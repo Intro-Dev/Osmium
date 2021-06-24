@@ -52,7 +52,7 @@ public class OptionUtil {
             while(reader.hasNextLine()) {
                 builder.append(reader.nextLine());
             }
-            if(createdFile || isJSONValid(builder.toString())) {
+            if(createdFile || !isJSONValid(builder.toString())) {
                 LOGGER.log(Level.WARN, "Config file either didn't exist or is corrupted, creating new one using default settings.");
                 System.out.println("Config file either didn't exist or is corrupted, creating new one using default settings.");
                 Options o = new Options();
