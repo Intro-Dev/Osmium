@@ -59,8 +59,7 @@ public class CapeHandler extends Module {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        System.out.println("CAPE IDENTIFIER!!!!!");
-        System.out.println(capeTexture);
+
         CapeRenderer.CapeArray.put(uuid, capeTexture);
     }
 
