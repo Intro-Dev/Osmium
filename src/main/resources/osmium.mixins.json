@@ -1,0 +1,27 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "com.intro.mixin",
+  "compatibilityLevel": "JAVA_16",
+  "mixins": [
+    "MinecraftClientMixin",
+    "InGameHudMixin",
+    "OptionsScreenMixin",
+    "TitleScreenMixin",
+    "GameRendererMixin",
+    "ClientWorldMixin",
+    "InGameOverlayRendererMixin",
+    "CameraMixin",
+    "MinecraftClientAccessor",
+    "WorldRendererAccessor",
+    "WorldRendererMixin",
+    "ClientPlayNetworkHandlerMixin",
+    "PlayerEntityRendererMixin"
+  ],
+  "client": [
+
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}
