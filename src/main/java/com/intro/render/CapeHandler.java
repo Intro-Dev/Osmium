@@ -59,8 +59,7 @@ public class CapeHandler extends Module {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        System.out.println("CAPE IDENTIFIER!!!!!");
-        System.out.println(capeTexture);
+
         CapeRenderer.CapeArray.put(uuid, capeTexture);
     }
 
@@ -108,7 +107,7 @@ public class CapeHandler extends Module {
     public static NativeImage parseCape(NativeImage image) {
 
                 if(image == null) {
-                    System.out.println("what the fuck happened here");
+                    System.out.println("Null cape texture being parsed");
                 }
                 int imageWidth = 64;
                 int imageHeight = 32;

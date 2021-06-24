@@ -72,9 +72,9 @@ public class CapeRenderer extends FeatureRenderer<AbstractClientPlayerEntity, Pl
                     }
 
                 } else {
-                    // System.out.println("Null uuid received. Cape rendering might crash!");
-                    // final VertexConsumer vertexConsumer = vertexConsumers.getBuffer(RenderLayer.getEntitySolid(CapeArray.get("")));
-                    // this.getContextModel().renderCape(stack, vertexConsumer, light, OverlayTexture.DEFAULT_UV);
+                    System.out.println("Null uuid received. Cape rendering might crash!");
+                    final VertexConsumer vertexConsumer = vertexConsumers.getBuffer(RenderLayer.getEntitySolid(CapeArray.get("")));
+                    this.getContextModel().renderCape(stack, vertexConsumer, light, OverlayTexture.DEFAULT_UV);
                 }
                 MinecraftClient.getInstance().getProfiler().pop();
                 stack.pop();
