@@ -44,16 +44,21 @@ public class OptionUtil {
         try {
             File file = Paths.get(path).toFile();
             StringBuilder builder = new StringBuilder();
-            if(file.createNewFile()) {
-                LOGGER.log(Level.ALL, "Couldn't find already existing config file, creating new one and using default settings.");
+
+            boolean createdFile = file.createNewFile();
+
+            Scanner reader = new Scanner(file);
+
+            while(reader.hasNextLine()) {
+                builder.append(reader.nextLine());
+            }
+            if(createdFile || isJSONValid(builder.toString())) {
+                LOGGER.log(Level.WARN, "Config file either didn't exist or is corrupted, creating new one using default settings.");
+                System.out.println("Config file either didn't exist or is corrupted, creating new one using default settings.");
                 Options o = new Options();
                 o.init();
                 save();
                 return o;
-            }
-            Scanner reader = new Scanner(file);
-            while(reader.hasNextLine()) {
-                builder.append(reader.nextLine());
             }
             return gson.fromJson(builder.toString(), Options.class);
 
@@ -87,6 +92,16 @@ public class OptionUtil {
     public static void load() {
         Osmium.options = OptionUtil.loadConfig(FabricLoader.getInstance().getConfigDir().resolve("osmium-options.json").toString());
         Osmium.options.putHashMap();
+    }
+
+
+    public static boolean isJSONValid(String jsonInString) {
+        try {
+            gson.fromJson(jsonInString, Object.class);
+            return true;
+        } catch(com.google.gson.JsonSyntaxException ex) {
+            return false;
+        }
     }
 
 
