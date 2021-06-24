@@ -1,21 +1,25 @@
 package com.intro.module;
 
-import com.intro.BlockEntityCullingMode;
-import com.intro.OsmiumOptions;
-import com.intro.mixin.WorldRendererAccessor;
+import com.intro.config.BlockEntityCullingMode;
+import com.intro.Osmium;
+import com.intro.OsmiumChunkManager;
+import com.intro.config.EnumOption;
+import com.intro.config.OptionUtil;
 import com.intro.module.event.Event;
-import com.intro.module.event.EventRender;
-import com.mojang.blaze3d.systems.RenderSystem;
-import net.minecraft.block.entity.BlockEntity;
-import net.minecraft.client.world.ClientWorld;
-import net.minecraft.util.math.BlockPos;
+import com.intro.module.event.EventTick;
+import net.minecraft.util.math.ChunkPos;
+import net.minecraft.world.chunk.Chunk;
 
 import java.util.ArrayList;
 
 public class OptimizationModule extends Module{
 
-    private ArrayList<BlockEntity> RemovedBlockEntities = new ArrayList<BlockEntity>();
-    private ArrayList<BlockEntity> QueuedRemovalBlockEntities = new ArrayList<BlockEntity>();
+    public volatile static ArrayList<ChunkPos> RemovedBlockEntities = new ArrayList<>();
+    private volatile ArrayList<ChunkPos> QueuedRemovalBlockEntities = new ArrayList<>();
+    public volatile static ArrayList<ChunkPos> PreviouslyRemovedBlockEntities = new ArrayList<>();
+
+
+    private ChunkPos lastChunkPos;
 
 
     public OptimizationModule() {
@@ -24,72 +28,42 @@ public class OptimizationModule extends Module{
 
     public void OnEvent(Event event) {
 
-        if(event instanceof EventRender) {
-            mc.getProfiler().push("OsmiumBlockEntityCulling");
-            RenderSystem.disableLighting();
-            RenderSystem.disableBlend();
-            RenderSystem.disableTexture();
-            if(!(OsmiumOptions.BlockEntityCulling == BlockEntityCullingMode.DISABLED)) {
-                QueuedRemovalBlockEntities.clear();
-                ClientWorld world = mc.world;
-                for(BlockEntity blockEntity : world.blockEntities) {
-                    if(ShouldBeCulled(blockEntity.getPos()) && !RemovedBlockEntities.contains(blockEntity)) {
-                        blockEntity.markRemoved();
-                        RemovedBlockEntities.add(blockEntity);
+        if(event instanceof EventTick && mc.player != null) {
+            if(((EnumOption) OptionUtil.Options.BlockEntityCullingMode.get()).variable != BlockEntityCullingMode.DISABLED && lastChunkPos != null) {
+                if(OsmiumChunkManager.getPlayerChunk() != mc.world.getChunk(lastChunkPos.getStartPos())) {
+                    for(Chunk c : Osmium.chunkManager.getLoadedChunks()) {
+                        for(Chunk k : OsmiumChunkManager.getAdjacentChunks()) {
+                            if(c.getPos() != k.getPos()) {
+                                QueuedRemovalBlockEntities.add(c.getPos());
+                            } else {
+                                PreviouslyRemovedBlockEntities.add(c.getPos());
+                                RemovedBlockEntities.remove(c.getPos());
+                            }
+                        }
+
                     }
                 }
 
-                for(BlockEntity blockEntity : RemovedBlockEntities) {
-                    if (!(ShouldBeCulled(blockEntity.getPos()) && blockEntity.isRemoved())) {
-                        blockEntity.cancelRemoval();
-                        world.setBlockEntity(blockEntity.getPos(), blockEntity);
-                        QueuedRemovalBlockEntities.add(blockEntity);
-                    }
-                }
 
-                for(BlockEntity blockEntity : QueuedRemovalBlockEntities) {
-                    RemovedBlockEntities.remove(blockEntity);
-                }
-            } else {
-                if(!RemovedBlockEntities.isEmpty()) {
-                    for(BlockEntity blockEntity : RemovedBlockEntities) {
-                        blockEntity.cancelRemoval();
-                        mc.world.setBlockEntity(blockEntity.getPos(), blockEntity);
-                        QueuedRemovalBlockEntities.add(blockEntity);
+                    for(ChunkPos b : QueuedRemovalBlockEntities) {
+                        if(!RemovedBlockEntities.contains(b)) {
+                            RemovedBlockEntities.add(b);
+                        }
                     }
-                    for(BlockEntity blockEntity : QueuedRemovalBlockEntities) {
-                        RemovedBlockEntities.remove(blockEntity);
-                    }
-                    QueuedRemovalBlockEntities.clear();
-                }
             }
-            RenderSystem.enableLighting();
-            RenderSystem.enableBlend();
-            RenderSystem.enableTexture();
-            mc.getProfiler().pop();
+            QueuedRemovalBlockEntities.clear();
+            lastChunkPos = mc.player.getChunkPos();
         }
-    }
 
-    public boolean ShouldBeCulled(BlockPos pos) {
-        switch (OsmiumOptions.BlockEntityCulling) {
-            case LOW:
-                if(pos.isWithinDistance(mc.player.getBlockPos(), (((WorldRendererAccessor) mc.worldRenderer).getRenderDistance() * 16 / 6f))) {
-                    return false;
-                }
-            case MEDIUM:
-                if(pos.isWithinDistance(mc.player.getBlockPos(), (((WorldRendererAccessor) mc.worldRenderer).getRenderDistance() * 16 / 8f))) {
-                    return false;
-                }
-            case HIGH:
-                if(pos.isWithinDistance(mc.player.getBlockPos(), (((WorldRendererAccessor) mc.worldRenderer).getRenderDistance() * 16 / 12f))) {
-                    return false;
-                }
-            case EXTREME:
-                if(pos.isWithinDistance(mc.player.getBlockPos(), 10)) {
-                    return false;
-                }
+
         }
-        return true;
-    }
+
+
+
+
+
+
+
+
 
 }

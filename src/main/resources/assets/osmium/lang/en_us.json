@@ -9,14 +9,14 @@
   "osmium.options.hurtbobbingdisabled": "NoHurtBob: Disabled",
   "keys.osmium.MenuKey": "Open Osmium Options",
   "keys.osmium.perspectivekey": "Perspective",
+  "keys.osmium.zoomkey": "Zoom",
   "keys.category.osmium.keys": "Osmium",
   "osmium.options.nofiredisabled": "LowFire: Disabled",
   "osmium.options.videooptions": "Video Options",
   "osmium.options.nofireenabled": "LowFire: Enabled",
-  "osmium.options.nosquishysneakenabled": "NoSquishySneak: Enabled",
-  "osmium.options.nosquishysneakdisabled": "NoSquishySneak: Disabled",
-  "osmium.options.smoothsneakenabled": "SmoothSneak: Enabled",
-  "osmium.options.smoothsneakdisabled": "SmoothSneak: Disabled",
+  "osmium.options.sneakvanilla": "Sneak: Vanilla",
+  "osmium.options.sneaksmooth": "Sneak: Smooth",
+  "osmium.options.sneakinstant": "Sneak: Instant",
   "osmium.options.videooptions.back": "Back",
   "osmium.options.videooptions.becullingenabled": "BECulling: Disabled",
   "osmium.options.videooptions.becullingdisabled": "BECulling: Disabled",
@@ -26,5 +26,7 @@
   "osmium.options.videooptions.becullingextreme": "BECulling: Extreme",
   "osmium.options.videooptions.capeall": "Capes: All",
   "osmium.options.videooptions.capedisabled": "Capes: Disabled",
-  "osmium.options.videooptions.capeoptifine": "Capes: Optifine Only"
+  "osmium.options.videooptions.capeoptifine": "Capes: Optifine Only",
+  "osmium.version": "Osmium Version 1.0.0",
+  "osmium.options.temporarilydisabled": "Temporarily Disabled!"
 }

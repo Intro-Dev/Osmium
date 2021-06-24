@@ -1,6 +1,7 @@
 package com.intro.module;
 
-import com.intro.OsmiumOptions;
+import com.intro.config.BooleanOption;
+import com.intro.config.OptionUtil;
 import com.intro.mixin.MinecraftClientAccessor;
 import com.intro.module.event.Event;
 import com.intro.module.event.EventJoinWorld;
@@ -16,12 +17,13 @@ public class FpsModule extends Module{
 
     public FpsModule() {
         super("Fps");
-
     }
 
     public void OnEvent(Event event) {
-        if(event instanceof EventTick && mc.player != null && !(String.valueOf(((MinecraftClientAccessor) MinecraftClient.getInstance()).getCurrentFps()).equals(FpsText.text)) && OsmiumOptions.FpsEnabled){
-            FpsText.text = String.valueOf(((MinecraftClientAccessor) MinecraftClient.getInstance()).getCurrentFps());
+        if(FpsText != null) {
+            if(event instanceof EventTick && mc.player != null && !(String.valueOf(((MinecraftClientAccessor) MinecraftClient.getInstance()).getCurrentFps()).equals(FpsText.text)) && ((BooleanOption) OptionUtil.Options.FpsEnabled).variable){
+                FpsText.text = String.valueOf(((MinecraftClientAccessor) MinecraftClient.getInstance()).getCurrentFps());
+            }
         }
         if(event instanceof EventJoinWorld) {
             assert mc.currentScreen != null;

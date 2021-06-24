@@ -29,9 +29,19 @@
   "depends": {
     "fabricloader": ">=0.10.0",
     "fabric": "*",
-    "minecraft": "1.16.x"
+    "minecraft": "1.17.x"
   },
-  "suggests": {
-    "another-mod": "*"
+  "custom": {
+    "modmenu": {
+      "links": {
+        "modmenu.discord": "https://discord.gg/jEGF5fb"
+      },
+      "parent": {
+        "id": "osmium",
+        "name": "Osmium",
+        "description": "Osmium adds various QOL and performance enhancing features to Minecraft!",
+        "icon": "assets/osmium/icon.png"
+      }
+    }
   }
 }

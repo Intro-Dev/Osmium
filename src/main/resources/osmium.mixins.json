@@ -3,25 +3,27 @@
   "minVersion": "0.8",
   "package": "com.intro.mixin",
   "compatibilityLevel": "JAVA_16",
-  "mixins": [
-    "MinecraftClientMixin",
-    "InGameHudMixin",
-    "OptionsScreenMixin",
-    "TitleScreenMixin",
-    "GameRendererMixin",
-    "ClientWorldMixin",
-    "InGameOverlayRendererMixin",
+  "client": [
     "CameraMixin",
+    "ClientChunkManagerMixin",
+    "ClientPlayNetworkHandlerMixin",
+    "ClientWorldMixin",
+    "GameRendererMixin",
+    "InGameHudMixin",
+    "InGameOverlayRendererMixin",
     "MinecraftClientAccessor",
+    "MinecraftClientMixin",
+    "OptionsScreenMixin",
+    "PlayerEntityRendererMixin",
+    "TitleScreenMixin",
     "WorldRendererAccessor",
     "WorldRendererMixin",
-    "ClientPlayNetworkHandlerMixin",
-    "PlayerEntityRendererMixin"
-  ],
-  "client": [
+    "ChestBlockEntityMixin"
 
   ],
   "injectors": {
     "defaultRequire": 1
-  }
+  },
+  "mixins": [
+  ]
 }

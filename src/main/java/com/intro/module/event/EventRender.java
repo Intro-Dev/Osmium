@@ -41,14 +41,10 @@ public class EventRender extends Event{
     public Matrix4f matrix4f;
     public Camera camera;
 
-    public EventRender(EventDirection direction, float tickDelta, long limitTime, MatrixStack matrix, boolean bl, Camera camera, MatrixStack matrixStack2, Matrix4f matrix4f) {
+    public EventRender(EventDirection direction, float tickDelta, long limitTime, MatrixStack matrix) {
         super(direction, false);
-        this.b1 = bl;
         this.limitTime = limitTime;
-        this.matrix4f = matrix4f;
         this.matrixStack = matrix;
-        this.matrixStack2 = matrixStack2;
-        this.camera = camera;
         this.tickDelta = tickDelta;
     }
 }

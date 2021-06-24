@@ -1,6 +1,9 @@
 package com.intro.render;
 
-import com.intro.OsmiumOptions;
+import com.intro.config.BooleanOption;
+import com.intro.config.EnumOption;
+import com.intro.config.OptionUtil;
+import com.intro.config.SneakMode;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
@@ -21,7 +24,6 @@ public class OsmiumOptionsScreen extends Screen {
     ButtonWidget FullbrightWidget;
     ButtonWidget HurtBobWidget;
     ButtonWidget NoFireWidget;
-    ButtonWidget NoSneakSquishWidget;
     ButtonWidget SmoothSneakWidget;
     ButtonWidget OpenVideoOptions;
     ButtonWidget BackButton;
@@ -38,10 +40,10 @@ public class OsmiumOptionsScreen extends Screen {
 
     @Override
     protected void init() {
-        if(OsmiumOptions.ToggleSprintEnabled) {
+        if(((BooleanOption) OptionUtil.Options.ToggleSprintEnabled.get()).variable) {
             ToggleSneakToggleWidget = new ButtonWidget(this.width / 2 - 75, this.height / 6 + 20, 150, 20, new TranslatableText("osmium.options.togglesprintenabled"), (buttonWidget) -> {
-                OsmiumOptions.ToggleSprintEnabled = !OsmiumOptions.ToggleSprintEnabled;
-                if(OsmiumOptions.ToggleSprintEnabled) {
+                ((BooleanOption) OptionUtil.Options.ToggleSprintEnabled.get()).variable = !((BooleanOption) OptionUtil.Options.ToggleSprintEnabled.get()).variable;
+                if(((BooleanOption) OptionUtil.Options.ToggleSprintEnabled.get()).variable) {
                     buttonWidget.setMessage(new TranslatableText("osmium.options.togglesprintenabled"));
                 } else {
                     buttonWidget.setMessage(new TranslatableText("osmium.options.togglesprintdisabled"));
@@ -49,18 +51,18 @@ public class OsmiumOptionsScreen extends Screen {
             });
         } else {
             ToggleSneakToggleWidget = new ButtonWidget(this.width / 2 - 75, this.height / 6 + 20, 150, 20, new TranslatableText("osmium.options.togglesprintdisabled"), (buttonWidget) -> {
-                OsmiumOptions.ToggleSprintEnabled = !OsmiumOptions.ToggleSprintEnabled;
-                if(OsmiumOptions.ToggleSprintEnabled) {
+                ((BooleanOption) OptionUtil.Options.ToggleSprintEnabled.get()).variable = !((BooleanOption) OptionUtil.Options.ToggleSprintEnabled.get()).variable;
+                if(((BooleanOption) OptionUtil.Options.ToggleSprintEnabled.get()).variable) {
                     buttonWidget.setMessage(new TranslatableText("osmium.options.togglesprintenabled"));
                 } else {
                     buttonWidget.setMessage(new TranslatableText("osmium.options.togglesprintdisabled"));
                 }
             });
         }
-        if(OsmiumOptions.FullbrightEnabled) {
+        if(((BooleanOption) OptionUtil.Options.FullbrightEnabled.get()).variable) {
             FullbrightWidget = new ButtonWidget(this.width / 2 - 275, this.height / 6 + 20, 150, 20, new TranslatableText("osmium.options.fullbrightenabled"), (buttonWidget) -> {
-                OsmiumOptions.FullbrightEnabled = !OsmiumOptions.FullbrightEnabled;
-                if(OsmiumOptions.FullbrightEnabled) {
+                ((BooleanOption) OptionUtil.Options.FullbrightEnabled.get()).variable = !((BooleanOption) OptionUtil.Options.FullbrightEnabled.get()).variable;
+                if(((BooleanOption) OptionUtil.Options.FullbrightEnabled.get()).variable) {
                     buttonWidget.setMessage(new TranslatableText("osmium.options.fullbrightenabled"));
                 } else {
                     buttonWidget.setMessage(new TranslatableText("osmium.options.fullbrightdisabled"));
@@ -68,18 +70,18 @@ public class OsmiumOptionsScreen extends Screen {
             });
         } else {
             FullbrightWidget = new ButtonWidget(this.width / 2 - 275, this.height / 6 + 20, 150, 20, new TranslatableText("osmium.options.fullbrightdisabled"), (buttonWidget) -> {
-                OsmiumOptions.FullbrightEnabled = !OsmiumOptions.FullbrightEnabled;
-                if(OsmiumOptions.FullbrightEnabled) {
+                ((BooleanOption) OptionUtil.Options.FullbrightEnabled.get()).variable = !((BooleanOption) OptionUtil.Options.FullbrightEnabled.get()).variable;
+                if(((BooleanOption) OptionUtil.Options.FullbrightEnabled.get()).variable) {
                     buttonWidget.setMessage(new TranslatableText("osmium.options.fullbrightenabled"));
                 } else {
                     buttonWidget.setMessage(new TranslatableText("osmium.options.fullbrightdisabled"));
                 }
             });
         }
-        if(OsmiumOptions.HurtBobbingModEnabled) {
+        if(((BooleanOption) OptionUtil.Options.HurtbobbingEnabled.get()).variable) {
             HurtBobWidget = new ButtonWidget(this.width / 2 + 125, this.height / 6 + 20, 150, 20, new TranslatableText("osmium.options.hurtbobbingenabled"), (buttonWidget) -> {
-                OsmiumOptions.HurtBobbingModEnabled = !OsmiumOptions.HurtBobbingModEnabled;
-                if(OsmiumOptions.HurtBobbingModEnabled) {
+                ((BooleanOption) OptionUtil.Options.HurtbobbingEnabled.get()).variable = !((BooleanOption) OptionUtil.Options.HurtbobbingEnabled.get()).variable;
+                if(((BooleanOption) OptionUtil.Options.HurtbobbingEnabled.get()).variable) {
                     buttonWidget.setMessage(new TranslatableText("osmium.options.hurtbobbingenabled"));
                 } else {
                     buttonWidget.setMessage(new TranslatableText("osmium.options.hurtbobbingdisabled"));
@@ -87,8 +89,8 @@ public class OsmiumOptionsScreen extends Screen {
             });
         } else {
             HurtBobWidget = new ButtonWidget(this.width / 2 + 125, this.height / 6 + 20, 150, 20, new TranslatableText("osmium.options.hurtbobbingdisabled"), (buttonWidget) -> {
-                OsmiumOptions.HurtBobbingModEnabled = !OsmiumOptions.HurtBobbingModEnabled;
-                if(OsmiumOptions.HurtBobbingModEnabled) {
+                ((BooleanOption) OptionUtil.Options.HurtbobbingEnabled.get()).variable = !((BooleanOption) OptionUtil.Options.HurtbobbingEnabled.get()).variable;
+                if(((BooleanOption) OptionUtil.Options.HurtbobbingEnabled.get()).variable) {
                     buttonWidget.setMessage(new TranslatableText("osmium.options.hurtbobbingenabled"));
                 } else {
                     buttonWidget.setMessage(new TranslatableText("osmium.options.hurtbobbingdisabled"));
@@ -96,10 +98,10 @@ public class OsmiumOptionsScreen extends Screen {
             });
         }
 
-        if(OsmiumOptions.NoFireEnabled) {
+        if(((BooleanOption) OptionUtil.Options.NoFireEnabled.get()).variable) {
             NoFireWidget = new ButtonWidget(this.width / 2 - 275, this.height / 6 + 60, 150, 20, new TranslatableText("osmium.options.nofireenabled"), (buttonWidget) -> {
-                OsmiumOptions.NoFireEnabled = !OsmiumOptions.NoFireEnabled;
-                if(OsmiumOptions.NoFireEnabled) {
+                ((BooleanOption) OptionUtil.Options.NoFireEnabled.get()).variable = !((BooleanOption) OptionUtil.Options.NoFireEnabled.get()).variable;
+                if(((BooleanOption) OptionUtil.Options.NoFireEnabled.get()).variable) {
                     buttonWidget.setMessage(new TranslatableText("osmium.options.nofireenabled"));
                 } else {
                     buttonWidget.setMessage(new TranslatableText("osmium.options.nofiredisabled"));
@@ -107,8 +109,8 @@ public class OsmiumOptionsScreen extends Screen {
             });
         } else {
             NoFireWidget = new ButtonWidget(this.width / 2 - 275, this.height / 6 + 60, 150, 20, new TranslatableText("osmium.options.nofiredisabled"), (buttonWidget) -> {
-                OsmiumOptions.NoFireEnabled = !OsmiumOptions.NoFireEnabled;
-                if(OsmiumOptions.NoFireEnabled) {
+                ((BooleanOption) OptionUtil.Options.NoFireEnabled.get()).variable = !((BooleanOption) OptionUtil.Options.NoFireEnabled.get()).variable;
+                if(((BooleanOption) OptionUtil.Options.NoFireEnabled.get()).variable) {
                     buttonWidget.setMessage(new TranslatableText("osmium.options.nofireenabled"));
                 } else {
                     buttonWidget.setMessage(new TranslatableText("osmium.options.nofiredisabled"));
@@ -116,51 +118,26 @@ public class OsmiumOptionsScreen extends Screen {
             });
         }
 
-        if(OsmiumOptions.SmoothSneak) {
-            SmoothSneakWidget = new ButtonWidget(this.width / 2 + 125, this.height / 6 + 60, 150, 20, new TranslatableText("osmium.options.smoothsneakenabled"), (buttonWidget) -> {
-                OsmiumOptions.SmoothSneak = !OsmiumOptions.SmoothSneak;
-                if(OsmiumOptions.SmoothSneak) {
-                    buttonWidget.setMessage(new TranslatableText("osmium.options.smoothsneakenabled"));
-                } else {
-                    buttonWidget.setMessage(new TranslatableText("osmium.options.smoothsneakdisabled"));
-                }
-            });
-        } else {
-            SmoothSneakWidget = new ButtonWidget(this.width / 2 + 125, this.height / 6 + 60, 150, 20, new TranslatableText("osmium.options.smoothsneakdisabled"), (buttonWidget) -> {
-                OsmiumOptions.SmoothSneak = !OsmiumOptions.SmoothSneak;
-                if(OsmiumOptions.SmoothSneak) {
-                    buttonWidget.setMessage(new TranslatableText("osmium.options.smoothsneakenabled"));
-                } else {
-                    buttonWidget.setMessage(new TranslatableText("osmium.options.smoothsneakdisabled"));
-                }
-            });
-        }
 
-        if(OsmiumOptions.NoSquishySneak) {
-            NoSneakSquishWidget = new ButtonWidget(this.width / 2 - 75, this.height / 6 + 60, 150, 20, new TranslatableText("osmium.options.nosquishysneakenabled"), (buttonWidget) -> {
-                OsmiumOptions.NoSquishySneak = !OsmiumOptions.NoSquishySneak;
-                if(OsmiumOptions.NoSquishySneak) {
-                    System.out.println("got here 0");
-                    buttonWidget.setMessage(new TranslatableText("osmium.options.nosquishysneakenabled"));
-                } else {
-                    System.out.println("got here 3");
-                    buttonWidget.setMessage(new TranslatableText("osmium.options.nosquishysneakdisabled"));
-                }
-            });
-        } else {
-            NoSneakSquishWidget = new ButtonWidget(this.width / 2 - 75, this.height / 6 + 60, 150, 20, new TranslatableText("osmium.options.nosquishysneakdisabled"), (buttonWidget) -> {
-                OsmiumOptions.NoSquishySneak = !OsmiumOptions.NoSquishySneak;
-                if(OsmiumOptions.NoSquishySneak) {
-                    System.out.println("got here 1");
-                    buttonWidget.setMessage(new TranslatableText("osmium.options.nosquishysneakenabled"));
-                } else {
-                    System.out.println("got here 4");
-                    buttonWidget.setMessage(new TranslatableText("osmium.options.nosquishysneakdisabled"));
-                }
-            });
-        }
+        SmoothSneakWidget = new ButtonWidget(this.width / 2 + 125, this.height / 6 + 60, 150, 20, new TranslatableText("osmium.options.sneak" + ((EnumOption) OptionUtil.Options.SneakMode.get()).variable.toString().toLowerCase()), (buttonWidget) -> {
+            ((EnumOption) OptionUtil.Options.SneakMode.get()).variable = ((SneakMode) ((EnumOption) OptionUtil.Options.SneakMode.get()).variable).next();
+            mc.worldRenderer.reload();
+            if(((EnumOption) OptionUtil.Options.SneakMode.get()).variable == SneakMode.VANILLA) {
+                buttonWidget.setMessage(new TranslatableText("osmium.options.sneakvanilla"));
+            } else if(((EnumOption) OptionUtil.Options.SneakMode.get()).variable == SneakMode.SMOOTH) {
+                buttonWidget.setMessage(new TranslatableText("osmium.options.sneaksmooth"));
+            } else if(((EnumOption) OptionUtil.Options.SneakMode.get()).variable == SneakMode.INSTANT) {
+                buttonWidget.setMessage(new TranslatableText("osmium.options.sneakinstant"));
+            }
 
-        OpenVideoOptions = new ButtonWidget(this.width / 2 - 275, this.height / 6 + 100, 150, 20, new TranslatableText("osmium.options.videooptions"), (buttonWidget) -> {
+
+
+
+
+        });
+
+
+        OpenVideoOptions = new ButtonWidget(this.width / 2 - 75, this.height / 6 + 60, 150, 20, new TranslatableText("osmium.options.videooptions"), (buttonWidget) -> {
             mc.openScreen(new OsmiumVideoOptionsScreen(this));
         });
 
@@ -170,25 +147,26 @@ public class OsmiumOptionsScreen extends Screen {
 
 
 
-        this.addButton(FullbrightWidget);
-        this.addButton(ToggleSneakToggleWidget);
-        this.addButton(HurtBobWidget);
-        this.addButton(NoFireWidget);
-        this.addButton(NoSneakSquishWidget);
-        this.addButton(SmoothSneakWidget);
-        this.addButton(OpenVideoOptions);
-        this.addButton(BackButton);
+        this.addDrawableChild(FullbrightWidget);
+        this.addDrawableChild(ToggleSneakToggleWidget);
+        this.addDrawableChild(HurtBobWidget);
+        this.addDrawableChild(NoFireWidget);
+        this.addDrawableChild(SmoothSneakWidget);
+        this.addDrawableChild(OpenVideoOptions);
+        this.addDrawableChild(BackButton);
     }
 
     @Override
     public void onClose() {
         super.onClose();
+        OptionUtil.save();
     }
 
     @Override
     public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
         this.renderBackground(matrices);
-        drawCenteredText(matrices, mc.textRenderer, new TranslatableText("osmium.options.title"), this.width / 2, 20, 0xffffff);
+        drawCenteredText(matrices, mc.textRenderer, new TranslatableText("osmium.options.title"), this.width / 2, 15, 0xffffff);
+        drawTextWithShadow(matrices, mc.textRenderer, new TranslatableText("osmium.version"), 20, this.height - 20, 0xffffff);
         super.render(matrices, mouseX, mouseY, delta);
     }
 

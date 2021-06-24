@@ -1,14 +1,10 @@
 package com.intro.render;
 
-import com.intro.BlockEntityCullingMode;
-import com.intro.OsmiumOptions;
+import com.intro.config.*;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.gui.screen.options.GameOptionsScreen;
 import net.minecraft.client.gui.widget.ButtonWidget;
-import net.minecraft.client.options.GameOptions;
 import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.text.Text;
 import net.minecraft.text.TranslatableText;
 
 public class OsmiumVideoOptionsScreen extends Screen {
@@ -31,59 +27,59 @@ public class OsmiumVideoOptionsScreen extends Screen {
             mc.openScreen(this.parent);
         });
 
-            ToggleBECullingWidget = new ButtonWidget(this.width / 2 - 275, this.height / 6 + 20, 150, 20, new TranslatableText("osmium.options.videooptions.beculling" + OsmiumOptions.BlockEntityCulling.toString().toLowerCase()), (buttonWidget) -> {
-                OsmiumOptions.BlockEntityCulling = OsmiumOptions.BlockEntityCulling.next();
-                mc.worldRenderer.reload();
-                switch (OsmiumOptions.BlockEntityCulling) {
-                    case DISABLED:
-                        buttonWidget.setMessage(new TranslatableText("osmium.options.videooptions.becullingdisabled"));
-                        break;
-                    case LOW:
-                        buttonWidget.setMessage(new TranslatableText("osmium.options.videooptions.becullinglow"));
-                        break;
-                    case MEDIUM:
-                        buttonWidget.setMessage(new TranslatableText("osmium.options.videooptions.becullingmedium"));
-                        break;
-                    case HIGH:
-                        buttonWidget.setMessage(new TranslatableText("osmium.options.videooptions.becullinghigh"));
-                        break;
-                    case EXTREME:
-                        buttonWidget.setMessage(new TranslatableText("osmium.options.videooptions.becullingextreme"));
-                        break;
 
-                }
-            });
-        ToggleCapeWidget = new ButtonWidget(this.width / 2 - 75, this.height / 6 + 20, 150, 20, new TranslatableText("osmium.options.videooptions.cape" + OsmiumOptions.CustomCapeModes.toString().toLowerCase()), (buttonWidget) -> {
-            OsmiumOptions.CustomCapeModes = OsmiumOptions.CustomCapeModes.next();
-            switch (OsmiumOptions.CustomCapeModes) {
-                case DISABLED:
-                    buttonWidget.setMessage(new TranslatableText("osmium.options.videooptions.capedisabled"));
-                    break;
-                case OPTIFINE:
-                    buttonWidget.setMessage(new TranslatableText("osmium.options.videooptions.capeoptifine"));
-                    break;
-                case ALL:
-                    buttonWidget.setMessage(new TranslatableText("osmium.options.videooptions.capeall"));
-                    break;
-
-
+        ToggleBECullingWidget = new ButtonWidget(this.width / 2 - 275, this.height / 6 + 20, 150, 20, new TranslatableText("osmium.options.temporarilydisabled"), (buttonWidget) -> { // + ((EnumOption) OptionUtil.Options.BlockEntityCullingMode.get()).variable.toString().toLowerCase()), (buttonWidget) -> {
+            /*
+            ((EnumOption) OptionUtil.Options.BlockEntityCullingMode.get()).variable = ((SneakMode) ((EnumOption) OptionUtil.Options.BlockEntityCullingMode.get()).variable).next();
+            mc.worldRenderer.reload();
+            if(((EnumOption) OptionUtil.Options.BlockEntityCullingMode.get()).variable == BlockEntityCullingMode.DISABLED) {
+                buttonWidget.setMessage(new TranslatableText("osmium.options.becullingenabled"));
+            } else if(((EnumOption) OptionUtil.Options.BlockEntityCullingMode.get()).variable == BlockEntityCullingMode.LOW) {
+                buttonWidget.setMessage(new TranslatableText("osmium.options.becullinglow"));
+            } else if(((EnumOption) OptionUtil.Options.BlockEntityCullingMode.get()).variable == BlockEntityCullingMode.MEDIUM) {
+                buttonWidget.setMessage(new TranslatableText("osmium.options.becullingmedium"));
+            } else if(((EnumOption) OptionUtil.Options.BlockEntityCullingMode.get()).variable == BlockEntityCullingMode.HIGH) {
+                buttonWidget.setMessage(new TranslatableText("osmium.options.becullinghigh"));
+            } else if(((EnumOption) OptionUtil.Options.BlockEntityCullingMode.get()).variable == BlockEntityCullingMode.EXTREME) {
+                buttonWidget.setMessage(new TranslatableText("osmium.options.becullingextreme"));
             }
+
+             */
         });
 
-        this.addButton(BackButton);
-        this.addButton(ToggleBECullingWidget);
-        this.addButton(ToggleCapeWidget);
+
+        ToggleCapeWidget = new ButtonWidget(this.width / 2 - 75, this.height / 6 + 20, 150, 20, new TranslatableText("osmium.options.videooptions.cape" + ((EnumOption) OptionUtil.Options.CustomCapeMode.get()).variable.toString().toLowerCase()), (buttonWidget) -> {
+
+            ((EnumOption) OptionUtil.Options.CustomCapeMode.get()).variable = ((CapeRenderingMode) ((EnumOption) OptionUtil.Options.CustomCapeMode.get()).variable).next();
+            mc.worldRenderer.reload();
+            if(((EnumOption) OptionUtil.Options.CustomCapeMode.get()).variable == CapeRenderingMode.DISABLED) {
+                buttonWidget.setMessage(new TranslatableText("osmium.options.videooptions.capedisabled"));
+            } else if(((EnumOption) OptionUtil.Options.CustomCapeMode.get()).variable == CapeRenderingMode.OPTIFINE) {
+                buttonWidget.setMessage(new TranslatableText("osmium.options.videooptions.capeoptifine"));
+            } else if(((EnumOption) OptionUtil.Options.CustomCapeMode.get()).variable == CapeRenderingMode.ALL) {
+                buttonWidget.setMessage(new TranslatableText("osmium.options.videooptions.capeall"));
+            }
+
+
+        });
+
+        this.addDrawableChild(BackButton);
+        this.addDrawableChild(ToggleBECullingWidget);
+        this.addDrawableChild(ToggleCapeWidget);
     }
 
     @Override
     public void onClose() {
         super.onClose();
+        OptionUtil.save();
     }
 
     @Override
     public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
         this.renderBackground(matrices);
-        drawCenteredText(matrices, mc.textRenderer, new TranslatableText("osmium.options.videooptions.title"), this.width / 2, 20, 0xffffff);
+        drawCenteredText(matrices, mc.textRenderer, new TranslatableText("osmium.options.videooptions.title"), this.width / 2, 15, 0xffffff);
+        drawTextWithShadow(matrices, mc.textRenderer, new TranslatableText("osmium.version"), 20, this.height - 20, 0xffffff);
+
         super.render(matrices, mouseX, mouseY, delta);
     }
 }

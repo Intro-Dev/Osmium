@@ -1,10 +1,8 @@
 package com.intro.mixin;
 
-import com.intro.OsmiumOptions;
-import net.minecraft.client.particle.RainSplashParticle;
+import com.intro.config.BooleanOption;
+import com.intro.config.OptionUtil;
 import net.minecraft.client.render.WorldRenderer;
-import net.minecraft.particle.ParticleEffect;
-import net.minecraft.particle.ParticleType;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -15,7 +13,7 @@ public class WorldRendererMixin {
 
     @Inject(at = @At("HEAD"), method = "renderWeather", cancellable = true)
     public void RenderWeather(CallbackInfo info) {
-        if(OsmiumOptions.NoRainEnabled) {
+        if(((BooleanOption) OptionUtil.Options.NoRainEnabled.get()).variable) {
             info.cancel();
         }
     }

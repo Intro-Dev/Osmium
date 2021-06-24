@@ -1,10 +1,9 @@
 package com.intro.module;
 
-import com.intro.OsmiumOptions;
+import com.intro.config.BooleanOption;
+import com.intro.config.OptionUtil;
 import com.intro.module.event.Event;
-import com.intro.module.event.EventStartGame;
 import com.intro.module.event.EventTick;
-import net.minecraft.client.MinecraftClient;
 
 public class Fullbright extends Module{
 
@@ -17,7 +16,7 @@ public class Fullbright extends Module{
     public void OnEvent(Event event) {
 
         if(event instanceof EventTick) {
-            if(OsmiumOptions.FullbrightEnabled)
+            if(((BooleanOption) OptionUtil.Options.FullbrightEnabled.get()).variable)
                 mc.options.gamma = 100d;
         }
     }
