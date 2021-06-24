@@ -19,7 +19,6 @@
     "WorldRendererAccessor",
     "WorldRendererMixin",
     "ChestBlockEntityMixin"
-
   ],
   "injectors": {
     "defaultRequire": 1

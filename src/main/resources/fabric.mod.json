@@ -9,14 +9,14 @@
     "Intro"
   ],
   "contact": {
-    "homepage": "",
+    "homepage": "https://github.com/Intro-Dev/Osmium",
     "sources": "https://github.com/Intro-Dev/Osmium"
   },
 
   "license": "CC0-1.0",
   "icon": "assets/osmium/icon.png",
 
-  "environment": "*",
+  "environment": "client",
   "entrypoints": {
     "main": [
       "com.intro.Osmium"
@@ -37,10 +37,7 @@
         "id": "osmium",
         "name": "Osmium",
         "description": "Osmium adds various QOL and performance enhancing features to Minecraft!",
-        "icon": "assets/osmium/icon.png",
-        "links": {
-          "source": "https://github.com/Intro-Dev/Osmium"
-        }
+        "icon": "assets/osmium/icon.png"
     }
   }
 }
