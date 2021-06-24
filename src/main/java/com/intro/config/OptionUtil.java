@@ -45,7 +45,11 @@ public class OptionUtil {
             File file = Paths.get(path).toFile();
             StringBuilder builder = new StringBuilder();
             if(file.createNewFile()) {
-                LOGGER.log(Level.ALL, "Couldn't find already existing config file, creating new one.");
+                LOGGER.log(Level.ALL, "Couldn't find already existing config file, creating new one and using default settings.");
+                Options o = new Options();
+                o.init();
+                save();
+                return o;
             }
             Scanner reader = new Scanner(file);
             while(reader.hasNextLine()) {
