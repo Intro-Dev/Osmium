@@ -1,9 +1,7 @@
-# Fabric Example Mod
+# Osmium
 
-## Setup
+## Basics
+Osmium is a quality of life and performance enhancement mod for fabric 1.17 and above.
 
-For setup instructions please see the [fabric wiki page](https://fabricmc.net/wiki/tutorial:setup) that relates to the IDE that you are using.
-
-## License
-
-This template is available under the CC0 license. Feel free to learn from it and incorporate it in your own projects.
+## Will Osmium be ported to Forge?
+No, Osmium is not going to be ported to Forge, at least for now.
