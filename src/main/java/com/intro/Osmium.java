@@ -52,11 +52,11 @@ public class Osmium implements ModInitializer {
     }
 
     public void onInitialize() {
-        System.out.println("Osmium Initialized");
-        RegisterModules();
-        chunkManager = new OsmiumChunkManager();
         OptionUtil.Options.init();
         OptionUtil.load();
+        RegisterModules();
+        chunkManager = new OsmiumChunkManager();
+        System.out.println("Osmium Initialized");
     }
 
     public static class EVENT_BUS {

@@ -25,6 +25,8 @@ public class Options {
     public Option CustomCapeMode;
     public Option ZoomMode;
     public Option NoFireEnabled;
+    public Option ToggleSprintPosition;
+    public Option FpsDisplayPosition;
 
 
     public void init() {
@@ -40,19 +42,51 @@ public class Options {
         CustomCapeMode = new EnumOption( "CustomCapeMode", CapeRenderingMode.DISABLED);
         ZoomMode = new EnumOption( "ZoomMode", com.intro.config.ZoomMode.DISABLED);
         NoFireEnabled = new BooleanOption("NoFireEnabled", false);
+        ToggleSprintPosition = new Vector2Option("ToggleSprintPosition", 5, 5);
+        FpsDisplayPosition = new Vector2Option("FpsDisplayPosition", 5, 5);
     }
 
     public void putHashMap() {
-        put(ToggleSprintEnabled.identifier, ToggleSprintEnabled);
-        put(FullbrightEnabled.identifier, FullbrightEnabled);
-        put(HurtbobbingEnabled.identifier, HurtbobbingEnabled);
-        put(SneakMode.identifier, SneakMode);
-        put(BlockEntityCullingMode.identifier, BlockEntityCullingMode);
-        put(NoRainEnabled.identifier, NoRainEnabled);
-        put(FpsEnabled.identifier, FpsEnabled);
-        put(CustomCapeMode.identifier, CustomCapeMode);
-        put(ZoomMode.identifier, ZoomMode);
-        put(NoFireEnabled.identifier, NoFireEnabled);
+        try {
+            put(ToggleSprintEnabled.identifier, ToggleSprintEnabled);
+            put(FullbrightEnabled.identifier, FullbrightEnabled);
+            put(HurtbobbingEnabled.identifier, HurtbobbingEnabled);
+            put(SneakMode.identifier, SneakMode);
+            put(BlockEntityCullingMode.identifier, BlockEntityCullingMode);
+            put(NoRainEnabled.identifier, NoRainEnabled);
+            put(FpsEnabled.identifier, FpsEnabled);
+            put(CustomCapeMode.identifier, CustomCapeMode);
+            put(ZoomMode.identifier, ZoomMode);
+            put(NoFireEnabled.identifier, NoFireEnabled);
+            put(ToggleSprintPosition.identifier, ToggleSprintPosition);
+            put(FpsDisplayPosition.identifier, FpsDisplayPosition);
+        } catch (Exception e) {
+            ToggleSprintEnabled = new BooleanOption( "ToggleSprintEnabled", false);
+            FullbrightEnabled = new BooleanOption("FullBrightEnabled", false);
+            HurtbobbingEnabled = new BooleanOption("HurtBobbingEnabled", false);
+            SneakMode = new EnumOption("SneakMode", com.intro.config.SneakMode.VANILLA);
+            BlockEntityCullingMode = new EnumOption("BlockEntityCullingMode", com.intro.config.BlockEntityCullingMode.DISABLED);
+            NoRainEnabled = new BooleanOption("NoRainEnabled", false);
+            FpsEnabled = new BooleanOption("FpsEnabled", false);
+            CustomCapeMode = new EnumOption( "CustomCapeMode", CapeRenderingMode.DISABLED);
+            ZoomMode = new EnumOption( "ZoomMode", com.intro.config.ZoomMode.DISABLED);
+            NoFireEnabled = new BooleanOption("NoFireEnabled", false);
+            ToggleSprintPosition = new Vector2Option("ToggleSprintPosition", 5, 5);
+            FpsDisplayPosition = new Vector2Option("FpsDisplayPosition", 5, 5);
+            put(ToggleSprintEnabled.identifier, ToggleSprintEnabled);
+            put(FullbrightEnabled.identifier, FullbrightEnabled);
+            put(HurtbobbingEnabled.identifier, HurtbobbingEnabled);
+            put(SneakMode.identifier, SneakMode);
+            put(BlockEntityCullingMode.identifier, BlockEntityCullingMode);
+            put(NoRainEnabled.identifier, NoRainEnabled);
+            put(FpsEnabled.identifier, FpsEnabled);
+            put(CustomCapeMode.identifier, CustomCapeMode);
+            put(ZoomMode.identifier, ZoomMode);
+            put(NoFireEnabled.identifier, NoFireEnabled);
+            put(ToggleSprintPosition.identifier, ToggleSprintPosition);
+            put(FpsDisplayPosition.identifier, FpsDisplayPosition);
+        }
+
     }
 
     public void getHashMap() {
@@ -66,6 +100,8 @@ public class Options {
         CustomCapeMode = get(CustomCapeMode.identifier);
         ZoomMode = get(ZoomMode.identifier);
         NoFireEnabled = get(NoFireEnabled.identifier);
+        ToggleSprintPosition = get(ToggleSprintPosition.identifier);
+        FpsDisplayPosition = get(FpsDisplayPosition.identifier);
 
     }
 }

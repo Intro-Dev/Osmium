@@ -27,6 +27,8 @@ public class OsmiumOptionsScreen extends Screen {
     ButtonWidget SmoothSneakWidget;
     ButtonWidget OpenVideoOptions;
     ButtonWidget BackButton;
+    ButtonWidget OpenGuiEditing;
+    ButtonWidget FpsWidget;
 
 
     MinecraftClient mc = MinecraftClient.getInstance();
@@ -145,6 +147,30 @@ public class OsmiumOptionsScreen extends Screen {
             mc.openScreen(this.parent);
         });
 
+        OpenGuiEditing = new ButtonWidget(this.width / 2 - 275, this.height / 6 + 100, 150, 20, new TranslatableText("osmium.guiedit.title"), (buttonWidget) -> {
+            mc.openScreen(new OsmiumGuiEditScreen(this));
+        });
+
+        if(((BooleanOption) OptionUtil.Options.FpsEnabled.get()).variable) {
+            FpsWidget = new ButtonWidget(this.width / 2 - 75, this.height / 6 + 100, 150, 20, new TranslatableText("osmium.options.fpsenabled"), (buttonWidget) -> {
+                ((BooleanOption) OptionUtil.Options.FpsEnabled.get()).variable = !((BooleanOption) OptionUtil.Options.FpsEnabled.get()).variable;
+                if(((BooleanOption) OptionUtil.Options.FpsEnabled.get()).variable) {
+                    buttonWidget.setMessage(new TranslatableText("osmium.options.fpsenabled"));
+                } else {
+                    buttonWidget.setMessage(new TranslatableText("osmium.options.fpsdisabled"));
+                }
+            });
+        } else {
+            FpsWidget = new ButtonWidget(this.width / 2 - 75, this.height / 6 + 100, 150, 20, new TranslatableText("osmium.options.fpsdisabled"), (buttonWidget) -> {
+                ((BooleanOption) OptionUtil.Options.FpsEnabled.get()).variable = !((BooleanOption) OptionUtil.Options.FpsEnabled.get()).variable;
+                if(((BooleanOption) OptionUtil.Options.FpsEnabled.get()).variable) {
+                    buttonWidget.setMessage(new TranslatableText("osmium.options.fpsenabled"));
+                } else {
+                    buttonWidget.setMessage(new TranslatableText("osmium.options.fpsdisabled"));
+                }
+            });
+        }
+
 
 
         this.addDrawableChild(FullbrightWidget);
@@ -154,6 +180,8 @@ public class OsmiumOptionsScreen extends Screen {
         this.addDrawableChild(SmoothSneakWidget);
         this.addDrawableChild(OpenVideoOptions);
         this.addDrawableChild(BackButton);
+        this.addDrawableChild(OpenGuiEditing);
+        this.addDrawableChild(FpsWidget);
     }
 
     @Override

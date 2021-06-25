@@ -27,10 +27,11 @@ import java.util.Scanner;
  */
 public class OptionUtil {
 
-    private static final Logger LOGGER = LogManager.getLogger();
+    public static final Logger LOGGER = LogManager.getLogger();
 
     public static Options Options = Osmium.options;
 
+    public static boolean ShouldResaveOptions = false;
 
     private static final Gson gson = new GsonBuilder()
             .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
@@ -60,7 +61,13 @@ public class OptionUtil {
                 save();
                 return o;
             }
-            return gson.fromJson(builder.toString(), Options.class);
+            Options options =  gson.fromJson(builder.toString(), Options.class);
+            if(options == null) {
+                options = new Options();
+                options.init();
+                return options;
+            }
+            return options;
 
         } catch (Exception e) {
             LOGGER.warn("Error in loading osmium config!");

@@ -1,7 +1,10 @@
 package com.intro.module;
 
+import com.intro.Osmium;
 import com.intro.config.BooleanOption;
+import com.intro.config.EnumOption;
 import com.intro.config.OptionUtil;
+import com.intro.config.Vector2Option;
 import com.intro.mixin.MinecraftClientAccessor;
 import com.intro.module.event.Event;
 import com.intro.module.event.EventJoinWorld;
@@ -17,17 +20,30 @@ public class FpsModule extends Module{
 
     public FpsModule() {
         super("Fps");
+        Text tmp;
+        try {
+            tmp = new Text((int) ((Vector2Option) Osmium.options.get("FpsDisplayPosition")).x, (int) ((Vector2Option) Osmium.options.get("FpsDisplayPosition")).y, "Fps", 0xffffff);
+        } catch (NullPointerException e) {
+            OptionUtil.ShouldResaveOptions = true;
+            OptionUtil.LOGGER.warn("Options file is corrupt, creating a new one!");
+            tmp = new Text(5, 5, "Fps", 0xffffff);
+        }
+        FpsText = tmp;
+        FpsText.guiElement = true;
+        FpsText.visible = false;
     }
 
     public void OnEvent(Event event) {
         if(FpsText != null) {
-            if(event instanceof EventTick && mc.player != null && !(String.valueOf(((MinecraftClientAccessor) MinecraftClient.getInstance()).getCurrentFps()).equals(FpsText.text)) && ((BooleanOption) OptionUtil.Options.FpsEnabled).variable){
-                FpsText.text = String.valueOf(((MinecraftClientAccessor) MinecraftClient.getInstance()).getCurrentFps());
+            if(event instanceof EventTick && mc.player != null) {
+                FpsText.visible = ((BooleanOption) Osmium.options.get("FpsEnabled")).variable;
+                if(((BooleanOption) Osmium.options.get("FpsEnabled")).variable) {
+                    FpsText.text = String.valueOf(((MinecraftClientAccessor) MinecraftClient.getInstance()).getCurrentFps());
+                    Osmium.options.put("FpsDisplayPosition", new Vector2Option("FpsDisplayPosition", FpsText.posX, FpsText.posY));
+                }
+            }
             }
         }
-        if(event instanceof EventJoinWorld) {
-            assert mc.currentScreen != null;
-            FpsText = new Text(mc.currentScreen.width / 2 - 120, mc.currentScreen.height / 2 + 250, "", 0xffffff);
-        }
-    }
+
+
 }

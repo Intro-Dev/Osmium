@@ -71,4 +71,5 @@ public class Color {
     public static int getDefaultAlpha() {
         return 0;
     }
+
 }

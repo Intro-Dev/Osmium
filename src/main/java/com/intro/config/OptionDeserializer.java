@@ -29,6 +29,9 @@ public class OptionDeserializer implements JsonDeserializer<Option> {
                 LOGGER.warn("Enum deserialization error!");
             }
         }
+        if(src.get("Type").getAsString().equals("Vector2Option")) {
+            return new Vector2Option( src.get("Identifier").getAsString(), src.get("x").getAsDouble(), src.get("y").getAsDouble());
+        }
         return null;
     }
 

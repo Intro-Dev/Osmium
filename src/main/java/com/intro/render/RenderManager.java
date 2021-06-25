@@ -8,6 +8,7 @@ import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
+import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.client.render.*;
 import net.minecraft.client.render.debug.DebugRenderer;
 import net.minecraft.client.util.math.MatrixStack;
@@ -17,8 +18,11 @@ import net.minecraft.util.math.*;
 
 import java.util.ArrayList;
 
-public class RenderManager {
-    public static ArrayList<Text> textArrayList = new ArrayList<Text>();
+public class RenderManager extends DrawableHelper {
+    public static ArrayList<Text> textArrayList = new ArrayList<>();
+
+    public static final int HITBOX_PADDING = 20;
+
 
 
     static MinecraftClient mc = MinecraftClient.getInstance();
@@ -29,8 +33,13 @@ public class RenderManager {
         mc.getProfiler().push("OsmiumHudRenderer");
         //draw3DString(new BlockPos(0, 128, 0), "test", 0xffffff);
         for(Text text : textArrayList) {
+            if(text.visible) {
+                // this.fillGradient(stack, text.getPosX() - HITBOX_PADDING, text.getPosY() - HITBOX_PADDING, text.getPosX() + text.getTextWidth() + HITBOX_PADDING,  text.getPosY() + text.getTextHeight() + HITBOX_PADDING, 0xffffff, -804253680);
+                renderer.drawWithShadow(stack, new LiteralText(text.text), text.posX, text.posY, text.color);
 
-            renderer.drawWithShadow(stack, new LiteralText(text.text), text.posX, text.posY, text.color);
+
+            }
+
         }
         mc.getProfiler().pop();
     }
@@ -42,6 +51,7 @@ public class RenderManager {
         Osmium.EVENT_BUS.PostEvent(new EventRender(EventDirection.POST, tickDelta, limitTime, matrix));
         mc.getProfiler().pop();
     }
+
 
     public void draw3DString(BlockPos pos, String text, int color) {
         drawString(text, pos.getX(), pos.getY(), pos.getZ(), color, 5, false, 100, true);
