@@ -31,6 +31,9 @@
   "osmium.options.temporarilydisabled": "Temporarily Disabled!",
   "osmium.guiedit.title": "Gui Editing",
   "osmium.options.fpsenabled": "Fps: Enabled",
-  "osmium.options.fpsdisabled": "Fps: Disabled"
+  "osmium.options.fpsdisabled": "Fps: Disabled",
+  "osmium.options.rainenabled": "NoRain: Enabled",
+  "osmium.options.raindisabled": "NoRain: Disabled"
+
 
 }

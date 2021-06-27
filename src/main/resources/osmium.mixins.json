@@ -5,6 +5,7 @@
   "compatibilityLevel": "JAVA_16",
   "client": [
     "CameraMixin",
+    "ChestBlockEntityMixin",
     "ClientChunkManagerMixin",
     "ClientPlayNetworkHandlerMixin",
     "ClientWorldMixin",
@@ -17,8 +18,7 @@
     "PlayerEntityRendererMixin",
     "TitleScreenMixin",
     "WorldRendererAccessor",
-    "WorldRendererMixin",
-    "ChestBlockEntityMixin"
+    "WorldRendererMixin"
   ],
   "injectors": {
     "defaultRequire": 1
