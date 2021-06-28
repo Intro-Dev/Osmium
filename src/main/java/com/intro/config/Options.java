@@ -27,6 +27,7 @@ public class Options {
     public Option NoFireEnabled;
     public Option ToggleSprintPosition;
     public Option FpsDisplayPosition;
+    public Option ToggleSneakEnabled;
 
 
     public void init() {
@@ -44,6 +45,7 @@ public class Options {
         NoFireEnabled = new BooleanOption("NoFireEnabled", false);
         ToggleSprintPosition = new Vector2Option("ToggleSprintPosition", 5, 5);
         FpsDisplayPosition = new Vector2Option("FpsDisplayPosition", 5, 5);
+        ToggleSneakEnabled = new BooleanOption("ToggleSneakEnabled", false);
     }
 
     public void putHashMap() {
@@ -60,6 +62,7 @@ public class Options {
             put(NoFireEnabled.identifier, NoFireEnabled);
             put(ToggleSprintPosition.identifier, ToggleSprintPosition);
             put(FpsDisplayPosition.identifier, FpsDisplayPosition);
+            put(ToggleSneakEnabled.identifier, ToggleSneakEnabled);
         } catch (Exception e) {
             ToggleSprintEnabled = new BooleanOption( "ToggleSprintEnabled", false);
             FullbrightEnabled = new BooleanOption("FullBrightEnabled", false);
@@ -73,6 +76,7 @@ public class Options {
             NoFireEnabled = new BooleanOption("NoFireEnabled", false);
             ToggleSprintPosition = new Vector2Option("ToggleSprintPosition", 5, 5);
             FpsDisplayPosition = new Vector2Option("FpsDisplayPosition", 5, 5);
+            ToggleSneakEnabled = new BooleanOption("ToggleSneakEnabled", false);
             put(ToggleSprintEnabled.identifier, ToggleSprintEnabled);
             put(FullbrightEnabled.identifier, FullbrightEnabled);
             put(HurtbobbingEnabled.identifier, HurtbobbingEnabled);
@@ -85,6 +89,8 @@ public class Options {
             put(NoFireEnabled.identifier, NoFireEnabled);
             put(ToggleSprintPosition.identifier, ToggleSprintPosition);
             put(FpsDisplayPosition.identifier, FpsDisplayPosition);
+            put(ToggleSneakEnabled.identifier, ToggleSneakEnabled);
+
         }
 
     }
@@ -102,6 +108,6 @@ public class Options {
         NoFireEnabled = get(NoFireEnabled.identifier);
         ToggleSprintPosition = get(ToggleSprintPosition.identifier);
         FpsDisplayPosition = get(FpsDisplayPosition.identifier);
-
+        ToggleSneakEnabled = get(ToggleSneakEnabled.identifier);
     }
 }

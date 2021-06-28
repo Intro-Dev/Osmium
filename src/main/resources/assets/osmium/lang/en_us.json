@@ -33,7 +33,8 @@
   "osmium.options.fpsenabled": "Fps: Enabled",
   "osmium.options.fpsdisabled": "Fps: Disabled",
   "osmium.options.rainenabled": "NoRain: Enabled",
-  "osmium.options.raindisabled": "NoRain: Disabled"
-
-
+  "osmium.options.raindisabled": "NoRain: Disabled",
+  "osmium.options.togglesneaksettings": "ToggleSneak Settings",
+  "osmium.options.togglesneakenabled": "ToggleSneak: Enabled",
+  "osmium.options.togglesneakdisabled": "ToggleSneak: Disabled"
 }

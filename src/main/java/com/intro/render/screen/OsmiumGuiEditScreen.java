@@ -1,6 +1,8 @@
-package com.intro.render;
+package com.intro.render.screen;
 
 import com.intro.config.OptionUtil;
+import com.intro.render.RenderManager;
+import com.intro.render.Text;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.Element;
 import net.minecraft.client.gui.screen.Screen;

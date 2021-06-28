@@ -32,7 +32,6 @@ public class Osmium implements ModInitializer {
     ShowEntityHealth showEntityHealth;
     FpsModule fpsModule;
     //BetterEntityCulling betterEntityCulling;
-    OptimizationModule optimizationModule;
     CapeHandler handler;
 
 

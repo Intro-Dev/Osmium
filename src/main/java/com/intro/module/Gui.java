@@ -1,10 +1,9 @@
 package com.intro.module;
 
 import com.intro.Osmium;
-import com.intro.render.OsmiumOptionsScreen;
+import com.intro.render.screen.OsmiumOptionsScreen;
 import com.intro.module.event.Event;
 import com.intro.module.event.EventTick;
-import net.minecraft.client.MinecraftClient;
 
 public class Gui extends Module{
 

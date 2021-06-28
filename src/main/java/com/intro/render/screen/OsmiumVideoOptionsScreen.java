@@ -1,4 +1,4 @@
-package com.intro.render;
+package com.intro.render.screen;
 
 import com.intro.config.*;
 import net.minecraft.client.MinecraftClient;
@@ -27,10 +27,6 @@ public class OsmiumVideoOptionsScreen extends Screen {
             mc.openScreen(this.parent);
         });
 
-
-
-
-
         ToggleCapeWidget = new ButtonWidget(this.width / 2 - 275, this.height / 6 + 20, 150, 20, new TranslatableText("osmium.options.videooptions.cape" + ((EnumOption) OptionUtil.Options.CustomCapeMode.get()).variable.toString().toLowerCase()), (buttonWidget) -> {
 
             ((EnumOption) OptionUtil.Options.CustomCapeMode.get()).variable = ((CapeRenderingMode) ((EnumOption) OptionUtil.Options.CustomCapeMode.get()).variable).next();
@@ -47,7 +43,7 @@ public class OsmiumVideoOptionsScreen extends Screen {
         });
 
         if(((BooleanOption) OptionUtil.Options.NoRainEnabled.get()).variable) {
-            ToggleRainWidget = new ButtonWidget(this.width / 2 + 125, this.height / 6 + 20, 150, 20, new TranslatableText("osmium.options.rainenabled"), (buttonWidget) -> {
+            ToggleRainWidget = new ButtonWidget(this.width / 2 - 75, this.height / 6 + 20, 150, 20, new TranslatableText("osmium.options.rainenabled"), (buttonWidget) -> {
                 ((BooleanOption) OptionUtil.Options.NoRainEnabled.get()).variable = !((BooleanOption) OptionUtil.Options.NoRainEnabled.get()).variable;
                 if(((BooleanOption) OptionUtil.Options.NoRainEnabled.get()).variable) {
                     buttonWidget.setMessage(new TranslatableText("osmium.options.rainenabled"));
@@ -56,7 +52,7 @@ public class OsmiumVideoOptionsScreen extends Screen {
                 }
             });
         } else {
-            ToggleRainWidget = new ButtonWidget(this.width / 2 + 125, this.height / 6 + 20, 150, 20, new TranslatableText("osmium.options.raindisabled"), (buttonWidget) -> {
+            ToggleRainWidget = new ButtonWidget(this.width / 2 - 75, this.height / 6 + 20, 150, 20, new TranslatableText("osmium.options.raindisabled"), (buttonWidget) -> {
                 ((BooleanOption) OptionUtil.Options.NoRainEnabled.get()).variable = !((BooleanOption) OptionUtil.Options.NoRainEnabled.get()).variable;
                 if(((BooleanOption) OptionUtil.Options.NoRainEnabled.get()).variable) {
                     buttonWidget.setMessage(new TranslatableText("osmium.options.rainenabled"));

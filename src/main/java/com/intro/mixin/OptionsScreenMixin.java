@@ -3,7 +3,7 @@ package com.intro.mixin;
 import com.intro.Osmium;
 import com.intro.module.event.EventDirection;
 import com.intro.module.event.EventSettingsChange;
-import com.intro.render.OsmiumOptionsScreen;
+import com.intro.render.screen.OsmiumOptionsScreen;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.option.OptionsScreen;
@@ -33,8 +33,7 @@ public abstract class OptionsScreenMixin extends Screen {
     @Inject(at = @At("TAIL"), method = "init")
     private void init(CallbackInfo info) {
         this.addDrawableChild(new ButtonWidget(this.width / 2 - 100, this.height / 6 + 200, 200, 20, new TranslatableText("osmium.options.title"), (buttonWidget) -> {
-            this.mc.openScreen(new OsmiumOptionsScreen(this) {
-            });
+            this.mc.openScreen(new OsmiumOptionsScreen(this));
         }));
     }
 

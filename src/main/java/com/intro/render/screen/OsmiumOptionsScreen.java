@@ -1,4 +1,4 @@
-package com.intro.render;
+package com.intro.render.screen;
 
 import com.intro.config.BooleanOption;
 import com.intro.config.EnumOption;
@@ -42,25 +42,11 @@ public class OsmiumOptionsScreen extends Screen {
 
     @Override
     protected void init() {
-        if(((BooleanOption) OptionUtil.Options.ToggleSprintEnabled.get()).variable) {
-            ToggleSneakToggleWidget = new ButtonWidget(this.width / 2 - 75, this.height / 6 + 20, 150, 20, new TranslatableText("osmium.options.togglesprintenabled"), (buttonWidget) -> {
-                ((BooleanOption) OptionUtil.Options.ToggleSprintEnabled.get()).variable = !((BooleanOption) OptionUtil.Options.ToggleSprintEnabled.get()).variable;
-                if(((BooleanOption) OptionUtil.Options.ToggleSprintEnabled.get()).variable) {
-                    buttonWidget.setMessage(new TranslatableText("osmium.options.togglesprintenabled"));
-                } else {
-                    buttonWidget.setMessage(new TranslatableText("osmium.options.togglesprintdisabled"));
-                }
+
+            ToggleSneakToggleWidget = new ButtonWidget(this.width / 2 - 75, this.height / 6 + 20, 150, 20, new TranslatableText("osmium.options.togglesneaksettings"), (buttonWidget) -> {
+                mc.openScreen(new OsmiumToggleSneakOptionsScreen(this));
             });
-        } else {
-            ToggleSneakToggleWidget = new ButtonWidget(this.width / 2 - 75, this.height / 6 + 20, 150, 20, new TranslatableText("osmium.options.togglesprintdisabled"), (buttonWidget) -> {
-                ((BooleanOption) OptionUtil.Options.ToggleSprintEnabled.get()).variable = !((BooleanOption) OptionUtil.Options.ToggleSprintEnabled.get()).variable;
-                if(((BooleanOption) OptionUtil.Options.ToggleSprintEnabled.get()).variable) {
-                    buttonWidget.setMessage(new TranslatableText("osmium.options.togglesprintenabled"));
-                } else {
-                    buttonWidget.setMessage(new TranslatableText("osmium.options.togglesprintdisabled"));
-                }
-            });
-        }
+
         if(((BooleanOption) OptionUtil.Options.FullbrightEnabled.get()).variable) {
             FullbrightWidget = new ButtonWidget(this.width / 2 - 275, this.height / 6 + 20, 150, 20, new TranslatableText("osmium.options.fullbrightenabled"), (buttonWidget) -> {
                 ((BooleanOption) OptionUtil.Options.FullbrightEnabled.get()).variable = !((BooleanOption) OptionUtil.Options.FullbrightEnabled.get()).variable;

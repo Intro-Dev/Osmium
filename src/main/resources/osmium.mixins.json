@@ -5,7 +5,6 @@
   "compatibilityLevel": "JAVA_16",
   "client": [
     "CameraMixin",
-    "ChestBlockEntityMixin",
     "ClientChunkManagerMixin",
     "ClientPlayNetworkHandlerMixin",
     "ClientWorldMixin",
