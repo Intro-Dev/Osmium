@@ -31,12 +31,6 @@ bin/
 # fabric
 
 run/
-/build.gradle
-/.github/workflows/build.yml
-/gradle.properties
-/gradle/wrapper/gradle-wrapper.jar
-/gradle/wrapper/gradle-wrapper.properties
-/gradlew
-/gradlew.bat
+
 /src/main/resources/assets/osmium/texture/potato_cape.png
-/settings.gradle
+
