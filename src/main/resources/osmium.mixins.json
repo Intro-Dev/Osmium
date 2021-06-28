@@ -17,7 +17,8 @@
     "PlayerEntityRendererMixin",
     "TitleScreenMixin",
     "WorldRendererAccessor",
-    "WorldRendererMixin"
+    "WorldRendererMixin",
+    "KeyboardInputMixin"
   ],
   "injectors": {
     "defaultRequire": 1

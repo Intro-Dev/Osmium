@@ -13,7 +13,7 @@ public class ToggleSneak extends Module{
 
     private boolean sprinting = false;
 
-    private boolean sneaking = false;
+    public static boolean sneaking = false;
 
     //private boolean sneaking = false;
     private final Text SprintingText;
@@ -44,11 +44,9 @@ public class ToggleSneak extends Module{
 
                     if(mc.player.forwardSpeed > 0 && !mc.player.isUsingItem() && !mc.player.isSneaking() && !mc.player.horizontalCollision && this.sprinting)
                         mc.player.setSprinting(true);
-                    if(sneaking) {
-                        mc.player.setSneaking(true);
-                    }
+
                     if(mc.options.keySneak.wasPressed()) {
-                        this.sneaking = !this.sneaking;
+                        sneaking = !sneaking;
                     }
                     if(mc.options.keySprint.wasPressed()) {
                         this.sprinting = !this.sprinting;
@@ -62,7 +60,7 @@ public class ToggleSneak extends Module{
                     } else if (mc.options.keySprint.isPressed()) {
                         SprintingText.visible = true;
                         SprintingText.text = "Sprinting(Key Down)";
-                    } else if(this.sneaking) {
+                    } else if(sneaking) {
                         SprintingText.visible = true;
                         SprintingText.text = "Sneaking(Toggled)";
                     } else if (mc.options.keySneak.isPressed()) {
