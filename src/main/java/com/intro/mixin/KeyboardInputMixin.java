@@ -14,7 +14,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 /*
  Adapted from Tweakeroo mod under GNU GPL
- Tweakeroo guthub : https://github.com/maruohon/tweakeroo/
+ Tweakeroo github : https://github.com/maruohon/tweakeroo/
 
  @author maruohon
  @author Intro

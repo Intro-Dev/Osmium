@@ -24,14 +24,13 @@ public class Osmium implements ModInitializer {
 
     public static Options options = new Options();
 
-    public static OsmiumChunkManager chunkManager;
+    // public static OsmiumChunkManager chunkManager;
 
     ToggleSneak toggleSneak;
     Fullbright fullbright;
     Gui gui;
     ShowEntityHealth showEntityHealth;
     FpsModule fpsModule;
-    //BetterEntityCulling betterEntityCulling;
     CapeHandler handler;
 
 
@@ -41,7 +40,6 @@ public class Osmium implements ModInitializer {
         gui = new Gui();
         showEntityHealth = new ShowEntityHealth();
         fpsModule = new FpsModule();
-        // Temporarily disabled optimizationModule = new OptimizationModule();
         handler = new CapeHandler();
         menuKey = new KeyBinding("keys.osmium.MenuKey", InputUtil.Type.KEYSYM, GLFW.GLFW_KEY_RIGHT_SHIFT, "keys.category.osmium.keys");
         perspectiveKey = new KeyBinding("keys.osmium.perspectivekey", InputUtil.Type.KEYSYM, GLFW.GLFW_KEY_V, "keys.category.osmium.keys");
@@ -54,7 +52,7 @@ public class Osmium implements ModInitializer {
         OptionUtil.Options.init();
         OptionUtil.load();
         RegisterModules();
-        chunkManager = new OsmiumChunkManager();
+        // chunkManager = new OsmiumChunkManager();
         System.out.println("Osmium Initialized");
     }
 

@@ -26,12 +26,12 @@ public class ClientChunkManagerMixin {
 
     @Inject(method = "loadChunkFromPacket", at = @At("TAIL"))
     private void load(int x, int z, BiomeArray biomes, PacketByteBuf buf, NbtCompound nbt, BitSet bitSet, CallbackInfoReturnable<WorldChunk> cir) {
-        Osmium.chunkManager.addChunk(world.getChunk(x, z));
+        // Osmium.chunkManager.addChunk(world.getChunk(x, z));
     }
 
     @Inject(method = "unload", at = @At(value = "TAIL"))
     private void unload(int x, int z, CallbackInfo info) {
-        Osmium.chunkManager.removeChunk(world.getChunk(x, z));
+        // Osmium.chunkManager.removeChunk(world.getChunk(x, z));
     }
 
 }
