@@ -1,6 +1,5 @@
 package com.intro.mixin;
 
-import com.intro.module.OptimizationModule;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.ChestBlockEntity;

@@ -13,7 +13,6 @@ public class OsmiumVideoOptionsScreen extends Screen {
     private MinecraftClient mc = MinecraftClient.getInstance();
 
     private ButtonWidget BackButton;
-    private ButtonWidget ToggleBECullingWidget;
     private ButtonWidget ToggleCapeWidget;
     private ButtonWidget ToggleRainWidget;
 
@@ -29,27 +28,10 @@ public class OsmiumVideoOptionsScreen extends Screen {
         });
 
 
-        ToggleBECullingWidget = new ButtonWidget(this.width / 2 - 275, this.height / 6 + 20, 150, 20, new TranslatableText("osmium.options.temporarilydisabled"), (buttonWidget) -> { // + ((EnumOption) OptionUtil.Options.BlockEntityCullingMode.get()).variable.toString().toLowerCase()), (buttonWidget) -> {
-            /*
-            ((EnumOption) OptionUtil.Options.BlockEntityCullingMode.get()).variable = ((SneakMode) ((EnumOption) OptionUtil.Options.BlockEntityCullingMode.get()).variable).next();
-            mc.worldRenderer.reload();
-            if(((EnumOption) OptionUtil.Options.BlockEntityCullingMode.get()).variable == BlockEntityCullingMode.DISABLED) {
-                buttonWidget.setMessage(new TranslatableText("osmium.options.becullingenabled"));
-            } else if(((EnumOption) OptionUtil.Options.BlockEntityCullingMode.get()).variable == BlockEntityCullingMode.LOW) {
-                buttonWidget.setMessage(new TranslatableText("osmium.options.becullinglow"));
-            } else if(((EnumOption) OptionUtil.Options.BlockEntityCullingMode.get()).variable == BlockEntityCullingMode.MEDIUM) {
-                buttonWidget.setMessage(new TranslatableText("osmium.options.becullingmedium"));
-            } else if(((EnumOption) OptionUtil.Options.BlockEntityCullingMode.get()).variable == BlockEntityCullingMode.HIGH) {
-                buttonWidget.setMessage(new TranslatableText("osmium.options.becullinghigh"));
-            } else if(((EnumOption) OptionUtil.Options.BlockEntityCullingMode.get()).variable == BlockEntityCullingMode.EXTREME) {
-                buttonWidget.setMessage(new TranslatableText("osmium.options.becullingextreme"));
-            }
-
-             */
-        });
 
 
-        ToggleCapeWidget = new ButtonWidget(this.width / 2 - 75, this.height / 6 + 20, 150, 20, new TranslatableText("osmium.options.videooptions.cape" + ((EnumOption) OptionUtil.Options.CustomCapeMode.get()).variable.toString().toLowerCase()), (buttonWidget) -> {
+
+        ToggleCapeWidget = new ButtonWidget(this.width / 2 - 275, this.height / 6 + 20, 150, 20, new TranslatableText("osmium.options.videooptions.cape" + ((EnumOption) OptionUtil.Options.CustomCapeMode.get()).variable.toString().toLowerCase()), (buttonWidget) -> {
 
             ((EnumOption) OptionUtil.Options.CustomCapeMode.get()).variable = ((CapeRenderingMode) ((EnumOption) OptionUtil.Options.CustomCapeMode.get()).variable).next();
             mc.worldRenderer.reload();
@@ -85,7 +67,6 @@ public class OsmiumVideoOptionsScreen extends Screen {
         }
 
         this.addDrawableChild(BackButton);
-        this.addDrawableChild(ToggleBECullingWidget);
         this.addDrawableChild(ToggleCapeWidget);
         this.addDrawableChild(ToggleRainWidget);
     }
