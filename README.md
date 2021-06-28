@@ -3,7 +3,22 @@
 # Osmium
 
 ## Basics
-Osmium is a quality of life and performance enhancement mod for fabric 1.17 and above.
+Osmium is a quality of life mod for fabric 1.17 and above.
 
-## Will Osmium be ported to Forge?
-No, Osmium is not going to be ported to Forge, at least for now.
+## Features
+Features include
+- ToggleSprint
+- ToggleSneak
+- Fullbright
+- Gui editing
+- NoRain
+- Fps display
+- LowFire
+- NoHurtBob
+- Optifine cape renderer
+
+
+## Usage
+Osmium is free and open source software licensed under the CC0-1.0 licence, for terms of use refer to the [license file](https://github.com/Intro-Dev/Osmium/blob/1.17.x/LICENSE) file
+
+## 
