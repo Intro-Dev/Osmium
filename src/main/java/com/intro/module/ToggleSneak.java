@@ -37,7 +37,7 @@ public class ToggleSneak extends Module{
 
     public void OnEvent(Event event) {
         if(mc.player != null) {
-            if(((BooleanOption) OptionUtil.Options.ToggleSprintEnabled.get()).variable) {
+            if(((BooleanOption) OptionUtil.Options.ToggleSprintEnabled.get()).variable || ((BooleanOption) OptionUtil.Options.ToggleSneakEnabled.get()).variable) {
                 if(event instanceof EventTick) {
 
                     Osmium.options.put("ToggleSprintPosition", new Vector2Option("ToggleSprintPosition", SprintingText.posX, SprintingText.posY));
@@ -54,21 +54,20 @@ public class ToggleSneak extends Module{
 
 
 
-                    if(this.sprinting) {
+                    if(this.sprinting && ((BooleanOption) OptionUtil.Options.ToggleSprintEnabled.get()).variable) {
                         SprintingText.visible = true;
                         SprintingText.text = "Sprinting(Toggled)";
-                    } else if (mc.options.keySprint.isPressed()) {
+                    } else if (mc.options.keySprint.isPressed() && ((BooleanOption) OptionUtil.Options.ToggleSprintEnabled.get()).variable) {
                         SprintingText.visible = true;
                         SprintingText.text = "Sprinting(Key Down)";
-                    } else if(sneaking) {
+                    } else if(sneaking && ((BooleanOption) OptionUtil.Options.ToggleSneakEnabled.get()).variable) {
                         SprintingText.visible = true;
                         SprintingText.text = "Sneaking(Toggled)";
-                    } else if (mc.options.keySneak.isPressed()) {
+                    } else if (mc.options.keySneak.isPressed() && ((BooleanOption) OptionUtil.Options.ToggleSneakEnabled.get()).variable) {
                         SprintingText.visible = true;
                         SprintingText.text = "Sneaking(Key Down)";
                     } else {
                         SprintingText.visible = false;
-                        SprintingText.text = "";
                     }
 
                 }

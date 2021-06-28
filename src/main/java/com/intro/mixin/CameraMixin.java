@@ -5,6 +5,7 @@ import com.intro.config.OptionUtil;
 import com.intro.config.SneakMode;
 import net.minecraft.client.render.Camera;
 import net.minecraft.entity.Entity;
+import net.minecraft.util.math.MathHelper;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -34,12 +35,14 @@ public class CameraMixin {
     @Inject(at = @At("HEAD"), method = "updateEyeHeight")
     public void changeEyeHeight(CallbackInfo info) {
         // smooth but no squish
-        if (this.focusedEntity != null) if (((EnumOption) OptionUtil.Options.SneakMode.get()).variable == SneakMode.INSTANT) {
-            this.cameraY = this.focusedEntity.getStandingEyeHeight();
-        } else if (((EnumOption) OptionUtil.Options.SneakMode.get()).variable == SneakMode.SMOOTH) {
-            this.cameraY += (this.focusedEntity.getStandingEyeHeight() - this.cameraY) * 0.8F;
-        } else {
-            this.cameraY += (this.focusedEntity.getStandingEyeHeight() - this.cameraY) * 0.5F;
+        if (this.focusedEntity != null) {
+            if (((EnumOption) OptionUtil.Options.SneakMode.get()).variable == SneakMode.INSTANT) {
+                this.cameraY = this.focusedEntity.getStandingEyeHeight();
+            } else if (((EnumOption) OptionUtil.Options.SneakMode.get()).variable == SneakMode.SMOOTH) {
+                this.cameraY = (float) MathHelper.lerp(0.8, this.cameraY, this.focusedEntity.getStandingEyeHeight());
+            } else {
+                this.cameraY += (this.focusedEntity.getStandingEyeHeight() - this.cameraY) * 0.5F;
+            }
         }
     }
 }
