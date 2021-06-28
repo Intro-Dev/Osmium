@@ -15,10 +15,11 @@ import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.LiteralText;
 import net.minecraft.text.TranslatableText;
 import net.minecraft.util.math.*;
+import org.lwjgl.opengl.GL11;
 
 import java.util.ArrayList;
 
-public class RenderManager extends DrawableHelper {
+public class RenderManager extends DrawableHelper{
     public static ArrayList<Text> textArrayList = new ArrayList<>();
 
     public static final int HITBOX_PADDING = 20;
@@ -104,49 +105,6 @@ public class RenderManager extends DrawableHelper {
         return new Vector2d(x / z, y / z);
     }
 
-    public static void drawRect(double x, double y, double width, double height, int color) {
-
-        double leftModifiable = x;
-        double topModifiable = y;
-        double rightModifiable = width;
-        double bottomModifiable = height;
-        if (leftModifiable < rightModifiable) {
-            double i = leftModifiable;
-            leftModifiable = rightModifiable;
-            rightModifiable = i;
-        }
-        if (topModifiable < bottomModifiable) {
-            double j = topModifiable;
-            topModifiable = bottomModifiable;
-            bottomModifiable = j;
-        }
-
-        Color c = new Color(color);
-        RenderSystem.clearColor(c.getR(), c.getG(), c.getB(), c.getA());
-
-        /*GlStateManager._enableBlend();
-        // GlStateManager._disableTexture();
-        GlStateManager._blendFuncSeparate(770, 771, 1, 0);
-        BufferBuilder buffer = Tessellator.getInstance().getBuffer();
-        buffer.begin(VertexFormat.DrawMode.TRIANGLE_STRIP, VertexFormats.POSITION_COLOR);
-        buffer.vertex(leftModifiable, bottomModifiable, 0.0).next();
-        buffer.vertex(rightModifiable, bottomModifiable, 0.0).next();
-        buffer.vertex(rightModifiable, topModifiable, 0.0).next();
-        buffer.vertex(leftModifiable, topModifiable, 0.0).next();
-        Tessellator.getInstance().draw();
-        // GlStateManager._enableTexture();
-        GlStateManager._disableBlend();
-
-
-
-         */
-
-    }
-
-    public void draw3dBox(int posX, int posY, int posZ, int color) {
-        Color c = new Color(color);
-        DebugRenderer.drawBox(new BlockPos(posX, posY, posZ), 1, c.getR(), c.getG(), c.getB(), c.getA());
-    }
 
 
 
@@ -155,6 +113,26 @@ public class RenderManager extends DrawableHelper {
 
     public static RenderManager CreateInstance() {
         return new RenderManager();
+    }
+
+    public static void enableGL2D() {
+        GL11.glDisable(GL11.GL_DEPTH_TEST);
+        GL11.glEnable(GL11.GL_BLEND);
+        GL11.glDisable(GL11.GL_TEXTURE_2D);
+        GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+        GL11.glDepthMask(true);
+        GL11.glEnable(GL11.GL_LINE_SMOOTH);
+        GL11.glHint(GL11.GL_LINE_SMOOTH_HINT, GL11.GL_NICEST);
+        GL11.glHint(GL11.GL_POLYGON_SMOOTH_HINT, GL11.GL_NICEST);
+    }
+
+    public static void disableGL2D() {
+
+        GL11.glEnable(GL11.GL_TEXTURE_2D);
+        GL11.glEnable(GL11.GL_DEPTH_TEST);
+        GL11.glDisable(GL11.GL_LINE_SMOOTH);
+        GL11.glHint(GL11.GL_LINE_SMOOTH_HINT, GL11.GL_DONT_CARE);
+        GL11.glHint(GL11.GL_POLYGON_SMOOTH_HINT, GL11.GL_DONT_CARE);
     }
 
 

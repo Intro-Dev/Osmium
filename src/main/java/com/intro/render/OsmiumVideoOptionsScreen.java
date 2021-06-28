@@ -15,6 +15,7 @@ public class OsmiumVideoOptionsScreen extends Screen {
     private ButtonWidget BackButton;
     private ButtonWidget ToggleBECullingWidget;
     private ButtonWidget ToggleCapeWidget;
+    private ButtonWidget ToggleRainWidget;
 
     public OsmiumVideoOptionsScreen(Screen parent) {
         super(new TranslatableText("osmium.options.videooptions.title"));
@@ -63,9 +64,30 @@ public class OsmiumVideoOptionsScreen extends Screen {
 
         });
 
+        if(((BooleanOption) OptionUtil.Options.NoRainEnabled.get()).variable) {
+            ToggleRainWidget = new ButtonWidget(this.width / 2 + 125, this.height / 6 + 20, 150, 20, new TranslatableText("osmium.options.rainenabled"), (buttonWidget) -> {
+                ((BooleanOption) OptionUtil.Options.NoRainEnabled.get()).variable = !((BooleanOption) OptionUtil.Options.NoRainEnabled.get()).variable;
+                if(((BooleanOption) OptionUtil.Options.NoRainEnabled.get()).variable) {
+                    buttonWidget.setMessage(new TranslatableText("osmium.options.rainenabled"));
+                } else {
+                    buttonWidget.setMessage(new TranslatableText("osmium.options.raindisabled"));
+                }
+            });
+        } else {
+            ToggleRainWidget = new ButtonWidget(this.width / 2 + 125, this.height / 6 + 20, 150, 20, new TranslatableText("osmium.options.raindisabled"), (buttonWidget) -> {
+                ((BooleanOption) OptionUtil.Options.NoRainEnabled.get()).variable = !((BooleanOption) OptionUtil.Options.NoRainEnabled.get()).variable;
+                if(((BooleanOption) OptionUtil.Options.NoRainEnabled.get()).variable) {
+                    buttonWidget.setMessage(new TranslatableText("osmium.options.rainenabled"));
+                } else {
+                    buttonWidget.setMessage(new TranslatableText("o smium.options.raindisabled"));
+                }
+            });
+        }
+
         this.addDrawableChild(BackButton);
         this.addDrawableChild(ToggleBECullingWidget);
         this.addDrawableChild(ToggleCapeWidget);
+        this.addDrawableChild(ToggleRainWidget);
     }
 
     @Override
