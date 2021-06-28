@@ -13,7 +13,6 @@ public class Text implements Element, Drawable, Selectable {
     public int posX, posY;
     public int color;
     public boolean visible = false;
-
     public static final int HITBOX_PADDING = 20;
 
     private MinecraftClient mc = MinecraftClient.getInstance();
