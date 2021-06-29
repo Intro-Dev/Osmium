@@ -44,19 +44,6 @@ public class ElytraRenderer<T extends LivingEntity, M extends EntityModel<T>> ex
         try {
             ItemStack itemStack = entity.getEquippedStack(EquipmentSlot.CHEST);
             if (itemStack.isOf(Items.ELYTRA) && (CapeRenderer.CapeArray.get(entity.getUuidAsString()) != null)) {
-                Identifier identifier4;
-                if (entity instanceof AbstractClientPlayerEntity playerEntity) {
-                    if (playerEntity.canRenderElytraTexture() && playerEntity.getElytraTexture() != null) {
-                        identifier4 = playerEntity.getElytraTexture();
-                    } else if (playerEntity.canRenderCapeTexture() && playerEntity.getCapeTexture() != null && playerEntity.isPartVisible(PlayerModelPart.CAPE)) {
-                        identifier4 = playerEntity.getCapeTexture();
-                    } else {
-                        identifier4 = SKIN;
-                    }
-                } else {
-                    identifier4 = SKIN;
-                }
-
                 stack.push();
                 stack.translate(0.0D, 0.0D, 0.125D);
                 this.getContextModel().copyStateTo(this.elytra);
@@ -65,11 +52,7 @@ public class ElytraRenderer<T extends LivingEntity, M extends EntityModel<T>> ex
                     if(((EnumOption) OptionUtil.Options.CustomCapeMode.get()).variable == CapeRenderingMode.OPTIFINE && CapeRenderer.OptifineCapes.contains(entity.getUuidAsString())) {
                         final VertexConsumer vertexConsumer = ItemRenderer.getArmorGlintConsumer(vertexConsumers, RenderLayer.getArmorCutoutNoCull(CapeRenderer.CapeArray.get(entity.getUuidAsString())), false, itemStack.hasGlint());
                         this.elytra.render(stack, vertexConsumer, light, OverlayTexture.DEFAULT_UV, 1.0F, 1.0F, 1.0F, 1.0F);
-                    } else if (((EnumOption) OptionUtil.Options.CustomCapeMode.get()).variable == CapeRenderingMode.ALL){
-                        final VertexConsumer vertexConsumer = ItemRenderer.getArmorGlintConsumer(vertexConsumers, RenderLayer.getArmorCutoutNoCull(CapeRenderer.CapeArray.get(entity.getUuidAsString())), false, itemStack.hasGlint());
-                        this.elytra.render(stack, vertexConsumer, light, OverlayTexture.DEFAULT_UV, 1.0f, 1.0f, 1.0f, 1.0f);
                     }
-
                 }
                 stack.pop();
             }

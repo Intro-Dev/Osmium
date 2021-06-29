@@ -25,8 +25,8 @@ public abstract class PlayerEntityRendererMixin extends LivingEntityRenderer<Abs
     @Inject(method = ("<init>"), at = @At("RETURN"))
     private void ConstructorMixinPlayerEntityRenderer(Context ctx, boolean slim, CallbackInfo ci) {
         this.addFeature(new CapeRenderer(this));
-        this.features.removeIf(renderer -> renderer instanceof CapeFeatureRenderer);
         this.addFeature(new ElytraRenderer<>(this, ctx.getModelLoader()));
+        this.features.removeIf(renderer -> renderer instanceof CapeFeatureRenderer);
         this.features.removeIf(renderer -> renderer instanceof ElytraFeatureRenderer);
 
     }
