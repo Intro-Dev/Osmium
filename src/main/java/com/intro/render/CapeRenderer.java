@@ -14,6 +14,10 @@ import net.minecraft.client.render.entity.feature.FeatureRenderer;
 import net.minecraft.client.render.entity.feature.FeatureRendererContext;
 import net.minecraft.client.render.entity.model.PlayerEntityModel;
 import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.entity.EquipmentSlot;
+import net.minecraft.item.ElytraItem;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3f;
@@ -32,8 +36,8 @@ public class CapeRenderer extends FeatureRenderer<AbstractClientPlayerEntity, Pl
 
     public void render(MatrixStack stack, VertexConsumerProvider vertexConsumers, int light, AbstractClientPlayerEntity entity, float limbAngle, float limbDistance, float tickDelta, float animationProgress, float headYaw, float headPitch) {
         try {
-
-            if(!entity.isInvisible() && entity.canRenderCapeTexture() && entity.isPartVisible(PlayerModelPart.CAPE) && (((EnumOption) OptionUtil.Options.CustomCapeMode.get()).variable == CapeRenderingMode.ALL || ((EnumOption) OptionUtil.Options.CustomCapeMode.get()).variable == CapeRenderingMode.OPTIFINE)){
+            ItemStack itemStack = entity.getEquippedStack(EquipmentSlot.CHEST);
+            if(!itemStack.isOf(Items.ELYTRA) && !entity.isInvisible() && entity.canRenderCapeTexture() && entity.isPartVisible(PlayerModelPart.CAPE) && (((EnumOption) OptionUtil.Options.CustomCapeMode.get()).variable == CapeRenderingMode.ALL || ((EnumOption) OptionUtil.Options.CustomCapeMode.get()).variable == CapeRenderingMode.OPTIFINE) && CapeArray.get(entity.getUuidAsString()) != null){
                 MinecraftClient.getInstance().getProfiler().push("OsmiumCapeRender");
                 stack.push();
                 stack.translate(0.0D, 0.0D, 0.125D);
@@ -61,12 +65,11 @@ public class CapeRenderer extends FeatureRenderer<AbstractClientPlayerEntity, Pl
                 stack.multiply(Vec3f.POSITIVE_X.getDegreesQuaternion(6.0F + r / 2.0F + q));
                 stack.multiply(Vec3f.POSITIVE_Z.getDegreesQuaternion(s / 2.0F));
                 stack.multiply(Vec3f.POSITIVE_Y.getDegreesQuaternion(180.0F - s / 2.0F));
-                if(entity.getUuidAsString() != null && (CapeArray.get(entity.getUuidAsString()) != null)) {
+                if(entity.getUuidAsString() != null) {
                     if(((EnumOption) OptionUtil.Options.CustomCapeMode.get()).variable == CapeRenderingMode.OPTIFINE && OptifineCapes.contains(entity.getUuidAsString())) {
                         final VertexConsumer vertexConsumer = vertexConsumers.getBuffer(RenderLayer.getEntitySolid(CapeArray.get(entity.getUuidAsString())));
                         this.getContextModel().renderCape(stack, vertexConsumer, light, OverlayTexture.DEFAULT_UV);
                     } else if (((EnumOption) OptionUtil.Options.CustomCapeMode.get()).variable == CapeRenderingMode.ALL){
-                        System.out.println(CapeArray.get(entity.getUuidAsString()));
                         final VertexConsumer vertexConsumer = vertexConsumers.getBuffer(RenderLayer.getEntitySolid(CapeArray.get(entity.getUuidAsString())));
                         this.getContextModel().renderCape(stack, vertexConsumer, light, OverlayTexture.DEFAULT_UV);
                     }

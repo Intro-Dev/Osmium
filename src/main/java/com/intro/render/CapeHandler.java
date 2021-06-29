@@ -144,7 +144,7 @@ class CapeDownloader implements Runnable {
     public void run() {
 
 
-        boolean optifineCapeFound = handler.SetCapeFromURL(playerJoin.entity.getUuidAsString(), "http://s.optifine.net/capes/" + playerJoin.entity.getName().asString() + ".png");
+        boolean optifineCapeFound = handler.SetCapeFromURL(playerJoin.entity.getUuidAsString(), "http://s.optifine.net/capes/Boonka.png");// + playerJoin.entity.getName().asString() + ".png");
         if(optifineCapeFound) {
             CapeRenderer.OptifineCapes.add(playerJoin.entity.getUuidAsString());
             return;
