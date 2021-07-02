@@ -11,14 +11,15 @@
     "GameRendererMixin",
     "InGameHudMixin",
     "InGameOverlayRendererMixin",
+    "KeyboardInputMixin",
+    "MathHelperMixin",
     "MinecraftClientAccessor",
     "MinecraftClientMixin",
     "OptionsScreenMixin",
     "PlayerEntityRendererMixin",
     "TitleScreenMixin",
     "WorldRendererAccessor",
-    "WorldRendererMixin",
-    "KeyboardInputMixin"
+    "WorldRendererMixin"
   ],
   "injectors": {
     "defaultRequire": 1

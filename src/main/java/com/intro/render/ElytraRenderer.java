@@ -43,16 +43,23 @@ public class ElytraRenderer<T extends LivingEntity, M extends EntityModel<T>> ex
     public void render(MatrixStack stack, VertexConsumerProvider vertexConsumers, int light, T entity, float limbAngle, float limbDistance, float tickDelta, float animationProgress, float headYaw, float headPitch) {
         try {
             ItemStack itemStack = entity.getEquippedStack(EquipmentSlot.CHEST);
-            if (itemStack.isOf(Items.ELYTRA) && (CapeRenderer.CapeArray.get(entity.getUuidAsString()) != null)) {
+            if (itemStack.isOf(Items.ELYTRA)) {
+
                 stack.push();
                 stack.translate(0.0D, 0.0D, 0.125D);
                 this.getContextModel().copyStateTo(this.elytra);
                 this.elytra.setAngles(entity, limbAngle, tickDelta, animationProgress, headYaw, headPitch);
                 if(entity.getUuidAsString() != null) {
-                    if(((EnumOption) OptionUtil.Options.CustomCapeMode.get()).variable == CapeRenderingMode.OPTIFINE && CapeRenderer.OptifineCapes.contains(entity.getUuidAsString())) {
-                        final VertexConsumer vertexConsumer = ItemRenderer.getArmorGlintConsumer(vertexConsumers, RenderLayer.getArmorCutoutNoCull(CapeRenderer.CapeArray.get(entity.getUuidAsString())), false, itemStack.hasGlint());
+                    if((CapeRenderer.CapeArray.get(entity.getUuidAsString()) != null)) {
+                        if(((EnumOption) OptionUtil.Options.CustomCapeMode.get()).variable == CapeRenderingMode.OPTIFINE && CapeRenderer.OptifineCapes.contains(entity.getUuidAsString())) {
+                            final VertexConsumer vertexConsumer = ItemRenderer.getArmorGlintConsumer(vertexConsumers, RenderLayer.getArmorCutoutNoCull(CapeRenderer.CapeArray.get(entity.getUuidAsString())), false, itemStack.hasGlint());
+                            this.elytra.render(stack, vertexConsumer, light, OverlayTexture.DEFAULT_UV, 1.0F, 1.0F, 1.0F, 1.0F);
+                        }
+                    } else {
+                        final VertexConsumer vertexConsumer = ItemRenderer.getArmorGlintConsumer(vertexConsumers, RenderLayer.getArmorCutoutNoCull(SKIN), false, itemStack.hasGlint());
                         this.elytra.render(stack, vertexConsumer, light, OverlayTexture.DEFAULT_UV, 1.0F, 1.0F, 1.0F, 1.0F);
                     }
+
                 }
                 stack.pop();
             }
