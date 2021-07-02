@@ -36,5 +36,8 @@
   "osmium.options.raindisabled": "NoRain: Disabled",
   "osmium.options.togglesneaksettings": "ToggleSneak Settings",
   "osmium.options.togglesneakenabled": "ToggleSneak: Enabled",
-  "osmium.options.togglesneakdisabled": "ToggleSneak: Disabled"
+  "osmium.options.togglesneakdisabled": "ToggleSneak: Disabled",
+  "osmium.options.fireworksenabled": "Fireworks: Enabled",
+  "osmium.options.fireworksdisabled": "Fireworks: Disabled"
+
 }

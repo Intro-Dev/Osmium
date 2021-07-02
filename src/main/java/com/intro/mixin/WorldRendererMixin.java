@@ -28,6 +28,9 @@ public class WorldRendererMixin {
         if(parameters == ParticleTypes.RAIN && (((BooleanOption) Osmium.options.NoRainEnabled.get()).variable)) {
             ci.cancel();
         }
+        if(parameters == ParticleTypes.FIREWORK && (((BooleanOption) Osmium.options.FireworksDisabled.get()).variable)) {
+            ci.cancel();
+        }
     }
 
 }

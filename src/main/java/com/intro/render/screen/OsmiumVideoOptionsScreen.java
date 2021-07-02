@@ -15,6 +15,7 @@ public class OsmiumVideoOptionsScreen extends Screen {
     private ButtonWidget BackButton;
     private ButtonWidget ToggleCapeWidget;
     private ButtonWidget ToggleRainWidget;
+    private ButtonWidget ToggleFireworksWidget;
 
     public OsmiumVideoOptionsScreen(Screen parent) {
         super(new TranslatableText("osmium.options.videooptions.title"));
@@ -57,7 +58,27 @@ public class OsmiumVideoOptionsScreen extends Screen {
                 if(((BooleanOption) OptionUtil.Options.NoRainEnabled.get()).variable) {
                     buttonWidget.setMessage(new TranslatableText("osmium.options.rainenabled"));
                 } else {
-                    buttonWidget.setMessage(new TranslatableText("o smium.options.raindisabled"));
+                    buttonWidget.setMessage(new TranslatableText("osmium.options.raindisabled"));
+                }
+            });
+        }
+
+        if(((BooleanOption) OptionUtil.Options.FireworksDisabled.get()).variable) {
+            ToggleFireworksWidget = new ButtonWidget(this.width / 2 + 125, this.height / 6 + 20, 150, 20, new TranslatableText("osmium.options.fireworksenabled"), (buttonWidget) -> {
+                ((BooleanOption) OptionUtil.Options.FireworksDisabled.get()).variable = !((BooleanOption) OptionUtil.Options.FireworksDisabled.get()).variable;
+                if(((BooleanOption) OptionUtil.Options.FireworksDisabled.get()).variable) {
+                    buttonWidget.setMessage(new TranslatableText("osmium.options.fireworksenabled"));
+                } else {
+                    buttonWidget.setMessage(new TranslatableText("osmium.options.fireworksdisabled"));
+                }
+            });
+        } else {
+            ToggleFireworksWidget = new ButtonWidget(this.width / 2 + 125, this.height / 6 + 20, 150, 20, new TranslatableText("osmium.options.fireworksdisabled"), (buttonWidget) -> {
+                ((BooleanOption) OptionUtil.Options.FireworksDisabled.get()).variable = !((BooleanOption) OptionUtil.Options.FireworksDisabled.get()).variable;
+                if(((BooleanOption) OptionUtil.Options.FireworksDisabled.get()).variable) {
+                    buttonWidget.setMessage(new TranslatableText("osmium.options.fireworksenabled"));
+                } else {
+                    buttonWidget.setMessage(new TranslatableText("osmium.options.fireworksdisabled"));
                 }
             });
         }
@@ -65,6 +86,7 @@ public class OsmiumVideoOptionsScreen extends Screen {
         this.addDrawableChild(BackButton);
         this.addDrawableChild(ToggleCapeWidget);
         this.addDrawableChild(ToggleRainWidget);
+        this.addDrawableChild(ToggleFireworksWidget);
     }
 
     @Override

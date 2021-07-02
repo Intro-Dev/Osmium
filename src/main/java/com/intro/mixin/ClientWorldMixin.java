@@ -1,6 +1,7 @@
 package com.intro.mixin;
 
 import com.intro.Osmium;
+import com.intro.config.BooleanOption;
 import com.intro.module.event.EventDirection;
 import com.intro.module.event.EventAddPlayer;
 import com.intro.module.event.EventRemovePlayer;
@@ -10,6 +11,10 @@ import net.minecraft.client.network.ClientPlayNetworkHandler;
 import net.minecraft.client.render.WorldRenderer;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.sound.SoundCategory;
+import net.minecraft.sound.SoundEvent;
+import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.profiler.Profiler;
 import net.minecraft.util.registry.RegistryKey;
 import net.minecraft.world.World;
@@ -52,6 +57,8 @@ public abstract class ClientWorldMixin {
             Osmium.EVENT_BUS.PostEvent(new EventRemovePlayer((AbstractClientPlayerEntity) entity));
         }
     }
+
+
 
 
 

@@ -28,24 +28,13 @@ public class Options {
     public Option ToggleSprintPosition;
     public Option FpsDisplayPosition;
     public Option ToggleSneakEnabled;
+    public Option FireworksDisabled;
 
 
     public void init() {
         // Default inits
         // Changed to preferences when config is loaded
-        ToggleSprintEnabled = new BooleanOption( "ToggleSprintEnabled", false);
-        FullbrightEnabled = new BooleanOption("FullBrightEnabled", false);
-        HurtbobbingEnabled = new BooleanOption("HurtBobbingEnabled", false);
-        SneakMode = new EnumOption("SneakMode", com.intro.config.SneakMode.VANILLA);
-        BlockEntityCullingMode = new EnumOption("BlockEntityCullingMode", com.intro.config.BlockEntityCullingMode.DISABLED);
-        NoRainEnabled = new BooleanOption("NoRainEnabled", false);
-        FpsEnabled = new BooleanOption("FpsEnabled", false);
-        CustomCapeMode = new EnumOption( "CustomCapeMode", CapeRenderingMode.DISABLED);
-        ZoomMode = new EnumOption( "ZoomMode", com.intro.config.ZoomMode.DISABLED);
-        NoFireEnabled = new BooleanOption("NoFireEnabled", false);
-        ToggleSprintPosition = new Vector2Option("ToggleSprintPosition", 5, 5);
-        FpsDisplayPosition = new Vector2Option("FpsDisplayPosition", 5, 5);
-        ToggleSneakEnabled = new BooleanOption("ToggleSneakEnabled", false);
+        this.setDefaults();
     }
 
     public void putHashMap() {
@@ -63,20 +52,9 @@ public class Options {
             put(ToggleSprintPosition.identifier, ToggleSprintPosition);
             put(FpsDisplayPosition.identifier, FpsDisplayPosition);
             put(ToggleSneakEnabled.identifier, ToggleSneakEnabled);
+            put(FireworksDisabled.identifier, FireworksDisabled);
         } catch (Exception e) {
-            ToggleSprintEnabled = new BooleanOption( "ToggleSprintEnabled", false);
-            FullbrightEnabled = new BooleanOption("FullBrightEnabled", false);
-            HurtbobbingEnabled = new BooleanOption("HurtBobbingEnabled", false);
-            SneakMode = new EnumOption("SneakMode", com.intro.config.SneakMode.VANILLA);
-            BlockEntityCullingMode = new EnumOption("BlockEntityCullingMode", com.intro.config.BlockEntityCullingMode.DISABLED);
-            NoRainEnabled = new BooleanOption("NoRainEnabled", false);
-            FpsEnabled = new BooleanOption("FpsEnabled", false);
-            CustomCapeMode = new EnumOption( "CustomCapeMode", CapeRenderingMode.DISABLED);
-            ZoomMode = new EnumOption( "ZoomMode", com.intro.config.ZoomMode.DISABLED);
-            NoFireEnabled = new BooleanOption("NoFireEnabled", false);
-            ToggleSprintPosition = new Vector2Option("ToggleSprintPosition", 5, 5);
-            FpsDisplayPosition = new Vector2Option("FpsDisplayPosition", 5, 5);
-            ToggleSneakEnabled = new BooleanOption("ToggleSneakEnabled", false);
+            this.setDefaults();
             put(ToggleSprintEnabled.identifier, ToggleSprintEnabled);
             put(FullbrightEnabled.identifier, FullbrightEnabled);
             put(HurtbobbingEnabled.identifier, HurtbobbingEnabled);
@@ -90,6 +68,7 @@ public class Options {
             put(ToggleSprintPosition.identifier, ToggleSprintPosition);
             put(FpsDisplayPosition.identifier, FpsDisplayPosition);
             put(ToggleSneakEnabled.identifier, ToggleSneakEnabled);
+            put(FireworksDisabled.identifier, FireworksDisabled);
 
         }
 
@@ -109,5 +88,23 @@ public class Options {
         ToggleSprintPosition = get(ToggleSprintPosition.identifier);
         FpsDisplayPosition = get(FpsDisplayPosition.identifier);
         ToggleSneakEnabled = get(ToggleSneakEnabled.identifier);
+        FireworksDisabled = get(FireworksDisabled.identifier);
+    }
+
+    public void setDefaults() {
+        ToggleSprintEnabled = new BooleanOption( "ToggleSprintEnabled", false);
+        FullbrightEnabled = new BooleanOption("FullBrightEnabled", false);
+        HurtbobbingEnabled = new BooleanOption("HurtBobbingEnabled", false);
+        SneakMode = new EnumOption("SneakMode", com.intro.config.SneakMode.VANILLA);
+        BlockEntityCullingMode = new EnumOption("BlockEntityCullingMode", com.intro.config.BlockEntityCullingMode.DISABLED);
+        NoRainEnabled = new BooleanOption("NoRainEnabled", false);
+        FpsEnabled = new BooleanOption("FpsEnabled", false);
+        CustomCapeMode = new EnumOption( "CustomCapeMode", CapeRenderingMode.DISABLED);
+        ZoomMode = new EnumOption( "ZoomMode", com.intro.config.ZoomMode.DISABLED);
+        NoFireEnabled = new BooleanOption("NoFireEnabled", false);
+        ToggleSprintPosition = new Vector2Option("ToggleSprintPosition", 5, 5);
+        FpsDisplayPosition = new Vector2Option("FpsDisplayPosition", 5, 5);
+        ToggleSneakEnabled = new BooleanOption("ToggleSneakEnabled", false);
+        FireworksDisabled = new BooleanOption("FireworksDisabled", false);
     }
 }
