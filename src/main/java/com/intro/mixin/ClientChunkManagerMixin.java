@@ -1,6 +1,5 @@
 package com.intro.mixin;
 
-import com.intro.Osmium;
 import net.minecraft.client.world.ClientChunkManager;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.nbt.NbtCompound;
@@ -16,7 +15,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.BitSet;
-import java.util.function.BooleanSupplier;
 
 @Mixin(ClientChunkManager.class)
 public class ClientChunkManagerMixin {

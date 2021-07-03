@@ -24,8 +24,6 @@ public class Osmium implements ModInitializer {
 
     public static Options options = new Options();
 
-    // public static OsmiumChunkManager chunkManager;
-
     ToggleSneak toggleSneak;
     Fullbright fullbright;
     Gui gui;
@@ -45,40 +43,20 @@ public class Osmium implements ModInitializer {
         perspectiveKey = new KeyBinding("keys.osmium.perspectivekey", InputUtil.Type.KEYSYM, GLFW.GLFW_KEY_V, "keys.category.osmium.keys");
         zoomKey = new KeyBinding("keys.osmium.zoomkey", InputUtil.Type.KEYSYM, GLFW.GLFW_KEY_C, "keys.category.osmium.keys");
         KeyBindingHelper.registerKeyBinding(menuKey);
-        // KeyBindingHelper.registerKeyBinding(zoomKey);
     }
 
     public void onInitialize() {
         OptionUtil.Options.init();
         OptionUtil.load();
         RegisterModules();
-        // chunkManager = new OsmiumChunkManager();
         System.out.println("Osmium Initialized");
     }
 
     public static class EVENT_BUS {
         public static void PostEvent(Event event) {
-            // Thread thread = new Thread(new ModuleThread(event));
-            // thread.start();
             for(Module m : Osmium.modules) {
                 m.OnEvent(event);
             }
-        }
-    }
-}
-
-class ModuleThread implements Runnable {
-
-    public boolean running = true;
-    private final Event event;
-
-    public ModuleThread(Event e) {
-        event = e;
-    }
-
-    public void run() {
-        for(Module m : Osmium.modules) {
-            m.OnEvent(event);
         }
     }
 }

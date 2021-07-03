@@ -3,7 +3,6 @@ package com.intro.mixin;
 import com.intro.render.CapeRenderer;
 import com.intro.render.ElytraRenderer;
 import net.minecraft.client.network.AbstractClientPlayerEntity;
-import net.minecraft.client.render.entity.EntityRenderDispatcher;
 import net.minecraft.client.render.entity.LivingEntityRenderer;
 import net.minecraft.client.render.entity.PlayerEntityRenderer;
 import net.minecraft.client.render.entity.EntityRendererFactory.Context;

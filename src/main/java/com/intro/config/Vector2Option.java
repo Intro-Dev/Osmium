@@ -1,7 +1,6 @@
 package com.intro.config;
 
 import com.intro.Osmium;
-import com.intro.Vector2d;
 
 public class Vector2Option extends Option {
 

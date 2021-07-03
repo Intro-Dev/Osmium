@@ -1,21 +1,13 @@
 package com.intro.render;
 
 import com.intro.Osmium;
-import com.intro.Vector2d;
 import com.intro.module.event.EventDirection;
 import com.intro.module.event.EventRender;
-import com.mojang.blaze3d.platform.GlStateManager;
-import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawableHelper;
-import net.minecraft.client.render.*;
-import net.minecraft.client.render.debug.DebugRenderer;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.LiteralText;
-import net.minecraft.text.TranslatableText;
-import net.minecraft.util.math.*;
-import org.lwjgl.opengl.GL11;
 
 import java.util.ArrayList;
 

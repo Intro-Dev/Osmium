@@ -5,7 +5,6 @@ import com.intro.config.BooleanOption;
 import com.intro.config.OptionUtil;
 import net.minecraft.client.render.WorldRenderer;
 import net.minecraft.particle.ParticleEffect;
-import net.minecraft.particle.ParticleType;
 import net.minecraft.particle.ParticleTypes;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;

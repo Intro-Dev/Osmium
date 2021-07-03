@@ -1,7 +1,5 @@
 package com.intro.config;
 
-import com.intro.Osmium;
-
 public abstract class Option {
 
     public final String identifier;

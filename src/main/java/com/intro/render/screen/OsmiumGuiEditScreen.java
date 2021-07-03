@@ -9,9 +9,6 @@ import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.TranslatableText;
 
-import java.util.ArrayList;
-import java.util.Optional;
-
 public class OsmiumGuiEditScreen extends Screen{
 
     private Screen parent;

@@ -1,8 +1,6 @@
 package com.intro.mixin;
 
 import com.intro.Osmium;
-import com.intro.module.event.Event;
-import com.intro.module.event.EventDirection;
 import com.intro.module.event.EventStartGame;
 import net.minecraft.client.gui.screen.TitleScreen;
 import org.spongepowered.asm.mixin.Mixin;

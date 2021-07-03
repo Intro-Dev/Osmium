@@ -1,6 +1,5 @@
 package com.intro.module.event;
 
-import net.minecraft.client.world.ClientWorld;
 import net.minecraft.entity.Entity;
 
 public class EventSpawnEntity extends Event {

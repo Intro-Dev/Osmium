@@ -27,7 +27,7 @@
   "osmium.options.videooptions.capeall": "Capes: All",
   "osmium.options.videooptions.capedisabled": "Capes: Disabled",
   "osmium.options.videooptions.capeoptifine": "Capes: Optifine Only",
-  "osmium.version": "Osmium Version 1.0.4",
+  "osmium.version": "Osmium Version 1.0.5",
   "osmium.options.temporarilydisabled": "Temporarily Disabled!",
   "osmium.guiedit.title": "Gui Editing",
   "osmium.options.fpsenabled": "Fps: Enabled",
@@ -37,7 +37,7 @@
   "osmium.options.togglesneaksettings": "ToggleSneak Settings",
   "osmium.options.togglesneakenabled": "ToggleSneak: Enabled",
   "osmium.options.togglesneakdisabled": "ToggleSneak: Disabled",
-  "osmium.options.fireworksenabled": "Fireworks: Enabled",
-  "osmium.options.fireworksdisabled": "Fireworks: Disabled"
+  "osmium.options.fireworksenabled": "Fireworks: Disabled",
+  "osmium.options.fireworksdisabled": "Fireworks: Enabled"
 
 }

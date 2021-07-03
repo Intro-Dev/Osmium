@@ -1,7 +1,6 @@
 package com.intro;
 
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.chunk.Chunk;
 
 import java.util.ArrayList;

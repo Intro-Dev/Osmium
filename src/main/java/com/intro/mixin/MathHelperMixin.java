@@ -17,22 +17,4 @@ public class MathHelperMixin {
         return n >> 1;
     }
 
-    /**
-     * @author Intro
-     * @reason Bitshifting is faster than multiplication
-     */
-    @Overwrite
-    public static float square(float n) {
-        return (int) n >> 1;
-    }
-
-    /**
-     * @author Intro
-     * @reason Bitshifting is faster than multiplication
-     */
-    @Overwrite
-    public static double square(double n) {
-        return (int) n >> 1;
-    }
-
 }

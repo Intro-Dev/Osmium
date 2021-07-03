@@ -2,12 +2,10 @@ package com.intro.module;
 
 import com.intro.Osmium;
 import com.intro.config.BooleanOption;
-import com.intro.config.EnumOption;
 import com.intro.config.OptionUtil;
 import com.intro.config.Vector2Option;
 import com.intro.mixin.MinecraftClientAccessor;
 import com.intro.module.event.Event;
-import com.intro.module.event.EventJoinWorld;
 import com.intro.module.event.EventTick;
 import com.intro.render.Text;
 import net.minecraft.client.MinecraftClient;
