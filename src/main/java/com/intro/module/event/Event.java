@@ -22,8 +22,10 @@ public class Event {
     }
 
     public boolean isPre() {
-        if(this.direction == EventDirection.PRE)
-            return true;
-        return false;
+        return this.direction == EventDirection.PRE;
+    }
+
+    public boolean isPost() {
+        return this.direction == EventDirection.POST;
     }
 }

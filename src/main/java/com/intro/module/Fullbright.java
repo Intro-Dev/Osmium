@@ -15,7 +15,7 @@ public class Fullbright extends Module{
 
     public void OnEvent(Event event) {
 
-        if(event instanceof EventTick) {
+        if(event instanceof EventTick && event.isPost()) {
             if(((BooleanOption) OptionUtil.Options.FullbrightEnabled.get()).variable)
                 mc.options.gamma = 100d;
         }

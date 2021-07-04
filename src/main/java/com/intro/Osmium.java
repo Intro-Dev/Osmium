@@ -27,7 +27,6 @@ public class Osmium implements ModInitializer {
     ToggleSneak toggleSneak;
     Fullbright fullbright;
     Gui gui;
-    ShowEntityHealth showEntityHealth;
     FpsModule fpsModule;
     CapeHandler handler;
 
@@ -36,7 +35,6 @@ public class Osmium implements ModInitializer {
         toggleSneak = new ToggleSneak();
         fullbright = new Fullbright();
         gui = new Gui();
-        showEntityHealth = new ShowEntityHealth();
         fpsModule = new FpsModule();
         handler = new CapeHandler();
         menuKey = new KeyBinding("keys.osmium.MenuKey", InputUtil.Type.KEYSYM, GLFW.GLFW_KEY_RIGHT_SHIFT, "keys.category.osmium.keys");

@@ -20,7 +20,7 @@ public class Gui extends Module{
 
     public void OnEvent(Event event) {
         if(mc.player != null) {
-            if(event instanceof EventTick) {
+            if(event instanceof EventTick && event.isPre()) {
                 if(Osmium.menuKey.wasPressed()) {
                     if(mc.currentScreen instanceof OsmiumOptionsScreen) {
                         mc.currentScreen.onClose();
