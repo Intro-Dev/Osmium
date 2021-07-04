@@ -81,7 +81,7 @@ public class Text implements Element, Drawable, Selectable {
 
     @Override
     public boolean mouseDragged(double mouseX, double mouseY, int button, double deltaX, double deltaY) {
-        if(this.visible && this.guiElement) {
+        if(this.guiElement) {
             if(mouseX + this.getTextWidth() < mc.currentScreen.width || mouseX - this.getTextWidth() < 0) {
                 this.posX = (int) mouseX;
             }

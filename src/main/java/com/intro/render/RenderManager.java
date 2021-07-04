@@ -24,8 +24,6 @@ public class RenderManager extends DrawableHelper{
         for(Text text : textArrayList) {
             if(text.visible) {
                 renderer.drawWithShadow(stack, new LiteralText(text.text), text.posX, text.posY, text.color);
-
-
             }
 
         }

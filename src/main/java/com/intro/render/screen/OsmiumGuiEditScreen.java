@@ -7,6 +7,7 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.Element;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.text.LiteralText;
 import net.minecraft.text.TranslatableText;
 
 public class OsmiumGuiEditScreen extends Screen{
@@ -41,6 +42,14 @@ public class OsmiumGuiEditScreen extends Screen{
     @Override
     public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
         this.renderBackground(matrices);
+        for(Element e : this.children()) {
+            if (e instanceof Text) {
+                if(!((Text) e).visible) {
+                    Text text = (Text) e;
+                    mc.textRenderer.drawWithShadow(matrices, new LiteralText(text.text), text.posX, text.posY, text.color);
+                }
+            }
+        }
         super.render(matrices, mouseX, mouseY, delta);
     }
 
@@ -57,7 +66,6 @@ public class OsmiumGuiEditScreen extends Screen{
 
     @Override
     public boolean mouseDragged(double mouseX, double mouseY, int button, double deltaX, double deltaY) {
-
             for(Element e : this.children()) {
                 if(e instanceof Text) {
                     if(((Text) e).isPositionWithinBounds((int) mouseX, (int) mouseY)) {
