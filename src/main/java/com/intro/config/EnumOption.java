@@ -6,9 +6,12 @@ public class EnumOption extends Option{
 
     public Enum variable;
 
+    public final Enum def;
+
     public EnumOption(String identifier, Enum option) {
         super(identifier, "EnumOption");
         this.variable = option;
+        this.def = variable;
         Osmium.options.put(identifier, this);
     }
 

@@ -29,6 +29,8 @@ public class Options {
     public Option FpsDisplayPosition;
     public Option ToggleSneakEnabled;
     public Option FireworksDisabled;
+    public Option FlyBoostAmount;
+    public Option FlyBoostEnabled;
 
 
     public void init() {
@@ -53,6 +55,8 @@ public class Options {
             put(FpsDisplayPosition.identifier, FpsDisplayPosition);
             put(ToggleSneakEnabled.identifier, ToggleSneakEnabled);
             put(FireworksDisabled.identifier, FireworksDisabled);
+            put(FlyBoostAmount.identifier, FlyBoostAmount);
+            put(FlyBoostEnabled.identifier, FlyBoostEnabled);
         } catch (Exception e) {
             this.setDefaults();
             put(ToggleSprintEnabled.identifier, ToggleSprintEnabled);
@@ -69,6 +73,8 @@ public class Options {
             put(FpsDisplayPosition.identifier, FpsDisplayPosition);
             put(ToggleSneakEnabled.identifier, ToggleSneakEnabled);
             put(FireworksDisabled.identifier, FireworksDisabled);
+            put(FlyBoostAmount.identifier, FlyBoostAmount);
+            put(FlyBoostEnabled.identifier, FlyBoostEnabled);
 
         }
 
@@ -89,6 +95,8 @@ public class Options {
         FpsDisplayPosition = get(FpsDisplayPosition.identifier);
         ToggleSneakEnabled = get(ToggleSneakEnabled.identifier);
         FireworksDisabled = get(FireworksDisabled.identifier);
+        FlyBoostAmount = get(FlyBoostAmount.identifier);
+        FlyBoostEnabled = get(FlyBoostEnabled.identifier);
     }
 
     public void setDefaults() {
@@ -106,5 +114,11 @@ public class Options {
         FpsDisplayPosition = new Vector2Option("FpsDisplayPosition", 5, 5);
         ToggleSneakEnabled = new BooleanOption("ToggleSneakEnabled", false);
         FireworksDisabled = new BooleanOption("FireworksDisabled", false);
+        FlyBoostAmount = new DoubleOption("FlyBoostAmount", 1D);
+        FlyBoostEnabled = new BooleanOption("FlyBoostEnabled", false);
+    }
+
+    public HashMap<String, Option> getValues() {
+        return this.options;
     }
 }

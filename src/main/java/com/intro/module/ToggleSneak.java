@@ -37,10 +37,8 @@ public class ToggleSneak extends Module{
     public void OnEvent(Event event) {
         if(mc.player != null) {
             if(((BooleanOption) OptionUtil.Options.ToggleSprintEnabled.get()).variable || ((BooleanOption) OptionUtil.Options.ToggleSneakEnabled.get()).variable) {
-                if(event instanceof EventTick) {
-
+                if(event instanceof EventTick && event.isPre()) {
                     Osmium.options.put("ToggleSprintPosition", new Vector2Option("ToggleSprintPosition", SprintingText.posX, SprintingText.posY));
-
                     if(mc.player.forwardSpeed > 0 && !mc.player.isUsingItem() && !mc.player.isSneaking() && !mc.player.horizontalCollision && this.sprinting)
                         mc.player.setSprinting(true);
 

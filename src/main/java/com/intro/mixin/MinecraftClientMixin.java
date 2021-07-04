@@ -1,6 +1,7 @@
 package com.intro.mixin;
 
 import com.intro.Osmium;
+import com.intro.config.OptionUtil;
 import com.intro.module.event.EventDirection;
 import com.intro.module.event.EventTick;
 import net.minecraft.client.MinecraftClient;
@@ -20,6 +21,11 @@ public class MinecraftClientMixin {
     @Inject(at = @At("HEAD"), method = "tick")
     public void postTick(CallbackInfo info) {
         Osmium.EVENT_BUS.PostEvent(new EventTick(EventDirection.POST));
+    }
+
+    @Inject(at = @At("HEAD"), method = "close")
+    public void close(CallbackInfo ci) {
+        OptionUtil.save();
     }
 
 

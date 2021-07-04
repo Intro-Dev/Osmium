@@ -38,6 +38,10 @@
   "osmium.options.togglesneakenabled": "ToggleSneak: Enabled",
   "osmium.options.togglesneakdisabled": "ToggleSneak: Disabled",
   "osmium.options.fireworksenabled": "Fireworks: Disabled",
-  "osmium.options.fireworksdisabled": "Fireworks: Enabled"
+  "osmium.options.fireworksdisabled": "Fireworks: Enabled",
+  "osmium.options.flyboostamount": "Fly Boost Amount: ",
+  "osmium.options.flyboostenabled": "Fly Boost: Enabled",
+  "osmium.options.flyboostdisabled": "Fly Boost: Disabled"
+
 
 }

@@ -81,6 +81,7 @@ public class OptionUtil {
             File file = Paths.get(path).toFile();
             StringBuilder builder = new StringBuilder();
             if(file.createNewFile()) {
+                System.out.println("Couldn't find already existing config file, creating new one.");
                 LOGGER.log(Level.ALL, "Couldn't find already existing config file, creating new one.");
             }
             FileWriter writer = new FileWriter(file);
@@ -99,6 +100,7 @@ public class OptionUtil {
     public static void load() {
         Osmium.options = OptionUtil.loadConfig(FabricLoader.getInstance().getConfigDir().resolve("osmium-options.json").toString());
         Osmium.options.putHashMap();
+
     }
 
 

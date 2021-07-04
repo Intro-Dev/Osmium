@@ -20,7 +20,8 @@
     "PlayerEntityRendererMixin",
     "TitleScreenMixin",
     "WorldRendererAccessor",
-    "WorldRendererMixin"
+    "WorldRendererMixin",
+    "PlayerAbilitiesMixin"
   ],
   "injectors": {
     "defaultRequire": 1

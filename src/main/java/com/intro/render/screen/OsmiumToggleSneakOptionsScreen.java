@@ -1,10 +1,14 @@
 package com.intro.render.screen;
 
+import com.intro.Osmium;
 import com.intro.config.BooleanOption;
+import com.intro.config.DoubleOption;
 import com.intro.config.OptionUtil;
+import com.intro.render.widget.DoubleSliderWidget;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
+import net.minecraft.client.gui.widget.SliderWidget;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.TranslatableText;
 
@@ -16,6 +20,8 @@ public class OsmiumToggleSneakOptionsScreen extends Screen {
     private ButtonWidget BackButton;
     private ButtonWidget ToggleSprintToggleWidget;
     private ButtonWidget ToggleSneakToggleWidget;
+    private DoubleSliderWidget FlyBoostAmountWidget;
+    private ButtonWidget FlyBoostEnabledWidget;
 
 
     public OsmiumToggleSneakOptionsScreen(Screen parent) {
@@ -69,9 +75,34 @@ public class OsmiumToggleSneakOptionsScreen extends Screen {
             });
         }
 
+        FlyBoostAmountWidget = new DoubleSliderWidget(mc, this.width / 2 + 25, this.height / 6 + 60, 150, 20, ((DoubleOption) Osmium.options.get("FlyBoostAmount")), "osmium.options.flyboostamount");
+
+
+        if(((BooleanOption) OptionUtil.Options.FlyBoostEnabled.get()).variable) {
+            FlyBoostEnabledWidget = new ButtonWidget(this.width / 2 - 175, this.height / 6 + 60, 150, 20, new TranslatableText("osmium.options.flyboostenabled"), (buttonWidget) -> {
+                ((BooleanOption) OptionUtil.Options.FlyBoostEnabled.get()).variable = !((BooleanOption) OptionUtil.Options.FlyBoostEnabled.get()).variable;
+                if(((BooleanOption) OptionUtil.Options.FlyBoostEnabled.get()).variable) {
+                    buttonWidget.setMessage(new TranslatableText("osmium.options.flyboostenabled"));
+                } else {
+                    buttonWidget.setMessage(new TranslatableText("osmium.options.flyboostdisabled"));
+                }
+            });
+        } else {
+            FlyBoostEnabledWidget = new ButtonWidget(this.width / 2 - 175, this.height / 6 + 60, 150, 20, new TranslatableText("osmium.options.flyboostdisabled"), (buttonWidget) -> {
+                ((BooleanOption) OptionUtil.Options.FlyBoostEnabled.get()).variable = !((BooleanOption) OptionUtil.Options.FlyBoostEnabled.get()).variable;
+                if(((BooleanOption) OptionUtil.Options.FlyBoostEnabled.get()).variable) {
+                    buttonWidget.setMessage(new TranslatableText("osmium.options.flyboostenabled"));
+                } else {
+                    buttonWidget.setMessage(new TranslatableText("osmium.options.flyboostdisabled"));
+                }
+            });
+        }
+
         this.addDrawableChild(ToggleSneakToggleWidget);
         this.addDrawableChild(ToggleSprintToggleWidget);
         this.addDrawableChild(BackButton);
+        this.addDrawableChild(FlyBoostAmountWidget);
+        this.addDrawableChild(FlyBoostEnabledWidget);
     }
 
     @Override

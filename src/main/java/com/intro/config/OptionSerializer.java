@@ -42,6 +42,14 @@ public class OptionSerializer implements JsonSerializer<Option> {
             returnObject.addProperty("Type", option.type);
             return returnObject;
         }
+        if(src.type.equals("DoubleOption")) {
+            DoubleOption option = (DoubleOption) src;
+            JsonObject returnObject = new JsonObject();
+            returnObject.addProperty("Identifier", option.identifier);
+            returnObject.addProperty("Value", option.variable);
+            returnObject.addProperty("Type", option.type);
+            return returnObject;
+        }
         return null;
     }
 }

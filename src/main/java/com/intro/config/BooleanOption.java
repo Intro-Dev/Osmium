@@ -6,9 +6,12 @@ public class BooleanOption extends Option {
 
     public boolean variable;
 
+    public final boolean def;
+
     public BooleanOption(String identifier, boolean variable) {
         super(identifier, "BooleanOption");
         this.variable = variable;
+        this.def = variable;
         Osmium.options.put(identifier, this);
     }
 
