@@ -21,4 +21,6 @@ Features include
 ## Usage
 Osmium is free and open source software licensed under the CC0-1.0 licence, for terms of use refer to the [license file](https://github.com/Intro-Dev/Osmium/blob/1.17.x/LICENSE) file
 
-## 
+## Building and editing
+To edit the Osmium source code, download the source code and open build.gradle in InteliJ.
+To get the most recent build of the mod, check the most recent commit and download the build artifacts.

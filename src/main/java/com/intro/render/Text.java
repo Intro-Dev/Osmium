@@ -1,5 +1,6 @@
 package com.intro.render;
 
+import com.intro.render.screen.OsmiumGuiEditScreen;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.Drawable;
 import net.minecraft.client.gui.Element;
@@ -67,7 +68,7 @@ public class Text implements Element, Drawable, Selectable {
         this.color = color;
     }
 
-    public void DestroySelf() {
+    public void destroySelf() {
         RenderManager.textArrayList.remove(this);
     }
 

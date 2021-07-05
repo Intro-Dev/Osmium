@@ -7,6 +7,7 @@ import com.intro.config.Vector2Option;
 import com.intro.mixin.MinecraftClientAccessor;
 import com.intro.module.event.Event;
 import com.intro.module.event.EventTick;
+import com.intro.module.event.EventType;
 import com.intro.render.Text;
 import net.minecraft.client.MinecraftClient;
 
@@ -31,6 +32,7 @@ public class FpsModule extends Module{
         FpsText.visible = false;
     }
 
+    @EventListener( ListenedEvents = {EventType.EVENT_TICK} )
     public void OnEvent(Event event) {
         if(FpsText != null) {
             if(event instanceof EventTick && mc.player != null) {

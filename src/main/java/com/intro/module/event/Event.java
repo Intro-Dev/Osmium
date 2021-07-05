@@ -28,4 +28,5 @@ public class Event {
     public boolean isPost() {
         return this.direction == EventDirection.POST;
     }
+
 }

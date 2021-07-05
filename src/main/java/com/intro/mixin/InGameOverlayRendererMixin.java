@@ -2,6 +2,7 @@ package com.intro.mixin;
 
 import com.intro.config.BooleanOption;
 import com.intro.config.OptionUtil;
+import com.intro.module.ToggleSneak;
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.MinecraftClient;
