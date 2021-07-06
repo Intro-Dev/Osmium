@@ -6,8 +6,10 @@ import com.intro.config.OptionUtil;
 import com.intro.config.Vector2Option;
 import com.intro.mixin.MinecraftClientAccessor;
 import com.intro.module.event.Event;
+import com.intro.module.event.EventRender;
 import com.intro.module.event.EventTick;
 import com.intro.module.event.EventType;
+import com.intro.render.RenderManager;
 import com.intro.render.Text;
 import net.minecraft.client.MinecraftClient;
 

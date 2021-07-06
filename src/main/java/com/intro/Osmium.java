@@ -15,6 +15,7 @@ import net.minecraft.client.util.InputUtil;
 import org.lwjgl.glfw.GLFW;
 
 import java.lang.annotation.Annotation;
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 
@@ -52,14 +53,14 @@ public class Osmium implements ModInitializer {
         OptionUtil.Options.init();
         OptionUtil.load();
         RegisterModules();
-        EVENT_BUS.ListenerInit();
+        // EVENT_BUS.ListenerInit();
         System.out.println("Osmium Initialized");
     }
 
     public static class EVENT_BUS {
 
-        private static ArrayList<Method> TickListenedMethods = new ArrayList<>();
-        private static ArrayList<Method> RenderListenedMethods = new ArrayList<>();
+        private static final ArrayList<Method> TickListenedMethods = new ArrayList<>();
+        private static final ArrayList<Method> RenderListenedMethods = new ArrayList<>();
 
 
 
@@ -90,16 +91,20 @@ public class Osmium implements ModInitializer {
 
 
         public static void PostEvent(Event event) {
-            /*
-             * Tick and render event listeners are cached for performance
-             *
-             *
-             */
+           /*
+           So it turns out that trying to optimise like this just makes it slower
+           Ill make this work later
 
-            if(event instanceof EventTick) {
+           if(event instanceof EventTick) {
                 for(Method m : TickListenedMethods) {
                     try {
-                        m.invoke(event);
+                        Class<?> c = m.getDeclaringClass();
+                        for(Module module : Osmium.modules) {
+                            if(module.getClass() == c) {
+                                m.setAccessible(true);
+                                m.invoke(module, event);
+                            }
+                        }
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -109,13 +114,20 @@ public class Osmium implements ModInitializer {
             if(event instanceof EventRender) {
                 for(Method m : RenderListenedMethods) {
                     try {
-                        m.invoke(event);
+                        Class<?> c = m.getDeclaringClass();
+                        Constructor constructor = c.getDeclaredConstructor();
+                        Object r = constructor.newInstance();
+                        m.setAccessible(true);
+                        m.invoke(r, event);
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
                 }
                 return;
             }
+            */
+
+
             for(Module m : Osmium.modules) {
                 m.OnEvent(event);
             }
