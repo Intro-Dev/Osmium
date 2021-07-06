@@ -4,6 +4,7 @@ import com.intro.config.BooleanOption;
 import com.intro.config.EnumOption;
 import com.intro.config.OptionUtil;
 import com.intro.config.SneakMode;
+import com.intro.render.widget.BooleanButtonWidget;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
@@ -34,82 +35,26 @@ public class OsmiumOptionsScreen extends Screen {
     MinecraftClient mc = MinecraftClient.getInstance();
 
     /*
-    Panel registration
-    Very Innfecient space wise but I couldent bother working out a better solution
-    TODO Make this good
+    Made this good
      */
 
 
     @Override
     protected void init() {
 
-            ToggleSneakToggleWidget = new ButtonWidget(this.width / 2 - 75, this.height / 6 + 20, 150, 20, new TranslatableText("osmium.options.togglesneaksettings"), (buttonWidget) -> {
-                mc.openScreen(new OsmiumToggleSneakOptionsScreen(this));
-            });
 
-        if(((BooleanOption) OptionUtil.Options.FullbrightEnabled.get()).variable) {
-            FullbrightWidget = new ButtonWidget(this.width / 2 - 275, this.height / 6 + 20, 150, 20, new TranslatableText("osmium.options.fullbrightenabled"), (buttonWidget) -> {
-                ((BooleanOption) OptionUtil.Options.FullbrightEnabled.get()).variable = !((BooleanOption) OptionUtil.Options.FullbrightEnabled.get()).variable;
-                if(((BooleanOption) OptionUtil.Options.FullbrightEnabled.get()).variable) {
-                    buttonWidget.setMessage(new TranslatableText("osmium.options.fullbrightenabled"));
-                } else {
-                    buttonWidget.setMessage(new TranslatableText("osmium.options.fullbrightdisabled"));
-                }
-            });
-        } else {
-            FullbrightWidget = new ButtonWidget(this.width / 2 - 275, this.height / 6 + 20, 150, 20, new TranslatableText("osmium.options.fullbrightdisabled"), (buttonWidget) -> {
-                ((BooleanOption) OptionUtil.Options.FullbrightEnabled.get()).variable = !((BooleanOption) OptionUtil.Options.FullbrightEnabled.get()).variable;
-                if(((BooleanOption) OptionUtil.Options.FullbrightEnabled.get()).variable) {
-                    buttonWidget.setMessage(new TranslatableText("osmium.options.fullbrightenabled"));
-                } else {
-                    buttonWidget.setMessage(new TranslatableText("osmium.options.fullbrightdisabled"));
-                }
-            });
-        }
-        if(((BooleanOption) OptionUtil.Options.HurtbobbingEnabled.get()).variable) {
-            HurtBobWidget = new ButtonWidget(this.width / 2 + 125, this.height / 6 + 20, 150, 20, new TranslatableText("osmium.options.hurtbobbingenabled"), (buttonWidget) -> {
-                ((BooleanOption) OptionUtil.Options.HurtbobbingEnabled.get()).variable = !((BooleanOption) OptionUtil.Options.HurtbobbingEnabled.get()).variable;
-                if(((BooleanOption) OptionUtil.Options.HurtbobbingEnabled.get()).variable) {
-                    buttonWidget.setMessage(new TranslatableText("osmium.options.hurtbobbingenabled"));
-                } else {
-                    buttonWidget.setMessage(new TranslatableText("osmium.options.hurtbobbingdisabled"));
-                }
-            });
-        } else {
-            HurtBobWidget = new ButtonWidget(this.width / 2 + 125, this.height / 6 + 20, 150, 20, new TranslatableText("osmium.options.hurtbobbingdisabled"), (buttonWidget) -> {
-                ((BooleanOption) OptionUtil.Options.HurtbobbingEnabled.get()).variable = !((BooleanOption) OptionUtil.Options.HurtbobbingEnabled.get()).variable;
-                if(((BooleanOption) OptionUtil.Options.HurtbobbingEnabled.get()).variable) {
-                    buttonWidget.setMessage(new TranslatableText("osmium.options.hurtbobbingenabled"));
-                } else {
-                    buttonWidget.setMessage(new TranslatableText("osmium.options.hurtbobbingdisabled"));
-                }
-            });
-        }
 
-        if(((BooleanOption) OptionUtil.Options.NoFireEnabled.get()).variable) {
-            NoFireWidget = new ButtonWidget(this.width / 2 - 275, this.height / 6 + 60, 150, 20, new TranslatableText("osmium.options.nofireenabled"), (buttonWidget) -> {
-                ((BooleanOption) OptionUtil.Options.NoFireEnabled.get()).variable = !((BooleanOption) OptionUtil.Options.NoFireEnabled.get()).variable;
-                if(((BooleanOption) OptionUtil.Options.NoFireEnabled.get()).variable) {
-                    buttonWidget.setMessage(new TranslatableText("osmium.options.nofireenabled"));
-                } else {
-                    buttonWidget.setMessage(new TranslatableText("osmium.options.nofiredisabled"));
-                }
-            });
-        } else {
-            NoFireWidget = new ButtonWidget(this.width / 2 - 275, this.height / 6 + 60, 150, 20, new TranslatableText("osmium.options.nofiredisabled"), (buttonWidget) -> {
-                ((BooleanOption) OptionUtil.Options.NoFireEnabled.get()).variable = !((BooleanOption) OptionUtil.Options.NoFireEnabled.get()).variable;
-                if(((BooleanOption) OptionUtil.Options.NoFireEnabled.get()).variable) {
-                    buttonWidget.setMessage(new TranslatableText("osmium.options.nofireenabled"));
-                } else {
-                    buttonWidget.setMessage(new TranslatableText("osmium.options.nofiredisabled"));
-                }
-            });
-        }
+
+
+        FullbrightWidget = new BooleanButtonWidget(this.width / 2 - 275, this.height / 6 + 20, 150, 20, (BooleanOption) OptionUtil.Options.FullbrightEnabled.get(), "osmium.options.fullbright");
+        HurtBobWidget = new BooleanButtonWidget(this.width / 2 + 125, this.height / 6 + 20, 150, 20,((BooleanOption) OptionUtil.Options.HurtbobbingEnabled.get()), "osmium.options.hurtbobbing");
+        NoFireWidget = new BooleanButtonWidget(this.width / 2 - 275, this.height / 6 + 60, 150, 20, ((BooleanOption) OptionUtil.Options.NoFireEnabled.get()), "osmium.options.nofire");
+        FpsWidget = new BooleanButtonWidget(this.width / 2 - 75, this.height / 6 + 100, 150, 20, ((BooleanOption) OptionUtil.Options.FpsEnabled.get()), "osmium.options.fps");
+
 
 
         SmoothSneakWidget = new ButtonWidget(this.width / 2 + 125, this.height / 6 + 60, 150, 20, new TranslatableText("osmium.options.sneak" + ((EnumOption) OptionUtil.Options.SneakMode.get()).variable.toString().toLowerCase()), (buttonWidget) -> {
             ((EnumOption) OptionUtil.Options.SneakMode.get()).variable = ((SneakMode) ((EnumOption) OptionUtil.Options.SneakMode.get()).variable).next();
-            mc.worldRenderer.reload();
             if(((EnumOption) OptionUtil.Options.SneakMode.get()).variable == SneakMode.VANILLA) {
                 buttonWidget.setMessage(new TranslatableText("osmium.options.sneakvanilla"));
             } else if(((EnumOption) OptionUtil.Options.SneakMode.get()).variable == SneakMode.SMOOTH) {
@@ -117,11 +62,6 @@ public class OsmiumOptionsScreen extends Screen {
             } else if(((EnumOption) OptionUtil.Options.SneakMode.get()).variable == SneakMode.INSTANT) {
                 buttonWidget.setMessage(new TranslatableText("osmium.options.sneakinstant"));
             }
-
-
-
-
-
         });
 
 
@@ -137,25 +77,10 @@ public class OsmiumOptionsScreen extends Screen {
             mc.openScreen(new OsmiumGuiEditScreen(this));
         });
 
-        if(((BooleanOption) OptionUtil.Options.FpsEnabled.get()).variable) {
-            FpsWidget = new ButtonWidget(this.width / 2 - 75, this.height / 6 + 100, 150, 20, new TranslatableText("osmium.options.fpsenabled"), (buttonWidget) -> {
-                ((BooleanOption) OptionUtil.Options.FpsEnabled.get()).variable = !((BooleanOption) OptionUtil.Options.FpsEnabled.get()).variable;
-                if(((BooleanOption) OptionUtil.Options.FpsEnabled.get()).variable) {
-                    buttonWidget.setMessage(new TranslatableText("osmium.options.fpsenabled"));
-                } else {
-                    buttonWidget.setMessage(new TranslatableText("osmium.options.fpsdisabled"));
-                }
-            });
-        } else {
-            FpsWidget = new ButtonWidget(this.width / 2 - 75, this.height / 6 + 100, 150, 20, new TranslatableText("osmium.options.fpsdisabled"), (buttonWidget) -> {
-                ((BooleanOption) OptionUtil.Options.FpsEnabled.get()).variable = !((BooleanOption) OptionUtil.Options.FpsEnabled.get()).variable;
-                if(((BooleanOption) OptionUtil.Options.FpsEnabled.get()).variable) {
-                    buttonWidget.setMessage(new TranslatableText("osmium.options.fpsenabled"));
-                } else {
-                    buttonWidget.setMessage(new TranslatableText("osmium.options.fpsdisabled"));
-                }
-            });
-        }
+        ToggleSneakToggleWidget = new ButtonWidget(this.width / 2 - 75, this.height / 6 + 20, 150, 20, new TranslatableText("osmium.options.togglesneaksettings"), (buttonWidget) -> {
+            mc.openScreen(new OsmiumToggleSneakOptionsScreen(this));
+        });
+
 
 
 

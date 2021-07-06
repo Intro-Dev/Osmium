@@ -44,8 +44,6 @@ public class FpsModule extends Module{
                     Osmium.options.put("FpsDisplayPosition", new Vector2Option("FpsDisplayPosition", FpsText.posX, FpsText.posY));
                 }
             }
-            }
         }
-
-
+    }
 }
