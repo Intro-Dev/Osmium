@@ -24,10 +24,9 @@ public class ElytraRenderer<T extends LivingEntity, M extends EntityModel<T>> ex
     private final ElytraEntityModel<T> elytra;
     private static final Identifier SKIN = new Identifier("textures/entity/elytra.png");
 
-    @SuppressWarnings("unchecked")
     public ElytraRenderer(FeatureRendererContext<T, M> context, EntityModelLoader loader) {
         super(context);
-        this.elytra = new ElytraEntityModel(loader.getModelPart(EntityModelLayers.ELYTRA));
+        this.elytra = new ElytraEntityModel<>(loader.getModelPart(EntityModelLayers.ELYTRA));
 
     }
 
