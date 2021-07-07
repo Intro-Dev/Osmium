@@ -19,8 +19,6 @@ import java.util.Scanner;
 /**
  * Pretty proud of the config system
  * only uses a single hashmap and is called when needed
- * only thing left to do is clean up the Option Screen code
- * TODO clean up Option Screen code
  *
  * @since 1.0
  * @author Intro
@@ -100,7 +98,7 @@ public class OptionUtil {
     public static void load() {
         Osmium.options = OptionUtil.loadConfig(FabricLoader.getInstance().getConfigDir().resolve("osmium-options.json").toString());
         Osmium.options.putHashMap();
-
+        System.out.println(FabricLoader.getInstance().getClass().getName());
     }
 
 

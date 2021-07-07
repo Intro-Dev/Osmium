@@ -41,7 +41,7 @@
   "osmium.options.fireworksdisabled": "Fireworks: Enabled",
   "osmium.options.flyboostamount": "Fly Boost Amount: ",
   "osmium.options.flyboostenabled": "Fly Boost: Enabled",
-  "osmium.options.flyboostdisabled": "Fly Boost: Disabled"
-
-
+  "osmium.options.flyboostdisabled": "Fly Boost: Disabled",
+  "osmium.options.netherparticlesenabled": "Nether Particles: Disabled",
+  "osmium.options.netherparticlesdisabled": "Nether Particles: Enabled"
 }

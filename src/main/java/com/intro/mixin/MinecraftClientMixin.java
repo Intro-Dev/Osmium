@@ -15,12 +15,12 @@ public class MinecraftClientMixin {
 
     @Inject(at = @At("HEAD"), method = "tick")
     public void preTick(CallbackInfo info) {
-        Osmium.EVENT_BUS.PostEvent(new EventTick(EventDirection.PRE));
+        Osmium.EVENT_BUS.postEvent(new EventTick(EventDirection.PRE));
     }
 
     @Inject(at = @At("HEAD"), method = "tick")
     public void postTick(CallbackInfo info) {
-        Osmium.EVENT_BUS.PostEvent(new EventTick(EventDirection.POST));
+        Osmium.EVENT_BUS.postEvent(new EventTick(EventDirection.POST));
     }
 
     @Inject(at = @At("HEAD"), method = "close")

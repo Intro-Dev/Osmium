@@ -13,7 +13,7 @@ public class TitleScreenMixin {
 
     @Inject(at = @At("HEAD"), method = "init()V")
     private void init(CallbackInfo info) {
-        Osmium.EVENT_BUS.PostEvent(new EventStartGame());
+        Osmium.EVENT_BUS.postEvent(new EventStartGame());
     }
 
 }

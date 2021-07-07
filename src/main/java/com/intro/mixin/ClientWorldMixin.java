@@ -24,24 +24,24 @@ public abstract class ClientWorldMixin {
 
     @Inject(at = @At("HEAD"), method = "addEntity")
     public void addEntityPre(int id, Entity entity, CallbackInfo info){
-        Osmium.EVENT_BUS.PostEvent(new EventSpawnEntity(EventDirection.PRE, entity));
+        Osmium.EVENT_BUS.postEvent(new EventSpawnEntity(EventDirection.PRE, entity));
     }
 
     @Inject(at = @At("TAIL"), method = "addEntity")
     public void addEntityPost(int id, Entity entity, CallbackInfo info){
-        Osmium.EVENT_BUS.PostEvent(new EventSpawnEntity(EventDirection.POST, entity));
+        Osmium.EVENT_BUS.postEvent(new EventSpawnEntity(EventDirection.POST, entity));
     }
 
     @Inject(at = @At("HEAD"), method = "addPlayer")
     public void addPlayerPre(int id, AbstractClientPlayerEntity player, CallbackInfo info) {
-        Osmium.EVENT_BUS.PostEvent(new EventAddPlayer(player));
+        Osmium.EVENT_BUS.postEvent(new EventAddPlayer(player));
     }
 
     // @Inject(at = @At("HEAD"), method = "removeEntity")
     public void removeEntity(int entityId, Entity.RemovalReason removalReason, CallbackInfo ci) {
         Entity entity = this.getEntityLookup().get(entityId);
         if(entity.isPlayer()) {
-            Osmium.EVENT_BUS.PostEvent(new EventRemovePlayer((AbstractClientPlayerEntity) entity));
+            Osmium.EVENT_BUS.postEvent(new EventRemovePlayer((AbstractClientPlayerEntity) entity));
         }
     }
 

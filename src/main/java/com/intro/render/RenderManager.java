@@ -33,8 +33,8 @@ public class RenderManager extends DrawableHelper{
     public void render(float tickDelta, long limitTime, MatrixStack matrix) {
         mc.getProfiler().push("OsmiumRenderer");
         EventRender EventRenderPre = new EventRender(EventDirection.PRE, tickDelta, limitTime, matrix);
-        Osmium.EVENT_BUS.PostEvent(EventRenderPre);
-        Osmium.EVENT_BUS.PostEvent(new EventRender(EventDirection.POST, tickDelta, limitTime, matrix));
+        Osmium.EVENT_BUS.postEvent(EventRenderPre);
+        Osmium.EVENT_BUS.postEvent(new EventRender(EventDirection.POST, tickDelta, limitTime, matrix));
         mc.getProfiler().pop();
     }
 

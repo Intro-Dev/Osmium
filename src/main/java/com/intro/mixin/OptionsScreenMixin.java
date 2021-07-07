@@ -39,11 +39,11 @@ public abstract class OptionsScreenMixin extends Screen {
 
     @Inject(at = @At("TAIL"), method = "removed")
     private void onClosePost(CallbackInfo info) {
-        Osmium.EVENT_BUS.PostEvent(new EventSettingsChange(EventDirection.POST));
+        Osmium.EVENT_BUS.postEvent(new EventSettingsChange(EventDirection.POST));
     }
 
     @Inject(at = @At("HEAD"), method = "removed")
     private void onClosePre(CallbackInfo info) {
-        Osmium.EVENT_BUS.PostEvent(new EventSettingsChange(EventDirection.POST));
+        Osmium.EVENT_BUS.postEvent(new EventSettingsChange(EventDirection.POST));
     }
 }

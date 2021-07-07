@@ -7,6 +7,7 @@ import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.TranslatableText;
+import org.lwjgl.system.CallbackI;
 
 public class OsmiumVideoOptionsScreen extends Screen {
 
@@ -17,6 +18,7 @@ public class OsmiumVideoOptionsScreen extends Screen {
     private ButtonWidget ToggleCapeWidget;
     private BooleanButtonWidget ToggleRainWidget;
     private BooleanButtonWidget ToggleFireworksWidget;
+    private BooleanButtonWidget ToggleNetherParticlesWidget;
 
     public OsmiumVideoOptionsScreen(Screen parent) {
         super(new TranslatableText("osmium.options.videooptions.title"));
@@ -46,18 +48,19 @@ public class OsmiumVideoOptionsScreen extends Screen {
 
         ToggleRainWidget = new BooleanButtonWidget(this.width / 2 - 75, this.height / 6 + 20, 150, 20, (BooleanOption) OptionUtil.Options.NoRainEnabled.get(), "osmium.options.rain");
         ToggleFireworksWidget = new BooleanButtonWidget(this.width / 2 + 125, this.height / 6 + 20, 150, 20, ((BooleanOption) OptionUtil.Options.FireworksDisabled.get()), "osmium.options.fireworks");
-
+        ToggleNetherParticlesWidget = new BooleanButtonWidget(this.width / 2 - 275, this.height / 6 + 60, 150, 20, ((BooleanOption) OptionUtil.Options.DecreaseNetherParticles.get()), "osmium.options.netherparticles");
 
         this.addDrawableChild(BackButton);
         this.addDrawableChild(ToggleCapeWidget);
         this.addDrawableChild(ToggleRainWidget);
         this.addDrawableChild(ToggleFireworksWidget);
+        this.addDrawableChild(ToggleNetherParticlesWidget);
     }
 
     @Override
     public void onClose() {
-        super.onClose();
         OptionUtil.save();
+        super.onClose();
     }
 
     @Override

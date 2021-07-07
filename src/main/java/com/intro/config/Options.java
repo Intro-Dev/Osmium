@@ -2,13 +2,44 @@ package com.intro.config;
 
 import java.util.HashMap;
 
+/**
+ * The Options class stores all Osmium options.
+ * For referencing options, options are stored in a normal variable form.
+ * Options are also stored in the options HashMap, which contains a cache of all options.
+ * When options are saved, the options are de-cached from the hashmap and loaded into their corresponding variables.
+ * When options are loaded, options are deserialized from json form, and loaded into the hashmap.
+ *
+ *
+ * @since 1.0
+ * @author Intro
+ */
 public class Options {
 
-    private HashMap<String, Option> options = new HashMap<>();
+    /**
+     * Cache of all options
+     */
+    private final HashMap<String, Option> options = new HashMap<>();
 
     public Option get(String identifier) {
         return options.get(identifier);
     }
+
+    public BooleanOption getBooleanOption(String identifier) {
+        return (BooleanOption) get(identifier);
+    }
+
+    public EnumOption getEnumOption(String identifier) {
+        return (EnumOption) get(identifier);
+    }
+
+    public DoubleOption getDoubleOption(String identifier) {
+        return (DoubleOption) get(identifier);
+    }
+
+    public Vector2Option getVector2Option(String identifier) {
+        return (Vector2Option) get(identifier);
+    }
+
 
     public void put(String identifier, Option option) {
         options.put(identifier, option);
@@ -31,6 +62,7 @@ public class Options {
     public Option FireworksDisabled;
     public Option FlyBoostAmount;
     public Option FlyBoostEnabled;
+    public Option DecreaseNetherParticles;
 
 
     public void init() {
@@ -39,6 +71,10 @@ public class Options {
         this.setDefaults();
     }
 
+    /**
+     * Caches the options HashMap using the corresponding variables.
+     * Catch block is to check if anything is null, and will set all options to default.
+     */
     public void putHashMap() {
         try {
             put(ToggleSprintEnabled.identifier, ToggleSprintEnabled);
@@ -57,6 +93,7 @@ public class Options {
             put(FireworksDisabled.identifier, FireworksDisabled);
             put(FlyBoostAmount.identifier, FlyBoostAmount);
             put(FlyBoostEnabled.identifier, FlyBoostEnabled);
+            put(DecreaseNetherParticles.identifier, DecreaseNetherParticles);
         } catch (Exception e) {
             this.setDefaults();
             put(ToggleSprintEnabled.identifier, ToggleSprintEnabled);
@@ -75,11 +112,15 @@ public class Options {
             put(FireworksDisabled.identifier, FireworksDisabled);
             put(FlyBoostAmount.identifier, FlyBoostAmount);
             put(FlyBoostEnabled.identifier, FlyBoostEnabled);
+            put(DecreaseNetherParticles.identifier, DecreaseNetherParticles);
 
         }
 
     }
 
+    /**
+     * De-caches the options HashMap into its corresponding variables.
+     */
     public void getHashMap() {
         ToggleSprintEnabled = get(ToggleSprintEnabled.identifier);
         FullbrightEnabled = get(FullbrightEnabled.identifier);
@@ -97,8 +138,12 @@ public class Options {
         FireworksDisabled = get(FireworksDisabled.identifier);
         FlyBoostAmount = get(FlyBoostAmount.identifier);
         FlyBoostEnabled = get(FlyBoostEnabled.identifier);
+        DecreaseNetherParticles = get(DecreaseNetherParticles.identifier);
     }
 
+    /**
+     * Assigns the default settings to the option variables.
+     */
     public void setDefaults() {
         ToggleSprintEnabled = new BooleanOption( "ToggleSprintEnabled", false);
         FullbrightEnabled = new BooleanOption("FullBrightEnabled", false);
@@ -116,6 +161,7 @@ public class Options {
         FireworksDisabled = new BooleanOption("FireworksDisabled", false);
         FlyBoostAmount = new DoubleOption("FlyBoostAmount", 1D);
         FlyBoostEnabled = new BooleanOption("FlyBoostEnabled", false);
+        DecreaseNetherParticles = new BooleanOption("DecreaseNetherParticles", false);
     }
 
     public HashMap<String, Option> getValues() {

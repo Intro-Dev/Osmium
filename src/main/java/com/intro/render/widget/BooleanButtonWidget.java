@@ -2,11 +2,8 @@ package com.intro.render.widget;
 
 import com.intro.Osmium;
 import com.intro.config.BooleanOption;
-import com.intro.config.DoubleOption;
-import com.intro.config.OptionUtil;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.text.LiteralText;
-import net.minecraft.text.Text;
 import net.minecraft.text.TranslatableText;
 
 public class BooleanButtonWidget extends ButtonWidget {

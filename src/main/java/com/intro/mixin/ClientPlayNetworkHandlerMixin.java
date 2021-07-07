@@ -16,7 +16,7 @@ public class ClientPlayNetworkHandlerMixin {
 
     @Inject(at = @At("RETURN"), method = "onGameJoin")
     public void onGameJoin(GameJoinS2CPacket packet, CallbackInfo info) {
-        Osmium.EVENT_BUS.PostEvent(new EventJoinWorld(packet));
-        Osmium.EVENT_BUS.PostEvent(new EventAddPlayer(MinecraftClient.getInstance().player));
+        Osmium.EVENT_BUS.postEvent(new EventJoinWorld(packet));
+        Osmium.EVENT_BUS.postEvent(new EventAddPlayer(MinecraftClient.getInstance().player));
     }
 }

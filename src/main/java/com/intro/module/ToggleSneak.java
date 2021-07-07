@@ -4,6 +4,7 @@ import com.intro.Osmium;
 import com.intro.config.BooleanOption;
 import com.intro.config.OptionUtil;
 import com.intro.config.Vector2Option;
+import com.intro.module.event.EventType;
 import com.intro.render.Text;
 import com.intro.module.event.Event;
 import com.intro.module.event.EventTick;
@@ -34,6 +35,7 @@ public class ToggleSneak extends Module{
         SprintingText.visible = false;
     }
 
+    @EventListener(ListenedEvents = { EventType.EVENT_TICK })
     public void OnEvent(Event event) {
         if(mc.player != null) {
             if(((BooleanOption) OptionUtil.Options.ToggleSprintEnabled.get()).variable || ((BooleanOption) OptionUtil.Options.ToggleSneakEnabled.get()).variable) {

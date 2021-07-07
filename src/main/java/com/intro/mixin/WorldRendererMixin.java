@@ -30,6 +30,9 @@ public class WorldRendererMixin {
         if(parameters == ParticleTypes.FIREWORK && (((BooleanOption) Osmium.options.FireworksDisabled.get()).variable)) {
             ci.cancel();
         }
+        if((parameters == ParticleTypes.WARPED_SPORE || parameters == ParticleTypes.CRIMSON_SPORE || parameters == ParticleTypes.SPORE_BLOSSOM_AIR || parameters == ParticleTypes.FALLING_SPORE_BLOSSOM) && (((BooleanOption) Osmium.options.DecreaseNetherParticles.get()).variable)) {
+            ci.cancel();
+        }
     }
 
 }

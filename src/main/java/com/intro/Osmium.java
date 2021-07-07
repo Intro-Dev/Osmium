@@ -1,8 +1,9 @@
 package com.intro;
 
-import com.intro.config.*;
-import com.intro.module.*;
+import com.intro.config.OptionUtil;
+import com.intro.config.Options;
 import com.intro.module.Module;
+import com.intro.module.*;
 import com.intro.module.event.Event;
 import com.intro.module.event.EventRender;
 import com.intro.module.event.EventTick;
@@ -15,9 +16,10 @@ import net.minecraft.client.util.InputUtil;
 import org.lwjgl.glfw.GLFW;
 
 import java.lang.annotation.Annotation;
-import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class Osmium implements ModInitializer {
 
@@ -30,14 +32,14 @@ public class Osmium implements ModInitializer {
 
     public static Options options = new Options();
 
-    ToggleSneak toggleSneak;
-    Fullbright fullbright;
-    Gui gui;
-    FpsModule fpsModule;
-    CapeHandler handler;
+    public static ToggleSneak toggleSneak;
+    public static Fullbright fullbright;
+    public static Gui gui;
+    public static FpsModule fpsModule;
+    public static CapeHandler handler;
 
 
-    public void RegisterModules() {
+    public static void RegisterModules() {
         toggleSneak = new ToggleSneak();
         fullbright = new Fullbright();
         gui = new Gui();
@@ -53,33 +55,32 @@ public class Osmium implements ModInitializer {
         OptionUtil.Options.init();
         OptionUtil.load();
         RegisterModules();
-        // EVENT_BUS.ListenerInit();
+        EVENT_BUS.ListenerInit();
         System.out.println("Osmium Initialized");
+
     }
 
     public static class EVENT_BUS {
 
-        private static final ArrayList<Method> TickListenedMethods = new ArrayList<>();
-        private static final ArrayList<Method> RenderListenedMethods = new ArrayList<>();
+        private static final ArrayList<MethodContainer> TickListenedMethods = new ArrayList<>();
+        private static final ArrayList<MethodContainer> RenderListenedMethods = new ArrayList<>();
+
+        public static ArrayList<MethodContainer> containers = new ArrayList<>();
 
 
 
 
         public static void ListenerInit() {
+            containers.clear();
             for(Module m : Osmium.modules) {
                 try{
                     Class<?> c = m.getClass();
 
                     Method[] methods = c.getMethods();
                     for(Method method : methods) {
-                        Annotation anno = method.getAnnotation(EventListener.class);
+                        EventListener anno = method.getAnnotation(EventListener.class);
                         if(anno != null) {
-                            for(EventType type : ((EventListener) anno).ListenedEvents()) {
-                                switch (type) {
-                                    case EVENT_TICK -> TickListenedMethods.add(method);
-                                    case EVENT_RENDER -> RenderListenedMethods.add(method);
-                                }
-                            }
+                            containers.add(new MethodContainer(m, method, anno.ListenedEvents()));
                         }
                     }
 
@@ -87,50 +88,47 @@ public class Osmium implements ModInitializer {
                     System.out.println(e);
                 }
             }
+            for(MethodContainer container : containers) {
+                if(Arrays.stream(container.type).toList().contains(EventType.EVENT_TICK)) {
+                    TickListenedMethods.add(container);
+                }
+                if(Arrays.stream(container.type).toList().contains(EventType.EVENT_RENDER)) {
+                    RenderListenedMethods.add(container);
+                }
+            }
         }
 
 
-        public static void PostEvent(Event event) {
+        public static void postEvent(Event event) {
            /*
            So it turns out that trying to optimise like this just makes it slower
            Ill make this work later
-
-           if(event instanceof EventTick) {
-                for(Method m : TickListenedMethods) {
+           */
+            if(event instanceof EventTick) {
+                for(MethodContainer m : TickListenedMethods) {
                     try {
-                        Class<?> c = m.getDeclaringClass();
-                        for(Module module : Osmium.modules) {
-                            if(module.getClass() == c) {
-                                m.setAccessible(true);
-                                m.invoke(module, event);
-                            }
-                        }
+                        m.method.setAccessible(true);
+                        m.method.invoke(m.module, event);
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
                 }
                 return;
             }
-            if(event instanceof EventRender) {
-                for(Method m : RenderListenedMethods) {
+           if(event instanceof EventRender) {
+                for(MethodContainer m : RenderListenedMethods) {
                     try {
-                        Class<?> c = m.getDeclaringClass();
-                        Constructor constructor = c.getDeclaredConstructor();
-                        Object r = constructor.newInstance();
-                        m.setAccessible(true);
-                        m.invoke(r, event);
+                        m.method.setAccessible(true);
+                        m.method.invoke(m.method, event);
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
                 }
                 return;
-            }
-            */
-
-
-            for(Module m : Osmium.modules) {
+           }
+           for(Module m : Osmium.modules) {
                 m.OnEvent(event);
-            }
+           }
         }
     }
 }

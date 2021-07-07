@@ -7,6 +7,12 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+/**
+ * Tells the event system to compile this into the optimised system at startup.
+ * @see com.intro.module.event.Event
+ * @see Module
+ * @since 1.0.6
+ */
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ ElementType.METHOD })
 public @interface EventListener {
