@@ -1,12 +1,13 @@
 package com.intro.module;
 
+import com.intro.module.event.EventTick;
 import com.intro.module.event.EventType;
 
 import java.lang.reflect.Method;
 
 /**
- * Contains a method with its accompanying module and event type.
- * Used by the event system to call methods.
+ * <p>Contains a method with its accompanying {@link Module} and {@link com.intro.module.event.Event} type.
+ *  * Used by the event system to call methods.</p>
  * @see com.intro.module.event.Event
  * @see Module
  * @see EventListener

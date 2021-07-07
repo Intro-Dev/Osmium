@@ -17,9 +17,7 @@ import java.util.Scanner;
 
 
 /**
- * Pretty proud of the config system
- * only uses a single hashmap and is called when needed
- *
+ * <p>This class contains the functions to load a config file into an {@link Options} object</p>
  * @since 1.0
  * @author Intro
  */
@@ -39,6 +37,11 @@ public class OptionUtil {
             .registerTypeAdapter(Option.class, new OptionDeserializer())
             .create();
 
+    /**
+     * <p>Loads a {@link Options} object from a config file</p>
+     * @param path The path of the config file
+     * @return A completed {@link Options} object
+     */
     public static Options loadConfig(String path) {
         try {
             File file = Paths.get(path).toFile();
@@ -74,6 +77,10 @@ public class OptionUtil {
         return null;
     }
 
+    /**
+     * <p>Saves the current {@link Options} object in the {@link Osmium} class</p>
+     * @param path The path of the config file
+     */
     public static void saveConfig(String path) {
         try {
             File file = Paths.get(path).toFile();
@@ -90,15 +97,20 @@ public class OptionUtil {
         }
     }
 
+    /**
+     * <p>A method to quickly save to the default config file</p>
+     */
     public static void save() {
         Osmium.options.getHashMap();
         saveConfig(FabricLoader.getInstance().getConfigDir().resolve("osmium-options.json").toString());
     }
 
+    /**
+     * <p>A method to quickly load from the default config file</p>
+     */
     public static void load() {
         Osmium.options = OptionUtil.loadConfig(FabricLoader.getInstance().getConfigDir().resolve("osmium-options.json").toString());
         Osmium.options.putHashMap();
-        System.out.println(FabricLoader.getInstance().getClass().getName());
     }
 
 

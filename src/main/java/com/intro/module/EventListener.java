@@ -8,7 +8,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Tells the event system to compile this into the optimised system at startup.
+ * <p>Tells the event system to compile this into the optimised system at startup.</p>
  * @see com.intro.module.event.Event
  * @see Module
  * @since 1.0.6
@@ -20,5 +20,5 @@ public @interface EventListener {
      * The events that the method listens to.
      * This is for optimizations at runtime init
      */
-    public EventType[] ListenedEvents();
+    EventType[] ListenedEvents();
 }
