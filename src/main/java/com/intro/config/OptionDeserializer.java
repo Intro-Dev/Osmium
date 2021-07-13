@@ -1,6 +1,7 @@
 package com.intro.config;
 
 import com.google.gson.*;
+import com.intro.render.Color;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -32,6 +33,9 @@ public class OptionDeserializer implements JsonDeserializer<Option> {
         }
         if(src.get("Type").getAsString().equals("DoubleOption")) {
             return new DoubleOption( src.get("Identifier").getAsString(), src.get("Value").getAsDouble());
+        }
+        if(src.get("Type").getAsString().equals("ColorOption")) {
+            return new ColorOption(src.get("Identifier").getAsString(), new Color(src.get("R").getAsInt(), src.get("G").getAsInt(), src.get("B").getAsInt(), src.get("A").getAsInt()));
         }
         return null;
     }

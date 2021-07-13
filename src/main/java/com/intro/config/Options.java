@@ -1,5 +1,7 @@
 package com.intro.config;
 
+import com.intro.render.Colors;
+
 import java.util.HashMap;
 
 /**
@@ -40,6 +42,10 @@ public class Options {
         return (Vector2Option) get(identifier);
     }
 
+    public ColorOption getColorOption(String identifier) {
+        return (ColorOption) get(identifier);
+    };
+
 
     public void put(String identifier, Option option) {
         options.put(identifier, option);
@@ -63,6 +69,8 @@ public class Options {
     public Option FlyBoostAmount;
     public Option FlyBoostEnabled;
     public Option DecreaseNetherParticles;
+    public Option CustomBlockOutline;
+    public Option BlockOutlineColor;
 
 
     public void init() {
@@ -94,6 +102,8 @@ public class Options {
             put(FlyBoostAmount.identifier, FlyBoostAmount);
             put(FlyBoostEnabled.identifier, FlyBoostEnabled);
             put(DecreaseNetherParticles.identifier, DecreaseNetherParticles);
+            put(CustomBlockOutline.identifier, CustomBlockOutline);
+            put(BlockOutlineColor.identifier, BlockOutlineColor);
         } catch (Exception e) {
             this.setDefaults();
             put(ToggleSprintEnabled.identifier, ToggleSprintEnabled);
@@ -113,6 +123,8 @@ public class Options {
             put(FlyBoostAmount.identifier, FlyBoostAmount);
             put(FlyBoostEnabled.identifier, FlyBoostEnabled);
             put(DecreaseNetherParticles.identifier, DecreaseNetherParticles);
+            put(CustomBlockOutline.identifier, CustomBlockOutline);
+            put(BlockOutlineColor.identifier, BlockOutlineColor);
 
         }
 
@@ -139,6 +151,8 @@ public class Options {
         FlyBoostAmount = get(FlyBoostAmount.identifier);
         FlyBoostEnabled = get(FlyBoostEnabled.identifier);
         DecreaseNetherParticles = get(DecreaseNetherParticles.identifier);
+        CustomBlockOutline = get(CustomBlockOutline.identifier);
+        BlockOutlineColor = get(BlockOutlineColor.identifier);
     }
 
     /**
@@ -162,6 +176,8 @@ public class Options {
         FlyBoostAmount = new DoubleOption("FlyBoostAmount", 1D);
         FlyBoostEnabled = new BooleanOption("FlyBoostEnabled", false);
         DecreaseNetherParticles = new BooleanOption("DecreaseNetherParticles", false);
+        CustomBlockOutline = new BooleanOption("CustomBlockOutline", false);
+        BlockOutlineColor = new ColorOption("BlockOutlineColor", Colors.TRANSPARENT.getColor());
     }
 
     public HashMap<String, Option> getValues() {

@@ -22,15 +22,17 @@
       "com.intro.Osmium"
     ]
   },
+  "accessWidener" : "osmium.accesswidener",
   "mixins": [
     "osmium.mixins.json"
   ],
 
   "depends": {
-    "fabricloader": ">=0.10.0",
+    "fabricloader": ">=0.8.0",
     "fabric": "*",
     "minecraft": "1.17.x"
   },
+
 
   "custom": {
     "modmenu": {

@@ -81,3 +81,7 @@ publishing {
 		// retrieving dependencies.
 	}
 }
+
+minecraft {
+	accessWidener =  file("src/main/resources/osmium.accesswidener")
+}

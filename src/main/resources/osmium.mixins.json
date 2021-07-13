@@ -17,15 +17,17 @@
     "MinecraftClientAccessor",
     "MinecraftClientMixin",
     "OptionsScreenMixin",
+    "PlayerAbilitiesMixin",
     "PlayerEntityRendererMixin",
     "TitleScreenMixin",
     "WorldRendererAccessor",
-    "WorldRendererMixin",
-    "PlayerAbilitiesMixin"
+    "WorldRendererMixin"
   ],
   "injectors": {
     "defaultRequire": 1
   },
   "mixins": [
+    "ResourceTextureAccessor",
+    "ResourceTextureSubclassAccessor"
   ]
 }
