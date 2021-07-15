@@ -1,28 +1,41 @@
 package com.intro.mixin;
 
 import com.intro.Osmium;
+import com.intro.config.BlockOutlineMode;
 import com.intro.config.BooleanOption;
 import com.intro.config.OptionUtil;
 import com.intro.render.Color;
-import com.intro.render.Colors;
+import com.mojang.blaze3d.platform.GlStateManager;
+import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.ShapeContext;
-import net.minecraft.client.render.VertexConsumer;
-import net.minecraft.client.render.WorldRenderer;
+import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.render.*;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.Entity;
 import net.minecraft.particle.ParticleEffect;
 import net.minecraft.particle.ParticleTypes;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Box;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.shape.VoxelShape;
+import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(WorldRenderer.class)
 public class WorldRendererMixin {
+
+
+    @Shadow @Final private BufferBuilderStorage bufferBuilders;
+
+    private final Identifier BAKED_TEXTURE = new Identifier("osmium", "/textures/gui/gradient.png");
+
+    MinecraftClient mc = MinecraftClient.getInstance();
 
 
     @Inject(at = @At("HEAD"), method = "renderWeather", cancellable = true)
@@ -47,13 +60,16 @@ public class WorldRendererMixin {
 
     @Inject(method = "drawBlockOutline", at = @At("HEAD"), cancellable = true)
     public void renderBlockOutline(MatrixStack matrices, VertexConsumer vertexConsumer, Entity entity, double d, double e, double f, BlockPos blockPos, BlockState blockState, CallbackInfo ci) {
-        if(Osmium.options.getBooleanOption(Osmium.options.CustomBlockOutline.identifier).variable) {
-            drawShapeOutline(matrices, vertexConsumer, blockState.getOutlineShape(entity.world, blockPos, ShapeContext.of(entity)), (double)blockPos.getX() - d, (double)blockPos.getY() - e, (double)blockPos.getZ() - f, Colors.RED.getColor());
+        if(Osmium.options.getEnumOption(Osmium.options.BlockOutlineMode.identifier).variable == BlockOutlineMode.LINES) {
+            drawShapeOutline(matrices, vertexConsumer, blockState.getOutlineShape(entity.world, blockPos, ShapeContext.of(entity)), (double)blockPos.getX() - d, (double)blockPos.getY() - e, (double)blockPos.getZ() - f, Osmium.options.getColorOption(Osmium.options.BlockOutlineColor.identifier).color);
+            ci.cancel();
+        } else if(Osmium.options.getEnumOption(Osmium.options.BlockOutlineMode.identifier).variable == BlockOutlineMode.QUADS) {
+            drawShapeFull(matrices, vertexConsumer, blockState.getOutlineShape(entity.world, blockPos, ShapeContext.of(entity)), (double)blockPos.getX() - d, (double)blockPos.getY() - e, (double)blockPos.getZ() - f, Osmium.options.getColorOption(Osmium.options.BlockOutlineColor.identifier).color);
             ci.cancel();
         }
     }
 
-    private static void drawShapeOutline(MatrixStack matrices, VertexConsumer vertexConsumer, VoxelShape voxelShape, double d, double e, double f, Color color) {
+    private void drawShapeOutline(MatrixStack matrices, VertexConsumer vertexConsumer, VoxelShape voxelShape, double x, double y, double z, Color color) {
         net.minecraft.client.util.math.MatrixStack.Entry entry = matrices.peek();
         voxelShape.forEachEdge((k, l, m, n, o, p) -> {
             float q = (float)(n - k);
@@ -63,9 +79,87 @@ public class WorldRendererMixin {
             q /= t;
             r /= t;
             s /= t;
-            vertexConsumer.vertex(entry.getModel(), (float)(k + d), (float)(l + e), (float)(m + f)).color(color.getFloatR(), color.getFloatG(), color.getFloatB(), color.getFloatA()).normal(entry.getNormal(), q, r, s).next();
-            vertexConsumer.vertex(entry.getModel(), (float)(n + d), (float)(o + e), (float)(p + f)).color(color.getFloatR(), color.getFloatG(), color.getFloatB(), color.getFloatA()).normal(entry.getNormal(), q, r, s).next();
+            RenderSystem.lineWidth(20);
+            vertexConsumer.vertex(entry.getModel(), (float)(k + x), (float)(l + y), (float)(m + z)).color(color.getFloatR(), color.getFloatG(), color.getFloatB(), 0.9f).normal(entry.getNormal(), q, r, s).next();
+            vertexConsumer.vertex(entry.getModel(), (float)(n + x), (float)(o + y), (float)(p + z)).color(color.getFloatR(), color.getFloatG(), color.getFloatB(), 0.9f).normal(entry.getNormal(), q, r, s).next();
         });
     }
 
+    private void drawShapeFull(MatrixStack matrices, VertexConsumer vertexConsumer, VoxelShape voxelShape, double d, double e, double f, Color color) {
+        RenderSystem.depthMask(true);
+        //RenderSystem.disableCull();
+        RenderSystem.enableBlend();
+        RenderSystem.defaultBlendFunc();
+        RenderSystem.disableTexture();
+        RenderSystem.setShader(GameRenderer::getPositionColorShader);
+        net.minecraft.client.util.math.MatrixStack.Entry entry = matrices.peek();
+        drawShapeFull(matrices, color, voxelShape);
+        RenderSystem.depthMask(true);
+        //RenderSystem.disableBlend();
+        RenderSystem.enableCull();
+        RenderSystem.enableTexture();
+    }
+
+    private void drawShapeFull(MatrixStack stack, Color c, VoxelShape shape) {
+        stack.push();
+        GlStateManager._enableBlend();
+        GlStateManager._blendFuncSeparate(770, 771, 1, 0);
+        GlStateManager._disableTexture();
+        BufferBuilder buffer = Tessellator.getInstance().getBuffer();
+
+        Box box = shape.getBoundingBox().offset(MinecraftClient.getInstance().gameRenderer.getCamera().getPos().negate());
+        //Box box = new Box(new BlockPos(0, 0, 0));
+        box.expand(0.01d);
+
+        //vertical
+        buffer.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_COLOR);
+        buffer.vertex(box.minX, box.minY, box.minZ).color(c.getR(), c.getG(), c.getB(), c.getA()).next();
+        buffer.vertex(box.maxX, box.minY, box.minZ).color(c.getR(), c.getG(), c.getB(), c.getA()).next();
+        buffer.vertex(box.maxX, box.minY, box.maxZ).color(c.getR(), c.getG(), c.getB(), c.getA()).next();
+        buffer.vertex(box.minX, box.minY, box.maxZ).color(c.getR(), c.getG(), c.getB(), c.getA()).next();
+        Tessellator.getInstance().draw();
+        /*
+
+        buffer.vertex(box.minX, box.maxY, box.maxZ).color(c.getR(), c.getG(), c.getB(), c.getA()).next();
+        buffer.vertex(box.maxX, box.maxY, box.maxZ).color(c.getR(), c.getG(), c.getB(), c.getA()).next();
+        buffer.vertex(box.maxX, box.maxY, box.minZ).color(c.getR(), c.getG(), c.getB(), c.getA()).next();
+        buffer.vertex(box.minX, box.maxY, box.minZ).color(c.getR(), c.getG(), c.getB(), c.getA()).next();
+
+
+        //x
+        buffer.vertex(box.minX, box.minY, box.maxZ).color(c.getR(), c.getG(), c.getB(), c.getA()).next();
+        buffer.vertex(box.minX, box.maxY, box.maxZ).color(c.getR(), c.getG(), c.getB(), c.getA()).next();
+        buffer.vertex(box.minX, box.maxY, box.minZ).color(c.getR(), c.getG(), c.getB(), c.getA()).next();
+        buffer.vertex(box.minX, box.minY, box.minZ).color(c.getR(), c.getG(), c.getB(), c.getA()).next();
+
+
+        buffer.vertex(box.maxX, box.minY, box.minZ).color(c.getR(), c.getG(), c.getB(), c.getA()).next();
+        buffer.vertex(box.maxX, box.maxY, box.minZ).color(c.getR(), c.getG(), c.getB(), c.getA()).next();
+        buffer.vertex(box.maxX, box.maxY, box.maxZ).color(c.getR(), c.getG(), c.getB(), c.getA()).next();
+        buffer.vertex(box.maxX, box.minY, box.maxZ).color(c.getR(), c.getG(), c.getB(), c.getA()).next();
+
+
+        //z
+        buffer.vertex(box.minX, box.maxY, box.minZ).color(c.getR(), c.getG(), c.getB(), c.getA()).next();
+        buffer.vertex(box.maxX, box.maxY, box.minZ).color(c.getR(), c.getG(), c.getB(), c.getA()).next();
+        buffer.vertex(box.maxX, box.minY, box.minZ).color(c.getR(), c.getG(), c.getB(), c.getA()).next();
+        buffer.vertex(box.minX, box.minY, box.minZ).color(c.getR(), c.getG(), c.getB(), c.getA()).next();
+
+
+        buffer.vertex(box.minX, box.minY, box.maxZ).color(c.getR(), c.getG(), c.getB(), c.getA()).next();
+        buffer.vertex(box.maxX, box.minY, box.maxZ).color(c.getR(), c.getG(), c.getB(), c.getA()).next();
+        buffer.vertex(box.maxX, box.maxY, box.maxZ).color(c.getR(), c.getG(), c.getB(), c.getA()).next();
+        buffer.vertex(box.minX, box.maxY, box.maxZ).color(c.getR(), c.getG(), c.getB(), c.getA()).next();
+        buffer.end();
+
+         */
+        BufferRenderer.draw(buffer);
+
+        GlStateManager._disableBlend();
+        GlStateManager._enableTexture();
+        stack.pop();
+    }
+
 }
+
+

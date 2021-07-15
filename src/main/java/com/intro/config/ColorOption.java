@@ -10,7 +10,7 @@ public class ColorOption extends Option {
     public final Color def;
 
     public ColorOption(String identifier, Color color) {
-        super(identifier, "BooleanOption");
+        super(identifier, "ColorOption");
         this.color = color;
         this.def = color;
         Osmium.options.put(identifier, this);

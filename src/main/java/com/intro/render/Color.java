@@ -157,4 +157,8 @@ public class Color {
         return this.getR() + ", " + this.getG() + ", " + this.getB() + ", " + this.getA();
     }
 
+    public String toStringNoAlpha() {
+        return this.getR() + ", " + this.getG() + ", " + this.getB();
+    }
+
 }

@@ -1,8 +1,9 @@
 package com.intro.render.screen;
 
 import com.intro.Osmium;
+import com.intro.config.BlockOutlineMode;
+import com.intro.config.EnumOption;
 import com.intro.config.OptionUtil;
-import com.intro.render.widget.BooleanButtonWidget;
 import com.intro.render.widget.ColorOptionWidget;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
@@ -31,9 +32,12 @@ public class OsmiumBlockOptionsScreen extends Screen {
             mc.openScreen(this.parent);
         });
 
-        ToggleOverlayButton = new BooleanButtonWidget(this.width / 2 - 175, this.height / 6 + 20, 150, 20, Osmium.options.getBooleanOption(Osmium.options.CustomBlockOutline.identifier), "osmium.options.blockoverlay");
         ColorSelectWidget = new ColorOptionWidget(this.width / 2 + 25, this.height / 6 + 20, Osmium.options.getColorOption(Osmium.options.BlockOutlineColor.identifier));
 
+        ToggleOverlayButton = new ButtonWidget(this.width / 2 - 175, this.height / 6 + 20, 150, 20, new TranslatableText("osmium.options.overlay" + ((EnumOption) OptionUtil.Options.BlockOutlineMode.get()).variable.toString().toLowerCase()), (buttonWidget) -> {
+            ((EnumOption) OptionUtil.Options.BlockOutlineMode.get()).variable = ((BlockOutlineMode) ((EnumOption) OptionUtil.Options.BlockOutlineMode.get()).variable).next();
+           buttonWidget.setMessage(new TranslatableText("osmium.options.overlay" + ((EnumOption) OptionUtil.Options.BlockOutlineMode.get()).variable.toString().toLowerCase()));
+        });
 
         this.addDrawableChild(BackButton);
         this.addDrawableChild(ToggleOverlayButton);

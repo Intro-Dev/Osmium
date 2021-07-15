@@ -56,6 +56,8 @@ public class ColorOptionWidget extends DrawableHelper implements Element, Drawab
     private final int WIDTH = 256;
     private final int HEIGHT = 256;
 
+    private double scale;
+
 
 
     /*
@@ -87,16 +89,16 @@ public class ColorOptionWidget extends DrawableHelper implements Element, Drawab
     public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
         RenderSystem.setShader(GameRenderer::getPositionTexShader);
         RenderSystem.setShaderTexture(0, BAKED_TEXTURE);
+        this.scale = 1;
         drawTexture(matrices, x, y, 0, 0, 256, 256);
-        mc.textRenderer.drawWithShadow(matrices, Osmium.options.getColorOption(this.attachedOption.identifier).color.toString(), (float) x, (float) y + 20, 0xffffff);
-        drawCenteredTextWithShadow(matrices, mc.textRenderer, new TranslatableText("osmium.widget.colorpicker"));
+        drawCenteredText(matrices, mc.textRenderer, Osmium.options.getColorOption(this.attachedOption.identifier).color.toStringNoAlpha(), x + (TEXTURE.getWidth() / 2), y + TEXTURE.getHeight() + 20, 0xffffff);
+        drawCenteredText(matrices, mc.textRenderer, new TranslatableText("osmium.widget.colorpicker"), x + (TEXTURE.getWidth() / 2), y - 20, 0xffffff);
         // this hack is nasty
         // loads a NativeImage object from the current shader texture
         // this gotta be like this because I can't find a way to get a NativeImage from an Identifier
         if(firstRun) {
             // 0 is default texture level
             TEXTURE.loadFromTextureImage(0, false);
-            System.out.println("loading texture from shader");
             firstRun = false;
         }
 
@@ -116,7 +118,13 @@ public class ColorOptionWidget extends DrawableHelper implements Element, Drawab
     public boolean mouseClicked(double mouseX, double mouseY, int button) {
         if(this.isPositionWithinBounds((int) mouseX, ((int) mouseY))) {
             Vector2d vec2 = this.getImagePixels((int) mouseX, (int) mouseY);
-            Osmium.options.getColorOption(this.attachedOption.identifier).color = new Color(TEXTURE.getPixelColor((int) vec2.getX(), (int) vec2.getY()));
+            int color = 0;
+            // for some reason NativeImage isn't reading color data properly.
+            // so we gotta get the base pixel data
+            int[] bytes = TEXTURE.makePixelArray();
+            color = getColorAtLocation(bytes, TEXTURE, (int) vec2.getX(), (int) vec2.getY());
+            Color c = new Color(color);
+            Osmium.options.getColorOption(this.attachedOption.identifier).color = c;
         }
         return Element.super.mouseClicked(mouseX, mouseY, button);
     }
@@ -126,7 +134,7 @@ public class ColorOptionWidget extends DrawableHelper implements Element, Drawab
     public Vector2d getImagePixels(int screenX, int screenY) {
         Screen screen = mc.currentScreen;
         // compute scale
-        double imageScale = Math.min(screen.width / this.WIDTH, screen.height / this.HEIGHT);
+        double imageScale = Math.min(screen.width / TEXTURE.getWidth(), screen.height / TEXTURE.getHeight()) * this.scale;
 
         // compute image offset
         double scaledWidth = this.WIDTH * imageScale;
@@ -143,6 +151,10 @@ public class ColorOptionWidget extends DrawableHelper implements Element, Drawab
         // normalize output
         double x = (screenX - this.x) / imageScale;
         double y = (screenY - this.y) / imageScale;
+
+        // de-scale output
+        x *= 2;
+        y *= 2;
 
         return new Vector2d(x, y);
     }
@@ -162,6 +174,11 @@ public class ColorOptionWidget extends DrawableHelper implements Element, Drawab
 
     protected ResourceTexture.TextureData loadTextureData(ResourceManager resourceManager, ResourceTexture texture) {
         return ResourceTexture.TextureData.load(resourceManager, ((ResourceTextureAccessor) texture).getLocation());
+    }
+    
+    public int getColorAtLocation(int[] arr, NativeImage baseImage, int x, int y) {
+        int index = (baseImage.getWidth() * y) + x;
+        return arr[index];
     }
 
 

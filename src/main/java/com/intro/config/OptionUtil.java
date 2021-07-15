@@ -72,7 +72,6 @@ public class OptionUtil {
 
         } catch (Exception e) {
             LOGGER.warn("Error in loading osmium config!");
-            e.printStackTrace();
         }
         return null;
     }
