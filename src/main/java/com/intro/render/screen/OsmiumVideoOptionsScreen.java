@@ -34,7 +34,7 @@ public class OsmiumVideoOptionsScreen extends Screen {
             mc.openScreen(this.parent);
         });
 
-        BlockOptionScreenButton = new ButtonWidget(this.width / 2 - 75, this.height / 6 + 60, 150, 20, new TranslatableText("  osmium.options.blockoptionsettings"), (buttonWidget) -> {
+        BlockOptionScreenButton = new ButtonWidget(this.width / 2 - 75, this.height / 6 + 60, 150, 20, new TranslatableText("osmium.options.blockoptionsettings"), (buttonWidget) -> {
             mc.openScreen(new OsmiumBlockOptionsScreen(this));
         });
 

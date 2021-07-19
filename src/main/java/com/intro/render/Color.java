@@ -102,19 +102,19 @@ public class Color {
     }
 
     public float getFloatR() {
-        return (this.r * 255) + 0.5f;
+        return (this.r / 255f);
     }
 
     public float getFloatG() {
-        return (this.g * 255) + 0.5f;
+        return (this.g / 255f);
     }
 
     public float getFloatB() {
-        return (this.b * 255) + 0.5f;
+        return (this.b / 255f);
     }
 
     public float getFloatA() {
-        return (this.a * 255) + 0.5f;
+        return (this.a / 255f);
     }
 
     public static Color fromFloatRGBA(float r, float g, float b, float a) {

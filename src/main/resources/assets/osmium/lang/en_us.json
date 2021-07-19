@@ -44,9 +44,12 @@
   "osmium.options.flyboostdisabled": "Fly Boost: Disabled",
   "osmium.options.netherparticlesenabled": "Nether Particles: Disabled",
   "osmium.options.netherparticlesdisabled": "Nether Particles: Enabled",
-  "osmium.options.blockoptionsettings": "Osmium Block Settings",
   "osmium.options.blockoverlayenabled": "Block Overlay: Enabled",
   "osmium.options.blockoverlaydisabled": "Block Overlay: Disabled",
-  "osmium.widget.colorpicker": "Color Picker"
+  "osmium.widget.colorpicker": "Color Picker",
+  "osmium.options.blockoverlayalpha": "Overlay Transparency: ",
+  "osmium.options.overlayvanilla": "BlockOverlay: Vanilla",
+  "osmium.options.overlaylines": "BlockOverlay: Outline",
+  "osmium.options.blockoptionsettings": "Block Overlay Settings"
 
 }

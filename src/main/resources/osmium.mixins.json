@@ -19,6 +19,8 @@
     "OptionsScreenMixin",
     "PlayerAbilitiesMixin",
     "PlayerEntityRendererMixin",
+    "ResourceTextureAccessor",
+    "ResourceTextureSubclassAccessor",
     "TitleScreenMixin",
     "WorldRendererAccessor",
     "WorldRendererMixin"
@@ -27,7 +29,6 @@
     "defaultRequire": 1
   },
   "mixins": [
-    "ResourceTextureAccessor",
-    "ResourceTextureSubclassAccessor"
+    "BufferBuilderAccessor"
   ]
 }

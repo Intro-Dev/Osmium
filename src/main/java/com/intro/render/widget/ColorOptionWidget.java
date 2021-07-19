@@ -115,15 +115,19 @@ public class ColorOptionWidget extends DrawableHelper implements Element, Drawab
     }
 
     @Override
+    @SuppressWarnings("deprecated")
     public boolean mouseClicked(double mouseX, double mouseY, int button) {
         if(this.isPositionWithinBounds((int) mouseX, ((int) mouseY))) {
             Vector2d vec2 = this.getImagePixels((int) mouseX, (int) mouseY);
             int color = 0;
             // for some reason NativeImage isn't reading color data properly.
             // so we gotta get the base pixel data
-            int[] bytes = TEXTURE.makePixelArray();
+            int[] bytes = new int[0];
+            bytes = TEXTURE.makePixelArray();
             color = getColorAtLocation(bytes, TEXTURE, (int) vec2.getX(), (int) vec2.getY());
+
             Color c = new Color(color);
+            System.out.println(c.toString());
             Osmium.options.getColorOption(this.attachedOption.identifier).color = c;
         }
         return Element.super.mouseClicked(mouseX, mouseY, button);

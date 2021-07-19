@@ -72,6 +72,7 @@ public class Options {
     public Option BlockOutlineMode;
     public Option BlockOutlineColor;
     public Option BlockOutlineWidth;
+    public Option BlockOutlineAlpha;
 
 
     public void init() {
@@ -106,6 +107,7 @@ public class Options {
             put(BlockOutlineMode.identifier, BlockOutlineMode);
             put(BlockOutlineColor.identifier, BlockOutlineColor);
             put(BlockOutlineWidth.identifier, BlockOutlineWidth);
+            put(BlockOutlineAlpha.identifier, BlockOutlineAlpha);
 
         } catch (Exception e) {
             this.setDefaults();
@@ -129,6 +131,7 @@ public class Options {
             put(BlockOutlineMode.identifier, BlockOutlineMode);
             put(BlockOutlineColor.identifier, BlockOutlineColor);
             put(BlockOutlineWidth.identifier, BlockOutlineWidth);
+            put(BlockOutlineAlpha.identifier, BlockOutlineAlpha);
 
         }
 
@@ -158,6 +161,7 @@ public class Options {
         BlockOutlineMode = get(BlockOutlineMode.identifier);
         BlockOutlineColor = get(BlockOutlineColor.identifier);
         BlockOutlineWidth = get(BlockOutlineWidth.identifier);
+        BlockOutlineAlpha = get(BlockOutlineAlpha.identifier);
     }
 
     /**
@@ -184,6 +188,7 @@ public class Options {
         BlockOutlineMode = new EnumOption("CustomBlockOutline", com.intro.config.BlockOutlineMode.VANILLA);
         BlockOutlineColor = new ColorOption("BlockOutlineColor", Colors.TRANSPARENT.getColor());
         BlockOutlineWidth = new DoubleOption("BlockOutlineWidth", 1);
+        BlockOutlineAlpha = new DoubleOption("BlockOutlineAlpha", 255);
     }
 
     public HashMap<String, Option> getValues() {

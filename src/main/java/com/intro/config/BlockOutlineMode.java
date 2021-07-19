@@ -2,8 +2,10 @@ package com.intro.config;
 
 public enum BlockOutlineMode {
     VANILLA,
-    LINES,
-    QUADS;
+    LINES;
+
+    // TODO work on quads overlay for the next update
+
 
     private static final BlockOutlineMode[] vals = values();
 

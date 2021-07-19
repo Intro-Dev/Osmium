@@ -8,7 +8,6 @@ import com.intro.render.widget.DoubleSliderWidget;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
-import net.minecraft.client.gui.widget.SliderWidget;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.TranslatableText;
 
@@ -75,7 +74,7 @@ public class OsmiumToggleSneakOptionsScreen extends Screen {
             });
         }
 
-        FlyBoostAmountWidget = new DoubleSliderWidget(mc, this.width / 2 + 25, this.height / 6 + 60, 150, 20, ((DoubleOption) Osmium.options.get("FlyBoostAmount")), "osmium.options.flyboostamount");
+        FlyBoostAmountWidget = new DoubleSliderWidget(mc, this.width / 2 + 25, this.height / 6 + 60, 150, 20, ((DoubleOption) Osmium.options.get("FlyBoostAmount")), "osmium.options.flyboostamount", 0, 1);
 
 
         if(((BooleanOption) OptionUtil.Options.FlyBoostEnabled.get()).variable) {

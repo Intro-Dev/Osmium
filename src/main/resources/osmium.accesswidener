@@ -2,3 +2,7 @@ accessWidener v1 named
 
 accessible class net/minecraft/client/texture/ResourceTexture
 accessible class net/minecraft/client/texture/ResourceTexture$TextureData
+
+accessible class net/minecraft/client/model/ModelPart
+accessible class net/minecraft/client/model/ModelPart$Quad
+accessible class net/minecraft/client/model/ModelPart$Vertex
