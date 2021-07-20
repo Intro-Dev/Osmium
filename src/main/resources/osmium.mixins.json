@@ -29,6 +29,8 @@
     "defaultRequire": 1
   },
   "mixins": [
-    "BufferBuilderAccessor"
+    "BufferBuilderAccessor",
+    "GameRendererInvoker",
+    "ShaderEffectInvoker"
   ]
 }

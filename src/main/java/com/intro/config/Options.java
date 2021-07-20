@@ -188,7 +188,7 @@ public class Options {
         BlockOutlineMode = new EnumOption("CustomBlockOutline", com.intro.config.BlockOutlineMode.VANILLA);
         BlockOutlineColor = new ColorOption("BlockOutlineColor", Colors.TRANSPARENT.getColor());
         BlockOutlineWidth = new DoubleOption("BlockOutlineWidth", 1);
-        BlockOutlineAlpha = new DoubleOption("BlockOutlineAlpha", 255);
+        BlockOutlineAlpha = new DoubleOption("BlockOutlineAlpha", 1);
     }
 
     public HashMap<String, Option> getValues() {

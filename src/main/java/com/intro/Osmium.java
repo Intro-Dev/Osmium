@@ -9,14 +9,16 @@ import com.intro.module.event.EventRender;
 import com.intro.module.event.EventTick;
 import com.intro.module.event.EventType;
 import com.intro.render.CapeHandler;
+import com.intro.render.shader.ShaderSystem;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
 import net.minecraft.client.option.KeyBinding;
 import net.minecraft.client.util.InputUtil;
+import net.minecraft.util.Identifier;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.lwjgl.glfw.GLFW;
 
-import java.lang.annotation.Annotation;
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -24,6 +26,8 @@ import java.util.Arrays;
 public class Osmium implements ModInitializer {
 
     public static final String MOD_ID = "osmium";
+
+    public static final Logger LOGGER = LogManager.getLogger();
 
     public static ArrayList<Module> modules = new ArrayList<Module>();
     public static KeyBinding menuKey;
@@ -39,7 +43,7 @@ public class Osmium implements ModInitializer {
     public static CapeHandler handler;
 
 
-    public static void RegisterModules() {
+    public static void registerModules() {
         toggleSneak = new ToggleSneak();
         fullbright = new Fullbright();
         gui = new Gui();
@@ -51,10 +55,15 @@ public class Osmium implements ModInitializer {
         KeyBindingHelper.registerKeyBinding(menuKey);
     }
 
+    public static void registerShaders() {
+        ShaderSystem.loadShader(new Identifier("osmium", "shaders/post/blur.json"));
+    }
+
     public void onInitialize() {
         OptionUtil.Options.init();
         OptionUtil.load();
-        RegisterModules();
+        registerModules();
+        registerShaders();
         EVENT_BUS.ListenerInit();
         System.out.println("Osmium Initialized");
 

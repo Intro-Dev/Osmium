@@ -20,8 +20,9 @@ public class PlayerAbilitiesMixin {
     @Inject(method = "getFlySpeed", at = @At("HEAD"), cancellable = true)
     public void getFlySpeed(CallbackInfoReturnable<Float> cir) {
         MinecraftClient mc = MinecraftClient.getInstance();
-        if(allowFlying && mc.player != null && ((BooleanOption) Osmium.options.get("FlyBoostEnabled")).variable ) {
-            cir.setReturnValue(MathHelper.clamp((float) ((DoubleOption) Osmium.options.get("FlyBoostAmount")).variable / 5, 0.05f, 0.5f));
+        if(allowFlying && mc.player != null && ((BooleanOption) Osmium.options.get(Osmium.options.FlyBoostEnabled.identifier)).variable ) {
+            System.out.println((float) ((DoubleOption) Osmium.options.get(Osmium.options.FlyBoostAmount.identifier)).variable / 40);
+            cir.setReturnValue(MathHelper.clamp((float) ((DoubleOption) Osmium.options.get(Osmium.options.FlyBoostAmount.identifier)).variable / 40, 0.05f, 0.5f));
         }
     }
 }

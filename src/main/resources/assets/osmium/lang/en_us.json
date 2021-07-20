@@ -27,7 +27,7 @@
   "osmium.options.videooptions.capeall": "Capes: All",
   "osmium.options.videooptions.capedisabled": "Capes: Disabled",
   "osmium.options.videooptions.capeoptifine": "Capes: Optifine Only",
-  "osmium.version": "Osmium Version 1.0.7",
+  "osmium.version": "Osmium Version 1.1.0",
   "osmium.options.temporarilydisabled": "Temporarily Disabled!",
   "osmium.guiedit.title": "Gui Editing",
   "osmium.options.fpsenabled": "Fps: Enabled",
@@ -50,6 +50,7 @@
   "osmium.options.blockoverlayalpha": "Overlay Transparency: ",
   "osmium.options.overlayvanilla": "BlockOverlay: Vanilla",
   "osmium.options.overlaylines": "BlockOverlay: Outline",
-  "osmium.options.blockoptionsettings": "Block Overlay Settings"
+  "osmium.options.blockoptionsettings": "Block Overlay Settings",
+  "osmium.opencredits": "Osmium Github"
 
 }

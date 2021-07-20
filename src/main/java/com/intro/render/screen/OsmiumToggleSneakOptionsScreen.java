@@ -74,7 +74,7 @@ public class OsmiumToggleSneakOptionsScreen extends Screen {
             });
         }
 
-        FlyBoostAmountWidget = new DoubleSliderWidget(mc, this.width / 2 + 25, this.height / 6 + 60, 150, 20, ((DoubleOption) Osmium.options.get("FlyBoostAmount")), "osmium.options.flyboostamount", 0, 1);
+        FlyBoostAmountWidget = new DoubleSliderWidget(mc, this.width / 2 + 25, this.height / 6 + 60, 150, 20, ((DoubleOption) Osmium.options.get(Osmium.options.FlyBoostAmount.identifier)), "osmium.options.flyboostamount", 0, 10, 10);
 
 
         if(((BooleanOption) OptionUtil.Options.FlyBoostEnabled.get()).variable) {
@@ -115,7 +115,6 @@ public class OsmiumToggleSneakOptionsScreen extends Screen {
         this.renderBackground(matrices);
         drawCenteredText(matrices, mc.textRenderer, new TranslatableText("osmium.options.togglesneaksettings"), this.width / 2, 15, 0xffffff);
         drawTextWithShadow(matrices, mc.textRenderer, new TranslatableText("osmium.version"), 20, this.height - 20, 0xffffff);
-
         super.render(matrices, mouseX, mouseY, delta);
     }
 }

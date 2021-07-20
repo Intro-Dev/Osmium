@@ -6,6 +6,8 @@ import com.intro.config.EnumOption;
 import com.intro.config.OptionUtil;
 import com.intro.config.ZoomMode;
 import com.intro.render.RenderManager;
+import com.intro.render.shader.Shader;
+import com.intro.render.shader.ShaderSystem;
 import net.minecraft.client.render.Camera;
 import net.minecraft.client.render.GameRenderer;
 import net.minecraft.client.util.math.MatrixStack;
@@ -44,6 +46,13 @@ public class GameRendererMixin {
             if(((EnumOption) OptionUtil.Options.ZoomMode.get()).variable == ZoomMode.HARD) {
                 info.setReturnValue(fov / 3);
             }
+        }
+    }
+
+    @Inject(method = "render", at = @At(value = "INVOKE", target = "net/minecraft/client/render/WorldRenderer.drawEntityOutlinesFramebuffer()V"))
+    public void render(float tickDelta, long startTime, boolean tick, CallbackInfo ci) {
+        for(Shader shader : ShaderSystem.getShaders().values()) {
+            shader.draw();
         }
     }
 

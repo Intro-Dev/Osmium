@@ -153,6 +153,10 @@ public class Color {
         }
     }
 
+    public static Color fromFloatArray(float[] arr) {
+        return fromFloatRGBA(arr[0], arr[1], arr[2], arr[3]);
+    }
+
     public String toString() {
         return this.getR() + ", " + this.getG() + ", " + this.getB() + ", " + this.getA();
     }

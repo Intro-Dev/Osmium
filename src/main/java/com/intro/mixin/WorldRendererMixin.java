@@ -5,6 +5,8 @@ import com.intro.config.BlockOutlineMode;
 import com.intro.config.BooleanOption;
 import com.intro.config.OptionUtil;
 import com.intro.render.Color;
+import com.intro.render.shader.Shader;
+import com.intro.render.shader.ShaderSystem;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.ShapeContext;
@@ -90,6 +92,18 @@ public class WorldRendererMixin {
         box.expand(0.1f);
         DebugRenderer.drawBox(box, color.getFloatR(), color.getFloatG(), color.getFloatB(), color.getFloatA());
     }
+
+    @Inject(method = "reload()V", at = @At("HEAD"))
+    public void reload(CallbackInfo ci) {
+        if(mc.world != null) {
+            System.out.println("loading shader");
+            for(Shader shader : ShaderSystem.getShaders().values()) {
+                shader.load();
+            }
+        }
+    }
+
+
 
 
 }

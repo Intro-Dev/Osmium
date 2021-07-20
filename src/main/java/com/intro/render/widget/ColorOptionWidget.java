@@ -127,7 +127,6 @@ public class ColorOptionWidget extends DrawableHelper implements Element, Drawab
             color = getColorAtLocation(bytes, TEXTURE, (int) vec2.getX(), (int) vec2.getY());
 
             Color c = new Color(color);
-            System.out.println(c.toString());
             Osmium.options.getColorOption(this.attachedOption.identifier).color = c;
         }
         return Element.super.mouseClicked(mouseX, mouseY, button);
