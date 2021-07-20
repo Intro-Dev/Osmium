@@ -4,10 +4,10 @@ import com.intro.Osmium;
 import com.intro.config.BooleanOption;
 import com.intro.config.OptionUtil;
 import com.intro.config.Vector2Option;
-import com.intro.module.event.EventType;
-import com.intro.render.Text;
 import com.intro.module.event.Event;
 import com.intro.module.event.EventTick;
+import com.intro.module.event.EventType;
+import com.intro.render.Text;
 
 public class ToggleSneak extends Module{
 
@@ -44,16 +44,16 @@ public class ToggleSneak extends Module{
                     if(mc.player.forwardSpeed > 0 && !mc.player.isUsingItem() && !mc.player.isSneaking() && !mc.player.horizontalCollision && this.sprinting)
                         mc.player.setSprinting(true);
 
-                    if(mc.options.keySneak.wasPressed()) {
+                    if(mc.options.keySneak.wasPressed() && ((BooleanOption) OptionUtil.Options.ToggleSneakEnabled.get()).variable) {
                         sneaking = !sneaking;
                     }
-                    if(mc.options.keySprint.wasPressed()) {
+                    if(mc.options.keySprint.wasPressed() && ((BooleanOption) OptionUtil.Options.ToggleSprintEnabled.get()).variable) {
                         this.sprinting = !this.sprinting;
                     }
 
 
 
-                    if(this.sprinting && ((BooleanOption) OptionUtil.Options.ToggleSprintEnabled.get()).variable) {
+                    if((this.sprinting && ((BooleanOption) OptionUtil.Options.ToggleSprintEnabled.get()).variable) && (!sneaking)) {
                         SprintingText.visible = true;
                         SprintingText.text = "Sprinting(Toggled)";
                     } else if (mc.options.keySprint.isPressed() && ((BooleanOption) OptionUtil.Options.ToggleSprintEnabled.get()).variable) {

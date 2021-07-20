@@ -55,6 +55,7 @@ public class Osmium implements ModInitializer {
         KeyBindingHelper.registerKeyBinding(menuKey);
     }
 
+    // Shaders are temporarily disabled until i can get them working
     public static void registerShaders() {
         ShaderSystem.loadShader(new Identifier("osmium", "shaders/post/blur.json"));
     }
@@ -63,7 +64,7 @@ public class Osmium implements ModInitializer {
         OptionUtil.Options.init();
         OptionUtil.load();
         registerModules();
-        registerShaders();
+        // registerShaders();
         EVENT_BUS.ListenerInit();
         System.out.println("Osmium Initialized");
 

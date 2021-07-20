@@ -36,12 +36,12 @@ public class OsmiumBlockOptionsScreen extends Screen {
 
         ColorSelectWidget = new ColorOptionWidget(this.width / 2 + 25, this.height / 6 - 40, Osmium.options.getColorOption(Osmium.options.BlockOutlineColor.identifier));
 
-        ToggleOverlayButton = new ButtonWidget(this.width / 2 - 175, this.height / 6 + 120, 150, 20, new TranslatableText("osmium.options.overlay" + ((EnumOption) OptionUtil.Options.BlockOutlineMode.get()).variable.toString().toLowerCase()), (buttonWidget) -> {
+        ToggleOverlayButton = new ButtonWidget(this.width / 2 - 175, this.height / 6 + 70, 150, 20, new TranslatableText("osmium.options.overlay" + ((EnumOption) OptionUtil.Options.BlockOutlineMode.get()).variable.toString().toLowerCase()), (buttonWidget) -> {
             ((EnumOption) OptionUtil.Options.BlockOutlineMode.get()).variable = ((BlockOutlineMode) ((EnumOption) OptionUtil.Options.BlockOutlineMode.get()).variable).next();
            buttonWidget.setMessage(new TranslatableText("osmium.options.overlay" + ((EnumOption) OptionUtil.Options.BlockOutlineMode.get()).variable.toString().toLowerCase()));
         });
 
-        AlphaSelectWidget = new DoubleSliderWidget(mc,this.width / 2 - 175, this.height / 6 + 160, 150, 20, Osmium.options.getDoubleOption(Osmium.options.BlockOutlineAlpha.identifier),"osmium.options.blockoverlayalpha", 0, 1, 10);
+        AlphaSelectWidget = new DoubleSliderWidget(mc,this.width / 2 - 175, this.height / 6 + 110, 150, 20, Osmium.options.getDoubleOption(Osmium.options.BlockOutlineAlpha.identifier),"osmium.options.blockoverlayalpha", 0, 1, 10);
 
         this.addDrawableChild(BackButton);
         this.addDrawableChild(ToggleOverlayButton);
