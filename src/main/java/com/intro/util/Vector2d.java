@@ -1,4 +1,4 @@
-package com.intro;
+package com.intro.util;
 
 public class Vector2d {
 
@@ -26,6 +26,6 @@ public class Vector2d {
     }
 
     public String toString() {
-        return String.valueOf(x) + ", " + String.valueOf(y);
+        return x + ", " + y;
     }
 }

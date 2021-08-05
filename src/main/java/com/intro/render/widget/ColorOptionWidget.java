@@ -1,11 +1,10 @@
 package com.intro.render.widget;
 
 import com.intro.Osmium;
-import com.intro.Vector2d;
 import com.intro.config.ColorOption;
-import com.intro.mixin.ResourceTextureAccessor;
-import com.intro.mixin.ResourceTextureSubclassAccessor;
 import com.intro.render.Color;
+import com.intro.util.TextureUtil;
+import com.intro.util.Vector2d;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.Drawable;
@@ -16,9 +15,7 @@ import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.narration.NarrationMessageBuilder;
 import net.minecraft.client.render.GameRenderer;
 import net.minecraft.client.texture.NativeImage;
-import net.minecraft.client.texture.ResourceTexture;
 import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.resource.ResourceManager;
 import net.minecraft.text.TranslatableText;
 import net.minecraft.util.Identifier;
 
@@ -43,11 +40,7 @@ public class ColorOptionWidget extends DrawableHelper implements Element, Drawab
 
     private final Identifier BAKED_TEXTURE = new Identifier("osmium", "/textures/gui/gradient.png");
 
-    // random defaults
-    // actually loads from shader
-    private NativeImage TEXTURE = new NativeImage(NativeImage.Format.ABGR, 256, 256, false);
-
-    private boolean firstRun = true;
+    private final NativeImage TEXTURE;
 
     private final int x;
     private final int y;
@@ -65,25 +58,17 @@ public class ColorOptionWidget extends DrawableHelper implements Element, Drawab
     On class init it loads a NativeImage object
     from an identifier, but after that you have to load the image
     again from a shader on the first render.
-    you have to do both or it wont work
+    you have to do both, or it won't work
     please help me
+
+    edit: turns out im stupid
     */
     public ColorOptionWidget(int x, int y, ColorOption attachedOption) {
         this.attachedOption = attachedOption;
         this.x = x;
         this.y = y;
-        mc.getTextureManager().bindTexture(BAKED_TEXTURE);
-        ResourceTexture texture = (ResourceTexture) mc.getTextureManager().getTexture(BAKED_TEXTURE);
-        try {
-            TEXTURE = this.getNativeImage(mc.getResourceManager(), texture);
-        } catch (Exception e) {
-            System.out.println("Error in making color picking widget!");
-            e.printStackTrace();
-        }
+        this.TEXTURE = TextureUtil.convertIdentifierToNativeImage(BAKED_TEXTURE);
     }
-    
-    
-    
 
     @Override
     public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
@@ -93,15 +78,6 @@ public class ColorOptionWidget extends DrawableHelper implements Element, Drawab
         drawTexture(matrices, x, y, 0, 0, 256, 256);
         drawCenteredText(matrices, mc.textRenderer, Osmium.options.getColorOption(this.attachedOption.identifier).color.toStringNoAlpha(), x + (TEXTURE.getWidth() / 2), y + TEXTURE.getHeight() + 20, 0xffffff);
         drawCenteredText(matrices, mc.textRenderer, new TranslatableText("osmium.widget.colorpicker"), x + (TEXTURE.getWidth() / 2), y - 20, 0xffffff);
-        // this hack is nasty
-        // loads a NativeImage object from the current shader texture
-        // this gotta be like this because I can't find a way to get a NativeImage from an Identifier
-        if(firstRun) {
-            // 0 is default texture level
-            TEXTURE.loadFromTextureImage(0, false);
-            firstRun = false;
-        }
-
     }
 
     @Override
@@ -119,15 +95,14 @@ public class ColorOptionWidget extends DrawableHelper implements Element, Drawab
     public boolean mouseClicked(double mouseX, double mouseY, int button) {
         if(this.isPositionWithinBounds((int) mouseX, ((int) mouseY))) {
             Vector2d vec2 = this.getImagePixels((int) mouseX, (int) mouseY);
-            int color = 0;
+            int color;
             // for some reason NativeImage isn't reading color data properly.
             // so we gotta get the base pixel data
-            int[] bytes = new int[0];
+            int[] bytes;
             bytes = TEXTURE.makePixelArray();
             color = getColorAtLocation(bytes, TEXTURE, (int) vec2.getX(), (int) vec2.getY());
 
-            Color c = new Color(color);
-            Osmium.options.getColorOption(this.attachedOption.identifier).color = c;
+            Osmium.options.getColorOption(this.attachedOption.identifier).color = new Color(color);
         }
         return Element.super.mouseClicked(mouseX, mouseY, button);
     }
@@ -166,18 +141,6 @@ public class ColorOptionWidget extends DrawableHelper implements Element, Drawab
         return x > this.x  && x < this.x + this.WIDTH && y > this.y && y < this.y + HEIGHT;
     }
 
-    // this is by far the most disgusting code i have ever produced
-    // the spaghetti is getting to me
-    public NativeImage getNativeImage(ResourceManager manager, ResourceTexture texture) {
-        ResourceTexture.TextureData textureData = this.loadTextureData(manager, texture);
-        NativeImage nativeImage = ((ResourceTextureSubclassAccessor) textureData).getImage();
-        return nativeImage;
-
-    }
-
-    protected ResourceTexture.TextureData loadTextureData(ResourceManager resourceManager, ResourceTexture texture) {
-        return ResourceTexture.TextureData.load(resourceManager, ((ResourceTextureAccessor) texture).getLocation());
-    }
     
     public int getColorAtLocation(int[] arr, NativeImage baseImage, int x, int y) {
         int index = (baseImage.getWidth() * y) + x;
