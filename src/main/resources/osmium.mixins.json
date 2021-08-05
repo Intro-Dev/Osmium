@@ -9,11 +9,11 @@
     "ClientPlayNetworkHandlerMixin",
     "ClientWorldMixin",
     "FireworkEntityRendererMixin",
+    "GameRendererInvoker",
     "GameRendererMixin",
     "InGameHudMixin",
     "InGameOverlayRendererMixin",
     "KeyboardInputMixin",
-    "MathHelperMixin",
     "MinecraftClientAccessor",
     "MinecraftClientMixin",
     "OptionsScreenMixin",
@@ -21,6 +21,7 @@
     "PlayerEntityRendererMixin",
     "ResourceTextureAccessor",
     "ResourceTextureSubclassAccessor",
+    "ShaderEffectInvoker",
     "TitleScreenMixin",
     "WorldRendererAccessor",
     "WorldRendererMixin"
@@ -29,8 +30,6 @@
     "defaultRequire": 1
   },
   "mixins": [
-    "BufferBuilderAccessor",
-    "GameRendererInvoker",
-    "ShaderEffectInvoker"
+
   ]
 }

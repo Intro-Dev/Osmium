@@ -3,24 +3,20 @@
 # Osmium
 
 ## Basics
-Osmium is a quality of life mod for fabric 1.17 and above.
+Osmium is a quality of life mod for fabric 1.17 and above that adds features similar to pvp clients like Badlion Client and Lunar Client.
 
 ## Features
 Features include
 - ToggleSprint
 - ToggleSneak
 - Fullbright
-- Gui editing
-- NoRain
+- No rain
 - Fps display
-- LowFire
+- Low fire
 - NoHurtBob
-- Optifine cape renderer
+- Custom cape rendering
+- Block Outline
+- Fly boost
+- Disable nether particles
+- Disable firework particles
 
-
-## Usage
-Osmium is free and open source software licensed under the CC0-1.0 licence, for terms of use refer to the [license file](https://github.com/Intro-Dev/Osmium/blob/1.17.x/LICENSE) file
-
-## Building and editing
-To edit the Osmium source code, download the source code and open build.gradle in InteliJ.
-To get the most recent build of the mod, check the most recent commit and download the build artifacts.
