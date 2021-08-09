@@ -54,7 +54,7 @@ public class OsmiumGuiEditScreen extends Screen{
     @Override
     public boolean mouseDragged(double mouseX, double mouseY, int button, double deltaX, double deltaY) {
         for(Drawable drawable : RenderManager.drawables) {
-            if(drawable.isPositionWithinBounds((int) mouseX, (int) mouseY)) {
+            if(drawable.isPositionWithinBounds((int) mouseX, (int) mouseY) && drawable.visible) {
                 if(mouseX + drawable.width < this.width || mouseX - drawable.width < 0) {
                     drawable.posX = (int) mouseX;
                 }

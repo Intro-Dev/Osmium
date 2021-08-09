@@ -19,15 +19,21 @@ public class RenderManager extends DrawableHelper {
     private static MinecraftClient mc = MinecraftClient.getInstance();
 
     public static void initDrawables() {
-       addDrawable(StatusEffectDisplay.getInstance());
+        addDrawable(StatusEffectDisplay.getInstance());
     }
 
     public static void renderHud(MatrixStack stack) {
         mc.getProfiler().push("OsmiumHudRenderer");
+        stack.push();
         for(Drawable element : drawables) {
-            if(element.visible)
+            if(element.visible) {
+                stack.push();
                 element.render(stack);
+                stack.pop();
+            }
+
         }
+        stack.pop();
         mc.getProfiler().pop();
     }
 

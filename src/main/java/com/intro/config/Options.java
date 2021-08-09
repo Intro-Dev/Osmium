@@ -1,7 +1,9 @@
 package com.intro.config;
 
+import com.intro.Osmium;
 import com.intro.config.options.*;
 import com.intro.render.Colors;
+import org.apache.logging.log4j.Level;
 
 import java.util.HashMap;
 
@@ -71,8 +73,10 @@ public class Options {
     public Option BlockOutlineMode;
     public Option BlockOutlineColor;
     public Option BlockOutlineAlpha;
-    public Option StatusEffectDisplayEnabled;
+    public Option StatusEffectDisplayMode;
     public Option StatusEffectDisplayPosition;
+    public Option MaxStatusEffectsDisplayed;
+    public Option StatusEffectDisplayScale;
 
 
 
@@ -82,32 +86,62 @@ public class Options {
         this.setDefaults();
     }
 
+
     /**
      * Caches the options HashMap using the corresponding variables.
      * Catch block is to check if anything is null, and will set all options to default.
      */
     public void putHashMap() {
+            try {
+                put(ToggleSprintEnabled.identifier, ToggleSprintEnabled);
+                put(FullbrightEnabled.identifier, FullbrightEnabled);
+                put(HurtbobbingEnabled.identifier, HurtbobbingEnabled);
+                put(SneakMode.identifier, SneakMode);
+                put(NoRainEnabled.identifier, NoRainEnabled);
+                put(FpsEnabled.identifier, FpsEnabled);
+                put(CustomCapeMode.identifier, CustomCapeMode);
+                put(NoFireEnabled.identifier, NoFireEnabled);
+                put(ToggleSprintPosition.identifier, ToggleSprintPosition);
+                put(FpsDisplayPosition.identifier, FpsDisplayPosition);
+                put(ToggleSneakEnabled.identifier, ToggleSneakEnabled);
+                put(FireworksDisabled.identifier, FireworksDisabled);
+                put(FlyBoostAmount.identifier, FlyBoostAmount);
+                put(FlyBoostEnabled.identifier, FlyBoostEnabled);
+                put(DecreaseNetherParticles.identifier, DecreaseNetherParticles);
+                put(BlockOutlineMode.identifier, BlockOutlineMode);
+                put(BlockOutlineColor.identifier, BlockOutlineColor);
+                put(BlockOutlineAlpha.identifier, BlockOutlineAlpha);
+                put(StatusEffectDisplayMode.identifier, StatusEffectDisplayMode);
+                put(StatusEffectDisplayPosition.identifier, StatusEffectDisplayPosition);
+                put(MaxStatusEffectsDisplayed.identifier, MaxStatusEffectsDisplayed);
+                put(StatusEffectDisplayScale.identifier, StatusEffectDisplayScale);
+            } catch (NullPointerException e) {
+                this.setDefaults();
+                put(ToggleSprintEnabled.identifier, ToggleSprintEnabled);
+                put(FullbrightEnabled.identifier, FullbrightEnabled);
+                put(HurtbobbingEnabled.identifier, HurtbobbingEnabled);
+                put(SneakMode.identifier, SneakMode);
+                put(NoRainEnabled.identifier, NoRainEnabled);
+                put(FpsEnabled.identifier, FpsEnabled);
+                put(CustomCapeMode.identifier, CustomCapeMode);
+                put(NoFireEnabled.identifier, NoFireEnabled);
+                put(ToggleSprintPosition.identifier, ToggleSprintPosition);
+                put(FpsDisplayPosition.identifier, FpsDisplayPosition);
+                put(ToggleSneakEnabled.identifier, ToggleSneakEnabled);
+                put(FireworksDisabled.identifier, FireworksDisabled);
+                put(FlyBoostAmount.identifier, FlyBoostAmount);
+                put(FlyBoostEnabled.identifier, FlyBoostEnabled);
+                put(DecreaseNetherParticles.identifier, DecreaseNetherParticles);
+                put(BlockOutlineMode.identifier, BlockOutlineMode);
+                put(BlockOutlineColor.identifier, BlockOutlineColor);
+                put(BlockOutlineAlpha.identifier, BlockOutlineAlpha);
+                put(StatusEffectDisplayMode.identifier, StatusEffectDisplayMode);
+                put(StatusEffectDisplayPosition.identifier, StatusEffectDisplayPosition);
+                put(MaxStatusEffectsDisplayed.identifier, MaxStatusEffectsDisplayed);
+                put(StatusEffectDisplayScale.identifier, StatusEffectDisplayScale);
+                Osmium.LOGGER.log(Level.ERROR, "Fatal error in deserializing Osmium Options, resetting options file");
+            }
 
-            put(ToggleSprintEnabled.identifier, ToggleSprintEnabled);
-            put(FullbrightEnabled.identifier, FullbrightEnabled);
-            put(HurtbobbingEnabled.identifier, HurtbobbingEnabled);
-            put(SneakMode.identifier, SneakMode);
-            put(NoRainEnabled.identifier, NoRainEnabled);
-            put(FpsEnabled.identifier, FpsEnabled);
-            put(CustomCapeMode.identifier, CustomCapeMode);
-            put(NoFireEnabled.identifier, NoFireEnabled);
-            put(ToggleSprintPosition.identifier, ToggleSprintPosition);
-            put(FpsDisplayPosition.identifier, FpsDisplayPosition);
-            put(ToggleSneakEnabled.identifier, ToggleSneakEnabled);
-            put(FireworksDisabled.identifier, FireworksDisabled);
-            put(FlyBoostAmount.identifier, FlyBoostAmount);
-            put(FlyBoostEnabled.identifier, FlyBoostEnabled);
-            put(DecreaseNetherParticles.identifier, DecreaseNetherParticles);
-            put(BlockOutlineMode.identifier, BlockOutlineMode);
-            put(BlockOutlineColor.identifier, BlockOutlineColor);
-            put(BlockOutlineAlpha.identifier, BlockOutlineAlpha);
-            put(StatusEffectDisplayEnabled.identifier, StatusEffectDisplayEnabled);
-            put(StatusEffectDisplayPosition.identifier, StatusEffectDisplayPosition);
 
     }
 
@@ -133,8 +167,10 @@ public class Options {
         BlockOutlineMode = get(BlockOutlineMode.identifier);
         BlockOutlineColor = get(BlockOutlineColor.identifier);
         BlockOutlineAlpha = get(BlockOutlineAlpha.identifier);
-        StatusEffectDisplayEnabled = get(StatusEffectDisplayEnabled.identifier);
+        StatusEffectDisplayMode = get(StatusEffectDisplayMode.identifier);
         StatusEffectDisplayPosition = get(StatusEffectDisplayPosition.identifier);
+        MaxStatusEffectsDisplayed = get(MaxStatusEffectsDisplayed.identifier);
+        StatusEffectDisplayScale = get(StatusEffectDisplayScale.identifier);
     }
 
     /**
@@ -159,8 +195,10 @@ public class Options {
         BlockOutlineMode = new EnumOption("CustomBlockOutline", com.intro.config.options.BlockOutlineMode.VANILLA);
         BlockOutlineColor = new ColorOption("BlockOutlineColor", Colors.TRANSPARENT.getColor());
         BlockOutlineAlpha = new DoubleOption("BlockOutlineAlpha", 1);
-        StatusEffectDisplayEnabled = new BooleanOption("StatusEffectDisplayEnabled", false);
+        StatusEffectDisplayMode = new EnumOption("StatusEffectDisplayMode", com.intro.config.options.StatusEffectDisplayMode.VANILLA);
         StatusEffectDisplayPosition = new Vector2Option("StatusEffectDisplayPosition", 0, 0);
+        MaxStatusEffectsDisplayed = new DoubleOption("MaxStatusEffectsDisplayed", 1);
+        StatusEffectDisplayScale = new DoubleOption("StatusEffectDisplayScale", 1);
     }
 
     public HashMap<String, Option> getValues() {

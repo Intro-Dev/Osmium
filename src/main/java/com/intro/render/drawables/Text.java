@@ -88,8 +88,9 @@ public class Text extends Drawable {
             this.height = mc.textRenderer.fontHeight;
             firstRun = false;
         }
-
+        stack.push();
         TextRenderer renderer = mc.textRenderer;
         renderer.drawWithShadow(stack, new LiteralText(this.text), this.posX, this.posY, this.color);
+        stack.pop();
     }
 }

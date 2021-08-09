@@ -51,6 +51,12 @@
   "osmium.options.overlayvanilla": "BlockOverlay: Vanilla",
   "osmium.options.overlaylines": "BlockOverlay: Outline",
   "osmium.options.blockoptionsettings": "Block Overlay Settings",
-  "osmium.opencredits": "Osmium Github"
+  "osmium.opencredits": "Osmium Modrinth",
+  "osmium.options.statuseffectdisplaysettings": "Effect Display Settings",
+  "osmium.options.statusdisplayscale": "Effect Display Scale: ",
+  "osmium.options.statuseffectdisplayvanilla": "Effect Display: Vanilla",
+  "osmium.options.statuseffectdisplayboth": "Effect Display: Both",
+  "osmium.options.statuseffectdisplaycustom": "Effect Display: Custom",
+  "osmium.options.maxstatusdisplay": "Max Display Effects: "
 
 }

@@ -30,9 +30,9 @@ public class OsmiumToggleSneakOptionsScreen extends Screen {
         });
 
 
-        ButtonWidget toggleSprintToggleWidget = new BooleanButtonWidget(this.width / 2 - 175, this.height / 6 + 20, 150, 20, ((BooleanOption) OptionUtil.Options.ToggleSprintEnabled.get()), "osmium.options.togglesprintdisabled");
-        ButtonWidget toggleSneakToggleWidget = new BooleanButtonWidget(this.width / 2 + 25, this.height / 6 + 20, 150, 20, ((BooleanOption) OptionUtil.Options.ToggleSneakEnabled.get()), "osmium.options.togglesneakenabled");
-        ButtonWidget flyBoostEnabledWidget = new BooleanButtonWidget(this.width / 2 - 175, this.height / 6 + 60, 150, 20, ((BooleanOption) OptionUtil.Options.FlyBoostEnabled.get()), "osmium.options.flyboostenabled");
+        ButtonWidget toggleSprintToggleWidget = new BooleanButtonWidget(this.width / 2 - 175, this.height / 6 + 20, 150, 20, ((BooleanOption) OptionUtil.Options.ToggleSprintEnabled.get()), "osmium.options.togglesprint");
+        ButtonWidget toggleSneakToggleWidget = new BooleanButtonWidget(this.width / 2 + 25, this.height / 6 + 20, 150, 20, ((BooleanOption) OptionUtil.Options.ToggleSneakEnabled.get()), "osmium.options.togglesneak");
+        ButtonWidget flyBoostEnabledWidget = new BooleanButtonWidget(this.width / 2 - 175, this.height / 6 + 60, 150, 20, ((BooleanOption) OptionUtil.Options.FlyBoostEnabled.get()), "osmium.options.flyboost");
         DoubleSliderWidget flyBoostAmountWidget = new DoubleSliderWidget(mc, this.width / 2 + 25, this.height / 6 + 60, 150, 20, ((DoubleOption) Osmium.options.get(Osmium.options.FlyBoostAmount.identifier)), "osmium.options.flyboostamount", 0, 10, 10);
 
 

@@ -1,10 +1,10 @@
 package com.intro.render.screen;
 
 import com.intro.config.options.BooleanOption;
-import com.intro.config.options.CapeRenderingMode;
 import com.intro.config.options.EnumOption;
 import com.intro.render.Color;
 import com.intro.render.widget.BooleanButtonWidget;
+import com.intro.render.widget.EnumSelectWidget;
 import com.intro.util.OptionUtil;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.MinecraftClient;
@@ -22,13 +22,6 @@ public class OsmiumVideoOptionsScreen extends Screen {
 
     private final Identifier LOGO_TEXTURE = new Identifier("osmium", "icon.png");
 
-    private ButtonWidget BackButton;
-    private ButtonWidget ToggleCapeWidget;
-    private BooleanButtonWidget ToggleRainWidget;
-    private BooleanButtonWidget ToggleFireworksWidget;
-    private BooleanButtonWidget ToggleNetherParticlesWidget;
-    private ButtonWidget BlockOptionScreenButton;
-
     public OsmiumVideoOptionsScreen(Screen parent) {
         super(new TranslatableText("osmium.options.videooptions.title"));
         this.parent = parent;
@@ -36,39 +29,30 @@ public class OsmiumVideoOptionsScreen extends Screen {
 
     @Override
     protected void init() {
-        BackButton = new ButtonWidget(this.width / 2 - 100, this.height / 6 + 300, 200, 20, new TranslatableText("osmium.options.videooptions.back"), (buttonWidget) -> {
+        ButtonWidget backButton = new ButtonWidget(this.width / 2 - 100, this.height / 6 + 300, 200, 20, new TranslatableText("osmium.options.videooptions.back"), (buttonWidget) -> {
             mc.openScreen(this.parent);
         });
 
-        BlockOptionScreenButton = new ButtonWidget(this.width / 2 - 75, this.height / 6 + 160, 150, 20, new TranslatableText("osmium.options.blockoptionsettings"), (buttonWidget) -> {
+        ButtonWidget blockOptionScreenButton = new ButtonWidget(this.width / 2 - 75, this.height / 6 + 160, 150, 20, new TranslatableText("osmium.options.blockoptionsettings"), (buttonWidget) -> {
             mc.openScreen(new OsmiumBlockOptionsScreen(this));
         });
 
-        ToggleCapeWidget = new ButtonWidget(this.width / 2 - 275, this.height / 6 + 120, 150, 20, new TranslatableText("osmium.options.videooptions.cape" + ((EnumOption) OptionUtil.Options.CustomCapeMode.get()).variable.toString().toLowerCase()), (buttonWidget) -> {
+        EnumSelectWidget toggleCapeWidget = new EnumSelectWidget(this.width / 2 - 275, this.height / 6 + 120, 150, 20, ((EnumOption) OptionUtil.Options.CustomCapeMode.get()),"osmium.options.videooptions.cape");
+        BooleanButtonWidget toggleRainWidget = new BooleanButtonWidget(this.width / 2 - 75, this.height / 6 + 120, 150, 20, (BooleanOption) OptionUtil.Options.NoRainEnabled.get(), "osmium.options.rain");
+        BooleanButtonWidget toggleFireworksWidget = new BooleanButtonWidget(this.width / 2 + 125, this.height / 6 + 120, 150, 20, ((BooleanOption) OptionUtil.Options.FireworksDisabled.get()), "osmium.options.fireworks");
+        BooleanButtonWidget toggleNetherParticlesWidget = new BooleanButtonWidget(this.width / 2 - 275, this.height / 6 + 160, 150, 20, ((BooleanOption) OptionUtil.Options.DecreaseNetherParticles.get()), "osmium.options.netherparticles");
 
-            ((EnumOption) OptionUtil.Options.CustomCapeMode.get()).variable = ((CapeRenderingMode) ((EnumOption) OptionUtil.Options.CustomCapeMode.get()).variable).next();
-            mc.worldRenderer.reload();
-            if(((EnumOption) OptionUtil.Options.CustomCapeMode.get()).variable == CapeRenderingMode.DISABLED) {
-                buttonWidget.setMessage(new TranslatableText("osmium.options.videooptions.capedisabled"));
-            } else if(((EnumOption) OptionUtil.Options.CustomCapeMode.get()).variable == CapeRenderingMode.OPTIFINE) {
-                buttonWidget.setMessage(new TranslatableText("osmium.options.videooptions.capeoptifine"));
-            } else if(((EnumOption) OptionUtil.Options.CustomCapeMode.get()).variable == CapeRenderingMode.ALL) {
-                buttonWidget.setMessage(new TranslatableText("osmium.options.videooptions.capeall"));
-            }
-
-
+        ButtonWidget statusEffectScreenButton = new ButtonWidget(this.width / 2 + 125, this.height / 6 + 160, 150, 20, new TranslatableText("osmium.options.statuseffectdisplaysettings"), (buttonWidget) -> {
+            mc.openScreen(new OsmiumStatusEffectDisplayOptionsScreen(this));
         });
 
-        ToggleRainWidget = new BooleanButtonWidget(this.width / 2 - 75, this.height / 6 + 120, 150, 20, (BooleanOption) OptionUtil.Options.NoRainEnabled.get(), "osmium.options.rain");
-        ToggleFireworksWidget = new BooleanButtonWidget(this.width / 2 + 125, this.height / 6 + 120, 150, 20, ((BooleanOption) OptionUtil.Options.FireworksDisabled.get()), "osmium.options.fireworks");
-        ToggleNetherParticlesWidget = new BooleanButtonWidget(this.width / 2 - 275, this.height / 6 + 160, 150, 20, ((BooleanOption) OptionUtil.Options.DecreaseNetherParticles.get()), "osmium.options.netherparticles");
-
-        this.addDrawableChild(BackButton);
-        this.addDrawableChild(ToggleCapeWidget);
-        this.addDrawableChild(ToggleRainWidget);
-        this.addDrawableChild(ToggleFireworksWidget);
-        this.addDrawableChild(ToggleNetherParticlesWidget);
-        this.addDrawableChild(BlockOptionScreenButton);
+        this.addDrawableChild(backButton);
+        this.addDrawableChild(toggleCapeWidget);
+        this.addDrawableChild(toggleRainWidget);
+        this.addDrawableChild(toggleFireworksWidget);
+        this.addDrawableChild(toggleNetherParticlesWidget);
+        this.addDrawableChild(blockOptionScreenButton);
+        this.addDrawableChild(statusEffectScreenButton);
     }
 
     @Override

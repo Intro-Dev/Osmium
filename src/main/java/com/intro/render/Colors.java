@@ -6,9 +6,9 @@ public enum Colors {
     BLUE(0, 0, 0xff, 0xff),
     TRANSPARENT(0, 0, 0, 0),
     BLACK(0, 0, 0, 0xff),
-    WHITE(0, 0, 0, 0xff);
+    WHITE(0xff, 0xff, 0xff, 0xff);
 
-    private Color color;
+    private final Color color;
 
     Colors(Color color) {
         this.color = color;

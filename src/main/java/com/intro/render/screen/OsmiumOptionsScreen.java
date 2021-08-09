@@ -62,7 +62,7 @@ public class OsmiumOptionsScreen extends Screen {
             mc.openScreen(new OsmiumToggleSneakOptionsScreen(this));
         });
 
-        ButtonWidget openGithubWidget = new ButtonWidget(this.width / 2 + 125, this.height / 6 + 200, 150, 20, new TranslatableText("osmium.opencredits"), this::openGithub);
+        ButtonWidget openGithubWidget = new ButtonWidget(this.width / 2 + 125, this.height / 6 + 200, 150, 20, new TranslatableText("osmium.opencredits"), this::openCredits);
 
 
         this.addDrawableChild(fullBrightWidget);
@@ -83,11 +83,11 @@ public class OsmiumOptionsScreen extends Screen {
         OptionUtil.save();
     }
 
-    private void openGithub(@Nullable ButtonWidget widget) {
+    private void openCredits(@Nullable ButtonWidget widget) {
         try {
-            Util.getOperatingSystem().open(new URI("https://github.com/Intro-Dev/Osmium"));
+            Util.getOperatingSystem().open(new URI("https://modrinth.com/mod/osmium"));
         } catch (URISyntaxException exception) {
-            Osmium.LOGGER.warn("Failed in opening github link. How did this even happen?");
+            Osmium.LOGGER.warn("Failed in opening modrinth link. How did this even happen?");
         }
     }
 
