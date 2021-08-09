@@ -14,4 +14,10 @@ public class EnumUtil {
         return eClass;
     }
 
+    public static <T extends Enum<T>> T nextEnum(Enum<T> tEnum) {
+        Class<T> tClass = tEnum.getDeclaringClass();
+        T[] values = tClass.getEnumConstants();
+        return values[(tEnum.ordinal()+1) % values.length];
+    }
+
 }
