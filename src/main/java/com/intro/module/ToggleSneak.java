@@ -1,13 +1,13 @@
 package com.intro.module;
 
 import com.intro.Osmium;
-import com.intro.config.BooleanOption;
-import com.intro.config.OptionUtil;
-import com.intro.config.Vector2Option;
+import com.intro.config.options.BooleanOption;
+import com.intro.config.options.Vector2Option;
 import com.intro.module.event.Event;
 import com.intro.module.event.EventTick;
 import com.intro.module.event.EventType;
-import com.intro.render.Text;
+import com.intro.render.drawables.Text;
+import com.intro.util.OptionUtil;
 
 public class ToggleSneak extends Module{
 

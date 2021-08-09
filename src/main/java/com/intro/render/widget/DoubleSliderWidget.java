@@ -1,7 +1,7 @@
 package com.intro.render.widget;
 
 import com.intro.Osmium;
-import com.intro.config.DoubleOption;
+import com.intro.config.options.DoubleOption;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.widget.OptionSliderWidget;
 import net.minecraft.client.util.math.MatrixStack;

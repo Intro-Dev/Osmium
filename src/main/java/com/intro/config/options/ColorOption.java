@@ -1,4 +1,4 @@
-package com.intro.config;
+package com.intro.config.options;
 
 import com.intro.Osmium;
 import com.intro.render.Color;

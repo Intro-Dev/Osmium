@@ -30,6 +30,6 @@
     "defaultRequire": 1
   },
   "mixins": [
-
+    "DrawableHelperAccessor"
   ]
 }

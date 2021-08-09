@@ -1,12 +1,12 @@
 package com.intro.mixin;
 
 import com.intro.Osmium;
-import com.intro.config.BlockOutlineMode;
-import com.intro.config.BooleanOption;
-import com.intro.config.OptionUtil;
+import com.intro.config.options.BlockOutlineMode;
+import com.intro.config.options.BooleanOption;
 import com.intro.render.Color;
 import com.intro.render.shader.Shader;
 import com.intro.render.shader.ShaderSystem;
+import com.intro.util.OptionUtil;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.ShapeContext;

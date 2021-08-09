@@ -1,4 +1,4 @@
-package com.intro.config;
+package com.intro.config.options;
 
 public abstract class Option {
 

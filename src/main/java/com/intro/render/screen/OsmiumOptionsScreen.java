@@ -1,12 +1,12 @@
 package com.intro.render.screen;
 
 import com.intro.Osmium;
-import com.intro.config.BooleanOption;
-import com.intro.config.EnumOption;
-import com.intro.config.OptionUtil;
-import com.intro.config.SneakMode;
+import com.intro.config.options.BooleanOption;
+import com.intro.config.options.EnumOption;
 import com.intro.render.Color;
 import com.intro.render.widget.BooleanButtonWidget;
+import com.intro.render.widget.EnumSelectWidget;
+import com.intro.util.OptionUtil;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
@@ -46,7 +46,7 @@ public class OsmiumOptionsScreen extends Screen {
     ButtonWidget FpsWidget;
     ButtonWidget OpenGithubWidget;
 
-    MinecraftClient mc = MinecraftClient.getInstance();
+    private MinecraftClient mc = MinecraftClient.getInstance();
 
     /*
     Made this good
@@ -62,16 +62,7 @@ public class OsmiumOptionsScreen extends Screen {
 
 
 
-        SmoothSneakWidget = new ButtonWidget(this.width / 2 + 125, this.height / 6 + 160, 150, 20, new TranslatableText("osmium.options.sneak" + ((EnumOption) OptionUtil.Options.SneakMode.get()).variable.toString().toLowerCase()), (buttonWidget) -> {
-            ((EnumOption) OptionUtil.Options.SneakMode.get()).variable = ((SneakMode) ((EnumOption) OptionUtil.Options.SneakMode.get()).variable).next();
-            if(((EnumOption) OptionUtil.Options.SneakMode.get()).variable == SneakMode.VANILLA) {
-                buttonWidget.setMessage(new TranslatableText("osmium.options.sneakvanilla"));
-            } else if(((EnumOption) OptionUtil.Options.SneakMode.get()).variable == SneakMode.SMOOTH) {
-                buttonWidget.setMessage(new TranslatableText("osmium.options.sneaksmooth"));
-            } else if(((EnumOption) OptionUtil.Options.SneakMode.get()).variable == SneakMode.INSTANT) {
-                buttonWidget.setMessage(new TranslatableText("osmium.options.sneakinstant"));
-            }
-        });
+        SmoothSneakWidget = new EnumSelectWidget(this.width / 2 + 125, this.height / 6 + 160, 150, 20, (EnumOption) OptionUtil.Options.SneakMode.get(), "osmium.options.sneak");
 
 
         OpenVideoOptions = new ButtonWidget(this.width / 2 - 75, this.height / 6 + 160, 150, 20, new TranslatableText("osmium.options.videooptions"), (buttonWidget) -> {

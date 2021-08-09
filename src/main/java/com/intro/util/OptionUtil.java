@@ -1,9 +1,13 @@
-package com.intro.config;
+package com.intro.util;
 
 import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.intro.Osmium;
+import com.intro.config.OptionDeserializer;
+import com.intro.config.OptionSerializer;
+import com.intro.config.Options;
+import com.intro.config.options.Option;
 import net.fabricmc.loader.api.FabricLoader;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
@@ -17,7 +21,7 @@ import java.util.Scanner;
 
 
 /**
- * <p>This class contains the functions to load a config file into an {@link Options} object</p>
+ * <p>This class contains the functions to load a config file into an {@link com.intro.config.Options} object</p>
  * @since 1.0
  * @author Intro
  */

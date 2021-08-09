@@ -1,8 +1,8 @@
-package com.intro.config;
+package com.intro.config.options;
 
 import com.intro.Osmium;
 
-public class EnumOption extends Option{
+public class EnumOption extends Option {
 
     public Enum variable;
 

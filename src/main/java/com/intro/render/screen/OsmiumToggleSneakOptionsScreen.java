@@ -1,10 +1,10 @@
 package com.intro.render.screen;
 
 import com.intro.Osmium;
-import com.intro.config.BooleanOption;
-import com.intro.config.DoubleOption;
-import com.intro.config.OptionUtil;
+import com.intro.config.options.BooleanOption;
+import com.intro.config.options.DoubleOption;
 import com.intro.render.widget.DoubleSliderWidget;
+import com.intro.util.OptionUtil;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;

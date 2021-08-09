@@ -1,11 +1,11 @@
 package com.intro.render.screen;
 
-import com.intro.config.BooleanOption;
-import com.intro.config.CapeRenderingMode;
-import com.intro.config.EnumOption;
-import com.intro.config.OptionUtil;
+import com.intro.config.options.BooleanOption;
+import com.intro.config.options.CapeRenderingMode;
+import com.intro.config.options.EnumOption;
 import com.intro.render.Color;
 import com.intro.render.widget.BooleanButtonWidget;
+import com.intro.util.OptionUtil;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;

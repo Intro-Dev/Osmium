@@ -3,43 +3,44 @@ package com.intro.render;
 import com.intro.Osmium;
 import com.intro.module.event.EventDirection;
 import com.intro.module.event.EventRender;
+import com.intro.render.drawables.Drawable;
+import com.intro.render.drawables.StatusEffectDisplay;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.text.LiteralText;
 
 import java.util.ArrayList;
 
-public class RenderManager extends DrawableHelper{
-    public static ArrayList<Text> textArrayList = new ArrayList<>();
+public class RenderManager extends DrawableHelper {
 
-    static MinecraftClient mc = MinecraftClient.getInstance();
+    public static ArrayList<Drawable> drawables = new ArrayList<>();
 
+    private static MinecraftClient mc = MinecraftClient.getInstance();
 
-    public void RenderHud(MatrixStack stack) {
-        TextRenderer renderer = mc.textRenderer;
+    public static void initDrawables() {
+        drawables.add(StatusEffectDisplay.getInstance());
+    }
+
+    public static void renderHud(MatrixStack stack) {
         mc.getProfiler().push("OsmiumHudRenderer");
-
-        for(Text text : textArrayList) {
-            if(text.visible) {
-                renderer.drawWithShadow(stack, new LiteralText(text.text), text.posX, text.posY, text.color);
-            }
-
+        for(Drawable element : drawables) {
+            if(element.visible)
+                element.render(stack);
         }
         mc.getProfiler().pop();
     }
 
-    public void render(float tickDelta, long limitTime, MatrixStack matrix) {
+    public static void postRenderEvents(float tickDelta, long limitTime, MatrixStack matrix) {
         mc.getProfiler().push("OsmiumRenderer");
         EventRender EventRenderPre = new EventRender(EventDirection.PRE, tickDelta, limitTime, matrix);
         Osmium.EVENT_BUS.postEvent(EventRenderPre);
-        Osmium.EVENT_BUS.postEvent(new EventRender(EventDirection.POST, tickDelta, limitTime, matrix));
         mc.getProfiler().pop();
     }
 
-    public static RenderManager CreateInstance() {
-        return new RenderManager();
+
+    public static void addDrawable(Drawable drawable) {
+        drawables.add(drawable);
     }
+
 
 }

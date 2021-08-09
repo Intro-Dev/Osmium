@@ -1,22 +1,17 @@
 package com.intro.render.screen;
 
-import com.intro.config.OptionUtil;
 import com.intro.render.RenderManager;
-import com.intro.render.Text;
+import com.intro.render.drawables.Drawable;
+import com.intro.util.OptionUtil;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.Element;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.text.LiteralText;
 import net.minecraft.text.TranslatableText;
 
 public class OsmiumGuiEditScreen extends Screen{
 
-    private Screen parent;
-    private MinecraftClient mc = MinecraftClient.getInstance();
-
-
-
+    private final Screen parent;
+    private final MinecraftClient mc = MinecraftClient.getInstance();
 
 
     public OsmiumGuiEditScreen(Screen parent) {
@@ -26,11 +21,7 @@ public class OsmiumGuiEditScreen extends Screen{
 
     @Override
     protected void init() {
-        for (Text t : RenderManager.textArrayList) {
-            if(t.guiElement) {
-                addDrawableChild(t);
-            }
-        }
+
     }
 
     @Override
@@ -42,14 +33,7 @@ public class OsmiumGuiEditScreen extends Screen{
     @Override
     public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
         this.renderBackground(matrices);
-        for(Element e : this.children()) {
-            if (e instanceof Text) {
-                if(!((Text) e).visible) {
-                    Text text = (Text) e;
-                    mc.textRenderer.drawWithShadow(matrices, new LiteralText(text.text), text.posX, text.posY, text.color);
-                }
-            }
-        }
+        RenderManager.renderHud(matrices);
         super.render(matrices, mouseX, mouseY, delta);
     }
 
@@ -64,15 +48,21 @@ public class OsmiumGuiEditScreen extends Screen{
         return super.keyPressed(keyCode, scanCode, modifiers);
     }
 
+    /**
+     * <p>remember to return super.mouseDragged(), or gui editing will break!</p>
+     */
     @Override
     public boolean mouseDragged(double mouseX, double mouseY, int button, double deltaX, double deltaY) {
-            for(Element e : this.children()) {
-                if(e instanceof Text) {
-                    if(((Text) e).isPositionWithinBounds((int) mouseX, (int) mouseY)) {
-                        e.mouseDragged(mouseX, mouseY, button, deltaX, deltaY);
-                    }
+        for(Drawable drawable : RenderManager.drawables) {
+            if(drawable.isPositionWithinBounds((int) mouseX, (int) mouseY)) {
+                if(mouseX + drawable.width < this.width || mouseX - drawable.width < 0) {
+                    drawable.posX = (int) mouseX;
+                }
+                if(mouseY + drawable.height < this.height || mouseY - drawable.height < 0) {
+                    drawable.posY = (int) mouseY;
                 }
             }
+        }
         return super.mouseDragged(mouseX, mouseY, button, deltaX, deltaY);
     }
 }

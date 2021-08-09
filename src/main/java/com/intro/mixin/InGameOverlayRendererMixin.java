@@ -1,9 +1,7 @@
 package com.intro.mixin;
 
-import com.intro.config.BooleanOption;
-import com.intro.config.OptionUtil;
-import com.intro.module.ToggleSneak;
-import com.mojang.blaze3d.platform.GlStateManager;
+import com.intro.config.options.BooleanOption;
+import com.intro.util.OptionUtil;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.hud.InGameOverlayRenderer;
@@ -16,9 +14,6 @@ import net.minecraft.util.math.Matrix4f;
 import net.minecraft.util.math.Vec3f;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
-import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(InGameOverlayRenderer.class)
 public class InGameOverlayRendererMixin {

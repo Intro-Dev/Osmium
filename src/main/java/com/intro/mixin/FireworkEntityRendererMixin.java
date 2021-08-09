@@ -1,7 +1,7 @@
 package com.intro.mixin;
 
 import com.intro.Osmium;
-import com.intro.config.BooleanOption;
+import com.intro.config.options.BooleanOption;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.entity.FireworkEntityRenderer;
 import net.minecraft.client.util.math.MatrixStack;

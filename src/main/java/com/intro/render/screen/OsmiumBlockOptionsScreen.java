@@ -1,11 +1,11 @@
 package com.intro.render.screen;
 
 import com.intro.Osmium;
-import com.intro.config.BlockOutlineMode;
-import com.intro.config.EnumOption;
-import com.intro.config.OptionUtil;
+import com.intro.config.options.BlockOutlineMode;
+import com.intro.config.options.EnumOption;
 import com.intro.render.widget.ColorOptionWidget;
 import com.intro.render.widget.DoubleSliderWidget;
+import com.intro.util.OptionUtil;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;

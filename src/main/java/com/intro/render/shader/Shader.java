@@ -1,7 +1,6 @@
 package com.intro.render.shader;
 
 import com.google.gson.JsonSyntaxException;
-import com.intro.mixin.ShaderEffectInvoker;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gl.Framebuffer;
 import net.minecraft.client.gl.ShaderEffect;
@@ -34,7 +33,7 @@ public class Shader {
         try {
             this.shader = new ShaderEffect(mc.getTextureManager(), mc.getResourceManager(), mc.getFramebuffer(), identifier);
             this.shader.setupDimensions(mc.getWindow().getFramebufferWidth(), mc.getWindow().getFramebufferHeight());
-            this.framebuffer = ((ShaderEffectInvoker) this.shader).invokeGetTarget("minecraft:main");
+            this.framebuffer = mc.getFramebuffer();
         } catch (IOException e) {
             LOGGER.warn("Failed to load shader: {}", identifier, e);
             e.printStackTrace();

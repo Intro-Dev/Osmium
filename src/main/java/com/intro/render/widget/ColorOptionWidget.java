@@ -1,16 +1,14 @@
 package com.intro.render.widget;
 
 import com.intro.Osmium;
-import com.intro.config.ColorOption;
+import com.intro.config.options.ColorOption;
 import com.intro.render.Color;
+import com.intro.render.RenderManager;
+import com.intro.render.drawables.Drawable;
 import com.intro.util.TextureUtil;
 import com.intro.util.Vector2d;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.Drawable;
-import net.minecraft.client.gui.DrawableHelper;
-import net.minecraft.client.gui.Element;
-import net.minecraft.client.gui.Selectable;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.narration.NarrationMessageBuilder;
 import net.minecraft.client.render.GameRenderer;
@@ -32,7 +30,7 @@ import net.minecraft.util.Identifier;
  * @see com.intro.config.Options
  * @see com.intro.render.screen.OsmiumBlockOptionsScreen
  */
-public class ColorOptionWidget extends DrawableHelper implements Element, Drawable, Selectable {
+public class ColorOptionWidget extends Drawable {
 
     private final ColorOption attachedOption;
 
@@ -71,6 +69,16 @@ public class ColorOptionWidget extends DrawableHelper implements Element, Drawab
     }
 
     @Override
+    public void render(MatrixStack stack) {
+        RenderManager.drawables.remove(this);
+    }
+
+    @Override
+    public void destroySelf() {
+
+    }
+
+    @Override
     public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
         RenderSystem.setShader(GameRenderer::getPositionTexShader);
         RenderSystem.setShaderTexture(0, BAKED_TEXTURE);
@@ -104,7 +112,7 @@ public class ColorOptionWidget extends DrawableHelper implements Element, Drawab
 
             Osmium.options.getColorOption(this.attachedOption.identifier).color = new Color(color);
         }
-        return Element.super.mouseClicked(mouseX, mouseY, button);
+        return super.mouseClicked(mouseX, mouseY, button);
     }
 
 

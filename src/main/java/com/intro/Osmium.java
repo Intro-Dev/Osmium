@@ -1,6 +1,5 @@
 package com.intro;
 
-import com.intro.config.OptionUtil;
 import com.intro.config.Options;
 import com.intro.module.Module;
 import com.intro.module.*;
@@ -10,6 +9,7 @@ import com.intro.module.event.EventTick;
 import com.intro.module.event.EventType;
 import com.intro.render.CapeHandler;
 import com.intro.render.shader.ShaderSystem;
+import com.intro.util.OptionUtil;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
 import net.minecraft.client.option.KeyBinding;
@@ -53,9 +53,10 @@ public class Osmium implements ModInitializer {
         perspectiveKey = new KeyBinding("keys.osmium.perspectivekey", InputUtil.Type.KEYSYM, GLFW.GLFW_KEY_V, "keys.category.osmium.keys");
         zoomKey = new KeyBinding("keys.osmium.zoomkey", InputUtil.Type.KEYSYM, GLFW.GLFW_KEY_C, "keys.category.osmium.keys");
         KeyBindingHelper.registerKeyBinding(menuKey);
+        System.out.println();
     }
 
-    // Shaders are temporarily disabled until i can get them working
+    // Shaders are temporarily disabled until I can get them working
     public static void registerShaders() {
         ShaderSystem.loadShader(new Identifier("osmium", "shaders/post/blur.json"));
     }
@@ -64,7 +65,7 @@ public class Osmium implements ModInitializer {
         OptionUtil.Options.init();
         OptionUtil.load();
         registerModules();
-        // registerShaders();
+        registerShaders();
         EVENT_BUS.ListenerInit();
         System.out.println("Osmium Initialized");
 

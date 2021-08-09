@@ -13,6 +13,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public class InGameHudMixin {
     @Inject(at = @At("TAIL"), method = "render(Lnet/minecraft/client/util/math/MatrixStack;F)V")
     public void render(MatrixStack stack, float f, CallbackInfo info) {
-        RenderManager.CreateInstance().RenderHud(stack);
+        RenderManager.renderHud(stack);
     }
 }

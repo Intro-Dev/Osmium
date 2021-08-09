@@ -1,10 +1,10 @@
 package com.intro.module;
 
-import com.intro.config.BooleanOption;
-import com.intro.config.OptionUtil;
+import com.intro.config.options.BooleanOption;
 import com.intro.module.event.Event;
 import com.intro.module.event.EventTick;
 import com.intro.module.event.EventType;
+import com.intro.util.OptionUtil;
 
 public class Fullbright extends Module{
 

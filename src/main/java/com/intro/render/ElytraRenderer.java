@@ -1,15 +1,18 @@
 package com.intro.render;
 
-import com.intro.config.CapeRenderingMode;
-import com.intro.config.EnumOption;
-import com.intro.config.OptionUtil;
+import com.intro.config.options.CapeRenderingMode;
+import com.intro.config.options.EnumOption;
+import com.intro.util.OptionUtil;
 import net.minecraft.client.render.OverlayTexture;
 import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.render.VertexConsumer;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.entity.feature.FeatureRenderer;
 import net.minecraft.client.render.entity.feature.FeatureRendererContext;
-import net.minecraft.client.render.entity.model.*;
+import net.minecraft.client.render.entity.model.ElytraEntityModel;
+import net.minecraft.client.render.entity.model.EntityModel;
+import net.minecraft.client.render.entity.model.EntityModelLayers;
+import net.minecraft.client.render.entity.model.EntityModelLoader;
 import net.minecraft.client.render.item.ItemRenderer;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.EquipmentSlot;

@@ -1,8 +1,8 @@
 package com.intro.mixin;
 
 import com.intro.Osmium;
-import com.intro.config.BooleanOption;
-import com.intro.config.DoubleOption;
+import com.intro.config.options.BooleanOption;
+import com.intro.config.options.DoubleOption;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.player.PlayerAbilities;
 import net.minecraft.util.math.MathHelper;

@@ -1,7 +1,9 @@
 package com.intro.config;
 
 import com.google.gson.*;
+import com.intro.config.options.*;
 import com.intro.render.Color;
+import com.intro.util.EnumUtil;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -23,7 +25,8 @@ public class OptionDeserializer implements JsonDeserializer<Option> {
         if(src.get("Type").getAsString().equals("EnumOption")) {
             try {
                 // Loads enum, gets its value from the config file, and creates an EnumOption instance
-                return new EnumOption( src.get("Identifier").getAsString(), loadEnum(cl, src.get("EnumType").getAsString(), src.get("EnumValue").getAsString()));
+                // throws an error according to intelij, but does it crash? no.
+                return new EnumOption( src.get("Identifier").getAsString(), EnumUtil.loadEnumState(cl, src.get("EnumType").getAsString(), src.get("EnumValue").getAsString()));
             } catch (Exception e) {
                 LOGGER.warn("Enum deserialization error!");
             }
@@ -37,12 +40,10 @@ public class OptionDeserializer implements JsonDeserializer<Option> {
         if(src.get("Type").getAsString().equals("ColorOption")) {
             return new ColorOption(src.get("Identifier").getAsString(), new Color(src.get("R").getAsInt(), src.get("G").getAsInt(), src.get("B").getAsInt(), src.get("A").getAsInt()));
         }
-        return null;
+        Options defaultOptions = new Options();
+        defaultOptions.setDefaults();
+        return defaultOptions.get(src.get("Identifier").getAsString());
     }
 
-    public static <T extends Enum<T>> T loadEnum(ClassLoader loader, String classBinaryName, String instanceName) throws ClassNotFoundException {
-        @SuppressWarnings("unchecked")
-        Class<T> eClass = (Class<T>)loader.loadClass(classBinaryName);
-        return Enum.valueOf(eClass, instanceName);
-    }
+
 }

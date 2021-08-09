@@ -1,8 +1,8 @@
 package com.intro.render;
 
-import com.intro.config.CapeRenderingMode;
-import com.intro.config.EnumOption;
-import com.intro.config.OptionUtil;
+import com.intro.config.options.CapeRenderingMode;
+import com.intro.config.options.EnumOption;
+import com.intro.util.OptionUtil;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.AbstractClientPlayerEntity;
 import net.minecraft.client.render.OverlayTexture;

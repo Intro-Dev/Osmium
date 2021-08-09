@@ -1,5 +1,6 @@
 package com.intro.config;
 
+import com.intro.config.options.*;
 import com.intro.render.Colors;
 
 import java.util.HashMap;
@@ -56,11 +57,9 @@ public class Options {
     public Option FullbrightEnabled;
     public Option HurtbobbingEnabled;
     public Option SneakMode;
-    public Option BlockEntityCullingMode;
     public Option NoRainEnabled;
     public Option FpsEnabled;
     public Option CustomCapeMode;
-    public Option ZoomMode;
     public Option NoFireEnabled;
     public Option ToggleSprintPosition;
     public Option FpsDisplayPosition;
@@ -71,8 +70,10 @@ public class Options {
     public Option DecreaseNetherParticles;
     public Option BlockOutlineMode;
     public Option BlockOutlineColor;
-    public Option BlockOutlineWidth;
     public Option BlockOutlineAlpha;
+    public Option StatusEffectDisplayEnabled;
+    public Option StatusEffectDisplayPosition;
+
 
 
     public void init() {
@@ -86,16 +87,14 @@ public class Options {
      * Catch block is to check if anything is null, and will set all options to default.
      */
     public void putHashMap() {
-        try {
+
             put(ToggleSprintEnabled.identifier, ToggleSprintEnabled);
             put(FullbrightEnabled.identifier, FullbrightEnabled);
             put(HurtbobbingEnabled.identifier, HurtbobbingEnabled);
             put(SneakMode.identifier, SneakMode);
-            put(BlockEntityCullingMode.identifier, BlockEntityCullingMode);
             put(NoRainEnabled.identifier, NoRainEnabled);
             put(FpsEnabled.identifier, FpsEnabled);
             put(CustomCapeMode.identifier, CustomCapeMode);
-            put(ZoomMode.identifier, ZoomMode);
             put(NoFireEnabled.identifier, NoFireEnabled);
             put(ToggleSprintPosition.identifier, ToggleSprintPosition);
             put(FpsDisplayPosition.identifier, FpsDisplayPosition);
@@ -106,34 +105,9 @@ public class Options {
             put(DecreaseNetherParticles.identifier, DecreaseNetherParticles);
             put(BlockOutlineMode.identifier, BlockOutlineMode);
             put(BlockOutlineColor.identifier, BlockOutlineColor);
-            put(BlockOutlineWidth.identifier, BlockOutlineWidth);
             put(BlockOutlineAlpha.identifier, BlockOutlineAlpha);
-
-        } catch (Exception e) {
-            this.setDefaults();
-            put(ToggleSprintEnabled.identifier, ToggleSprintEnabled);
-            put(FullbrightEnabled.identifier, FullbrightEnabled);
-            put(HurtbobbingEnabled.identifier, HurtbobbingEnabled);
-            put(SneakMode.identifier, SneakMode);
-            put(BlockEntityCullingMode.identifier, BlockEntityCullingMode);
-            put(NoRainEnabled.identifier, NoRainEnabled);
-            put(FpsEnabled.identifier, FpsEnabled);
-            put(CustomCapeMode.identifier, CustomCapeMode);
-            put(ZoomMode.identifier, ZoomMode);
-            put(NoFireEnabled.identifier, NoFireEnabled);
-            put(ToggleSprintPosition.identifier, ToggleSprintPosition);
-            put(FpsDisplayPosition.identifier, FpsDisplayPosition);
-            put(ToggleSneakEnabled.identifier, ToggleSneakEnabled);
-            put(FireworksDisabled.identifier, FireworksDisabled);
-            put(FlyBoostAmount.identifier, FlyBoostAmount);
-            put(FlyBoostEnabled.identifier, FlyBoostEnabled);
-            put(DecreaseNetherParticles.identifier, DecreaseNetherParticles);
-            put(BlockOutlineMode.identifier, BlockOutlineMode);
-            put(BlockOutlineColor.identifier, BlockOutlineColor);
-            put(BlockOutlineWidth.identifier, BlockOutlineWidth);
-            put(BlockOutlineAlpha.identifier, BlockOutlineAlpha);
-
-        }
+            put(StatusEffectDisplayEnabled.identifier, StatusEffectDisplayEnabled);
+            put(StatusEffectDisplayPosition.identifier, StatusEffectDisplayPosition);
 
     }
 
@@ -145,11 +119,9 @@ public class Options {
         FullbrightEnabled = get(FullbrightEnabled.identifier);
         HurtbobbingEnabled = get(HurtbobbingEnabled.identifier);
         SneakMode = get(SneakMode.identifier);
-        BlockEntityCullingMode = get(BlockEntityCullingMode.identifier);
         NoRainEnabled = get(NoRainEnabled.identifier);
         FpsEnabled = get(FpsEnabled.identifier);
         CustomCapeMode = get(CustomCapeMode.identifier);
-        ZoomMode = get(ZoomMode.identifier);
         NoFireEnabled = get(NoFireEnabled.identifier);
         ToggleSprintPosition = get(ToggleSprintPosition.identifier);
         FpsDisplayPosition = get(FpsDisplayPosition.identifier);
@@ -160,8 +132,9 @@ public class Options {
         DecreaseNetherParticles = get(DecreaseNetherParticles.identifier);
         BlockOutlineMode = get(BlockOutlineMode.identifier);
         BlockOutlineColor = get(BlockOutlineColor.identifier);
-        BlockOutlineWidth = get(BlockOutlineWidth.identifier);
         BlockOutlineAlpha = get(BlockOutlineAlpha.identifier);
+        StatusEffectDisplayEnabled = get(StatusEffectDisplayEnabled.identifier);
+        StatusEffectDisplayPosition = get(StatusEffectDisplayPosition.identifier);
     }
 
     /**
@@ -171,12 +144,10 @@ public class Options {
         ToggleSprintEnabled = new BooleanOption( "ToggleSprintEnabled", false);
         FullbrightEnabled = new BooleanOption("FullBrightEnabled", false);
         HurtbobbingEnabled = new BooleanOption("HurtBobbingEnabled", false);
-        SneakMode = new EnumOption("SneakMode", com.intro.config.SneakMode.VANILLA);
-        BlockEntityCullingMode = new EnumOption("BlockEntityCullingMode", com.intro.config.BlockEntityCullingMode.DISABLED);
+        SneakMode = new EnumOption("SneakMode", com.intro.config.options.SneakMode.VANILLA);
         NoRainEnabled = new BooleanOption("NoRainEnabled", false);
         FpsEnabled = new BooleanOption("FpsEnabled", false);
         CustomCapeMode = new EnumOption( "CustomCapeMode", CapeRenderingMode.DISABLED);
-        ZoomMode = new EnumOption( "ZoomMode", com.intro.config.ZoomMode.DISABLED);
         NoFireEnabled = new BooleanOption("NoFireEnabled", false);
         ToggleSprintPosition = new Vector2Option("ToggleSprintPosition", 5, 5);
         FpsDisplayPosition = new Vector2Option("FpsDisplayPosition", 5, 5);
@@ -185,10 +156,11 @@ public class Options {
         FlyBoostAmount = new DoubleOption("FlyBoostAmount", 1D);
         FlyBoostEnabled = new BooleanOption("FlyBoostEnabled", false);
         DecreaseNetherParticles = new BooleanOption("DecreaseNetherParticles", false);
-        BlockOutlineMode = new EnumOption("CustomBlockOutline", com.intro.config.BlockOutlineMode.VANILLA);
+        BlockOutlineMode = new EnumOption("CustomBlockOutline", com.intro.config.options.BlockOutlineMode.VANILLA);
         BlockOutlineColor = new ColorOption("BlockOutlineColor", Colors.TRANSPARENT.getColor());
-        BlockOutlineWidth = new DoubleOption("BlockOutlineWidth", 1);
         BlockOutlineAlpha = new DoubleOption("BlockOutlineAlpha", 1);
+        StatusEffectDisplayEnabled = new BooleanOption("StatusEffectDisplayEnabled", false);
+        StatusEffectDisplayPosition = new Vector2Option("StatusEffectDisplayPosition", 0, 0);
     }
 
     public HashMap<String, Option> getValues() {

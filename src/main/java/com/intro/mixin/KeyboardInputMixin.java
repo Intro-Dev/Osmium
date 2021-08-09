@@ -1,8 +1,8 @@
 package com.intro.mixin;
 
-import com.intro.config.BooleanOption;
-import com.intro.config.OptionUtil;
+import com.intro.config.options.BooleanOption;
 import com.intro.module.ToggleSneak;
+import com.intro.util.OptionUtil;
 import net.minecraft.client.input.Input;
 import net.minecraft.client.input.KeyboardInput;
 import org.objectweb.asm.Opcodes;

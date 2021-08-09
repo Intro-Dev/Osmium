@@ -1,8 +1,8 @@
 package com.intro.mixin;
 
-import com.intro.config.EnumOption;
-import com.intro.config.OptionUtil;
-import com.intro.config.SneakMode;
+import com.intro.config.options.EnumOption;
+import com.intro.config.options.SneakMode;
+import com.intro.util.OptionUtil;
 import net.minecraft.client.render.Camera;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.math.MathHelper;
