@@ -1,8 +1,9 @@
 package com.intro.mixin;
 
 import com.intro.Osmium;
-import com.intro.module.event.EventJoinWorld;
 import com.intro.module.event.EventAddPlayer;
+import com.intro.module.event.EventJoinWorld;
+import com.intro.module.event.EventType;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayNetworkHandler;
 import net.minecraft.network.packet.s2c.play.GameJoinS2CPacket;
@@ -16,7 +17,7 @@ public class ClientPlayNetworkHandlerMixin {
 
     @Inject(at = @At("RETURN"), method = "onGameJoin")
     public void onGameJoin(GameJoinS2CPacket packet, CallbackInfo info) {
-        Osmium.EVENT_BUS.postEvent(new EventJoinWorld(packet));
-        Osmium.EVENT_BUS.postEvent(new EventAddPlayer(MinecraftClient.getInstance().player));
+        Osmium.EVENT_BUS.postEvent(new EventJoinWorld(packet), EventType.EVENT_JOIN_WORLD);
+        Osmium.EVENT_BUS.postEvent(new EventAddPlayer(MinecraftClient.getInstance().player), EventType.EVENT_ADD_PLAYER);
     }
 }

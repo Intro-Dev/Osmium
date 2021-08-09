@@ -3,6 +3,7 @@ package com.intro.render;
 import com.intro.Osmium;
 import com.intro.module.event.EventDirection;
 import com.intro.module.event.EventRender;
+import com.intro.module.event.EventType;
 import com.intro.render.drawables.Drawable;
 import com.intro.render.drawables.StatusEffectDisplay;
 import net.minecraft.client.MinecraftClient;
@@ -18,7 +19,7 @@ public class RenderManager extends DrawableHelper {
     private static MinecraftClient mc = MinecraftClient.getInstance();
 
     public static void initDrawables() {
-        drawables.add(StatusEffectDisplay.getInstance());
+       addDrawable(StatusEffectDisplay.getInstance());
     }
 
     public static void renderHud(MatrixStack stack) {
@@ -33,7 +34,7 @@ public class RenderManager extends DrawableHelper {
     public static void postRenderEvents(float tickDelta, long limitTime, MatrixStack matrix) {
         mc.getProfiler().push("OsmiumRenderer");
         EventRender EventRenderPre = new EventRender(EventDirection.PRE, tickDelta, limitTime, matrix);
-        Osmium.EVENT_BUS.postEvent(EventRenderPre);
+        Osmium.EVENT_BUS.postEvent(EventRenderPre, EventType.EVENT_RENDER);
         mc.getProfiler().pop();
     }
 

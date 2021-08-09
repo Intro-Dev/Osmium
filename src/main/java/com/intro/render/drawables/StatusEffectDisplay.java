@@ -12,8 +12,8 @@ import net.minecraft.entity.effect.StatusEffectInstance;
 
 public class StatusEffectDisplay extends Drawable {
 
-    private MinecraftClient mc = MinecraftClient.getInstance();
-    private TextRenderer renderer = mc.textRenderer;
+    private final MinecraftClient mc = MinecraftClient.getInstance();
+    private final TextRenderer renderer = mc.textRenderer;
     
     private static StatusEffectDisplay instance;
 

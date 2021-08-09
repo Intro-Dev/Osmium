@@ -6,19 +6,19 @@ import com.intro.config.options.Vector2Option;
 import com.intro.mixin.MinecraftClientAccessor;
 import com.intro.module.event.Event;
 import com.intro.module.event.EventTick;
-import com.intro.module.event.EventType;
 import com.intro.render.drawables.Text;
 import com.intro.util.OptionUtil;
 import net.minecraft.client.MinecraftClient;
 
-public class FpsModule extends Module{
+public class FpsModule {
 
     public int fps = 0;
-    private Text FpsText;
+    private final Text FpsText;
+
+    private final MinecraftClient mc = MinecraftClient.getInstance();
 
 
     public FpsModule() {
-        super("Fps");
         Text tmp;
         try {
             tmp = new Text((int) ((Vector2Option) Osmium.options.get("FpsDisplayPosition")).x, (int) ((Vector2Option) Osmium.options.get("FpsDisplayPosition")).y, "Fps", 0xffffff);
@@ -32,8 +32,7 @@ public class FpsModule extends Module{
         FpsText.visible = false;
     }
 
-    @EventListener( ListenedEvents = {EventType.EVENT_TICK} )
-    public void OnEvent(Event event) {
+    public void onEvent(Event event) {
         if(FpsText != null) {
             if(event instanceof EventTick && mc.player != null) {
                 FpsText.visible = ((BooleanOption) Osmium.options.get("FpsEnabled")).variable;

@@ -3,6 +3,7 @@ package com.intro.mixin;
 import com.intro.Osmium;
 import com.intro.module.event.EventDirection;
 import com.intro.module.event.EventSettingsChange;
+import com.intro.module.event.EventType;
 import com.intro.render.screen.OsmiumOptionsScreen;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
@@ -39,11 +40,11 @@ public abstract class OptionsScreenMixin extends Screen {
 
     @Inject(at = @At("TAIL"), method = "removed")
     private void onClosePost(CallbackInfo info) {
-        Osmium.EVENT_BUS.postEvent(new EventSettingsChange(EventDirection.POST));
+        Osmium.EVENT_BUS.postEvent(new EventSettingsChange(EventDirection.POST), EventType.EVENT_SETTINGS_CHANGE);
     }
 
     @Inject(at = @At("HEAD"), method = "removed")
     private void onClosePre(CallbackInfo info) {
-        Osmium.EVENT_BUS.postEvent(new EventSettingsChange(EventDirection.POST));
+        Osmium.EVENT_BUS.postEvent(new EventSettingsChange(EventDirection.PRE), EventType.EVENT_SETTINGS_CHANGE);
     }
 }

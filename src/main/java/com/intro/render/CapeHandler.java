@@ -1,6 +1,5 @@
 package com.intro.render;
 
-import com.intro.module.Module;
 import com.intro.module.event.Event;
 import com.intro.module.event.EventAddPlayer;
 import com.intro.module.event.EventRemovePlayer;
@@ -24,23 +23,15 @@ Credit for cape URL code goes to them
 @author Intro
 @author dragonostic
  **/
-public class CapeHandler extends Module {
-    public CapeHandler() {
-        super("Cape Handler");
-    }
+public class CapeHandler {
 
-
-
-    public void OnEvent(Event event) {
-
+    public void handleEvents(Event event) {
         if(event instanceof EventAddPlayer) {
             Thread CapeDownloaderThread = new Thread(new CapeDownloader(this, (EventAddPlayer) event));
             CapeDownloaderThread.start();
         }
         if(event instanceof EventRemovePlayer) {
-            if(CapeRenderer.OptifineCapes.contains(((EventRemovePlayer) event).entity.getUuidAsString())) {
-                CapeRenderer.OptifineCapes.remove(((EventRemovePlayer) event).entity.getUuidAsString());
-            }
+            CapeRenderer.OptifineCapes.remove(((EventRemovePlayer) event).entity.getUuidAsString());
             CapeRenderer.CapeArray.remove(((EventRemovePlayer) event).entity.getUuidAsString());
         }
     }
@@ -75,7 +66,7 @@ public class CapeHandler extends Module {
                 CapeRenderer.CapeArray.put(uuid, null);
                 return false;
             }
-            InputStream stream = null;
+            InputStream stream;
             try {
                 stream = capeURL.openStream();
             } catch (FileNotFoundException e) {

@@ -35,67 +35,46 @@ public class OsmiumOptionsScreen extends Screen {
         this.parent = parent;
     }
 
-    ButtonWidget ToggleSneakToggleWidget;
-    ButtonWidget FullbrightWidget;
-    ButtonWidget HurtBobWidget;
-    ButtonWidget NoFireWidget;
-    ButtonWidget SmoothSneakWidget;
-    ButtonWidget OpenVideoOptions;
-    ButtonWidget BackButton;
-    ButtonWidget OpenGuiEditing;
-    ButtonWidget FpsWidget;
-    ButtonWidget OpenGithubWidget;
-
-    private MinecraftClient mc = MinecraftClient.getInstance();
-
-    /*
-    Made this good
-     */
+    private final MinecraftClient mc = MinecraftClient.getInstance();
 
 
     @Override
     protected void init() {
-        FullbrightWidget = new BooleanButtonWidget(this.width / 2 - 275, this.height / 6 + 120, 150, 20, (BooleanOption) OptionUtil.Options.FullbrightEnabled.get(), "osmium.options.fullbright");
-        HurtBobWidget = new BooleanButtonWidget(this.width / 2 + 125, this.height / 6 + 120, 150, 20,((BooleanOption) OptionUtil.Options.HurtbobbingEnabled.get()), "osmium.options.hurtbobbing");
-        NoFireWidget = new BooleanButtonWidget(this.width / 2 - 275, this.height / 6 + 160, 150, 20, ((BooleanOption) OptionUtil.Options.NoFireEnabled.get()), "osmium.options.nofire");
-        FpsWidget = new BooleanButtonWidget(this.width / 2 - 75, this.height / 6 + 200, 150, 20, ((BooleanOption) OptionUtil.Options.FpsEnabled.get()), "osmium.options.fps");
+        ButtonWidget fullBrightWidget = new BooleanButtonWidget(this.width / 2 - 275, this.height / 6 + 120, 150, 20, (BooleanOption) OptionUtil.Options.FullbrightEnabled.get(), "osmium.options.fullbright");
+        ButtonWidget hurtBobWidget = new BooleanButtonWidget(this.width / 2 + 125, this.height / 6 + 120, 150, 20, ((BooleanOption) OptionUtil.Options.HurtbobbingEnabled.get()), "osmium.options.hurtbobbing");
+        ButtonWidget noFireWidget = new BooleanButtonWidget(this.width / 2 - 275, this.height / 6 + 160, 150, 20, ((BooleanOption) OptionUtil.Options.NoFireEnabled.get()), "osmium.options.nofire");
+        ButtonWidget fpsWidget = new BooleanButtonWidget(this.width / 2 - 75, this.height / 6 + 200, 150, 20, ((BooleanOption) OptionUtil.Options.FpsEnabled.get()), "osmium.options.fps");
+        ButtonWidget smoothSneakWidget = new EnumSelectWidget(this.width / 2 + 125, this.height / 6 + 160, 150, 20, (EnumOption) OptionUtil.Options.SneakMode.get(), "osmium.options.sneak");
 
-
-
-        SmoothSneakWidget = new EnumSelectWidget(this.width / 2 + 125, this.height / 6 + 160, 150, 20, (EnumOption) OptionUtil.Options.SneakMode.get(), "osmium.options.sneak");
-
-
-        OpenVideoOptions = new ButtonWidget(this.width / 2 - 75, this.height / 6 + 160, 150, 20, new TranslatableText("osmium.options.videooptions"), (buttonWidget) -> {
+        ButtonWidget openVideoOptions = new ButtonWidget(this.width / 2 - 75, this.height / 6 + 160, 150, 20, new TranslatableText("osmium.options.videooptions"), (buttonWidget) -> {
             mc.openScreen(new OsmiumVideoOptionsScreen(this));
         });
 
-        BackButton = new ButtonWidget(this.width / 2 - 100, this.height / 6 + 300, 200, 20, new TranslatableText("osmium.options.videooptions.back"), (buttonWidget) -> {
+        ButtonWidget backButton = new ButtonWidget(this.width / 2 - 100, this.height / 6 + 300, 200, 20, new TranslatableText("osmium.options.videooptions.back"), (buttonWidget) -> {
             mc.openScreen(this.parent);
         });
 
-        OpenGuiEditing = new ButtonWidget(this.width / 2 - 275, this.height / 6 + 200, 150, 20, new TranslatableText("osmium.guiedit.title"), (buttonWidget) -> {
+        ButtonWidget openGuiEditing = new ButtonWidget(this.width / 2 - 275, this.height / 6 + 200, 150, 20, new TranslatableText("osmium.guiedit.title"), (buttonWidget) -> {
             mc.openScreen(new OsmiumGuiEditScreen(this));
         });
 
-        ToggleSneakToggleWidget = new ButtonWidget(this.width / 2 - 75, this.height / 6 + 120, 150, 20, new TranslatableText("osmium.options.togglesneaksettings"), (buttonWidget) -> {
+        ButtonWidget toggleSneakToggleWidget = new ButtonWidget(this.width / 2 - 75, this.height / 6 + 120, 150, 20, new TranslatableText("osmium.options.togglesneaksettings"), (buttonWidget) -> {
             mc.openScreen(new OsmiumToggleSneakOptionsScreen(this));
         });
 
-        OpenGithubWidget = new ButtonWidget(this.width / 2 + 125, this.height / 6 + 200, 150, 20, new TranslatableText("osmium.opencredits"), this::openGithub);
+        ButtonWidget openGithubWidget = new ButtonWidget(this.width / 2 + 125, this.height / 6 + 200, 150, 20, new TranslatableText("osmium.opencredits"), this::openGithub);
 
 
-
-
-        this.addDrawableChild(FullbrightWidget);
-        this.addDrawableChild(ToggleSneakToggleWidget);
-        this.addDrawableChild(HurtBobWidget);
-        this.addDrawableChild(NoFireWidget);
-        this.addDrawableChild(SmoothSneakWidget);
-        this.addDrawableChild(OpenVideoOptions);
-        this.addDrawableChild(BackButton);
-        this.addDrawableChild(OpenGuiEditing);
-        this.addDrawableChild(FpsWidget);
-        this.addDrawableChild(OpenGithubWidget);
+        this.addDrawableChild(fullBrightWidget);
+        this.addDrawableChild(toggleSneakToggleWidget);
+        this.addDrawableChild(hurtBobWidget);
+        this.addDrawableChild(noFireWidget);
+        this.addDrawableChild(smoothSneakWidget);
+        this.addDrawableChild(openVideoOptions);
+        this.addDrawableChild(backButton);
+        this.addDrawableChild(openGuiEditing);
+        this.addDrawableChild(fpsWidget);
+        this.addDrawableChild(openGithubWidget);
     }
 
     @Override

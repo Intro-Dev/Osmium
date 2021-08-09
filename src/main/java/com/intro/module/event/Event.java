@@ -1,15 +1,12 @@
 package com.intro.module.event;
 
 /**
- <p>Thc core of the Event system. All events extend this class.
- All events have a direction property, which tells weather the event is going to happen, or already happened.
- The canceled property is currently not well implemented, but will be in the future.
- To use events, make a Module class, and to use common events like {@link EventTick} or {@link EventRender}, add a {@link com.intro.module.EventListener} to the onEvent method.
- Event method lists for common events are compiled on runtime startup for performance.
- Events are posted to all listeners via the Osmium.EVENT_BU.postEvent method.</p>
+<p>The core of the event system, all events extend this class</p>
+ <p>When an event is posted, the {@link com.intro.Osmium.EVENT_BUS#postEvent(Event, EventType)} is called and passed
+ the event object and an EventType. This is then used to post to all registered callbacks for that event type.</p>
 
- @see com.intro.module.EventListener
- @see com.intro.module.Module
+ @see com.intro.module.EventListenerSupplier
+ @see EventType
  @see com.intro.Osmium.EVENT_BUS
  @since 1.0.0
  @author Intro

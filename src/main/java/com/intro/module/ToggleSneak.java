@@ -5,11 +5,11 @@ import com.intro.config.options.BooleanOption;
 import com.intro.config.options.Vector2Option;
 import com.intro.module.event.Event;
 import com.intro.module.event.EventTick;
-import com.intro.module.event.EventType;
 import com.intro.render.drawables.Text;
 import com.intro.util.OptionUtil;
+import net.minecraft.client.MinecraftClient;
 
-public class ToggleSneak extends Module{
+public class ToggleSneak {
 
     private boolean sprinting = false;
 
@@ -18,10 +18,9 @@ public class ToggleSneak extends Module{
     //private boolean sneaking = false;
     private final Text SprintingText;
 
-
+    private final MinecraftClient mc = MinecraftClient.getInstance();
 
     public ToggleSneak() {
-        super("ToggleSneak");
         Text tmp;
         try {
             tmp = new Text((int) ((Vector2Option) Osmium.options.get("ToggleSprintPosition").get()).x, (int) ((Vector2Option) Osmium.options.get("ToggleSprintPosition").get()).y, "Sprinting(Toggled)", 0xffffff);
@@ -35,8 +34,7 @@ public class ToggleSneak extends Module{
         SprintingText.visible = false;
     }
 
-    @EventListener(ListenedEvents = { EventType.EVENT_TICK })
-    public void OnEvent(Event event) {
+    public void onEvent(Event event) {
         if(mc.player != null) {
             if(((BooleanOption) OptionUtil.Options.ToggleSprintEnabled.get()).variable || ((BooleanOption) OptionUtil.Options.ToggleSneakEnabled.get()).variable) {
                 if(event instanceof EventTick && event.isPre()) {

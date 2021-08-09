@@ -1,24 +1,16 @@
 package com.intro.module;
 
 import com.intro.Osmium;
-import com.intro.render.screen.OsmiumOptionsScreen;
 import com.intro.module.event.Event;
 import com.intro.module.event.EventTick;
+import com.intro.render.screen.OsmiumOptionsScreen;
+import net.minecraft.client.MinecraftClient;
 
-public class Gui extends Module{
+public class Gui {
 
-    //Text text;
-    public boolean GuiOpen = false;
-   //private ArrayList<Text> guiText = new ArrayList<Text>();
+    private final MinecraftClient mc = MinecraftClient.getInstance();
 
-
-
-    public Gui() {
-        super("Gui");
-        //text = new Text(200, 100, "", 0xffffff);
-    }
-
-    public void OnEvent(Event event) {
+    public void onEvent(Event event) {
         if(mc.player != null) {
             if(event instanceof EventTick && event.isPre()) {
                 if(Osmium.menuKey.wasPressed()) {

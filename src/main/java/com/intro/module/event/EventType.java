@@ -1,12 +1,23 @@
 package com.intro.module.event;
 
 public enum EventType {
-    EVENT_ADD_PLAYER,
-    EVENT_JOIN_WORLD,
-    EVENT_REMOVE_PLAYER,
-    EVENT_RENDER,
-    EVENT_SETTINGS_CHANGE,
-    EVENT_SPAWN_ENTITY,
-    EVENT_START_GAME,
-    EVENT_TICK
+    EVENT_ADD_PLAYER(0),
+    EVENT_JOIN_WORLD(1),
+    EVENT_REMOVE_PLAYER(2),
+    EVENT_RENDER(3),
+    EVENT_RENDER_POST_TICK(4),
+    EVENT_SETTINGS_CHANGE(5),
+    EVENT_SPAWN_ENTITY(6),
+    EVENT_START_GAME(7),
+    EVENT_TICK(8);
+
+    private final int value;
+
+    public int getIntVal() {
+        return value;
+    }
+
+    EventType(int value) {
+        this.value = value;
+    }
 }
