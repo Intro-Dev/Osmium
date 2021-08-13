@@ -6,13 +6,11 @@ import com.intro.module.event.Event;
 import com.intro.module.event.EventType;
 import com.intro.render.CapeHandler;
 import com.intro.render.RenderManager;
-import com.intro.render.shader.ShaderSystem;
 import com.intro.util.OptionUtil;
+import com.mojang.blaze3d.platform.InputConstants;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
-import net.minecraft.client.option.KeyBinding;
-import net.minecraft.client.util.InputUtil;
-import net.minecraft.util.Identifier;
+import net.minecraft.client.KeyMapping;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.lwjgl.glfw.GLFW;
@@ -26,11 +24,9 @@ public class Osmium implements ModInitializer {
 
     public static final Logger LOGGER = LogManager.getLogger();
 
-    public static KeyBinding menuKey;
+    public static KeyMapping menuKey;
 
     public static Options options = new Options();
-
-
 
 
     public static void registerModules() {
@@ -49,14 +45,10 @@ public class Osmium implements ModInitializer {
     }
 
     public void registerKeyBindings() {
-        menuKey = new KeyBinding("keys.osmium.MenuKey", InputUtil.Type.KEYSYM, GLFW.GLFW_KEY_RIGHT_SHIFT, "keys.category.osmium.keys");
+        menuKey = new KeyMapping("keys.osmium.MenuKey", InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_RIGHT_SHIFT, "keys.category.osmium.keys");
         KeyBindingHelper.registerKeyBinding(menuKey);
     }
 
-    // Shaders are temporarily disabled until I can get them working
-    public static void registerShaders() {
-        ShaderSystem.loadShader(new Identifier("osmium", "shaders/post/blur.json"));
-    }
 
     public void onInitialize() {
         OptionUtil.Options.init();
@@ -67,8 +59,8 @@ public class Osmium implements ModInitializer {
         RenderManager.initDrawables();
         // registerShaders();
         System.out.println("Osmium Initialized");
-
     }
+
 
     public static class EVENT_BUS {
 
@@ -99,5 +91,6 @@ public class Osmium implements ModInitializer {
                supplier.run(event);
            }
         }
+
     }
 }

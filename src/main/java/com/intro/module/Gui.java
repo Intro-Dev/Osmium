@@ -4,20 +4,20 @@ import com.intro.Osmium;
 import com.intro.module.event.Event;
 import com.intro.module.event.EventTick;
 import com.intro.render.screen.OsmiumOptionsScreen;
-import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.Minecraft;
 
 public class Gui {
 
-    private final MinecraftClient mc = MinecraftClient.getInstance();
+    private final Minecraft mc = Minecraft.getInstance();
 
     public void onEvent(Event event) {
         if(mc.player != null) {
             if(event instanceof EventTick && event.isPre()) {
-                if(Osmium.menuKey.wasPressed()) {
-                    if(mc.currentScreen instanceof OsmiumOptionsScreen) {
-                        mc.currentScreen.onClose();
+                if(Osmium.menuKey.consumeClick()) {
+                    if(mc.screen instanceof OsmiumOptionsScreen) {
+                        mc.screen.onClose();
                     } else {
-                        mc.openScreen(new OsmiumOptionsScreen(null));
+                        mc.setScreen(new OsmiumOptionsScreen(null));
                     }
                 }
             }

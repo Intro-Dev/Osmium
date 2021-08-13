@@ -3,19 +3,19 @@ package com.intro.module;
 import com.intro.Osmium;
 import com.intro.config.options.BooleanOption;
 import com.intro.config.options.Vector2Option;
-import com.intro.mixin.MinecraftClientAccessor;
+import com.intro.mixin.MinecraftAccessor;
 import com.intro.module.event.Event;
 import com.intro.module.event.EventTick;
 import com.intro.render.drawables.Text;
 import com.intro.util.OptionUtil;
-import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.Minecraft;
 
 public class FpsModule {
 
     public int fps = 0;
     private final Text FpsText;
 
-    private final MinecraftClient mc = MinecraftClient.getInstance();
+    private final Minecraft mc = Minecraft.getInstance();
 
 
     public FpsModule() {
@@ -37,7 +37,7 @@ public class FpsModule {
             if(event instanceof EventTick && mc.player != null) {
                 FpsText.visible = ((BooleanOption) Osmium.options.get("FpsEnabled")).variable;
                 if(((BooleanOption) Osmium.options.get("FpsEnabled")).variable) {
-                    FpsText.text = String.valueOf(((MinecraftClientAccessor) MinecraftClient.getInstance()).getCurrentFps());
+                    FpsText.text = String.valueOf(((MinecraftAccessor) Minecraft.getInstance()).getFps());
                     Osmium.options.put("FpsDisplayPosition", new Vector2Option("FpsDisplayPosition", FpsText.posX, FpsText.posY));
                 }
             }

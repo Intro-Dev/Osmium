@@ -7,7 +7,7 @@ import com.intro.module.event.Event;
 import com.intro.module.event.EventTick;
 import com.intro.render.drawables.Text;
 import com.intro.util.OptionUtil;
-import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.Minecraft;
 
 public class ToggleSneak {
 
@@ -18,7 +18,7 @@ public class ToggleSneak {
     //private boolean sneaking = false;
     private final Text SprintingText;
 
-    private final MinecraftClient mc = MinecraftClient.getInstance();
+    private final Minecraft mc = Minecraft.getInstance();
 
     public ToggleSneak() {
         Text tmp;
@@ -39,13 +39,15 @@ public class ToggleSneak {
             if(((BooleanOption) OptionUtil.Options.ToggleSprintEnabled.get()).variable || ((BooleanOption) OptionUtil.Options.ToggleSneakEnabled.get()).variable) {
                 if(event instanceof EventTick && event.isPre()) {
                     Osmium.options.put("ToggleSprintPosition", new Vector2Option("ToggleSprintPosition", SprintingText.posX, SprintingText.posY));
-                    if(mc.player.forwardSpeed > 0 && !mc.player.isUsingItem() && !mc.player.isSneaking() && !mc.player.horizontalCollision && this.sprinting)
+                    if(mc.player.zza > 0 && !mc.player.isUsingItem() && !mc.player.isShiftKeyDown() && !mc.player.horizontalCollision && this.sprinting)
                         mc.player.setSprinting(true);
 
-                    if(mc.options.keySneak.wasPressed() && ((BooleanOption) OptionUtil.Options.ToggleSneakEnabled.get()).variable) {
+                    // why is sneak called keyShift?
+                    // the world may never know
+                    if(mc.options.keyShift.consumeClick() && ((BooleanOption) OptionUtil.Options.ToggleSneakEnabled.get()).variable) {
                         sneaking = !sneaking;
                     }
-                    if(mc.options.keySprint.wasPressed() && ((BooleanOption) OptionUtil.Options.ToggleSprintEnabled.get()).variable) {
+                    if(mc.options.keySprint.consumeClick() && ((BooleanOption) OptionUtil.Options.ToggleSprintEnabled.get()).variable) {
                         this.sprinting = !this.sprinting;
                     }
 
@@ -54,13 +56,13 @@ public class ToggleSneak {
                     if((this.sprinting && ((BooleanOption) OptionUtil.Options.ToggleSprintEnabled.get()).variable) && (!sneaking)) {
                         SprintingText.visible = true;
                         SprintingText.text = "Sprinting(Toggled)";
-                    } else if (mc.options.keySprint.isPressed() && ((BooleanOption) OptionUtil.Options.ToggleSprintEnabled.get()).variable) {
+                    } else if (mc.options.keySprint.isDown() && ((BooleanOption) OptionUtil.Options.ToggleSprintEnabled.get()).variable) {
                         SprintingText.visible = true;
                         SprintingText.text = "Sprinting(Key Down)";
                     } else if(sneaking && ((BooleanOption) OptionUtil.Options.ToggleSneakEnabled.get()).variable) {
                         SprintingText.visible = true;
                         SprintingText.text = "Sneaking(Toggled)";
-                    } else if (mc.options.keySneak.isPressed() && ((BooleanOption) OptionUtil.Options.ToggleSneakEnabled.get()).variable) {
+                    } else if (mc.options.keyShift.isDown() && ((BooleanOption) OptionUtil.Options.ToggleSneakEnabled.get()).variable) {
                         SprintingText.visible = true;
                         SprintingText.text = "Sneaking(Key Down)";
                     } else {

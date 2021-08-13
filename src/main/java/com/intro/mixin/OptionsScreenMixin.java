@@ -5,13 +5,11 @@ import com.intro.module.event.EventDirection;
 import com.intro.module.event.EventSettingsChange;
 import com.intro.module.event.EventType;
 import com.intro.render.screen.OsmiumOptionsScreen;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.gui.screen.option.OptionsScreen;
-import net.minecraft.client.gui.widget.ButtonWidget;
-import net.minecraft.client.option.GameOptions;
-import net.minecraft.text.Text;
-import net.minecraft.text.TranslatableText;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.components.Button;
+import net.minecraft.client.gui.screens.OptionsScreen;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.network.chat.TranslatableComponent;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -20,21 +18,16 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(OptionsScreen.class)
 public abstract class OptionsScreenMixin extends Screen {
 
-    public int tsX = 10, tsY = 10;
+    private Minecraft mc = Minecraft.getInstance();
 
-
-    MinecraftClient mc = MinecraftClient.getInstance();
-    private final GameOptions settings;
-
-    protected OptionsScreenMixin(Text title, GameOptions gameOptions, GameOptions settings) {
+    protected OptionsScreenMixin(TranslatableComponent title) {
         super(title);
-        this.settings = settings;
     }
 
     @Inject(at = @At("TAIL"), method = "init")
     private void init(CallbackInfo info) {
-        this.addDrawableChild(new ButtonWidget(this.width / 2 - 100, this.height / 6 + 200, 200, 20, new TranslatableText("osmium.options.title"), (buttonWidget) -> {
-            this.mc.openScreen(new OsmiumOptionsScreen(this));
+        this.addRenderableWidget(new Button(this.width / 2 - 100, this.height / 6 + 200, 200, 20, new TranslatableComponent("osmium.options.title"), (buttonWidget) -> {
+            mc.setScreen(new OsmiumOptionsScreen(this));
         }));
     }
 

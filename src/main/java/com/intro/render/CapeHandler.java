@@ -3,10 +3,10 @@ package com.intro.render;
 import com.intro.module.event.Event;
 import com.intro.module.event.EventAddPlayer;
 import com.intro.module.event.EventRemovePlayer;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.texture.NativeImage;
-import net.minecraft.client.texture.NativeImageBackedTexture;
-import net.minecraft.util.Identifier;
+import com.mojang.blaze3d.platform.NativeImage;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.texture.DynamicTexture;
+import net.minecraft.resources.ResourceLocation;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -31,8 +31,8 @@ public class CapeHandler {
             CapeDownloaderThread.start();
         }
         if(event instanceof EventRemovePlayer) {
-            CapeRenderer.OptifineCapes.remove(((EventRemovePlayer) event).entity.getUuidAsString());
-            CapeRenderer.CapeArray.remove(((EventRemovePlayer) event).entity.getUuidAsString());
+            CapeRenderer.OptifineCapes.remove(((EventRemovePlayer) event).entity.getStringUUID());
+            CapeRenderer.CapeArray.remove(((EventRemovePlayer) event).entity.getStringUUID());
         }
     }
 
@@ -43,10 +43,10 @@ public class CapeHandler {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        Identifier capeTexture = null;
+        ResourceLocation capeTexture = null;
         try {
-            NativeImageBackedTexture nIBT = new NativeImageBackedTexture(parseCape(cape));
-            capeTexture = MinecraftClient.getInstance().getTextureManager().registerDynamicTexture(uuid.replace("-", ""), nIBT);
+            DynamicTexture dynamicTexture = new DynamicTexture(parseCape(cape));
+            capeTexture = Minecraft.getInstance().getTextureManager().register(uuid.replace("-", ""), dynamicTexture);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -113,7 +113,7 @@ public class CapeHandler {
                 NativeImage imgNew = new NativeImage(imageWidth, imageHeight, true);
                 for (int x = 0; x < imageSrcWidth; x++) {
                     for (int y = 0; y < srcHeight; y++) {
-                        imgNew.setPixelColor(x, y, image.getPixelColor(x, y));
+                        imgNew.setPixelRGBA(x, y, image.getPixelRGBA(x, y));
                     }
                 }
                 image.close();
@@ -135,12 +135,12 @@ class CapeDownloader implements Runnable {
     public void run() {
 
 
-        boolean optifineCapeFound = handler.SetCapeFromURL(playerJoin.entity.getUuidAsString(), "http://s.optifine.net/capes/" + playerJoin.entity.getName().asString() + ".png");
+        boolean optifineCapeFound = handler.SetCapeFromURL(playerJoin.entity.getStringUUID(), "http://s.optifine.net/capes/" + playerJoin.entity.getName().getString() + ".png");
         if(optifineCapeFound) {
-            CapeRenderer.OptifineCapes.add(playerJoin.entity.getUuidAsString());
+            CapeRenderer.OptifineCapes.add(playerJoin.entity.getStringUUID());
             return;
         }
-        if(handler.SetCapeFromURL(playerJoin.entity.getUuidAsString(), "https://minecraftcapes.net/profile/" + playerJoin.entity.getUuidAsString().replace("-", "") + "/cape/map"))
+        if(handler.SetCapeFromURL(playerJoin.entity.getStringUUID(), "https://minecraftcapes.net/profile/" + playerJoin.entity.getStringUUID().replace("-", "") + "/cape/map"))
             return;
     }
 }

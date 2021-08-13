@@ -7,15 +7,14 @@ import com.intro.render.RenderManager;
 import com.intro.render.drawables.Drawable;
 import com.intro.util.TextureUtil;
 import com.intro.util.Vector2d;
+import com.mojang.blaze3d.platform.NativeImage;
 import com.mojang.blaze3d.systems.RenderSystem;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.gui.screen.narration.NarrationMessageBuilder;
-import net.minecraft.client.render.GameRenderer;
-import net.minecraft.client.texture.NativeImage;
-import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.text.TranslatableText;
-import net.minecraft.util.Identifier;
+import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.renderer.GameRenderer;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.resources.ResourceLocation;
 
 
 /**
@@ -34,9 +33,9 @@ public class ColorOptionWidget extends Drawable {
 
     private final ColorOption attachedOption;
 
-    private static MinecraftClient mc = MinecraftClient.getInstance();
+    private static Minecraft mc = Minecraft.getInstance();
 
-    private final Identifier BAKED_TEXTURE = new Identifier("osmium", "/textures/gui/gradient.png");
+    private final ResourceLocation BAKED_TEXTURE = new ResourceLocation("osmium", "/textures/gui/gradient.png");
 
     private final NativeImage TEXTURE;
 
@@ -69,7 +68,7 @@ public class ColorOptionWidget extends Drawable {
     }
 
     @Override
-    public void render(MatrixStack stack) {
+    public void render(PoseStack stack) {
         RenderManager.drawables.remove(this);
     }
 
@@ -79,23 +78,13 @@ public class ColorOptionWidget extends Drawable {
     }
 
     @Override
-    public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
+    public void render(PoseStack matrices, int mouseX, int mouseY, float delta) {
         RenderSystem.setShader(GameRenderer::getPositionTexShader);
         RenderSystem.setShaderTexture(0, BAKED_TEXTURE);
         this.scale = 1;
-        drawTexture(matrices, x, y, 0, 0, 256, 256);
-        drawCenteredText(matrices, mc.textRenderer, Osmium.options.getColorOption(this.attachedOption.identifier).color.toStringNoAlpha(), x + (TEXTURE.getWidth() / 2), y + TEXTURE.getHeight() + 20, 0xffffff);
-        drawCenteredText(matrices, mc.textRenderer, new TranslatableText("osmium.widget.colorpicker"), x + (TEXTURE.getWidth() / 2), y - 20, 0xffffff);
-    }
-
-    @Override
-    public SelectionType getType() {
-        return SelectionType.NONE;
-    }
-
-    @Override
-    public void appendNarrations(NarrationMessageBuilder builder) {
-
+        blit(matrices, x, y, 0, 0, 256, 256);
+        drawCenteredString(matrices, mc.font, Osmium.options.getColorOption(this.attachedOption.identifier).color.toStringNoAlpha(), x + (TEXTURE.getWidth() / 2), y + TEXTURE.getHeight() + 20, 0xffffff);
+        drawCenteredString(matrices, mc.font, new TranslatableComponent("osmium.widget.colorpicker"), x + (TEXTURE.getWidth() / 2), y - 20, 0xffffff);
     }
 
     @Override
@@ -118,7 +107,7 @@ public class ColorOptionWidget extends Drawable {
 
     // gets image coordinates from screen coordinates
     public Vector2d getImagePixels(int screenX, int screenY) {
-        Screen screen = mc.currentScreen;
+        Screen screen = mc.screen;
         // compute scale
         double imageScale = Math.min(screen.width / TEXTURE.getWidth(), screen.height / TEXTURE.getHeight()) * this.scale;
 

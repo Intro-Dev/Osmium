@@ -1,11 +1,12 @@
 package com.intro.render.drawables;
 
 import com.intro.render.RenderManager;
-import net.minecraft.client.gui.DrawableHelper;
-import net.minecraft.client.gui.Element;
-import net.minecraft.client.gui.Selectable;
-import net.minecraft.client.gui.screen.narration.NarrationMessageBuilder;
-import net.minecraft.client.util.math.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.gui.GuiComponent;
+import net.minecraft.client.gui.components.Widget;
+import net.minecraft.client.gui.components.events.GuiEventListener;
+import net.minecraft.client.gui.narration.NarratableEntry;
+import net.minecraft.client.gui.narration.NarrationElementOutput;
 
 /**
  * <p>Generic class for gui drawables</p>
@@ -15,32 +16,31 @@ import net.minecraft.client.util.math.MatrixStack;
  * @author Intro
  * @since 1.1.1
  */
-public abstract class Drawable extends DrawableHelper implements Element, net.minecraft.client.gui.Drawable, Selectable {
+public abstract class Drawable extends GuiComponent implements Widget, GuiEventListener, NarratableEntry {
     
     public int posX = 0, posY = 0;
     public int width = 0, height = 0;
 
     public static final int HITBOX_PADDING = 20;
-
     public boolean visible = true;
     
-    public abstract void render(MatrixStack stack);
+    public abstract void render(PoseStack stack);
 
     public abstract void destroySelf();
 
 
     @Override
-    public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
+    public void render(PoseStack matrices, int mouseX, int mouseY, float delta) {
         this.render(matrices);
     }
 
     @Override
-    public SelectionType getType() {
-        return SelectionType.NONE;
+    public NarratableEntry.NarrationPriority narrationPriority() {
+        return NarratableEntry.NarrationPriority.NONE;
     }
 
     @Override
-    public void appendNarrations(NarrationMessageBuilder builder) {
+    public void updateNarration(NarrationElementOutput builder) {
 
     }
 

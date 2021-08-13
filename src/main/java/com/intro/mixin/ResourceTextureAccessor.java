@@ -1,15 +1,15 @@
 package com.intro.mixin;
 
-import net.minecraft.client.texture.ResourceTexture;
-import net.minecraft.util.Identifier;
+import net.minecraft.client.renderer.texture.SimpleTexture;
+import net.minecraft.resources.ResourceLocation;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.gen.Accessor;
 
-@Mixin(ResourceTexture.class)
+@Mixin(SimpleTexture.class)
 public interface ResourceTextureAccessor {
 
     @Accessor
-    Identifier getLocation();
+    ResourceLocation getLocation();
 
 
 }

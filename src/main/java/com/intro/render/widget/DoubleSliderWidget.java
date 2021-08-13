@@ -2,14 +2,14 @@ package com.intro.render.widget;
 
 import com.intro.Osmium;
 import com.intro.config.options.DoubleOption;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.widget.OptionSliderWidget;
-import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.text.LiteralText;
-import net.minecraft.text.TranslatableText;
-import net.minecraft.util.math.MathHelper;
+import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.components.AbstractOptionSliderButton;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.util.Mth;
 
-public class DoubleSliderWidget extends OptionSliderWidget {
+public class DoubleSliderWidget extends AbstractOptionSliderButton {
 
     private final DoubleOption AttachedOption;
     public final String key;
@@ -18,7 +18,7 @@ public class DoubleSliderWidget extends OptionSliderWidget {
 
     private double roundTo;
 
-    public DoubleSliderWidget(MinecraftClient mc, int x, int y, int width, int height, DoubleOption doubleOption, String key, double minVal, double maxVal, double roundTo) {
+    public DoubleSliderWidget(Minecraft mc, int x, int y, int width, int height, DoubleOption doubleOption, String key, double minVal, double maxVal, double roundTo) {
         super(mc.options, x, y, width, height, doubleOption.variable);
         this.AttachedOption = doubleOption;
         this.key = key;
@@ -32,21 +32,21 @@ public class DoubleSliderWidget extends OptionSliderWidget {
     @Override
     protected void updateMessage() {
         double scaledVal = (maxVal - minVal) * this.value;
-        scaledVal = MathHelper.clamp(scaledVal, minVal, maxVal);
-        this.setMessage(new LiteralText(new TranslatableText(key).getString() + (Math.round(scaledVal * roundTo) / roundTo)));
+        scaledVal = Mth.clamp(scaledVal, minVal, maxVal);
+        this.setMessage(new TextComponent(new TranslatableComponent(key).getString() + (Math.round(scaledVal * roundTo) / roundTo)));
     }
 
     @Override
     protected void applyValue() {
         double scaledVal = (maxVal - minVal) * this.value;
-        scaledVal = MathHelper.clamp(scaledVal, minVal, maxVal);
+        scaledVal = Mth.clamp(scaledVal, minVal, maxVal);
         ((DoubleOption) Osmium.options.get(AttachedOption.identifier)).variable = Math.round(scaledVal * roundTo) / roundTo;
     }
 
 
     @Override
-    public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
-        this.value = MathHelper.clamp(value, 0, 1);
+    public void render(PoseStack matrices, int mouseX, int mouseY, float delta) {
+        this.value = Mth.clamp(value, 0, 1);
         super.render(matrices, mouseX, mouseY, delta);
     }
 }

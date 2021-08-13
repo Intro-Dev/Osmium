@@ -3,19 +3,19 @@ package com.intro.render.screen;
 import com.intro.render.RenderManager;
 import com.intro.render.drawables.Drawable;
 import com.intro.util.OptionUtil;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.text.TranslatableText;
+import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.network.chat.TranslatableComponent;
 
-public class OsmiumGuiEditScreen extends Screen{
+public class OsmiumGuiEditScreen extends Screen {
 
     private final Screen parent;
-    private final MinecraftClient mc = MinecraftClient.getInstance();
+    private final Minecraft mc = Minecraft.getInstance();
 
 
     public OsmiumGuiEditScreen(Screen parent) {
-        super(new TranslatableText("osmium.guiedit.title"));
+        super(new TranslatableComponent("osmium.guiedit.title"));
         this.parent = parent;
     }
 
@@ -31,7 +31,7 @@ public class OsmiumGuiEditScreen extends Screen{
     }
 
     @Override
-    public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
+    public void render(PoseStack matrices, int mouseX, int mouseY, float delta) {
         this.renderBackground(matrices);
         RenderManager.renderHud(matrices);
         super.render(matrices, mouseX, mouseY, delta);

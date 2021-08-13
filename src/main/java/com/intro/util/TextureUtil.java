@@ -2,32 +2,32 @@ package com.intro.util;
 
 import com.intro.mixin.ResourceTextureAccessor;
 import com.intro.mixin.ResourceTextureSubclassAccessor;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.texture.NativeImage;
-import net.minecraft.client.texture.ResourceTexture;
-import net.minecraft.resource.ResourceManager;
-import net.minecraft.util.Identifier;
+import com.mojang.blaze3d.platform.NativeImage;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.texture.SimpleTexture;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.packs.resources.ResourceManager;
 
 public class TextureUtil {
 
-    private static MinecraftClient mc = MinecraftClient.getInstance();
+    private static Minecraft mc = Minecraft.getInstance();
 
 
-    public static NativeImage convertIdentifierToNativeImage(Identifier identifier) {
+    public static NativeImage convertIdentifierToNativeImage(ResourceLocation location) {
         NativeImage TEXTURE;
-        mc.getTextureManager().bindTexture(identifier);
-        ResourceTexture texture = (ResourceTexture) mc.getTextureManager().getTexture(identifier);
+        mc.getTextureManager().bindForSetup(location);
+        SimpleTexture texture = (SimpleTexture) mc.getTextureManager().getTexture(location);
         TEXTURE = getNativeImage(mc.getResourceManager(), texture);
         return TEXTURE;
     }
 
-    private static NativeImage getNativeImage(ResourceManager manager, ResourceTexture texture) {
-        ResourceTexture.TextureData textureData = loadTextureData(manager, texture);
-        return ((ResourceTextureSubclassAccessor) textureData).getImage();
+    private static NativeImage getNativeImage(ResourceManager manager, SimpleTexture texture) {
+        SimpleTexture.TextureImage textureImage = loadTextureData(manager, texture);
+        return ((ResourceTextureSubclassAccessor) textureImage).getImage();
     }
 
-    private static ResourceTexture.TextureData loadTextureData(ResourceManager resourceManager, ResourceTexture texture) {
-        return ResourceTexture.TextureData.load(resourceManager, ((ResourceTextureAccessor) texture).getLocation());
+    private static SimpleTexture.TextureImage loadTextureData(ResourceManager resourceManager, SimpleTexture texture) {
+        return SimpleTexture.TextureImage.load(resourceManager, ((ResourceTextureAccessor) texture).getLocation());
     }
 
 }

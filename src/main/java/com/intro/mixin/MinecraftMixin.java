@@ -2,18 +2,17 @@ package com.intro.mixin;
 
 import com.intro.Osmium;
 import com.intro.module.event.EventDirection;
-import com.intro.module.event.EventRenderPostTick;
 import com.intro.module.event.EventTick;
 import com.intro.module.event.EventType;
 import com.intro.util.OptionUtil;
-import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.Minecraft;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-@Mixin(MinecraftClient.class)
-public class MinecraftClientMixin {
+@Mixin(Minecraft.class)
+public class MinecraftMixin {
 
     @Inject(at = @At("HEAD"), method = "tick")
     public void preTick(CallbackInfo info) {
@@ -31,10 +30,6 @@ public class MinecraftClientMixin {
     }
 
 
-    @Inject(method = "render", at = @At(value = "INVOKE", target = "net/minecraft/client/toast/ToastManager.draw(Lnet/minecraft/client/util/math/MatrixStack;)V"))
-    public void onPostRenderTick(CallbackInfo info) {
-        Osmium.EVENT_BUS.postEvent(new EventRenderPostTick(EventDirection.POST), EventType.EVENT_RENDER_POST_TICK);
-    }
 
 
 }

@@ -1,10 +1,12 @@
 package com.intro.module.event;
 
-import net.minecraft.client.network.AbstractClientPlayerEntity;
+import net.minecraft.client.player.AbstractClientPlayer;
 
 public class EventAddPlayer extends Event {
-    public AbstractClientPlayerEntity entity;
-    public EventAddPlayer(AbstractClientPlayerEntity entity) {
+
+    public AbstractClientPlayer entity;
+
+    public EventAddPlayer(AbstractClientPlayer entity) {
         super(EventDirection.POST, false);
         this.entity = entity;
     }

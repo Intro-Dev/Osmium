@@ -1,12 +1,12 @@
 package com.intro.module.event;
 
-import net.minecraft.network.packet.s2c.play.GameJoinS2CPacket;
+import net.minecraft.network.protocol.game.ClientboundLoginPacket;
 
 public class EventJoinWorld extends Event{
 
-    public GameJoinS2CPacket packet;
+    public ClientboundLoginPacket packet;
 
-    public EventJoinWorld(GameJoinS2CPacket packet) {
+    public EventJoinWorld(ClientboundLoginPacket packet) {
         super(EventDirection.POST, false);
         this.packet = packet;
     }

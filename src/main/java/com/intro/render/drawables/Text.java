@@ -1,10 +1,10 @@
 package com.intro.render.drawables;
 
 import com.intro.render.RenderManager;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.font.TextRenderer;
-import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.text.LiteralText;
+import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.Font;
+import net.minecraft.network.chat.TextComponent;
 
 public class Text extends Drawable {
     public String text = "";
@@ -12,7 +12,7 @@ public class Text extends Drawable {
 
     public static final int HITBOX_PADDING = 20;
 
-    private MinecraftClient mc = MinecraftClient.getInstance();
+    private Minecraft mc = Minecraft.getInstance();
 
     public boolean guiElement = false;
 
@@ -82,15 +82,15 @@ public class Text extends Drawable {
 
 
     @Override
-    public void render(MatrixStack stack) {
+    public void render(PoseStack stack) {
         if(firstRun) {
-            this.width = mc.textRenderer.getWidth(this.text);
-            this.height = mc.textRenderer.fontHeight;
+            this.width = mc.font.width(this.text);
+            this.height = mc.font.lineHeight;
             firstRun = false;
         }
-        stack.push();
-        TextRenderer renderer = mc.textRenderer;
-        renderer.drawWithShadow(stack, new LiteralText(this.text), this.posX, this.posY, this.color);
-        stack.pop();
+        // stack.push();
+        Font renderer = mc.font;
+        renderer.drawShadow(stack, new TextComponent(this.text), this.posX, this.posY, this.color);
+        // stack.pop();
     }
 }

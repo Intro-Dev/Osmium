@@ -8,14 +8,14 @@ import com.intro.render.widget.BooleanButtonWidget;
 import com.intro.render.widget.EnumSelectWidget;
 import com.intro.util.OptionUtil;
 import com.mojang.blaze3d.systems.RenderSystem;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.gui.widget.ButtonWidget;
-import net.minecraft.client.render.GameRenderer;
-import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.text.TranslatableText;
-import net.minecraft.util.Identifier;
-import net.minecraft.util.Util;
+import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.Util;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.components.Button;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.renderer.GameRenderer;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.Nullable;
 
 import java.net.URI;
@@ -28,53 +28,53 @@ public class OsmiumOptionsScreen extends Screen {
 
     private int animationProgress = 0;
 
-    private final Identifier LOGO_TEXTURE = new Identifier("osmium", "icon.png");
+    private final ResourceLocation LOGO_TEXTURE = new ResourceLocation("osmium", "icon.png");
 
     public OsmiumOptionsScreen(Screen parent) {
-        super(new TranslatableText("osmium.options.title"));
+        super(new TranslatableComponent("osmium.options.title"));
         this.parent = parent;
     }
 
-    private final MinecraftClient mc = MinecraftClient.getInstance();
+    private final Minecraft mc = Minecraft.getInstance();
 
 
     @Override
     protected void init() {
-        ButtonWidget fullBrightWidget = new BooleanButtonWidget(this.width / 2 - 275, this.height / 6 + 120, 150, 20, (BooleanOption) OptionUtil.Options.FullbrightEnabled.get(), "osmium.options.fullbright");
-        ButtonWidget hurtBobWidget = new BooleanButtonWidget(this.width / 2 + 125, this.height / 6 + 120, 150, 20, ((BooleanOption) OptionUtil.Options.HurtbobbingEnabled.get()), "osmium.options.hurtbobbing");
-        ButtonWidget noFireWidget = new BooleanButtonWidget(this.width / 2 - 275, this.height / 6 + 160, 150, 20, ((BooleanOption) OptionUtil.Options.NoFireEnabled.get()), "osmium.options.nofire");
-        ButtonWidget fpsWidget = new BooleanButtonWidget(this.width / 2 - 75, this.height / 6 + 200, 150, 20, ((BooleanOption) OptionUtil.Options.FpsEnabled.get()), "osmium.options.fps");
-        ButtonWidget smoothSneakWidget = new EnumSelectWidget(this.width / 2 + 125, this.height / 6 + 160, 150, 20, (EnumOption) OptionUtil.Options.SneakMode.get(), "osmium.options.sneak");
+        BooleanButtonWidget fullBrightWidget = new BooleanButtonWidget(this.width / 2 - 275, this.height / 6 + 120, 150, 20, (BooleanOption) OptionUtil.Options.FullbrightEnabled.get(), "osmium.options.fullbright");
+        BooleanButtonWidget hurtBobWidget = new BooleanButtonWidget(this.width / 2 + 125, this.height / 6 + 120, 150, 20, ((BooleanOption) OptionUtil.Options.HurtbobbingEnabled.get()), "osmium.options.hurtbobbing");
+        BooleanButtonWidget noFireWidget = new BooleanButtonWidget(this.width / 2 - 275, this.height / 6 + 160, 150, 20, ((BooleanOption) OptionUtil.Options.NoFireEnabled.get()), "osmium.options.nofire");
+        BooleanButtonWidget fpsWidget = new BooleanButtonWidget(this.width / 2 - 75, this.height / 6 + 200, 150, 20, ((BooleanOption) OptionUtil.Options.FpsEnabled.get()), "osmium.options.fps");
+        EnumSelectWidget smoothSneakWidget = new EnumSelectWidget(this.width / 2 + 125, this.height / 6 + 160, 150, 20, (EnumOption) OptionUtil.Options.SneakMode.get(), "osmium.options.sneak");
 
-        ButtonWidget openVideoOptions = new ButtonWidget(this.width / 2 - 75, this.height / 6 + 160, 150, 20, new TranslatableText("osmium.options.videooptions"), (buttonWidget) -> {
-            mc.openScreen(new OsmiumVideoOptionsScreen(this));
+        Button openVideoOptions = new Button(this.width / 2 - 75, this.height / 6 + 160, 150, 20, new TranslatableComponent("osmium.options.videooptions"), (Button) -> {
+            mc.setScreen(new OsmiumVideoOptionsScreen(this));
         });
 
-        ButtonWidget backButton = new ButtonWidget(this.width / 2 - 100, this.height / 6 + 300, 200, 20, new TranslatableText("osmium.options.videooptions.back"), (buttonWidget) -> {
-            mc.openScreen(this.parent);
+        Button backButton = new Button(this.width / 2 - 100, this.height / 6 + 300, 200, 20, new TranslatableComponent("osmium.options.videooptions.back"), (Button) -> {
+            mc.setScreen(this.parent);
         });
 
-        ButtonWidget openGuiEditing = new ButtonWidget(this.width / 2 - 275, this.height / 6 + 200, 150, 20, new TranslatableText("osmium.guiedit.title"), (buttonWidget) -> {
-            mc.openScreen(new OsmiumGuiEditScreen(this));
+        Button openGuiEditing = new Button(this.width / 2 - 275, this.height / 6 + 200, 150, 20, new TranslatableComponent("osmium.guiedit.title"), (Button) -> {
+            mc.setScreen(new OsmiumGuiEditScreen(this));
         });
 
-        ButtonWidget toggleSneakToggleWidget = new ButtonWidget(this.width / 2 - 75, this.height / 6 + 120, 150, 20, new TranslatableText("osmium.options.togglesneaksettings"), (buttonWidget) -> {
-            mc.openScreen(new OsmiumToggleSneakOptionsScreen(this));
+        Button toggleSneakToggleWidget = new Button(this.width / 2 - 75, this.height / 6 + 120, 150, 20, new TranslatableComponent("osmium.options.togglesneaksettings"), (Button) -> {
+            mc.setScreen(new OsmiumToggleSneakOptionsScreen(this));
         });
 
-        ButtonWidget openGithubWidget = new ButtonWidget(this.width / 2 + 125, this.height / 6 + 200, 150, 20, new TranslatableText("osmium.opencredits"), this::openCredits);
+        Button openGithubWidget = new Button(this.width / 2 + 125, this.height / 6 + 200, 150, 20, new TranslatableComponent("osmium.opencredits"), this::openCredits);
 
 
-        this.addDrawableChild(fullBrightWidget);
-        this.addDrawableChild(toggleSneakToggleWidget);
-        this.addDrawableChild(hurtBobWidget);
-        this.addDrawableChild(noFireWidget);
-        this.addDrawableChild(smoothSneakWidget);
-        this.addDrawableChild(openVideoOptions);
-        this.addDrawableChild(backButton);
-        this.addDrawableChild(openGuiEditing);
-        this.addDrawableChild(fpsWidget);
-        this.addDrawableChild(openGithubWidget);
+        this.addRenderableWidget(fullBrightWidget);
+        this.addRenderableWidget(toggleSneakToggleWidget);
+        this.addRenderableWidget(hurtBobWidget);
+        this.addRenderableWidget(noFireWidget);
+        this.addRenderableWidget(smoothSneakWidget);
+        this.addRenderableWidget(openVideoOptions);
+        this.addRenderableWidget(backButton);
+        this.addRenderableWidget(openGuiEditing);
+        this.addRenderableWidget(fpsWidget);
+        this.addRenderableWidget(openGithubWidget);
     }
 
     @Override
@@ -83,16 +83,16 @@ public class OsmiumOptionsScreen extends Screen {
         OptionUtil.save();
     }
 
-    private void openCredits(@Nullable ButtonWidget widget) {
+    private void openCredits(@Nullable Button widget) {
         try {
-            Util.getOperatingSystem().open(new URI("https://modrinth.com/mod/osmium"));
+            Util.OS.WINDOWS.openUri(new URI("https://modrinth.com/mod/osmium"));
         } catch (URISyntaxException exception) {
             Osmium.LOGGER.warn("Failed in opening modrinth link. How did this even happen?");
         }
     }
 
     @Override
-    public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
+    public void render(PoseStack matrices, int mouseX, int mouseY, float delta) {
         this.renderBackground(matrices);
 
         // set proper shaders
@@ -102,7 +102,7 @@ public class OsmiumOptionsScreen extends Screen {
         Color shaderColor = Color.fromFloatArray(RenderSystem.getShaderColor());
         RenderSystem.enableBlend();
         // renders osmium logo to screen with fade in
-        matrices.push();
+        matrices.pushPose();
         // sets the current shader color to itself, but with a modified alpha for fade in effect
         RenderSystem.setShaderColor(shaderColor.getFloatR(), shaderColor.getFloatG(), shaderColor.getFloatB(), ((animationProgress * 4) - 1) / 255f);
         // scale image down to a good size
@@ -110,14 +110,14 @@ public class OsmiumOptionsScreen extends Screen {
         // account for scaling difference
         // its width / 2 - 128 because we are scaling by 0.5, and 128 is the scaled dimensions of the image
         matrices.translate(this.width / 2f - 128, animationProgress,0);
-        drawTexture(matrices, this.width / 2, 15, 0, 0, 256, 256);
-        matrices.pop();
+        blit(matrices, this.width / 2, 15, 0, 0, 256, 256);
+        matrices.popPose();
 
-        matrices.push();
+        matrices.pushPose();
         RenderSystem.setShaderColor(shaderColor.getFloatR(), shaderColor.getFloatG(), shaderColor.getFloatB(), ((animationProgress * 4) - 1) / 255f);
         matrices.translate(0, animationProgress,0);
-        drawCenteredText(matrices, mc.textRenderer, new TranslatableText("osmium.version"), this.width / 2, 140, 0xffffff);
-        matrices.pop();
+        drawCenteredString(matrices, mc.font, new TranslatableComponent("osmium.version"), this.width / 2, 140, 0xffffff);
+        matrices.popPose();
         // drawTextWithShadow(matrices, mc.textRenderer, new TranslatableText("osmium.github"), 20, this.height - 40, 0xffffff);
         super.render(matrices, mouseX, mouseY, delta);
         // 57 is the max because of animation progress looking good at 3
