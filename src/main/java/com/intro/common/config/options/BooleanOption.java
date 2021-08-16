@@ -12,7 +12,6 @@ public class BooleanOption extends Option {
         super(identifier, "BooleanOption");
         this.variable = variable;
         this.def = variable;
-        OsmiumClient.options.put(identifier, this);
     }
 
     @Override

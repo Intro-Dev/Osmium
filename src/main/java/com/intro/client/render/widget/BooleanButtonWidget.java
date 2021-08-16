@@ -14,7 +14,7 @@ public class BooleanButtonWidget extends Button {
 
     public BooleanButtonWidget(int x, int y, int width, int height, BooleanOption attachedOption, String key) {
         super(x, y, width, height, new TextComponent(""), button -> {
-            if(!OsmiumClient.options.overwrittenOptions.containsValue(attachedOption)) {
+            if(!OsmiumClient.options.getOverwrittenOptions().containsKey(attachedOption.identifier)) {
                 ((BooleanOption) OsmiumClient.options.get(attachedOption.identifier)).variable = !((BooleanOption) OsmiumClient.options.get(attachedOption.identifier)).variable;
             } else {
                 button.active = false;
@@ -24,10 +24,11 @@ public class BooleanButtonWidget extends Button {
             } else {
                 button.setMessage(new TranslatableComponent(key + "disabled"));
             }
+
         });
         this.attachedOption = attachedOption;
         this.key = key;
-        if(OsmiumClient.options.overwrittenOptions.containsValue(attachedOption)) {
+        if(OsmiumClient.options.getOverwrittenOptions().containsKey(attachedOption.identifier)) {
             this.active = false;
         }
         if(((BooleanOption) OsmiumClient.options.get(attachedOption.identifier)).variable) {

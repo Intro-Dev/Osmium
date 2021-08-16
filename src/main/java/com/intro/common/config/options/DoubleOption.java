@@ -12,7 +12,6 @@ public class DoubleOption extends Option {
         super(identifier, "DoubleOption");
         this.variable = variable;
         this.def = variable;
-        OsmiumClient.options.put(identifier, this);
     }
 
     @Override

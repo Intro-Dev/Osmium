@@ -12,7 +12,6 @@ public class EnumOption extends Option {
         super(identifier, "EnumOption");
         this.variable = option;
         this.def = variable;
-        OsmiumClient.options.put(identifier, this);
     }
 
     @Override

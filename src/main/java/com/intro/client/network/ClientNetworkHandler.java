@@ -6,7 +6,6 @@ import com.google.gson.GsonBuilder;
 import com.intro.client.OsmiumClient;
 import com.intro.common.config.OptionDeserializer;
 import com.intro.common.config.OptionSerializer;
-import com.intro.common.config.options.BooleanOption;
 import com.intro.common.config.options.Option;
 import com.intro.common.network.NetworkingConstants;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents;
@@ -37,28 +36,17 @@ public class ClientNetworkHandler {
 
     public static void registerPackets() {
         ClientPlayNetworking.registerGlobalReceiver(NetworkingConstants.SET_SETTING_PACKET_ID, (client, handler, buf, responseSender) -> {
-            BooleanOption booleanOption = OsmiumClient.options.getBooleanOption(OsmiumClient.options.NoFireEnabled.identifier);
-            System.out.println(booleanOption.identifier);
-            System.out.println(booleanOption.variable);
-            // what
-            // deserializing an option here sets the option to true
-            // no reason for it
-            // just does
-            String utf = buf.readUtf();
-            Option option = GSON.fromJson(utf, Option.class);
-            booleanOption = OsmiumClient.options.getBooleanOption(OsmiumClient.options.NoFireEnabled.identifier);
-            System.out.println(booleanOption.identifier);
-            System.out.println(booleanOption.variable);
-
-
-            try {
-                OsmiumClient.options.overwrittenOptions.put(option.identifier, OsmiumClient.options.get(option.identifier));
-                OsmiumClient.options.put(option.identifier, option);
-            } catch (Exception e) {
-                OsmiumClient.LOGGER.log(Level.WARN, "Received invalid option data from server!");
+            int setCount = buf.readInt();
+            for(int i = 0; i < setCount; i++) {
+                try {
+                    String utf = buf.readUtf();
+                    Option option = GSON.fromJson(utf, Option.class);
+                    OsmiumClient.options.putOverwrittenOption(option.identifier, OsmiumClient.options.get(option.identifier));
+                    OsmiumClient.options.put(option.identifier, option);
+                } catch (Exception e) {
+                    OsmiumClient.LOGGER.log(Level.WARN, "Received invalid option data from server!");
+                }
             }
-
-
         });
 
         ClientPlayNetworking.registerGlobalReceiver(NetworkingConstants.RUNNING_OSMIUM_SERVER_PACKET_ID, (client, handler, buf, responseSender) -> {
@@ -68,18 +56,12 @@ public class ClientNetworkHandler {
 
         ClientPlayConnectionEvents.DISCONNECT.register((handler, client) -> {
             isRunningOsmiumServer = false;
-            System.out.println(OsmiumClient.options.overwrittenOptions.size());
-            for(Option option : OsmiumClient.options.overwrittenOptions.values()) {
-                System.out.println(option.identifier);
-                System.out.println(((BooleanOption) option).variable);
-
+            for(Option option : OsmiumClient.options.getOverwrittenOptions().values()) {
                 OsmiumClient.options.put(option.identifier, option);
-                System.out.println(option);
-                System.out.println(OsmiumClient.options.get(option.identifier));
             }
             OsmiumClient.options.getHashMap();
-            System.out.println(((BooleanOption) OsmiumClient.options.get(OsmiumClient.options.NoFireEnabled.identifier)).variable);
-            OsmiumClient.options.overwrittenOptions.clear();
+            OsmiumClient.options.clearOverwrittenOptions();
         });
     }
+
 }

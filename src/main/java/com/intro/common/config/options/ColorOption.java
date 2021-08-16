@@ -13,7 +13,6 @@ public class ColorOption extends Option {
         super(identifier, "ColorOption");
         this.color = color;
         this.def = color;
-        OsmiumClient.options.put(identifier, this);
     }
 
     @Override

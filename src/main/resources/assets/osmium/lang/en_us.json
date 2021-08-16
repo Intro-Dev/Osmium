@@ -59,6 +59,8 @@
   "osmium.options.statuseffectdisplaycustom": "Effect Display: Custom",
   "osmium.options.maxstatusdisplay": "Max Display Effects: ",
   "osmium.toast.running_osmium_server": "Connected to Osmium Server",
-  "osmium.toast.settings_change": "Some Settings May Have Been Disabled"
+  "osmium.toast.settings_change": "Some Settings May Have Been Disabled",
+  "osmium.command.invalid_option_data": "Invalid Option Data!",
+  "osmium.command.option_set_success": "Successfully Set Option"
 
 }

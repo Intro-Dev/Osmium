@@ -11,7 +11,7 @@ import net.minecraft.util.Mth;
 
 public class DoubleSliderWidget extends AbstractOptionSliderButton {
 
-    private final DoubleOption AttachedOption;
+    private final DoubleOption attachedOption;
     public final String key;
     private double minVal;
     private double maxVal;
@@ -20,7 +20,7 @@ public class DoubleSliderWidget extends AbstractOptionSliderButton {
 
     public DoubleSliderWidget(Minecraft mc, int x, int y, int width, int height, DoubleOption doubleOption, String key, double minVal, double maxVal, double roundTo) {
         super(mc.options, x, y, width, height, doubleOption.variable);
-        this.AttachedOption = doubleOption;
+        this.attachedOption = doubleOption;
         this.key = key;
         this.minVal = minVal;
         this.maxVal = maxVal;
@@ -31,6 +31,9 @@ public class DoubleSliderWidget extends AbstractOptionSliderButton {
 
     @Override
     protected void updateMessage() {
+        if(OsmiumClient.options.getOverwrittenOptions().containsKey(attachedOption.identifier)) {
+            this.active = false;
+        }
         double scaledVal = (maxVal - minVal) * this.value;
         scaledVal = Mth.clamp(scaledVal, minVal, maxVal);
         this.setMessage(new TextComponent(new TranslatableComponent(key).getString() + (Math.round(scaledVal * roundTo) / roundTo)));
@@ -38,9 +41,11 @@ public class DoubleSliderWidget extends AbstractOptionSliderButton {
 
     @Override
     protected void applyValue() {
-        double scaledVal = (maxVal - minVal) * this.value;
-        scaledVal = Mth.clamp(scaledVal, minVal, maxVal);
-        ((DoubleOption) OsmiumClient.options.get(AttachedOption.identifier)).variable = Math.round(scaledVal * roundTo) / roundTo;
+        if(!OsmiumClient.options.getOverwrittenOptions().containsKey(attachedOption.identifier)) {
+            double scaledVal = (maxVal - minVal) * this.value;
+            scaledVal = Mth.clamp(scaledVal, minVal, maxVal);
+            ((DoubleOption) OsmiumClient.options.get(attachedOption.identifier)).variable = Math.round(scaledVal * roundTo) / roundTo;
+        }
     }
 
 

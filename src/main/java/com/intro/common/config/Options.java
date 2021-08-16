@@ -25,7 +25,23 @@ public class Options {
      */
     private final HashMap<String, Option> options = new HashMap<>();
 
-    public HashMap<String, Option> overwrittenOptions = new HashMap<>();
+    private final HashMap<String, Option> overwrittenOptions = new HashMap<>();
+
+    public void putOverwrittenOption(String key, Option value) {
+        overwrittenOptions.put(key, value);
+    }
+
+    public HashMap<String, Option> getOverwrittenOptions() {
+        return overwrittenOptions;
+    }
+
+    public Option getOverwrittenOption(String key) {
+        return overwrittenOptions.get(key);
+    }
+
+    public void clearOverwrittenOptions() {
+        overwrittenOptions.clear();
+    }
 
     public Option get(String identifier) {
         return options.get(identifier);

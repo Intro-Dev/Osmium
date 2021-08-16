@@ -24,9 +24,14 @@
     "client.TitleScreenMixin"
   ],
   "server": [
-    "server.PlayerListMixin"
+    "server.MinecraftServerMixin",
+    "server.PlayerListMixin",
+    "server.PlayerMapMixin"
   ],
   "injectors": {
     "defaultRequire": 1
-  }
+  },
+  "mixins": [
+    "server.PlayerMapMixin"
+  ]
 }

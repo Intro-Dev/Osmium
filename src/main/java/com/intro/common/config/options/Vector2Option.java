@@ -16,7 +16,6 @@ public class Vector2Option extends Option {
         this.y = y;
         this.defX = x;
         this.defY = y;
-        OsmiumClient.options.put(identifier, this);
     }
 
     @Override

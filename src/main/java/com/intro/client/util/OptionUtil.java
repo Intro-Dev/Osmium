@@ -33,7 +33,7 @@ public class OptionUtil {
 
     public static boolean ShouldResaveOptions = false;
 
-    private static final Gson gson = new GsonBuilder()
+    private static final Gson GSON = new GsonBuilder()
             .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
             .setPrettyPrinting()
             .excludeFieldsWithModifiers(Modifier.PRIVATE)
@@ -66,7 +66,7 @@ public class OptionUtil {
                 save();
                 return o;
             }
-            Options options =  gson.fromJson(builder.toString(), Options.class);
+            Options options =  GSON.fromJson(builder.toString(), Options.class);
             if(options == null) {
                 options = new Options();
                 options.init();
@@ -93,7 +93,7 @@ public class OptionUtil {
                 LOGGER.log(Level.ALL, "Couldn't find already existing config file, creating new one.");
             }
             FileWriter writer = new FileWriter(file);
-            writer.write(gson.toJson(OsmiumClient.options));
+            writer.write(GSON.toJson(OsmiumClient.options));
             writer.close();
         } catch (Exception e) {
             LOGGER.warn("Error in saving osmium config!");
@@ -104,8 +104,12 @@ public class OptionUtil {
      * <p>A method to quickly save to the default config file</p>
      */
     public static void save() {
-        for(Option option : OsmiumClient.options.overwrittenOptions.values()) {
-            OsmiumClient.options.put(option.identifier, option);
+        for(Option option : OsmiumClient.options.getOverwrittenOptions().values()) {
+            if(option != null) {
+                OsmiumClient.options.put(option.identifier, option);
+            } else {
+                LOGGER.log(Level.ERROR, "Null option!");
+            }
         }
         OsmiumClient.options.getHashMap();
         saveConfig(FabricLoader.getInstance().getConfigDir().resolve("osmium-options.json").toString());
@@ -122,7 +126,7 @@ public class OptionUtil {
 
     public static boolean isJSONValid(String jsonInString) {
         try {
-            gson.fromJson(jsonInString, Object.class);
+            GSON.fromJson(jsonInString, Object.class);
             return true;
         } catch(com.google.gson.JsonSyntaxException ex) {
             return false;

@@ -1,17 +1,19 @@
 package com.intro.server;
 
-import com.intro.common.config.Options;
 import com.intro.server.api.OptionApi;
+import com.intro.server.command.CommandManager;
 import net.fabricmc.api.DedicatedServerModInitializer;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class OsmiumServer implements DedicatedServerModInitializer  {
+
+    public static final Logger LOGGER = LogManager.getLogger();
+
     @Override
     public void onInitializeServer() {
-        System.out.println("osmium init");
-        Options options = new Options();
-        options.setDefaults();
-        options.putHashMap();
-        options.getBooleanOption(options.NoFireEnabled.identifier).variable = true;
-        OptionApi.addSetOption(options.getBooleanOption(options.NoFireEnabled.identifier));
+        CommandManager.registerCommands();
+        // ServerNetworkHandler.registerPackets();
+        OptionApi.load();
     }
 }

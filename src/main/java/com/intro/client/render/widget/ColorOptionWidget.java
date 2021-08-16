@@ -58,7 +58,7 @@ public class ColorOptionWidget extends Drawable {
     you have to do both, or it won't work
     please help me
 
-    edit: turns out im stupid
+    edit: turns out im stupid, and it doesn't do all that
     */
     public ColorOptionWidget(int x, int y, ColorOption attachedOption) {
         this.attachedOption = attachedOption;
