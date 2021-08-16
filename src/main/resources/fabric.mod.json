@@ -16,10 +16,13 @@
   "license": "CC0-1.0",
   "icon": "assets/osmium/icon.png",
 
-  "environment": "client",
+  "environment": "*",
   "entrypoints": {
-    "main": [
-      "com.intro.Osmium"
+    "client": [
+      "com.intro.client.OsmiumClient"
+    ],
+    "server": [
+      "com.intro.server.OsmiumServer"
     ]
   },
   "accessWidener" : "osmium.accesswidener",

@@ -73,6 +73,6 @@ publishing {
 	}
 }
 
-minecraft {
+loom {
 	accessWidenerPath = file("src/main/resources/osmium.accesswidener")
 }

@@ -57,6 +57,8 @@
   "osmium.options.statuseffectdisplayvanilla": "Effect Display: Vanilla",
   "osmium.options.statuseffectdisplayboth": "Effect Display: Both",
   "osmium.options.statuseffectdisplaycustom": "Effect Display: Custom",
-  "osmium.options.maxstatusdisplay": "Max Display Effects: "
+  "osmium.options.maxstatusdisplay": "Max Display Effects: ",
+  "osmium.toast.running_osmium_server": "Connected to Osmium Server",
+  "osmium.toast.settings_change": "Some Settings May Have Been Disabled"
 
 }

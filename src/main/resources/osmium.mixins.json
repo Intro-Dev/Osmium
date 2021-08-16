@@ -1,31 +1,32 @@
 {
   "required": true,
   "minVersion": "0.8",
-  "package": "com.intro.mixin",
+  "package": "com.intro.common.mixin",
   "compatibilityLevel": "JAVA_16",
   "client": [
-    "AbilitiesMixin",
-    "CameraMixin",
-    "ClientLevelMixin",
-    "ClientPacketListenerMixin",
-    "FireworkEntityRendererMixin",
-    "GameRendererMixin",
-    "GuiMixin",
-    "KeyboardInputMixin",
-    "LevelRendererAccessor",
-    "LevelRendererMixin",
-    "MinecraftAccessor",
-    "MinecraftMixin",
-    "OptionsScreenMixin",
-    "PlayerRendererMixin",
-    "ResourceTextureAccessor",
-    "ResourceTextureSubclassAccessor",
-    "ScreenEffectRendererMixin",
-    "TitleScreenMixin"
+    "client.AbilitiesMixin",
+    "client.CameraMixin",
+    "client.ClientLevelMixin",
+    "client.ClientPacketListenerMixin",
+    "client.FireworkEntityRendererMixin",
+    "client.GameRendererMixin",
+    "client.GuiMixin",
+    "client.KeyboardInputMixin",
+    "client.LevelRendererAccessor",
+    "client.LevelRendererMixin",
+    "client.MinecraftAccessor",
+    "client.MinecraftMixin",
+    "client.OptionsScreenMixin",
+    "client.PlayerRendererMixin",
+    "client.ResourceTextureAccessor",
+    "client.ResourceTextureSubclassAccessor",
+    "client.ScreenEffectRendererMixin",
+    "client.TitleScreenMixin"
+  ],
+  "server": [
+    "server.PlayerListMixin"
   ],
   "injectors": {
     "defaultRequire": 1
-  },
-  "mixins": [
-  ]
+  }
 }
