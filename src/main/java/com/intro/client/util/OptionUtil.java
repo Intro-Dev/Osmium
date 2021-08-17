@@ -67,12 +67,10 @@ public class OptionUtil {
                 return o;
             }
             Option[] arr = GSON.fromJson(builder.toString(), Option[].class);
-            com.intro.common.config.Options options = new Options();
-            options.init();
             for(Option o : arr)  {
-                options.put(o.identifier, o);
+                OsmiumClient.options.put(o.identifier, o);
             }
-            return options;
+            return OsmiumClient.options;
         } catch (Exception e) {
             LOGGER.warn("Error in loading osmium config, resetting config to avoid crash!");
             resetOptionsFile();
@@ -129,8 +127,7 @@ public class OptionUtil {
      * <p>A method to quickly load from the default config file</p>
      */
     public static void load() {
-        OsmiumClient.options = OptionUtil.loadConfig(FabricLoader.getInstance().getConfigDir().resolve("osmium-options.json").toString());
-        OsmiumClient.options.putHashMap();
+        OptionUtil.loadConfig(FabricLoader.getInstance().getConfigDir().resolve("osmium-options.json").toString());
     }
 
 

@@ -45,15 +45,15 @@ public class LevelRendererMixin {
         }
     }
 
-    @Inject(at = @At("HEAD"), method = "addParticle(Lnet/minecraft/core/particles/ParticleOptions;DDDDDD)V", cancellable = true)
-    public void addParticle(ParticleOptions particleOptions, double x, double y, double z, double xSpeed, double ySpeed, double zSpeed, CallbackInfo ci) {
-        if(particleOptions == ParticleTypes.RAIN && (((BooleanOption) OsmiumClient.options.NoRainEnabled.get()).variable)) {
+    @Inject(at = @At("HEAD"), method = "addParticle(Lnet/minecraft/core/particles/ParticleOptions;ZZDDDDDD)V", cancellable = true)
+    public void addParticle(ParticleOptions particleData, boolean ignoreRange, boolean minimizeLevel, double x, double y, double z, double xSpeed, double ySpeed, double zSpeed, CallbackInfo ci) {
+        if(particleData == ParticleTypes.RAIN && (((BooleanOption) OsmiumClient.options.NoRainEnabled.get()).variable)) {
             ci.cancel();
         }
-        if(particleOptions == ParticleTypes.FIREWORK && (((BooleanOption) OsmiumClient.options.FireworksDisabled.get()).variable)) {
+        if(particleData == ParticleTypes.FIREWORK && (((BooleanOption) OsmiumClient.options.FireworksDisabled.get()).variable)) {
             ci.cancel();
         }
-        if((particleOptions == ParticleTypes.WARPED_SPORE || particleOptions == ParticleTypes.CRIMSON_SPORE || particleOptions == ParticleTypes.SPORE_BLOSSOM_AIR || particleOptions == ParticleTypes.FALLING_SPORE_BLOSSOM) && (((BooleanOption) OsmiumClient.options.DecreaseNetherParticles.get()).variable)) {
+        if((particleData == ParticleTypes.WARPED_SPORE || particleData == ParticleTypes.CRIMSON_SPORE || particleData == ParticleTypes.SPORE_BLOSSOM_AIR || particleData == ParticleTypes.FALLING_SPORE_BLOSSOM) && (((BooleanOption) OsmiumClient.options.DecreaseNetherParticles.get()).variable)) {
             ci.cancel();
         }
     }
