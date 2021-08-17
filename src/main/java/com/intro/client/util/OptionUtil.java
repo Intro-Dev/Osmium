@@ -66,18 +66,28 @@ public class OptionUtil {
                 save();
                 return o;
             }
-            Options options =  GSON.fromJson(builder.toString(), Options.class);
-            if(options == null) {
-                options = new Options();
-                options.init();
-                return options;
+            Option[] arr = GSON.fromJson(builder.toString(), Option[].class);
+            com.intro.common.config.Options options = new Options();
+            options.init();
+            for(Option o : arr)  {
+                options.put(o.identifier, o);
             }
             return options;
-
         } catch (Exception e) {
-            LOGGER.warn("Error in loading osmium config!");
+            LOGGER.warn("Error in loading osmium config, resetting config to avoid crash!");
+            resetOptionsFile();
+            com.intro.common.config.Options options = new Options();
+            options.init();
+            return options;
         }
-        return null;
+    }
+
+    public static void resetOptionsFile() {
+        File file = Paths.get(FabricLoader.getInstance().getConfigDir().resolve("osmium-options.json").toString()).toFile();
+        boolean deleted = file.delete();
+        if(!deleted) {
+            LOGGER.error("Error in resetting osmium config file. If this issue persists file an issue report at https://github.com/Intro-Dev/Osmium/issues");
+        }
     }
 
     /**
@@ -87,13 +97,13 @@ public class OptionUtil {
     public static void saveConfig(String path) {
         try {
             File file = Paths.get(path).toFile();
-            StringBuilder builder = new StringBuilder();
             if(file.createNewFile()) {
                 System.out.println("Couldn't find already existing config file, creating new one.");
                 LOGGER.log(Level.ALL, "Couldn't find already existing config file, creating new one.");
             }
             FileWriter writer = new FileWriter(file);
-            writer.write(GSON.toJson(OsmiumClient.options));
+            Option[] arr = OsmiumClient.options.getOptions().values().toArray(new Option[0]);
+            writer.write(GSON.toJson(arr));
             writer.close();
         } catch (Exception e) {
             LOGGER.warn("Error in saving osmium config!");

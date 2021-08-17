@@ -2,6 +2,7 @@ package com.intro.server.network;
 
 import com.intro.common.network.NetworkingConstants;
 import com.intro.server.api.PlayerApi;
+import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
@@ -20,6 +21,12 @@ public class ServerNetworkHandler {
             PlayerApi.setRunningOsmium(player, true);
             PlayerApi.playersRunningOsmium.put(player.getUUID().toString(), player);
         });
+
+        ServerPlayConnectionEvents.DISCONNECT.register(((handler, server) -> {
+            System.out.println("removed player");
+            PlayerApi.removePlayerRegistry(handler.getPlayer());
+            PlayerApi.playersRunningOsmium.remove(handler.getPlayer().getUUID().toString());
+        }));
     }
 
 }

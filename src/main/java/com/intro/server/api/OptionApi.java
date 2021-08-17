@@ -14,9 +14,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.lang.reflect.Modifier;
 import java.nio.file.Paths;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 
 public class OptionApi {
 
@@ -35,7 +33,7 @@ public class OptionApi {
         save();
     }
 
-    public static List<Option> getServerSetOptions() {
+    public static Collection<Option> getServerSetOptions()   {
         return serverSetOptions.values().stream().toList();
     }
 
@@ -44,10 +42,9 @@ public class OptionApi {
         save();
     }
 
-    public static void removeSetOption(String identifier) {
-        serverSetOptions.remove(identifier);
-        save();
-    }
+    public static void removeSetOption(String  identifier) {
+        serverSetOptions.remove(identifier);}
+
 
     public static void save() {
         try {
@@ -57,7 +54,10 @@ public class OptionApi {
                 OsmiumServer.LOGGER.log(Level.ALL, "Couldn't find already existing config file, creating new one.");
             }
             FileWriter writer = new FileWriter(file);
-            writer.write(GSON.toJson(serverSetOptions));
+
+            Option[] array = serverSetOptions.values().toArray(new Option[0]);
+
+            writer.write(GSON.toJson(array));
             writer.close();
         } catch (Exception e) {
             OsmiumServer.LOGGER.error("Error in saving osmium config!");
@@ -71,19 +71,24 @@ public class OptionApi {
             StringBuilder builder = new StringBuilder();
             boolean createdFile = file.createNewFile();
             Scanner reader = new Scanner(file);
-
             while(reader.hasNextLine()) {
                 builder.append(reader.nextLine());
             }
             if(createdFile || !isJSONValid(builder.toString())) {
                 OsmiumServer.LOGGER.log(Level.WARN, "Config file either didn't exist or is corrupted, creating new one using default settings.");
-                System.out.println("Config file either didn't exist or is corrupted, creating new one using default settings.");
                 serverSetOptions = new HashMap<>();
                 save();
                 return;
             }
 
-            serverSetOptions = GSON.fromJson(builder.toString(), HashMap.class);
+            Option[] array = GSON.fromJson(builder.toString(), Option[].class);
+
+            for(Option o : array) {
+                serverSetOptions.put(o.identifier, o);
+            }
+
+
+
         } catch (Exception e) {
             OsmiumServer.LOGGER.error("Error in loading osmium config!");
         }
@@ -98,4 +103,11 @@ public class OptionApi {
         }
     }
 
+    // now you might be wondering why this has to be a separate function
+    // this has to be like this because of the jvm only parsing this properly at runtime
+    // see https://stackoverflow.com/questions/27253555/com-google-gson-internal-linkedtreemap-cannot-be-cast-to-my-class
+    public static <T> List<T> stringToArray(String s, Class<T[]> clazz) {
+        T[] arr = new Gson().fromJson(s, clazz);
+        return Arrays.asList(arr); //or return Arrays.asList(new Gson().fromJson(s, clazz)); for a one-liner
+    }
 }

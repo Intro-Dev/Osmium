@@ -25,13 +25,11 @@
   ],
   "server": [
     "server.MinecraftServerMixin",
-    "server.PlayerListMixin",
-    "server.PlayerMapMixin"
+    "server.PlayerListMixin"
   ],
   "injectors": {
     "defaultRequire": 1
   },
   "mixins": [
-    "server.PlayerMapMixin"
   ]
 }

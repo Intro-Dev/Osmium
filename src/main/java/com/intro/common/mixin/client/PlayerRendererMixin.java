@@ -21,7 +21,7 @@ public abstract class PlayerRendererMixin extends LivingEntityRenderer<AbstractC
     }
 
     @Inject(method = ("<init>"), at = @At("RETURN"))
-    private void ConstructorMixinPlayerEntityRenderer(EntityRendererProvider.Context ctx, boolean slim, CallbackInfo ci) {
+    public void ConstructorMixinPlayerEntityRenderer(EntityRendererProvider.Context ctx, boolean slim, CallbackInfo ci) {
         this.addLayer(new CapeRenderer(this));
         this.addLayer(new ElytraRenderer<>(this, ctx.getModelSet()));
         this.layers.removeIf(renderer -> renderer instanceof CapeLayer);

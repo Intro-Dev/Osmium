@@ -27,6 +27,10 @@ public class Options {
 
     private final HashMap<String, Option> overwrittenOptions = new HashMap<>();
 
+    public HashMap<String, Option> getOptions() {
+        return options;
+    }
+
     public void putOverwrittenOption(String key, Option value) {
         overwrittenOptions.put(key, value);
     }

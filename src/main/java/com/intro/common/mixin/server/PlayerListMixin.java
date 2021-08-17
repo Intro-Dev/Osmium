@@ -6,6 +6,7 @@ import com.intro.common.network.NetworkingConstants;
 import com.intro.server.api.OptionApi;
 import com.intro.server.api.PlayerApi;
 import com.intro.server.network.ServerNetworkHandler;
+import com.mojang.authlib.GameProfile;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.minecraft.network.Connection;
 import net.minecraft.network.FriendlyByteBuf;
@@ -20,29 +21,31 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(PlayerList.class)
-public class PlayerListMixin {
+public abstract class PlayerListMixin {
 
     @Shadow @Final private MinecraftServer server;
 
+    @Shadow public abstract void op(GameProfile profile);
+
+
     @Inject(method = "placeNewPlayer", at = @At("TAIL"))
     public void placeNewPlayer(Connection netManager, ServerPlayer player, CallbackInfo ci) {
-
         OptionSerializer serializer = new OptionSerializer();
-         ServerNetworkHandler.sendPacket(player, NetworkingConstants.RUNNING_OSMIUM_SERVER_PACKET_ID, PacketByteBufs.create());
-         FriendlyByteBuf byteBuf = PacketByteBufs.create();
-         byteBuf.writeInt(OptionApi.getServerSetOptions().size());
-         System.out.println(OptionApi.getServerSetOptions().size());
-         for(Option option : OptionApi.getServerSetOptions()) {
-            String serializedOption = serializer.serialize(option, null, null).toString();
-            byteBuf.writeUtf(serializedOption);
+        try {
+            ServerNetworkHandler.sendPacket(player, NetworkingConstants.RUNNING_OSMIUM_SERVER_PACKET_ID, PacketByteBufs.create());
+            FriendlyByteBuf byteBuf = PacketByteBufs.create();
+            byteBuf.writeInt(OptionApi.getServerSetOptions().size());
+            for (Option option : OptionApi.getServerSetOptions()) {
+                // can't use the GSON object here, or it doesn't serialize properly
+                // I have no clue why
+                byteBuf.writeUtf(serializer.serialize(option, null, null).toString());
             }
-          ServerNetworkHandler.sendPacket(player, NetworkingConstants.SET_SETTING_PACKET_ID, byteBuf);
-         PlayerApi.registerPlayer(player);
-
-
-
+            ServerNetworkHandler.sendPacket(player, NetworkingConstants.SET_SETTING_PACKET_ID, byteBuf);
+            PlayerApi.registerPlayer(player);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
     }
-
 }
 

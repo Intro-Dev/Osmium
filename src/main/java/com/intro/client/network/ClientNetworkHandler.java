@@ -10,6 +10,7 @@ import com.intro.common.config.options.Option;
 import com.intro.common.network.NetworkingConstants;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
+import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.toasts.SystemToast;
 import net.minecraft.network.chat.Component;
@@ -44,6 +45,7 @@ public class ClientNetworkHandler {
                     OsmiumClient.options.putOverwrittenOption(option.identifier, OsmiumClient.options.get(option.identifier));
                     OsmiumClient.options.put(option.identifier, option);
                 } catch (Exception e) {
+                    e.printStackTrace();
                     OsmiumClient.LOGGER.log(Level.WARN, "Received invalid option data from server!");
                 }
             }
@@ -54,6 +56,7 @@ public class ClientNetworkHandler {
             sendToast(Minecraft.getInstance(), new TranslatableComponent("osmium.toast.running_osmium_server"), new TranslatableComponent("osmium.toast.settings_change"));
         });
 
+
         ClientPlayConnectionEvents.DISCONNECT.register((handler, client) -> {
             isRunningOsmiumServer = false;
             for(Option option : OsmiumClient.options.getOverwrittenOptions().values()) {
@@ -62,6 +65,10 @@ public class ClientNetworkHandler {
             OsmiumClient.options.getHashMap();
             OsmiumClient.options.clearOverwrittenOptions();
         });
+
+        ClientPlayConnectionEvents.JOIN.register(((handler, sender, client) -> {
+            ClientPlayNetworking.send(NetworkingConstants.RUNNING_OSMIUM_CLIENT_PACKET_ID, PacketByteBufs.create());
+        }));
     }
 
 }
