@@ -4,8 +4,8 @@ import com.intro.client.OsmiumClient;
 
 public class Vector2Option extends Option {
 
-    public double x;
-    public double y;
+    public final double x;
+    public final double y;
 
     public final double defX;
     public final double defY;

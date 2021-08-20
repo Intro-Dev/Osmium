@@ -24,7 +24,9 @@ import java.net.URISyntaxException;
 
 public class OsmiumOptionsScreen extends Screen {
 
-    private Screen parent;
+    private static boolean shownUpdateScreen = false;
+
+    private final Screen parent;
 
     private int animationProgress = 0;
 
@@ -40,29 +42,30 @@ public class OsmiumOptionsScreen extends Screen {
 
     @Override
     protected void init() {
-        BooleanButtonWidget fullBrightWidget = new BooleanButtonWidget(this.width / 2 - 275, this.height / 6 + 120, 150, 20, (BooleanOption) OptionUtil.Options.FullbrightEnabled.get(), "osmium.options.fullbright");
-        BooleanButtonWidget hurtBobWidget = new BooleanButtonWidget(this.width / 2 + 125, this.height / 6 + 120, 150, 20, ((BooleanOption) OptionUtil.Options.HurtbobbingEnabled.get()), "osmium.options.hurtbobbing");
-        BooleanButtonWidget noFireWidget = new BooleanButtonWidget(this.width / 2 - 275, this.height / 6 + 160, 150, 20, ((BooleanOption) OptionUtil.Options.NoFireEnabled.get()), "osmium.options.nofire");
-        BooleanButtonWidget fpsWidget = new BooleanButtonWidget(this.width / 2 - 75, this.height / 6 + 200, 150, 20, ((BooleanOption) OptionUtil.Options.FpsEnabled.get()), "osmium.options.fps");
-        EnumSelectWidget smoothSneakWidget = new EnumSelectWidget(this.width / 2 + 125, this.height / 6 + 160, 150, 20, (EnumOption) OptionUtil.Options.SneakMode.get(), "osmium.options.sneak");
 
-        Button openVideoOptions = new Button(this.width / 2 - 75, this.height / 6 + 160, 150, 20, new TranslatableComponent("osmium.options.videooptions"), (Button) -> {
-            mc.setScreen(new OsmiumVideoOptionsScreen(this));
-        });
+         if(!OsmiumClient.runningLatestVersion && !shownUpdateScreen) {
+             shownUpdateScreen = true;
+             mc.setScreen(new OsmiumUpdateScreen(this));
+         }
 
-        Button backButton = new Button(this.width / 2 - 100, this.height / 6 + 300, 200, 20, new TranslatableComponent("osmium.options.videooptions.back"), (Button) -> {
-            mc.setScreen(this.parent);
-        });
 
-        Button openGuiEditing = new Button(this.width / 2 - 275, this.height / 6 + 200, 150, 20, new TranslatableComponent("osmium.guiedit.title"), (Button) -> {
-            mc.setScreen(new OsmiumGuiEditScreen(this));
-        });
 
-        Button toggleSneakToggleWidget = new Button(this.width / 2 - 75, this.height / 6 + 120, 150, 20, new TranslatableComponent("osmium.options.togglesneaksettings"), (Button) -> {
-            mc.setScreen(new OsmiumToggleSneakOptionsScreen(this));
-        });
 
-        Button openGithubWidget = new Button(this.width / 2 + 125, this.height / 6 + 200, 150, 20, new TranslatableComponent("osmium.opencredits"), this::openCredits);
+        BooleanButtonWidget fullBrightWidget = new BooleanButtonWidget(this.width / 2 - 275, this.height / 6 + 120, 150, 20, (BooleanOption) OptionUtil.Options.FullbrightEnabled.get(), "osmium.options.full_bright_");
+        BooleanButtonWidget hurtBobWidget = new BooleanButtonWidget(this.width / 2 + 125, this.height / 6 + 120, 150, 20, ((BooleanOption) OptionUtil.Options.HurtbobbingEnabled.get()), "osmium.options.hurt_bobbing_");
+        BooleanButtonWidget noFireWidget = new BooleanButtonWidget(this.width / 2 - 275, this.height / 6 + 160, 150, 20, ((BooleanOption) OptionUtil.Options.NoFireEnabled.get()), "osmium.options.no_fire_");
+        BooleanButtonWidget fpsWidget = new BooleanButtonWidget(this.width / 2 - 75, this.height / 6 + 200, 150, 20, ((BooleanOption) OptionUtil.Options.FpsEnabled.get()), "osmium.options.fps_");
+        EnumSelectWidget smoothSneakWidget = new EnumSelectWidget(this.width / 2 + 125, this.height / 6 + 160, 150, 20, (EnumOption) OptionUtil.Options.SneakMode.get(), "osmium.options.sneak_");
+
+        Button openVideoOptions = new Button(this.width / 2 - 75, this.height / 6 + 160, 150, 20, new TranslatableComponent("osmium.options.video_options"), (Button) -> mc.setScreen(new OsmiumVideoOptionsScreen(this)));
+
+        Button backButton = new Button(this.width / 2 - 100, this.height / 6 + 300, 200, 20, new TranslatableComponent("osmium.options.video_options.back"), (Button) -> mc.setScreen(parent));
+
+        Button openGuiEditing = new Button(this.width / 2 - 275, this.height / 6 + 200, 150, 20, new TranslatableComponent("osmium.gui_edit.title"), (Button) -> mc.setScreen(new OsmiumGuiEditScreen()));
+
+        Button toggleSneakToggleWidget = new Button(this.width / 2 - 75, this.height / 6 + 120, 150, 20, new TranslatableComponent("osmium.options.toggle_sneak_settings"), (Button) -> mc.setScreen(new OsmiumToggleSneakOptionsScreen(this)));
+
+        Button openGithubWidget = new Button(this.width / 2 + 125, this.height / 6 + 200, 150, 20, new TranslatableComponent("osmium.open_credits"), this::openCredits);
 
 
         this.addRenderableWidget(fullBrightWidget);
@@ -118,7 +121,6 @@ public class OsmiumOptionsScreen extends Screen {
         matrices.translate(0, animationProgress,0);
         drawCenteredString(matrices, mc.font, new TranslatableComponent("osmium.version"), this.width / 2, 140, 0xffffff);
         matrices.popPose();
-        // drawTextWithShadow(matrices, mc.textRenderer, new TranslatableText("osmium.github"), 20, this.height - 40, 0xffffff);
         super.render(matrices, mouseX, mouseY, delta);
         // 57 is the max because of animation progress looking good at 3
         if(!(animationProgress >= 57))

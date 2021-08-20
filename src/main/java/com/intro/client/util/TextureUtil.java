@@ -10,7 +10,7 @@ import net.minecraft.server.packs.resources.ResourceManager;
 
 public class TextureUtil {
 
-    private static Minecraft mc = Minecraft.getInstance();
+    private static final Minecraft mc = Minecraft.getInstance();
 
 
     public static NativeImage convertIdentifierToNativeImage(ResourceLocation location) {

@@ -4,19 +4,13 @@ import com.intro.client.render.RenderManager;
 import com.intro.client.render.drawables.Drawable;
 import com.intro.client.util.OptionUtil;
 import com.mojang.blaze3d.vertex.PoseStack;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.TranslatableComponent;
 
 public class OsmiumGuiEditScreen extends Screen {
 
-    private final Screen parent;
-    private final Minecraft mc = Minecraft.getInstance();
-
-
-    public OsmiumGuiEditScreen(Screen parent) {
-        super(new TranslatableComponent("osmium.guiedit.title"));
-        this.parent = parent;
+    public OsmiumGuiEditScreen() {
+        super(new TranslatableComponent("osmium.gui_edit.title"));
     }
 
     @Override
@@ -48,9 +42,7 @@ public class OsmiumGuiEditScreen extends Screen {
         return super.keyPressed(keyCode, scanCode, modifiers);
     }
 
-    /**
-     * <p>remember to return super.mouseDragged(), or gui editing will break!</p>
-     */
+
     @Override
     public boolean mouseDragged(double mouseX, double mouseY, int button, double deltaX, double deltaY) {
         for(Drawable drawable : RenderManager.drawables) {

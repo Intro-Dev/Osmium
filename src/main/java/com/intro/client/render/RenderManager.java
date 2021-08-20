@@ -12,16 +12,16 @@ import java.util.ArrayList;
 
 public class RenderManager {
 
-    public static ArrayList<Drawable> drawables = new ArrayList<>();
+    public static final ArrayList<Drawable> drawables = new ArrayList<>();
 
-    private static Minecraft mc = Minecraft.getInstance();
+    private static final Minecraft mc = Minecraft.getInstance();
 
     public static void initDrawables() {
         // for some reason ArmorDisplay has to be first, or it doesn't render transparency
         // I don't know why this happens
         // why does this happen
         // well hi there
-        // these features aren' t done yet
+        // these features aren't' t done yet
         // but are still being implemented
         // addDrawable(ArmorDisplay.getInstance());
         // addDrawable(StatusEffectDisplay.getInstance());

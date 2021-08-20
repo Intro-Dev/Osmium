@@ -14,25 +14,12 @@ import com.intro.client.OsmiumClient;
  @author Intro
  */
 public class Event {
-    public Event(EventDirection direction, boolean canceled) {
+    public Event(EventDirection direction) {
         this.direction = direction;
-        Canceled = canceled;
     }
 
-    public EventDirection direction;
-    public boolean Canceled;
+    public final EventDirection direction;
 
-    public EventDirection getDirection() {
-        return direction;
-    }
-
-    public boolean isCanceled() {
-        throw new UnsupportedOperationException("Event cancellation is currently not implemented!");
-    }
-
-    public void setCanceled(boolean canceled) {
-        throw new UnsupportedOperationException("Event cancellation is currently not implemented!");
-    }
 
     public boolean isPre() {
         return this.direction == EventDirection.PRE;

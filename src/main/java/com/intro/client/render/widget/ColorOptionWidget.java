@@ -33,7 +33,7 @@ public class ColorOptionWidget extends Drawable {
 
     private final ColorOption attachedOption;
 
-    private static Minecraft mc = Minecraft.getInstance();
+    private static final Minecraft mc = Minecraft.getInstance();
 
     private final ResourceLocation BAKED_TEXTURE = new ResourceLocation("osmium", "/textures/gui/gradient.png");
 
@@ -84,7 +84,7 @@ public class ColorOptionWidget extends Drawable {
         this.scale = 1;
         blit(matrices, x, y, 0, 0, 256, 256);
         drawCenteredString(matrices, mc.font, OsmiumClient.options.getColorOption(this.attachedOption.identifier).color.toStringNoAlpha(), x + (TEXTURE.getWidth() / 2), y + TEXTURE.getHeight() + 20, 0xffffff);
-        drawCenteredString(matrices, mc.font, new TranslatableComponent("osmium.widget.colorpicker"), x + (TEXTURE.getWidth() / 2), y - 20, 0xffffff);
+        drawCenteredString(matrices, mc.font, new TranslatableComponent("osmium.widget.color_picker"), x + (TEXTURE.getWidth() / 2), y - 20, 0xffffff);
     }
 
     @Override
@@ -94,7 +94,7 @@ public class ColorOptionWidget extends Drawable {
             Vector2d vec2 = this.getImagePixels((int) mouseX, (int) mouseY);
             int color;
             // for some reason NativeImage isn't reading color data properly.
-            // so we gotta get the base pixel data
+            // so we have to get the base pixel data
             int[] bytes;
             bytes = TEXTURE.makePixelArray();
             color = getColorAtLocation(bytes, TEXTURE, (int) vec2.getX(), (int) vec2.getY());

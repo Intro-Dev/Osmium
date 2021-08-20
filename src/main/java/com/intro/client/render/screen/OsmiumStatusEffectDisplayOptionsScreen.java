@@ -20,19 +20,17 @@ public class OsmiumStatusEffectDisplayOptionsScreen extends Screen {
 
 
     public OsmiumStatusEffectDisplayOptionsScreen(Screen parent) {
-        super(new TranslatableComponent("osmium.options.statuseffectdisplaysettings"));
+        super(new TranslatableComponent("osmium.options.status_effect_display_settings"));
         this.parent = parent;
     }
 
     @Override
     protected void init() {
-        Button backButton = new Button(this.width / 2 - 100, this.height / 6 + 200, 200, 20, new TranslatableComponent("osmium.options.videooptions.back"), (buttonWidget) -> {
-            mc.setScreen(this.parent);
-        });
+        Button backButton = new Button(this.width / 2 - 100, this.height / 6 + 200, 200, 20, new TranslatableComponent("osmium.options.video_options.back"), (buttonWidget) -> mc.setScreen(this.parent));
 
-        EnumSelectWidget displayModeWidget = new EnumSelectWidget(this.width / 2 - 175, this.height / 6 + 20, 150, 20, ((EnumOption) OptionUtil.Options.StatusEffectDisplayMode.get()), "osmium.options.statuseffectdisplay");
-        DoubleSliderWidget maxDisplayedWidget = new DoubleSliderWidget(mc, this.width / 2 - 175, this.height / 6 + 60, 150, 20, ((DoubleOption) OsmiumClient.options.get(OsmiumClient.options.MaxStatusEffectsDisplayed.identifier)), "osmium.options.maxstatusdisplay", 0, 10, 1);
-        DoubleSliderWidget displayScaleWidget = new DoubleSliderWidget(mc, this.width / 2 + 25, this.height / 6 + 20, 150, 20, ((DoubleOption) OptionUtil.Options.StatusEffectDisplayScale.get()), "osmium.options.statusdisplayscale", 0, 10, 1);
+        EnumSelectWidget displayModeWidget = new EnumSelectWidget(this.width / 2 - 175, this.height / 6 + 20, 150, 20, ((EnumOption) OptionUtil.Options.StatusEffectDisplayMode.get()), "osmium.options.status_effect_display");
+        DoubleSliderWidget maxDisplayedWidget = new DoubleSliderWidget(mc, this.width / 2 - 175, this.height / 6 + 60, 150, 20, ((DoubleOption) OsmiumClient.options.get(OsmiumClient.options.MaxStatusEffectsDisplayed.identifier)), "osmium.options.max_status_display", 0, 10, 1);
+        DoubleSliderWidget displayScaleWidget = new DoubleSliderWidget(mc, this.width / 2 + 25, this.height / 6 + 20, 150, 20, ((DoubleOption) OptionUtil.Options.StatusEffectDisplayScale.get()), "osmium.options.status_display_scale", 0, 10, 1);
 
 
         this.addRenderableWidget(backButton);
@@ -51,7 +49,7 @@ public class OsmiumStatusEffectDisplayOptionsScreen extends Screen {
     @Override
     public void render(PoseStack matrices, int mouseX, int mouseY, float delta) {
         this.renderBackground(matrices);
-        drawCenteredString(matrices, mc.font, new TranslatableComponent("osmium.options.statuseffectdisplaysettings"), this.width / 2, 15, 0xffffff);
+        drawCenteredString(matrices, mc.font, new TranslatableComponent("osmium.options.status_effect_display_settings"), this.width / 2, 15, 0xffffff);
         drawString(matrices, mc.font, new TranslatableComponent("osmium.version"), 20, this.height - 20, 0xffffff);
         super.render(matrices, mouseX, mouseY, delta);
     }

@@ -12,7 +12,7 @@ public class Text extends Drawable {
 
     public static final int HITBOX_PADDING = 20;
 
-    private Minecraft mc = Minecraft.getInstance();
+    private final Minecraft mc = Minecraft.getInstance();
 
     public boolean guiElement = false;
 
@@ -26,6 +26,17 @@ public class Text extends Drawable {
         this.width = this.getTextWidth();
         this.height = this.getTextHeight();
         RenderManager.drawables.add(this);
+    }
+
+    public Text(int posX, int posY, String text, int color, boolean autoAdd) {
+        this.posX = posX;
+        this.posY = posY;
+        this.text = text;
+        this.color = color;
+        this.width = this.getTextWidth();
+        this.height = this.getTextHeight();
+        if(autoAdd)
+            RenderManager.drawables.add(this);
     }
 
     public Text(int posX, int posY, Object text, int color) {

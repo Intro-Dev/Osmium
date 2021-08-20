@@ -10,7 +10,7 @@ import org.jetbrains.annotations.NotNull;
 
 public class EnumSelectWidget extends Button {
 
-    public EnumOption attachedOption;
+    public final EnumOption attachedOption;
     public final String key;
 
     @SuppressWarnings("unsafe")

@@ -4,10 +4,10 @@ import net.minecraft.client.player.AbstractClientPlayer;
 
 public class EventAddPlayer extends Event {
 
-    public AbstractClientPlayer entity;
+    public final AbstractClientPlayer entity;
 
     public EventAddPlayer(AbstractClientPlayer entity) {
-        super(EventDirection.POST, false);
+        super(EventDirection.POST);
         this.entity = entity;
     }
 }

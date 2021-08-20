@@ -9,7 +9,7 @@ import net.minecraft.network.chat.TranslatableComponent;
 
 public class BooleanButtonWidget extends Button {
 
-    public BooleanOption attachedOption;
+    public final BooleanOption attachedOption;
     public final String key;
 
     public BooleanButtonWidget(int x, int y, int width, int height, BooleanOption attachedOption, String key) {

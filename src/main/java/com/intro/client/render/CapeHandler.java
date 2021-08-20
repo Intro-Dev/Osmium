@@ -18,7 +18,7 @@ import java.net.URL;
 Cape code adapted from of-capes under GNU GPL
 Credit for cape URL code goes to them
 
- of-capes github: https://github.com/dragonostic/of-capes
+ of-capes GitHub: https://github.com/dragonostic/of-capes
 
 @author Intro
 @author dragonostic
@@ -124,8 +124,8 @@ public class CapeHandler {
 }
 class CapeDownloader implements Runnable {
 
-    CapeHandler handler;
-    EventAddPlayer playerJoin;
+    private final CapeHandler handler;
+    private final EventAddPlayer playerJoin;
 
     public CapeDownloader(CapeHandler handler, EventAddPlayer e) {
         this.handler = handler;

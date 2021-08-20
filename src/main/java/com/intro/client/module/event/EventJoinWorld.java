@@ -4,10 +4,10 @@ import net.minecraft.network.protocol.game.ClientboundLoginPacket;
 
 public class EventJoinWorld extends Event{
 
-    public ClientboundLoginPacket packet;
+    public final ClientboundLoginPacket packet;
 
     public EventJoinWorld(ClientboundLoginPacket packet) {
-        super(EventDirection.POST, false);
+        super(EventDirection.POST);
         this.packet = packet;
     }
 }

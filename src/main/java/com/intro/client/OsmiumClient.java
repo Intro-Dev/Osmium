@@ -8,6 +8,7 @@ import com.intro.client.render.CapeHandler;
 import com.intro.client.render.RenderManager;
 import com.intro.client.util.OptionUtil;
 import com.intro.common.config.Options;
+import com.intro.common.util.Util;
 import com.mojang.blaze3d.platform.InputConstants;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
@@ -27,7 +28,9 @@ public class OsmiumClient implements ClientModInitializer {
 
     public static KeyMapping menuKey;
 
-    public static Options options = new Options();
+    public static final Options options = new Options();
+
+    public static boolean runningLatestVersion = true;
 
 
     public static void registerModules() {
@@ -59,13 +62,14 @@ public class OsmiumClient implements ClientModInitializer {
         registerKeyBindings();
         ClientNetworkHandler.registerPackets();
         RenderManager.initDrawables();
+        runningLatestVersion = Util.isRunningLatestVersion();
         System.out.println("Osmium Initialized");
     }
 
 
     public static class EVENT_BUS {
 
-        public static HashMap<Integer, ArrayList<EventListenerSupplier>> mappedListeners = new HashMap<>();
+        public static final HashMap<Integer, ArrayList<EventListenerSupplier>> mappedListeners = new HashMap<>();
 
         public static void initListenerMap() {
             for(EventType eventType : EventType.values()) {

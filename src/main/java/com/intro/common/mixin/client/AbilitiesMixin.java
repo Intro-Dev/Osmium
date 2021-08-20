@@ -17,7 +17,7 @@ public class AbilitiesMixin {
 
     @Shadow public boolean flying;
 
-    private Minecraft mc = Minecraft.getInstance();
+    private final Minecraft mc = Minecraft.getInstance();
 
     @Inject(method = "getFlyingSpeed", at = @At("HEAD"), cancellable = true)
     public void getFlyingSpeed(CallbackInfoReturnable<Float> cir) {

@@ -1,5 +1,5 @@
 plugins {
-	id 'fabric-loom' version '0.9-SNAPSHOT'
+	id 'fabric-loom' version '0.8-SNAPSHOT'
 	id 'maven-publish'
 }
 
@@ -11,25 +11,14 @@ version = project.mod_version
 group = project.maven_group
 
 repositories {
-	mavenCentral()
 
-	maven {
-		name = "Sonatype Snapshots"
-		url = uri("https://oss.sonatype.org/content/repositories/snapshots/")
-	}
-
-	maven {
-		name = "ldtteam"
-		url = uri("https://ldtteam.jfrog.io/artifactory/parchmentmc-snapshots/")
-	}
 }
 
 dependencies {
 	minecraft "com.mojang:minecraft:1.17.1"
-	mappings(loom.layered {
-		officialMojangMappings()
-		parchment("org.parchmentmc.data:parchment-1.17.1:2021.07.26-nightly-SNAPSHOT@zip")
-	})
+	mappings loom.officialMojangMappings()
+
+
 	modImplementation "net.fabricmc:fabric-loader:0.11.6"
 	//Fabric api
 	modImplementation "net.fabricmc.fabric-api:fabric-api:0.36.1+1.17"
@@ -74,5 +63,5 @@ publishing {
 }
 
 loom {
-	accessWidenerPath = file("src/main/resources/osmium.accesswidener")
+	accessWidener = file("src/main/resources/osmium.accesswidener")
 }

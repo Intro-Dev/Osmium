@@ -13,10 +13,10 @@ public class DoubleSliderWidget extends AbstractOptionSliderButton {
 
     private final DoubleOption attachedOption;
     public final String key;
-    private double minVal;
-    private double maxVal;
+    private final double minVal;
+    private final double maxVal;
 
-    private double roundTo;
+    private final double roundTo;
 
     public DoubleSliderWidget(Minecraft mc, int x, int y, int width, int height, DoubleOption doubleOption, String key, double minVal, double maxVal, double roundTo) {
         super(mc.options, x, y, width, height, doubleOption.variable);

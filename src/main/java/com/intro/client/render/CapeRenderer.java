@@ -26,8 +26,8 @@ import java.util.HashMap;
 
 public class CapeRenderer extends RenderLayer<AbstractClientPlayer, PlayerModel<AbstractClientPlayer>> {
 
-    public static HashMap<String, ResourceLocation> CapeArray = new HashMap<>();
-    public static ArrayList<String> OptifineCapes = new ArrayList<>();
+    public static final HashMap<String, ResourceLocation> CapeArray = new HashMap<>();
+    public static final ArrayList<String> OptifineCapes = new ArrayList<>();
 
     public CapeRenderer(RenderLayerParent<AbstractClientPlayer, PlayerModel<AbstractClientPlayer>> parent) {
         super(parent);

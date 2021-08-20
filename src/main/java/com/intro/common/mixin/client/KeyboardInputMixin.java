@@ -14,7 +14,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 /*
  Adapted from Tweakeroo mod under GNU GPL
- Tweakeroo github : https://github.com/maruohon/tweakeroo/
+ Tweakeroo GitHub : https://github.com/maruohon/tweakeroo/
 
  @author maruohon
  @author Intro
@@ -22,7 +22,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(KeyboardInput.class)
 public class KeyboardInputMixin extends Input {
 
-    @Inject(method = "tick(Z)V", at = @At(
+    @Inject(method = "tick", at = @At(
             value = "FIELD",
             target = "Lnet/minecraft/client/player/KeyboardInput;shiftKeyDown:Z",
             ordinal = 0,

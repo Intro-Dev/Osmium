@@ -17,34 +17,28 @@ import net.minecraft.resources.ResourceLocation;
 
 public class OsmiumVideoOptionsScreen extends Screen {
 
-    private Screen parent;
-    private Minecraft mc = Minecraft.getInstance();
+    private final Screen parent;
+    private final Minecraft mc = Minecraft.getInstance();
 
     private final ResourceLocation LOGO_TEXTURE = new ResourceLocation("osmium", "icon.png");
 
     public OsmiumVideoOptionsScreen(Screen parent) {
-        super(new TranslatableComponent("osmium.options.videooptions.title"));
+        super(new TranslatableComponent("osmium.options.video_options.title"));
         this.parent = parent;
     }
 
     @Override
     protected void init() {
-        Button backButton = new Button(this.width / 2 - 100, this.height / 6 + 300, 200, 20, new TranslatableComponent("osmium.options.videooptions.back"), (buttonWidget) -> {
-            mc.setScreen(this.parent);
-        });
+        Button backButton = new Button(this.width / 2 - 100, this.height / 6 + 300, 200, 20, new TranslatableComponent("osmium.options.video_options.back"), (buttonWidget) -> mc.setScreen(this.parent));
 
-        Button blockOptionScreenButton = new Button(this.width / 2 - 75, this.height / 6 + 160, 150, 20, new TranslatableComponent("osmium.options.blockoptionsettings"), (buttonWidget) -> {
-            mc.setScreen(new OsmiumBlockOptionsScreen(this));
-        });
+        Button blockOptionScreenButton = new Button(this.width / 2 - 75, this.height / 6 + 160, 150, 20, new TranslatableComponent("osmium.options.block_option_settings"), (buttonWidget) -> mc.setScreen(new OsmiumBlockOptionsScreen(this)));
 
-        EnumSelectWidget toggleCapeWidget = new EnumSelectWidget(this.width / 2 - 275, this.height / 6 + 120, 150, 20, ((EnumOption) OptionUtil.Options.CustomCapeMode.get()),"osmium.options.videooptions.cape");
-        BooleanButtonWidget toggleRainWidget = new BooleanButtonWidget(this.width / 2 - 75, this.height / 6 + 120, 150, 20, (BooleanOption) OptionUtil.Options.NoRainEnabled.get(), "osmium.options.rain");
-        BooleanButtonWidget toggleFireworksWidget = new BooleanButtonWidget(this.width / 2 + 125, this.height / 6 + 120, 150, 20, ((BooleanOption) OptionUtil.Options.FireworksDisabled.get()), "osmium.options.fireworks");
-        BooleanButtonWidget toggleNetherParticlesWidget = new BooleanButtonWidget(this.width / 2 - 275, this.height / 6 + 160, 150, 20, ((BooleanOption) OptionUtil.Options.DecreaseNetherParticles.get()), "osmium.options.netherparticles");
+        EnumSelectWidget toggleCapeWidget = new EnumSelectWidget(this.width / 2 - 275, this.height / 6 + 120, 150, 20, ((EnumOption) OptionUtil.Options.CustomCapeMode.get()),"osmium.options.video_options.cape_");
+        BooleanButtonWidget toggleRainWidget = new BooleanButtonWidget(this.width / 2 - 75, this.height / 6 + 120, 150, 20, (BooleanOption) OptionUtil.Options.NoRainEnabled.get(), "osmium.options.rain_");
+        BooleanButtonWidget toggleFireworksWidget = new BooleanButtonWidget(this.width / 2 + 125, this.height / 6 + 120, 150, 20, ((BooleanOption) OptionUtil.Options.FireworksDisabled.get()), "osmium.options.fireworks_");
+        BooleanButtonWidget toggleNetherParticlesWidget = new BooleanButtonWidget(this.width / 2 - 275, this.height / 6 + 160, 150, 20, ((BooleanOption) OptionUtil.Options.DecreaseNetherParticles.get()), "osmium.options.nether_particles_");
 
-        Button statusEffectScreenButton = new Button(this.width / 2 + 125, this.height / 6 + 160, 150, 20, new TranslatableComponent("osmium.options.statuseffectdisplaysettings"), (buttonWidget) -> {
-            mc.setScreen(new OsmiumStatusEffectDisplayOptionsScreen(this));
-        });
+        Button statusEffectScreenButton = new Button(this.width / 2 + 125, this.height / 6 + 160, 150, 20, new TranslatableComponent("osmium.options.status_effect_display_settings"), (buttonWidget) -> mc.setScreen(new OsmiumStatusEffectDisplayOptionsScreen(this)));
 
         this.addRenderableWidget(backButton);
         this.addRenderableWidget(toggleCapeWidget);
@@ -52,7 +46,6 @@ public class OsmiumVideoOptionsScreen extends Screen {
         this.addRenderableWidget(toggleFireworksWidget);
         this.addRenderableWidget(toggleNetherParticlesWidget);
         this.addRenderableWidget(blockOptionScreenButton);
-        // this.addRenderableWidget(statusEffectScreenButton);
     }
 
     @Override
@@ -73,7 +66,7 @@ public class OsmiumVideoOptionsScreen extends Screen {
         // renders osmium logo to screen with fade in
         matrices.pushPose();
         // sets the current shader color to itself, but with a modified alpha for fade in effect
-        // 0.8901961 because thats the final result for the fade in animation on the main settings page
+        // 0.8901961 because that's the final result for the fade in animation on the main settings page
         RenderSystem.setShaderColor(shaderColor.getFloatR(), shaderColor.getFloatG(), shaderColor.getFloatB(), 0.8901961f);
         // scale image down to a good size
         matrices.scale(0.5f, 0.5f, 0.5f);

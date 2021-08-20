@@ -34,7 +34,7 @@ public class StatusEffectDisplay extends Drawable {
 
     private static StatusEffectDisplay instance;
 
-    public float scale = 1f;
+    public final float scale = 1f;
 
     public int maxEffectsDisplayed = 0;
 

@@ -29,7 +29,7 @@ public class OptionUtil {
 
     public static final Logger LOGGER = LogManager.getLogger();
 
-    public static Options Options = OsmiumClient.options;
+    public static final Options Options = OsmiumClient.options;
 
     public static boolean ShouldResaveOptions = false;
 

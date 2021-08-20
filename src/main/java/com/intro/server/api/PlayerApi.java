@@ -8,7 +8,7 @@ import java.util.HashMap;
 public class PlayerApi {
 
     private static final HashMap<String, PlayerProperties> playerProperties = new HashMap<>();
-    public static HashMap<String, ServerPlayer> playersRunningOsmium = new HashMap<>();
+    public static final HashMap<String, ServerPlayer> playersRunningOsmium = new HashMap<>();
 
     public static void registerPlayer(ServerPlayer player) {
         playerProperties.put(player.getUUID().toString(), new PlayerProperties());

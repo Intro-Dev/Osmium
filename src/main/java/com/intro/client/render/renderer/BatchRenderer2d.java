@@ -16,16 +16,13 @@ public class BatchRenderer2d implements Renderer2D {
     private BufferBuilder buffer;
     private boolean drawing;
 
-    private Minecraft mc = Minecraft.getInstance();
-
-    private VertexFormat format;
+    private final Minecraft mc = Minecraft.getInstance();
 
     public void begin(VertexFormat.Mode mode, VertexFormat format) {
         if(drawing)
             throw new IllegalStateException("Already drawing!");
         this.drawing = true;
         this.buffer = new BufferBuilder(4096);
-        this.format = format;
         buffer.begin(mode, format);
     }
 
