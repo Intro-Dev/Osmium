@@ -3,6 +3,7 @@ package com.intro.client.util;
 import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonSyntaxException;
 import com.intro.client.OsmiumClient;
 import com.intro.common.config.OptionDeserializer;
 import com.intro.common.config.OptionSerializer;
@@ -44,9 +45,8 @@ public class OptionUtil {
     /**
      * <p>Loads a {@link Options} object from a config file</p>
      * @param path The path of the config file
-     * @return A completed {@link Options} object
      */
-    public static Options loadConfig(String path) {
+    public static void loadConfig(String path) {
         try {
             File file = Paths.get(path).toFile();
             StringBuilder builder = new StringBuilder();
@@ -58,25 +58,28 @@ public class OptionUtil {
             while(reader.hasNextLine()) {
                 builder.append(reader.nextLine());
             }
+
+            reader.close();
             if(createdFile || !isJSONValid(builder.toString())) {
                 LOGGER.log(Level.WARN, "Config file either didn't exist or is corrupted, creating new one using default settings.");
                 System.out.println("Config file either didn't exist or is corrupted, creating new one using default settings.");
                 Options o = new Options();
                 o.init();
                 save();
-                return o;
+                return;
             }
             Option[] arr = GSON.fromJson(builder.toString(), Option[].class);
-            for(Option o : arr)  {
-                OsmiumClient.options.put(o.identifier, o);
+            if(arr.length != 0) {
+                for(Option o : arr)  {
+                    OsmiumClient.options.put(o.identifier, o);
+                }
             }
-            return OsmiumClient.options;
         } catch (Exception e) {
             LOGGER.warn("Error in loading osmium config, resetting config to avoid crash!");
             resetOptionsFile();
             com.intro.common.config.Options options = new Options();
             options.init();
-            return options;
+
         }
     }
 
@@ -112,6 +115,15 @@ public class OptionUtil {
      * <p>A method to quickly save to the default config file</p>
      */
     public static void save() {
+        setNormalOptions();
+        OsmiumClient.options.getHashMap();
+        saveConfig(FabricLoader.getInstance().getConfigDir().resolve("osmium-options.json").toString());
+    }
+
+    /**
+     * <p>Sets the options back to their player set values</p>
+     */
+    public static void setNormalOptions() {
         for(Option option : OsmiumClient.options.getOverwrittenOptions().values()) {
             if(option != null) {
                 OsmiumClient.options.put(option.identifier, option);
@@ -119,8 +131,7 @@ public class OptionUtil {
                 LOGGER.log(Level.ERROR, "Null option!");
             }
         }
-        OsmiumClient.options.getHashMap();
-        saveConfig(FabricLoader.getInstance().getConfigDir().resolve("osmium-options.json").toString());
+        OsmiumClient.options.clearOverwrittenOptions();
     }
 
     /**
@@ -131,11 +142,14 @@ public class OptionUtil {
     }
 
 
+    /**
+     * <p>Checks if a string is valid JSON</p>
+     */
     public static boolean isJSONValid(String jsonInString) {
         try {
             GSON.fromJson(jsonInString, Object.class);
             return true;
-        } catch(com.google.gson.JsonSyntaxException ex) {
+        } catch(JsonSyntaxException e) {
             return false;
         }
     }

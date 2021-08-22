@@ -53,7 +53,9 @@ public class OsmiumGuiEditScreen extends Screen {
                 if(mouseY + drawable.height < this.height || mouseY - drawable.height < 0) {
                     drawable.posY = (int) mouseY;
                 }
+                // return super.mouseDragged(mouseX, mouseX, button, deltaX, deltaY);
             }
+
         }
         return super.mouseDragged(mouseX, mouseY, button, deltaX, deltaY);
     }

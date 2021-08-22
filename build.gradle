@@ -1,5 +1,5 @@
 plugins {
-	id 'fabric-loom' version '0.8-SNAPSHOT'
+	id 'fabric-loom' version '0.9-SNAPSHOT'
 	id 'maven-publish'
 }
 
@@ -63,5 +63,5 @@ publishing {
 }
 
 loom {
-	accessWidener = file("src/main/resources/osmium.accesswidener")
+	accessWidenerPath = file("src/main/resources/osmium.accesswidener")
 }

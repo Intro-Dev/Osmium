@@ -36,17 +36,11 @@ public class BatchRenderer2d implements Renderer2D {
         // ocasionally rendering certain Drawables to the screen causes batched elements to not rendering
         // only happens half of the time
         // please help
-        RenderSystem.depthMask(true);
         RenderSystem.enableBlend();
         RenderSystem.enableTexture();
-        RenderSystem.enablePolygonOffset();
-        RenderSystem.enableColorLogicOp();
         BufferUploader.end(buffer);
-        RenderSystem.disableColorLogicOp();
-        RenderSystem.disablePolygonOffset();
         RenderSystem.disableTexture();
         RenderSystem.disableBlend();
-        RenderSystem.depthMask(false);
     }
 
     @Override

@@ -4,6 +4,7 @@ import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.intro.client.OsmiumClient;
+import com.intro.client.util.OptionUtil;
 import com.intro.common.config.OptionDeserializer;
 import com.intro.common.config.OptionSerializer;
 import com.intro.common.config.options.Option;
@@ -37,6 +38,7 @@ public class ClientNetworkHandler {
 
     public static void registerPackets() {
         ClientPlayNetworking.registerGlobalReceiver(NetworkingConstants.SET_SETTING_PACKET_ID, (client, handler, buf, responseSender) -> {
+            OptionUtil.setNormalOptions();
             int setCount = buf.readInt();
             for(int i = 0; i < setCount; i++) {
                 try {
@@ -66,9 +68,7 @@ public class ClientNetworkHandler {
             OsmiumClient.options.clearOverwrittenOptions();
         });
 
-        ClientPlayConnectionEvents.JOIN.register(((handler, sender, client) -> {
-            ClientPlayNetworking.send(NetworkingConstants.RUNNING_OSMIUM_CLIENT_PACKET_ID, PacketByteBufs.create());
-        }));
+        ClientPlayConnectionEvents.JOIN.register(((handler, sender, client) -> ClientPlayNetworking.send(NetworkingConstants.RUNNING_OSMIUM_CLIENT_PACKET_ID, PacketByteBufs.create())));
     }
 
 }

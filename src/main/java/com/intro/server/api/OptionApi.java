@@ -14,7 +14,9 @@ import java.io.File;
 import java.io.FileWriter;
 import java.lang.reflect.Modifier;
 import java.nio.file.Paths;
-import java.util.*;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Scanner;
 
 public class OptionApi {
 
@@ -42,10 +44,17 @@ public class OptionApi {
         save();
     }
 
+    public static void clearSetOptions() {
+        serverSetOptions.clear();
+    }
+
     public static void removeSetOption(String  identifier) {
         serverSetOptions.remove(identifier);}
 
 
+    /**
+     * <p>Saves set options to server config</p>
+     */
     public static void save() {
         try {
             File file = Paths.get(FabricLoader.getInstance().getConfigDir().resolve("osmium-server-config.json").toString()).toFile();
@@ -64,7 +73,9 @@ public class OptionApi {
         }
     }
 
-    @SuppressWarnings("unchecked")
+    /**
+     * <p>Loads set options from server config</p>
+     */
     public static void load() {
         try {
             File file = Paths.get(FabricLoader.getInstance().getConfigDir().resolve("osmium-server-config.json").toString()).toFile();
@@ -83,13 +94,16 @@ public class OptionApi {
 
             Option[] array = GSON.fromJson(builder.toString(), Option[].class);
 
-            for(Option o : array) {
-                serverSetOptions.put(o.identifier, o);
+            if(array.length != 0) {
+                for(Option o : array) {
+                    serverSetOptions.put(o.identifier, o);
+                }
             }
 
 
 
         } catch (Exception e) {
+            e.printStackTrace();
             OsmiumServer.LOGGER.error("Error in loading osmium config!");
         }
     }
@@ -103,11 +117,4 @@ public class OptionApi {
         }
     }
 
-    // now you might be wondering why this has to be a separate function
-    // this has to be like this because of the jvm only parsing this properly at runtime
-    // see https://stackoverflow.com/questions/27253555/com-google-gson-internal-linkedtreemap-cannot-be-cast-to-my-class
-    public static <T> List<T> stringToArray(String s, Class<T[]> clazz) {
-        T[] arr = new Gson().fromJson(s, clazz);
-        return Arrays.asList(arr); //or return Arrays.asList(new Gson().fromJson(s, clazz)); for a one-liner
-    }
 }

@@ -46,6 +46,7 @@ public class OsmiumVideoOptionsScreen extends Screen {
         this.addRenderableWidget(toggleFireworksWidget);
         this.addRenderableWidget(toggleNetherParticlesWidget);
         this.addRenderableWidget(blockOptionScreenButton);
+        // this.addRenderableWidget(statusEffectScreenButton);
     }
 
     @Override

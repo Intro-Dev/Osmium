@@ -23,7 +23,6 @@ public class ServerNetworkHandler {
         });
 
         ServerPlayConnectionEvents.DISCONNECT.register(((handler, server) -> {
-            System.out.println("removed player");
             PlayerApi.removePlayerRegistry(handler.getPlayer());
             PlayerApi.playersRunningOsmium.remove(handler.getPlayer().getUUID().toString());
         }));

@@ -63,6 +63,10 @@ public class OsmiumOptionsScreen extends Screen {
 
         Button openGuiEditing = new Button(this.width / 2 - 275, this.height / 6 + 200, 150, 20, new TranslatableComponent("osmium.gui_edit.title"), (Button) -> mc.setScreen(new OsmiumGuiEditScreen()));
 
+        if(mc.level == null) {
+            openGuiEditing.active = false;
+        }
+
         Button toggleSneakToggleWidget = new Button(this.width / 2 - 75, this.height / 6 + 120, 150, 20, new TranslatableComponent("osmium.options.toggle_sneak_settings"), (Button) -> mc.setScreen(new OsmiumToggleSneakOptionsScreen(this)));
 
         Button openGithubWidget = new Button(this.width / 2 + 125, this.height / 6 + 200, 150, 20, new TranslatableComponent("osmium.open_credits"), this::openCredits);
