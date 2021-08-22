@@ -6,13 +6,18 @@ import com.intro.client.module.event.EventTick;
 import com.intro.client.module.event.EventType;
 import com.intro.client.util.OptionUtil;
 import net.minecraft.client.Minecraft;
+import org.apache.logging.log4j.Logger;
+import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(Minecraft.class)
 public class MinecraftMixin {
+
+    @Shadow @Final private static Logger LOGGER;
 
     @Inject(at = @At("HEAD"), method = "tick")
     public void preTick(CallbackInfo info) {
@@ -28,6 +33,7 @@ public class MinecraftMixin {
     public void close(CallbackInfo ci) {
         OptionUtil.save();
     }
+
 
 
 

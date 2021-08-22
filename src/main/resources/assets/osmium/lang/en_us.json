@@ -52,7 +52,7 @@
   "osmium.command.option_set_success": "Successfully Set Option",
   "osmium.update_available": "An update is available!",
   "osmium.decline_update": "Continue to options",
-  "osmium.download_update": "Download and restart",
+  "osmium.download_update": "Download",
   "osmium.retry": "Retry update",
   "osmium.options.video_options.cape_disabled": "Custom Capes: Disabled",
   "osmium.options.video_options.cape_optifine": "Custom Capes: Optifine",

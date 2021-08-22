@@ -24,6 +24,7 @@ public class Util {
     private static String cachedLatestReleaseDownload;
     private static String cachedLatestReleaseName;
 
+
     // cache values at startup
     static {
         getLatestGithubReleaseTag();

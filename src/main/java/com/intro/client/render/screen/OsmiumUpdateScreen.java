@@ -19,8 +19,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.nio.file.Files;
-import java.nio.file.Path;
 
 public class OsmiumUpdateScreen extends Screen  {
 
@@ -94,7 +92,7 @@ public class OsmiumUpdateScreen extends Screen  {
                 HttpURLConnection connection = (HttpURLConnection) fileUrl.openConnection();
 
                 BufferedInputStream stream = new BufferedInputStream(connection.getInputStream());
-                FileOutputStream fileOutputStream = new FileOutputStream(FabricLoader.getInstance().getGameDir().getParent().toString() + "/mods/" + latestReleaseName);
+                FileOutputStream fileOutputStream = new FileOutputStream(FabricLoader.getInstance().getGameDir().toString() + "/mods/" + latestReleaseName);
 
                 double bytesDownloaded = 0;
 
@@ -113,12 +111,8 @@ public class OsmiumUpdateScreen extends Screen  {
                 fileOutputStream.close();
                 connection.disconnect();
 
-                errorText = "Deleting old jar...";
-                // try to delete old jar
-                // hardcoded because fabric isn't exposing all the mod metadata needed for finding the jar name
-                Files.delete(Path.of(FabricLoader.getInstance().getGameDir().getParent().toString() + "/mods/osmium-" + ModConstants.UPDATE_STRING + ".jar"));
-                errorText = "Update successful! Exiting game...";
-                mc.close();
+                errorText = "Update successful! Exit the game and delete the old jar.";
+
             } catch (Exception e) {
                 OsmiumClient.LOGGER.log(Level.ERROR, "Update Error: " + e + ", Try manually updating if this issue persists");
                 errorText = "Update Error: " + e + ", Try manually updating if this issue persists";
