@@ -1,7 +1,7 @@
 package com.intro.common.mixin.client;
 
-import com.intro.client.util.OptionUtil;
-import com.intro.common.config.options.BooleanOption;
+import com.intro.client.OsmiumClient;
+import com.intro.common.config.Options;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
 import com.mojang.math.Matrix4f;
@@ -53,7 +53,7 @@ public class ScreenEffectRendererMixin {
             float u = -0.5F;
             float v = 0.5F;
             float w = -0.5F;
-            if(((BooleanOption) OptionUtil.Options.NoFireEnabled.get()).variable) {
+            if(OsmiumClient.options.getBooleanOption(Options.BlockOutlineAlpha).variable) {
                 stack.translate((float)(-(r * 2 - 1)) * 0.24F, -0.53000001192092896D, 0.0D);
             } else {
                 stack.translate((float)(-(r * 2 - 1)) * 0.24F, -0.30000001192092896D, 0.0D);

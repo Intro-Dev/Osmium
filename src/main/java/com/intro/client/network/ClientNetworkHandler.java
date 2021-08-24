@@ -64,7 +64,6 @@ public class ClientNetworkHandler {
             for(Option option : OsmiumClient.options.getOverwrittenOptions().values()) {
                 OsmiumClient.options.put(option.identifier, option);
             }
-            OsmiumClient.options.getHashMap();
             OsmiumClient.options.clearOverwrittenOptions();
         });
 

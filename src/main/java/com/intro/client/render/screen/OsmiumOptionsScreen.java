@@ -5,8 +5,7 @@ import com.intro.client.render.Color;
 import com.intro.client.render.widget.BooleanButtonWidget;
 import com.intro.client.render.widget.EnumSelectWidget;
 import com.intro.client.util.OptionUtil;
-import com.intro.common.config.options.BooleanOption;
-import com.intro.common.config.options.EnumOption;
+import com.intro.common.config.Options;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.Util;
@@ -51,11 +50,11 @@ public class OsmiumOptionsScreen extends Screen {
 
 
 
-        BooleanButtonWidget fullBrightWidget = new BooleanButtonWidget(this.width / 2 - 275, this.height / 6 + 120, 150, 20, (BooleanOption) OptionUtil.Options.FullbrightEnabled.get(), "osmium.options.full_bright_");
-        BooleanButtonWidget hurtBobWidget = new BooleanButtonWidget(this.width / 2 + 125, this.height / 6 + 120, 150, 20, ((BooleanOption) OptionUtil.Options.HurtbobbingEnabled.get()), "osmium.options.hurt_bobbing_");
-        BooleanButtonWidget noFireWidget = new BooleanButtonWidget(this.width / 2 - 275, this.height / 6 + 160, 150, 20, ((BooleanOption) OptionUtil.Options.NoFireEnabled.get()), "osmium.options.no_fire_");
-        BooleanButtonWidget fpsWidget = new BooleanButtonWidget(this.width / 2 - 75, this.height / 6 + 200, 150, 20, ((BooleanOption) OptionUtil.Options.FpsEnabled.get()), "osmium.options.fps_");
-        EnumSelectWidget smoothSneakWidget = new EnumSelectWidget(this.width / 2 + 125, this.height / 6 + 160, 150, 20, (EnumOption) OptionUtil.Options.SneakMode.get(), "osmium.options.sneak_");
+        BooleanButtonWidget fullBrightWidget = new BooleanButtonWidget(this.width / 2 - 275, this.height / 6 + 120, 150, 20, Options.FullbrightEnabled, "osmium.options.full_bright_");
+        BooleanButtonWidget hurtBobWidget = new BooleanButtonWidget(this.width / 2 + 125, this.height / 6 + 120, 150, 20, Options.HurtbobbingEnabled, "osmium.options.hurt_bobbing_");
+        BooleanButtonWidget noFireWidget = new BooleanButtonWidget(this.width / 2 - 275, this.height / 6 + 160, 150, 20, Options.NoFireEnabled, "osmium.options.no_fire_");
+        BooleanButtonWidget fpsWidget = new BooleanButtonWidget(this.width / 2 - 75, this.height / 6 + 200, 150, 20, Options.FpsEnabled, "osmium.options.fps_");
+        EnumSelectWidget smoothSneakWidget = new EnumSelectWidget(this.width / 2 + 125, this.height / 6 + 160, 150, 20, Options.SneakMode, "osmium.options.sneak_");
 
         Button openVideoOptions = new Button(this.width / 2 - 75, this.height / 6 + 160, 150, 20, new TranslatableComponent("osmium.options.video_options"), (Button) -> mc.setScreen(new OsmiumVideoOptionsScreen(this)));
 

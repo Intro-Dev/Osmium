@@ -56,5 +56,8 @@
   "osmium.retry": "Retry update",
   "osmium.options.video_options.cape_disabled": "Custom Capes: Disabled",
   "osmium.options.video_options.cape_optifine": "Custom Capes: Optifine",
-  "osmium.options.video_options.cape_all": "Custom Capes: All"
+  "osmium.options.video_options.cape_all": "Custom Capes: All",
+  "osmium.options.armor_display_enabled": "Armor Display: Enabled",
+  "osmium.options.armor_display_disabled": "Armor Display: Disabled"
+
 }

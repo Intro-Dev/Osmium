@@ -1,11 +1,10 @@
 package com.intro.client.render.screen;
 
-import com.intro.client.OsmiumClient;
 import com.intro.client.render.widget.ColorOptionWidget;
 import com.intro.client.render.widget.DoubleSliderWidget;
 import com.intro.client.render.widget.EnumSelectWidget;
 import com.intro.client.util.OptionUtil;
-import com.intro.common.config.options.EnumOption;
+import com.intro.common.config.Options;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.Button;
@@ -26,12 +25,12 @@ public class OsmiumBlockOptionsScreen extends Screen {
     protected void init() {
         Button backButton = new Button(this.width / 2 - 100, this.height / 6 + 300, 200, 20, new TranslatableComponent("osmium.options.video_options.back"), (buttonWidget) -> mc.setScreen(this.parent));
 
-        ColorOptionWidget colorSelectWidget = new ColorOptionWidget(this.width / 2 + 25, this.height / 6 - 40, OsmiumClient.options.getColorOption(OsmiumClient.options.BlockOutlineColor.identifier));
+        ColorOptionWidget colorSelectWidget = new ColorOptionWidget(this.width / 2 + 25, this.height / 6 - 40, Options.BlockOutlineColor);
 
 
-        EnumSelectWidget toggleOverlayButton = new EnumSelectWidget(this.width / 2 - 175, this.height / 6 + 70, 150, 20, ((EnumOption) OptionUtil.Options.BlockOutlineMode.get()), "osmium.options.overlay_");
+        EnumSelectWidget toggleOverlayButton = new EnumSelectWidget(this.width / 2 - 175, this.height / 6 + 70, 150, 20, Options.BlockOutlineMode, "osmium.options.overlay_");
 
-        DoubleSliderWidget alphaSelectWidget = new DoubleSliderWidget(mc, this.width / 2 - 175, this.height / 6 + 110, 150, 20, OsmiumClient.options.getDoubleOption(OsmiumClient.options.BlockOutlineAlpha.identifier), "osmium.options.block_overlay_alpha", 0, 1, 10);
+        DoubleSliderWidget alphaSelectWidget = new DoubleSliderWidget(mc, this.width / 2 - 175, this.height / 6 + 110, 150, 20, Options.BlockOutlineAlpha, "osmium.options.block_overlay_alpha", 0, 1, 10);
 
         this.addRenderableWidget(backButton);
         this.addRenderableWidget(toggleOverlayButton);

@@ -2,7 +2,7 @@ package com.intro.common.mixin.client;
 
 import com.intro.client.OsmiumClient;
 import com.intro.client.render.RenderManager;
-import com.intro.common.config.options.EnumOption;
+import com.intro.common.config.Options;
 import com.intro.common.config.options.StatusEffectDisplayMode;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.gui.Gui;
@@ -21,7 +21,7 @@ public class GuiMixin {
 
     @Inject(at = @At("HEAD"), method = "renderEffects", cancellable = true)
     public void renderStatusEffectOverlay(PoseStack matrixStack, CallbackInfo ci) {
-        if(((EnumOption) OsmiumClient.options.get(OsmiumClient.options.StatusEffectDisplayMode.identifier)).variable == StatusEffectDisplayMode.CUSTOM)
+        if(OsmiumClient.options.getEnumOption(Options.StatusEffectDisplayMode).variable == StatusEffectDisplayMode.CUSTOM)
             ci.cancel();
     }
 }

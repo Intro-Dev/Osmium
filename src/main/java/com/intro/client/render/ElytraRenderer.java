@@ -1,8 +1,8 @@
 package com.intro.client.render;
 
-import com.intro.client.util.OptionUtil;
+import com.intro.client.OsmiumClient;
+import com.intro.common.config.Options;
 import com.intro.common.config.options.CapeRenderingMode;
-import com.intro.common.config.options.EnumOption;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.model.ElytraModel;
@@ -45,9 +45,7 @@ public class ElytraRenderer<T extends LivingEntity, M extends EntityModel<T>> ex
                 this.elytra.setupAnim(entity, limbAngle, tickDelta, animationProgress, headYaw, headPitch);
                 if(entity.getStringUUID() != null) {
                     if((CapeRenderer.CapeArray.get(entity.getStringUUID()) != null)) {
-                        if(((EnumOption) OptionUtil.Options.CustomCapeMode.get()).variable == CapeRenderingMode.OPTIFINE && CapeRenderer.OptifineCapes.contains(entity.getStringUUID())) {
-                            // FIXME might break depending on OverlayTexture
-                            // just mess with it until it works
+                        if(OsmiumClient.options.getEnumOption(Options.CustomCapeMode).variable == CapeRenderingMode.OPTIFINE && CapeRenderer.OptifineCapes.contains(entity.getStringUUID())) {
                             final VertexConsumer vertexConsumer = ItemRenderer.getArmorFoilBuffer(vertexConsumers, RenderType.armorCutoutNoCull(CapeRenderer.CapeArray.get(entity.getStringUUID())), false, itemStack.hasFoil());
                             this.elytra.renderToBuffer(stack, vertexConsumer, light, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
                         }

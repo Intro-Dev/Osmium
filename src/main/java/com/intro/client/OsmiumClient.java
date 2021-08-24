@@ -57,7 +57,6 @@ public class OsmiumClient implements ClientModInitializer {
     public void onInitializeClient() {
         OptionUtil.Options.init();
         OptionUtil.load();
-        options.putHashMap();
         EVENT_BUS.initListenerMap();
         registerModules();
         registerKeyBindings();

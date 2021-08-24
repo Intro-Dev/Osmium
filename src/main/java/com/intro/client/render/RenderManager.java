@@ -4,7 +4,9 @@ import com.intro.client.OsmiumClient;
 import com.intro.client.module.event.EventDirection;
 import com.intro.client.module.event.EventRender;
 import com.intro.client.module.event.EventType;
+import com.intro.client.render.drawables.ArmorDisplay;
 import com.intro.client.render.drawables.Drawable;
+import com.intro.client.render.drawables.StatusEffectDisplay;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
 
@@ -23,8 +25,8 @@ public class RenderManager {
         // well hi there
         // these features aren't' t done yet
         // but are still being implemented
-        // addDrawable(ArmorDisplay.getInstance());
-        // addDrawable(StatusEffectDisplay.getInstance());
+         addDrawable(ArmorDisplay.getInstance());
+         addDrawable(StatusEffectDisplay.getInstance());
     }
 
     public static void renderHud(PoseStack stack) {

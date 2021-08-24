@@ -9,29 +9,29 @@ import net.minecraft.network.chat.TranslatableComponent;
 
 public class BooleanButtonWidget extends Button {
 
-    public final BooleanOption attachedOption;
+    public final String optionId;
     public final String key;
 
-    public BooleanButtonWidget(int x, int y, int width, int height, BooleanOption attachedOption, String key) {
+    public BooleanButtonWidget(int x, int y, int width, int height, String optionId, String key) {
         super(x, y, width, height, new TextComponent(""), button -> {
-            if(!OsmiumClient.options.getOverwrittenOptions().containsKey(attachedOption.identifier)) {
-                ((BooleanOption) OsmiumClient.options.get(attachedOption.identifier)).variable = !((BooleanOption) OsmiumClient.options.get(attachedOption.identifier)).variable;
+            if(!OsmiumClient.options.getOverwrittenOptions().containsKey(optionId)) {
+                ((BooleanOption) OsmiumClient.options.get(optionId)).variable = !((BooleanOption) OsmiumClient.options.get(optionId)).variable;
             } else {
                 button.active = false;
             }
-            if(((BooleanOption) OsmiumClient.options.get(attachedOption.identifier)).variable) {
+            if(((BooleanOption) OsmiumClient.options.get(optionId)).variable) {
                 button.setMessage(new TranslatableComponent(key + "enabled"));
             } else {
                 button.setMessage(new TranslatableComponent(key + "disabled"));
             }
 
         });
-        this.attachedOption = attachedOption;
+        this.optionId = optionId;
         this.key = key;
-        if(OsmiumClient.options.getOverwrittenOptions().containsKey(attachedOption.identifier)) {
+        if(OsmiumClient.options.getOverwrittenOptions().containsKey(optionId)) {
             this.active = false;
         }
-        if(((BooleanOption) OsmiumClient.options.get(attachedOption.identifier)).variable) {
+        if(((BooleanOption) OsmiumClient.options.get(optionId)).variable) {
             super.setMessage(new TranslatableComponent(key + "enabled"));
         } else {
             super.setMessage(new TranslatableComponent(key + "disabled"));

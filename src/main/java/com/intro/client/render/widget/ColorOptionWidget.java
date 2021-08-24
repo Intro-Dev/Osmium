@@ -6,7 +6,6 @@ import com.intro.client.render.RenderManager;
 import com.intro.client.render.drawables.Drawable;
 import com.intro.client.util.TextureUtil;
 import com.intro.client.util.Vector2d;
-import com.intro.common.config.options.ColorOption;
 import com.mojang.blaze3d.platform.NativeImage;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
@@ -31,7 +30,7 @@ import net.minecraft.resources.ResourceLocation;
  */
 public class ColorOptionWidget extends Drawable {
 
-    private final ColorOption attachedOption;
+    private final String optionId;
 
     private static final Minecraft mc = Minecraft.getInstance();
 
@@ -60,8 +59,8 @@ public class ColorOptionWidget extends Drawable {
 
     edit: turns out im stupid, and it doesn't do all that
     */
-    public ColorOptionWidget(int x, int y, ColorOption attachedOption) {
-        this.attachedOption = attachedOption;
+    public ColorOptionWidget(int x, int y, String optionId) {
+        this.optionId = optionId;
         this.x = x;
         this.y = y;
         this.TEXTURE = TextureUtil.convertIdentifierToNativeImage(BAKED_TEXTURE);
@@ -83,7 +82,7 @@ public class ColorOptionWidget extends Drawable {
         RenderSystem.setShaderTexture(0, BAKED_TEXTURE);
         this.scale = 1;
         blit(matrices, x, y, 0, 0, 256, 256);
-        drawCenteredString(matrices, mc.font, OsmiumClient.options.getColorOption(this.attachedOption.identifier).color.toStringNoAlpha(), x + (TEXTURE.getWidth() / 2), y + TEXTURE.getHeight() + 20, 0xffffff);
+        drawCenteredString(matrices, mc.font, OsmiumClient.options.getColorOption(this.optionId).color.toStringNoAlpha(), x + (TEXTURE.getWidth() / 2), y + TEXTURE.getHeight() + 20, 0xffffff);
         drawCenteredString(matrices, mc.font, new TranslatableComponent("osmium.widget.color_picker"), x + (TEXTURE.getWidth() / 2), y - 20, 0xffffff);
     }
 
@@ -99,7 +98,7 @@ public class ColorOptionWidget extends Drawable {
             bytes = TEXTURE.makePixelArray();
             color = getColorAtLocation(bytes, TEXTURE, (int) vec2.getX(), (int) vec2.getY());
 
-            OsmiumClient.options.getColorOption(this.attachedOption.identifier).color = new Color(color);
+            OsmiumClient.options.getColorOption(this.optionId).color = new Color(color);
         }
         return super.mouseClicked(mouseX, mouseY, button);
     }

@@ -1,9 +1,9 @@
 package com.intro.client.module;
 
+import com.intro.client.OsmiumClient;
 import com.intro.client.module.event.Event;
 import com.intro.client.module.event.EventTick;
-import com.intro.client.util.OptionUtil;
-import com.intro.common.config.options.BooleanOption;
+import com.intro.common.config.Options;
 import net.minecraft.client.Minecraft;
 
 public class FullBright {
@@ -12,7 +12,7 @@ public class FullBright {
 
     public void onEvent(Event event) {
         if(event instanceof EventTick && event.isPost()) {
-            if(((BooleanOption) OptionUtil.Options.FullbrightEnabled.get()).variable)
+            if(OsmiumClient.options.getBooleanOption(Options.FullbrightEnabled).variable)
                 mc.options.gamma = 100d;
         }
     }

@@ -9,6 +9,8 @@ import net.minecraft.network.chat.TranslatableComponent;
 
 public class OsmiumGuiEditScreen extends Screen {
 
+    private Drawable currentlyDraggingElement;
+
     public OsmiumGuiEditScreen() {
         super(new TranslatableComponent("osmium.gui_edit.title"));
     }
@@ -46,17 +48,21 @@ public class OsmiumGuiEditScreen extends Screen {
     @Override
     public boolean mouseDragged(double mouseX, double mouseY, int button, double deltaX, double deltaY) {
         for(Drawable drawable : RenderManager.drawables) {
-            if(drawable.isPositionWithinBounds((int) mouseX, (int) mouseY) && drawable.visible) {
+            boolean firstDraggedElement = true;
+            if(drawable.isPositionWithinBounds((int) mouseX, (int) mouseY) && drawable.visible && (currentlyDraggingElement != null || firstDraggedElement)) {
                 if(mouseX + drawable.width < this.width || mouseX - drawable.width < 0) {
                     drawable.posX = (int) mouseX;
+                    currentlyDraggingElement = drawable;
                 }
                 if(mouseY + drawable.height < this.height || mouseY - drawable.height < 0) {
                     drawable.posY = (int) mouseY;
+                    currentlyDraggingElement = drawable;
                 }
-                // return super.mouseDragged(mouseX, mouseX, button, deltaX, deltaY);
+                return super.mouseDragged(mouseX, mouseX, button, deltaX, deltaY);
             }
 
         }
+        currentlyDraggingElement = null;
         return super.mouseDragged(mouseX, mouseY, button, deltaX, deltaY);
     }
 }

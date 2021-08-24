@@ -4,8 +4,7 @@ import com.google.common.collect.Ordering;
 import com.intro.client.OsmiumClient;
 import com.intro.client.render.Colors;
 import com.intro.client.render.RenderManager;
-import com.intro.common.config.options.DoubleOption;
-import com.intro.common.config.options.EnumOption;
+import com.intro.common.config.Options;
 import com.intro.common.config.options.StatusEffectDisplayMode;
 import com.intro.common.config.options.Vector2Option;
 import com.mojang.blaze3d.systems.RenderSystem;
@@ -21,9 +20,9 @@ import java.util.List;
 public class StatusEffectDisplay extends Drawable {
 
     public StatusEffectDisplay() {
-        this.posX = (int) ((Vector2Option) OsmiumClient.options.get(OsmiumClient.options.StatusEffectDisplayPosition.identifier)).x;
-        this.posY = (int) ((Vector2Option) OsmiumClient.options.get(OsmiumClient.options.StatusEffectDisplayPosition.identifier)).y;
-        this.maxEffectsDisplayed = (int) ((DoubleOption) OsmiumClient.options.get(OsmiumClient.options.MaxStatusEffectsDisplayed.identifier)).variable;
+        this.posX = (int) OsmiumClient.options.getVector2Option(Options.StatusEffectDisplayPosition).x;
+        this.posY = (int) OsmiumClient.options.getVector2Option(Options.StatusEffectDisplayPosition).y;
+        this.maxEffectsDisplayed = (int) OsmiumClient.options.getDoubleOption(Options.MaxStatusEffectsDisplayed).variable;
     }
 
 
@@ -37,10 +36,10 @@ public class StatusEffectDisplay extends Drawable {
 
     @Override
     public void render(PoseStack stack) {
-        if(mc.player != null && (((EnumOption) OsmiumClient.options.get(OsmiumClient.options.StatusEffectDisplayMode.identifier)).variable == StatusEffectDisplayMode.CUSTOM || ((EnumOption) OsmiumClient.options.get(OsmiumClient.options.StatusEffectDisplayMode.identifier)).variable == StatusEffectDisplayMode.BOTH)) {
+        if(mc.player != null && (OsmiumClient.options.getEnumOption(Options.StatusEffectDisplayMode).variable == StatusEffectDisplayMode.CUSTOM || OsmiumClient.options.getEnumOption(Options.StatusEffectDisplayMode).variable == StatusEffectDisplayMode.BOTH)) {
             MobEffectTextureManager spriteManager = mc.getMobEffectTextures();
 
-            OsmiumClient.options.put(OsmiumClient.options.StatusEffectDisplayPosition.identifier, new Vector2Option("StatusEffectDisplayPosition", this.posX, this.posY));
+            OsmiumClient.options.put(Options.StatusEffectDisplayPosition, new Vector2Option(Options.StatusEffectDisplayPosition, this.posX, this.posY));
 
             stack.pushPose();
             {
@@ -50,9 +49,11 @@ public class StatusEffectDisplay extends Drawable {
 
                 this.width = (int) (32 * scale);
                 this.height = (int) ((effects.size() * 56 * scale) + (40 * scale));
+                this.maxEffectsDisplayed = (int) OsmiumClient.options.getDoubleOption(Options.MaxStatusEffectsDisplayed).variable;
 
                 if(effects.size() != 0) {
                     for(int i = 0; i < effects.size() && i < maxEffectsDisplayed; i++) {
+
                         MobEffectInstance effect = effects.get(i);
                         TextureAtlasSprite sprite = spriteManager.get(effect.getEffect());
 

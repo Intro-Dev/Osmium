@@ -39,6 +39,7 @@ public class Color {
 
     public Color(float r, float g, float b, float a) {
         Color c = fromFloatRGBA(r, g, b, a);
+        copy(c);
     }
 
     public int getR() {
@@ -163,6 +164,13 @@ public class Color {
 
     public String toStringNoAlpha() {
         return this.getR() + ", " + this.getG() + ", " + this.getB();
+    }
+
+    public void copy(Color color) {
+        this.r = color.getR();
+        this.g = color.getG();
+        this.b = color.getB();
+        this.a = color.getA();
     }
 
 }

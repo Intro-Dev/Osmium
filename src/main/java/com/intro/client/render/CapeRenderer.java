@@ -1,8 +1,8 @@
 package com.intro.client.render;
 
-import com.intro.client.util.OptionUtil;
+import com.intro.client.OsmiumClient;
+import com.intro.common.config.Options;
 import com.intro.common.config.options.CapeRenderingMode;
-import com.intro.common.config.options.EnumOption;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Vector3f;
@@ -36,7 +36,7 @@ public class CapeRenderer extends RenderLayer<AbstractClientPlayer, PlayerModel<
     public void render(PoseStack stack, MultiBufferSource multiBuffer, int light, AbstractClientPlayer entity, float limbAngle, float limbDistance, float tickDelta, float animationProgress, float headYaw, float headPitch) {
         try {
             ItemStack itemStack = entity.getItemBySlot(EquipmentSlot.CHEST);
-            if(!itemStack.is(Items.ELYTRA) && !entity.isInvisible() && entity.isCapeLoaded() && entity.isModelPartShown(PlayerModelPart.CAPE) && (((EnumOption) OptionUtil.Options.CustomCapeMode.get()).variable == CapeRenderingMode.ALL || ((EnumOption) OptionUtil.Options.CustomCapeMode.get()).variable == CapeRenderingMode.OPTIFINE) && CapeArray.get(entity.getStringUUID()) != null){
+            if(!itemStack.is(Items.ELYTRA) && !entity.isInvisible() && entity.isCapeLoaded() && entity.isModelPartShown(PlayerModelPart.CAPE) && OsmiumClient.options.getEnumOption(Options.CustomCapeMode).variable == CapeRenderingMode.ALL || OsmiumClient.options.getEnumOption(Options.CustomCapeMode).variable == CapeRenderingMode.OPTIFINE && CapeArray.get(entity.getStringUUID()) != null){
                 stack.pushPose();
                 stack.translate(0.0D, 0.0D, 0.125D);
                 double d = Mth.lerp(tickDelta, entity.xCloakO, entity.xCloak) - Mth.lerp(tickDelta, entity.xo, entity.getX());
@@ -67,12 +67,10 @@ public class CapeRenderer extends RenderLayer<AbstractClientPlayer, PlayerModel<
 
                 stack.popPose();
                 if(entity.getStringUUID() != null) {
-                    if(((EnumOption) OptionUtil.Options.CustomCapeMode.get()).variable == CapeRenderingMode.OPTIFINE && OptifineCapes.contains(entity.getStringUUID())) {
+                    if(OsmiumClient.options.getEnumOption(Options.CustomCapeMode).variable == CapeRenderingMode.OPTIFINE && OptifineCapes.contains(entity.getStringUUID())) {
                         final VertexConsumer vertexConsumer = multiBuffer.getBuffer(RenderType.entitySolid(CapeArray.get(entity.getStringUUID())));
-                        // FIXME might break depending on OverlayTexture
-                        // just mess with it until it works
                         this.getParentModel().renderCloak(stack, vertexConsumer, light, OverlayTexture.NO_OVERLAY);
-                    } else if (((EnumOption) OptionUtil.Options.CustomCapeMode.get()).variable == CapeRenderingMode.ALL){
+                    } else if (OsmiumClient.options.getEnumOption(Options.CustomCapeMode).variable == CapeRenderingMode.ALL){
                         final VertexConsumer vertexConsumer = multiBuffer.getBuffer(RenderType.entitySolid(CapeArray.get(entity.getStringUUID())));
                         this.getParentModel().renderCloak(stack, vertexConsumer, light, OverlayTexture.NO_OVERLAY);
                     }

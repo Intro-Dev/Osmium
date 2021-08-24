@@ -1,7 +1,7 @@
 package com.intro.common.mixin.client;
 
-import com.intro.client.util.OptionUtil;
-import com.intro.common.config.options.EnumOption;
+import com.intro.client.OsmiumClient;
+import com.intro.common.config.Options;
 import com.intro.common.config.options.SneakMode;
 import net.minecraft.client.Camera;
 import net.minecraft.util.Mth;
@@ -19,16 +19,8 @@ public class CameraMixin {
     private Entity entity;
 
     @Shadow
-    private float eyeHeightOld;
-
-    @Shadow
     private float eyeHeight;
 
-    @Shadow
-    private float yRot;
-
-    @Shadow
-    private float xRot;
 
 
 
@@ -36,9 +28,9 @@ public class CameraMixin {
     public void changeEyeHeight(CallbackInfo info) {
         // smooth but no squish
         if (this.entity != null) {
-            if (((EnumOption) OptionUtil.Options.SneakMode.get()).variable == SneakMode.INSTANT) {
+            if (OsmiumClient.options.getEnumOption(Options.SneakMode).variable == SneakMode.INSTANT) {
                 this.eyeHeight = this.entity.getEyeHeight();
-            } else if (((EnumOption) OptionUtil.Options.SneakMode.get()).variable == SneakMode.SMOOTH) {
+            } else if (OsmiumClient.options.getEnumOption(Options.SneakMode).variable == SneakMode.SMOOTH) {
                 this.eyeHeight = (float) Mth.lerp(0.8, this.eyeHeight, this.entity.getEyeHeight());
             } else {
                 this.eyeHeight += (this.entity.getEyeHeight() - this.eyeHeight) * 0.5F;

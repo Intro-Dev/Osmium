@@ -4,8 +4,7 @@ import com.intro.client.OsmiumClient;
 import com.intro.client.module.event.Event;
 import com.intro.client.module.event.EventTick;
 import com.intro.client.render.drawables.Text;
-import com.intro.client.util.OptionUtil;
-import com.intro.common.config.options.BooleanOption;
+import com.intro.common.config.Options;
 import com.intro.common.config.options.Vector2Option;
 import net.minecraft.client.Minecraft;
 
@@ -15,7 +14,6 @@ public class ToggleSneak {
 
     public static boolean sneaking = false;
 
-    //private boolean sneaking = false;
     private final Text SprintingText;
 
     private final Minecraft mc = Minecraft.getInstance();
@@ -23,11 +21,9 @@ public class ToggleSneak {
     public ToggleSneak() {
         Text tmp;
         try {
-            tmp = new Text((int) ((Vector2Option) OsmiumClient.options.get("ToggleSprintPosition").get()).x, (int) ((Vector2Option) OsmiumClient.options.get("ToggleSprintPosition").get()).y, "Sprinting(Toggled)", 0xffffff);
+            tmp = new Text((int) OsmiumClient.options.getVector2Option(Options.ToggleSprintPosition).x, (int) OsmiumClient.options.getVector2Option(Options.ToggleSprintPosition).y, "Sprinting(Toggled)", 0xffffff);
         } catch (NullPointerException e) {
-            OptionUtil.ShouldResaveOptions = true;
-            OptionUtil.LOGGER.warn("Options file is corrupt, creating a new one!");
-            tmp = new Text((int) ((Vector2Option) OsmiumClient.options.get("ToggleSprintPosition").get()).x, (int) ((Vector2Option) OsmiumClient.options.get("ToggleSprintPosition").get()).y, "Sprinting(Toggled)", 0xffffff);
+            tmp = new Text((int) OsmiumClient.options.getVector2Option(Options.ToggleSprintPosition).x, (int) OsmiumClient.options.getVector2Option(Options.ToggleSprintPosition).y, "Sprinting(Toggled)", 0xffffff);
         }
         SprintingText = tmp;
         SprintingText.guiElement = true;
@@ -36,33 +32,35 @@ public class ToggleSneak {
 
     public void onEvent(Event event) {
         if(mc.player != null) {
-            if(((BooleanOption) OptionUtil.Options.ToggleSprintEnabled.get()).variable || ((BooleanOption) OptionUtil.Options.ToggleSneakEnabled.get()).variable) {
+            if(OsmiumClient.options.getBooleanOption(Options.ToggleSprintEnabled).variable || OsmiumClient.options.getBooleanOption(Options.ToggleSneakEnabled).variable) {
+                boolean toggleSprintEnabled = OsmiumClient.options.getBooleanOption(Options.ToggleSprintEnabled).variable;
+                boolean toggleSneakEnabled = OsmiumClient.options.getBooleanOption(Options.ToggleSneakEnabled).variable;
                 if(event instanceof EventTick && event.isPre()) {
-                    OsmiumClient.options.put("ToggleSprintPosition", new Vector2Option("ToggleSprintPosition", SprintingText.posX, SprintingText.posY));
+                    OsmiumClient.options.put(Options.ToggleSprintPosition, new Vector2Option(Options.ToggleSprintPosition, SprintingText.posX, SprintingText.posY));
                     if(mc.player.zza > 0 && !mc.player.isUsingItem() && !mc.player.isShiftKeyDown() && !mc.player.horizontalCollision && this.sprinting)
                         mc.player.setSprinting(true);
 
                     // why is sneak called keyShift?
                     // the world may never know
-                    if(mc.options.keyShift.consumeClick() && ((BooleanOption) OptionUtil.Options.ToggleSneakEnabled.get()).variable) {
+                    if(mc.options.keyShift.consumeClick() && toggleSneakEnabled) {
                         sneaking = !sneaking;
                     }
-                    if(mc.options.keySprint.consumeClick() && ((BooleanOption) OptionUtil.Options.ToggleSprintEnabled.get()).variable) {
+                    if(mc.options.keySprint.consumeClick() && toggleSprintEnabled) {
                         this.sprinting = !this.sprinting;
                     }
 
 
 
-                    if((this.sprinting && ((BooleanOption) OptionUtil.Options.ToggleSprintEnabled.get()).variable) && (!sneaking)) {
+                    if((this.sprinting && toggleSprintEnabled) && (!sneaking)) {
                         SprintingText.visible = true;
                         SprintingText.text = "Sprinting(Toggled)";
-                    } else if (mc.options.keySprint.isDown() && ((BooleanOption) OptionUtil.Options.ToggleSprintEnabled.get()).variable) {
+                    } else if (mc.options.keySprint.isDown() && toggleSprintEnabled) {
                         SprintingText.visible = true;
                         SprintingText.text = "Sprinting(Key Down)";
-                    } else if(sneaking && ((BooleanOption) OptionUtil.Options.ToggleSneakEnabled.get()).variable) {
+                    } else if(sneaking && toggleSneakEnabled) {
                         SprintingText.visible = true;
                         SprintingText.text = "Sneaking(Toggled)";
-                    } else if (mc.options.keyShift.isDown() && ((BooleanOption) OptionUtil.Options.ToggleSneakEnabled.get()).variable) {
+                    } else if (mc.options.keyShift.isDown() && toggleSneakEnabled) {
                         SprintingText.visible = true;
                         SprintingText.text = "Sneaking(Key Down)";
                     } else {

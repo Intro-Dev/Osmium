@@ -18,6 +18,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.lang.reflect.Modifier;
 import java.nio.file.Paths;
+import java.util.Arrays;
 import java.util.Scanner;
 
 
@@ -69,6 +70,8 @@ public class OptionUtil {
                 return;
             }
             Option[] arr = GSON.fromJson(builder.toString(), Option[].class);
+            System.out.println(Arrays.toString(arr));
+            OsmiumClient.options.setDefaults();
             if(arr.length != 0) {
                 for(Option o : arr)  {
                     OsmiumClient.options.put(o.identifier, o);
@@ -116,7 +119,6 @@ public class OptionUtil {
      */
     public static void save() {
         setNormalOptions();
-        OsmiumClient.options.getHashMap();
         saveConfig(FabricLoader.getInstance().getConfigDir().resolve("osmium-options.json").toString());
     }
 

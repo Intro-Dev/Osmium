@@ -1,8 +1,8 @@
 package com.intro.common.mixin.client;
 
+import com.intro.client.OsmiumClient;
 import com.intro.client.render.RenderManager;
-import com.intro.client.util.OptionUtil;
-import com.intro.common.config.options.BooleanOption;
+import com.intro.common.config.Options;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.renderer.GameRenderer;
 import org.spongepowered.asm.mixin.Mixin;
@@ -15,7 +15,7 @@ public class GameRendererMixin {
 
     @Inject(at = @At("HEAD"), method = "bobHurt", cancellable = true)
     public void bobViewWhenHurt(PoseStack arg, float f, CallbackInfo info) {
-        if(((BooleanOption) OptionUtil.Options.HurtbobbingEnabled.get()).variable)
+        if(OsmiumClient.options.getBooleanOption(Options.HurtbobbingEnabled).variable)
             info.cancel();
     }
 

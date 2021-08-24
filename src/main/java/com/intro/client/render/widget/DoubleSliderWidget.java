@@ -11,16 +11,16 @@ import net.minecraft.util.Mth;
 
 public class DoubleSliderWidget extends AbstractOptionSliderButton {
 
-    private final DoubleOption attachedOption;
+    private final String optionId;
     public final String key;
     private final double minVal;
     private final double maxVal;
 
     private final double roundTo;
 
-    public DoubleSliderWidget(Minecraft mc, int x, int y, int width, int height, DoubleOption doubleOption, String key, double minVal, double maxVal, double roundTo) {
-        super(mc.options, x, y, width, height, doubleOption.variable);
-        this.attachedOption = doubleOption;
+    public DoubleSliderWidget(Minecraft mc, int x, int y, int width, int height, String optionId, String key, double minVal, double maxVal, double roundTo) {
+        super(mc.options, x, y, width, height, OsmiumClient.options.getDoubleOption(optionId).variable);
+        this.optionId = optionId;
         this.key = key;
         this.minVal = minVal;
         this.maxVal = maxVal;
@@ -31,7 +31,7 @@ public class DoubleSliderWidget extends AbstractOptionSliderButton {
 
     @Override
     protected void updateMessage() {
-        if(OsmiumClient.options.getOverwrittenOptions().containsKey(attachedOption.identifier)) {
+        if(OsmiumClient.options.getOverwrittenOptions().containsKey(optionId)) {
             this.active = false;
         }
         double scaledVal = (maxVal - minVal) * this.value;
@@ -41,10 +41,10 @@ public class DoubleSliderWidget extends AbstractOptionSliderButton {
 
     @Override
     protected void applyValue() {
-        if(!OsmiumClient.options.getOverwrittenOptions().containsKey(attachedOption.identifier)) {
+        if(!OsmiumClient.options.getOverwrittenOptions().containsKey(optionId)) {
             double scaledVal = (maxVal - minVal) * this.value;
             scaledVal = Mth.clamp(scaledVal, minVal, maxVal);
-            ((DoubleOption) OsmiumClient.options.get(attachedOption.identifier)).variable = Math.round(scaledVal * roundTo) / roundTo;
+            ((DoubleOption) OsmiumClient.options.get(optionId)).variable = Math.round(scaledVal * roundTo) / roundTo;
         }
     }
 
