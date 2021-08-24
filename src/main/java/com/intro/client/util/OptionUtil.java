@@ -18,7 +18,6 @@ import java.io.File;
 import java.io.FileWriter;
 import java.lang.reflect.Modifier;
 import java.nio.file.Paths;
-import java.util.Arrays;
 import java.util.Scanner;
 
 
@@ -63,14 +62,12 @@ public class OptionUtil {
             reader.close();
             if(createdFile || !isJSONValid(builder.toString())) {
                 LOGGER.log(Level.WARN, "Config file either didn't exist or is corrupted, creating new one using default settings.");
-                System.out.println("Config file either didn't exist or is corrupted, creating new one using default settings.");
                 Options o = new Options();
                 o.init();
                 save();
                 return;
             }
             Option[] arr = GSON.fromJson(builder.toString(), Option[].class);
-            System.out.println(Arrays.toString(arr));
             OsmiumClient.options.setDefaults();
             if(arr.length != 0) {
                 for(Option o : arr)  {

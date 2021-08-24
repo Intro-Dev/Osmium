@@ -7,11 +7,8 @@ import java.util.HashMap;
 
 /**
  * The Options class stores all OsmiumClient options.
- * For referencing options, options are stored in a normal variable form.
- * Options are also stored in the options HashMap, which contains a cache of all options.
- * When options are saved, the options are de-cached from the hashmap and loaded into their corresponding variables.
- * When options are loaded, options are deserialized from json form, and loaded into the hashmap.
- *
+ * All options have a String identifier, which is used to get the option from the HashMap
+ * On startup, default options are set first, and are then put to the HashMap from an Option array loaded from a json file
  *
  * @since 1.0
  * @author Intro
@@ -98,6 +95,8 @@ public class Options {
     public static final String MaxStatusEffectsDisplayed = "MaxStatusEffectsDisplayed";
     public static final String StatusEffectDisplayScale = "StatusEffectDisplayScale";
     public static final String ArmorDisplayEnabled = "ArmorDisplayEnabled";
+    public static final String ArmorDisplayPosition = "ArmorDisplayPosition";
+
 
 
 
@@ -136,6 +135,7 @@ public class Options {
         put(MaxStatusEffectsDisplayed, new DoubleOption(MaxStatusEffectsDisplayed, 1d));
         put(StatusEffectDisplayScale, new DoubleOption(StatusEffectDisplayScale, 1d));
         put(ArmorDisplayEnabled, new BooleanOption(ArmorDisplayEnabled, false));
+        put(ArmorDisplayPosition, new Vector2Option(ArmorDisplayPosition, 5, 5));
     }
 
     public HashMap<String, Option> getValues() {
