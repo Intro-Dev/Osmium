@@ -92,6 +92,9 @@ public class OsmiumUpdateScreen extends Screen  {
         @Override
         public void run() {
             try {
+                Path oldJarPath = Util.getModJarPath("osmium", "Osmium");
+                oldJarPath.toFile().deleteOnExit();
+
                 URL fileUrl = new URL(Util.getLatestReleaseDownloadString());
                 long fileSize = getFileSize(fileUrl);
                 HttpURLConnection connection = (HttpURLConnection) fileUrl.openConnection();
@@ -116,8 +119,7 @@ public class OsmiumUpdateScreen extends Screen  {
                 fileOutputStream.close();
                 connection.disconnect();
 
-                Path oldJarPath = Util.getModJarPath("osmium", "Osmium");
-                oldJarPath.toFile().deleteOnExit();
+
                 errorText = "Update successful! Update will be applied on game shutdown.";
                 retryButton.visible = false;
                 continueButton.visible = true;
