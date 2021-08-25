@@ -14,6 +14,7 @@ import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
+import org.jetbrains.annotations.NotNull;
 
 
 /**
@@ -42,11 +43,8 @@ public class ColorOptionWidget extends Drawable {
     private final int y;
 
     // width and height are always the same as baked image
-    private final int WIDTH = 256;
-    private final int HEIGHT = 256;
-
-    private double scale;
-
+    private final int width;
+    private final int height;
 
 
     /*
@@ -59,10 +57,12 @@ public class ColorOptionWidget extends Drawable {
 
     edit: turns out im stupid, and it doesn't do all that
     */
-    public ColorOptionWidget(int x, int y, String optionId) {
+    public ColorOptionWidget(int x, int y, int width, int height, String optionId) {
         this.optionId = optionId;
         this.x = x;
         this.y = y;
+        this.width = width;
+        this.height = height;
         this.TEXTURE = TextureUtil.convertIdentifierToNativeImage(BAKED_TEXTURE);
     }
 
@@ -80,10 +80,9 @@ public class ColorOptionWidget extends Drawable {
     public void render(PoseStack matrices, int mouseX, int mouseY, float delta) {
         RenderSystem.setShader(GameRenderer::getPositionTexShader);
         RenderSystem.setShaderTexture(0, BAKED_TEXTURE);
-        this.scale = 1;
-        blit(matrices, x, y, 0, 0, 256, 256);
-        drawCenteredString(matrices, mc.font, OsmiumClient.options.getColorOption(this.optionId).color.toStringNoAlpha(), x + (TEXTURE.getWidth() / 2), y + TEXTURE.getHeight() + 20, 0xffffff);
-        drawCenteredString(matrices, mc.font, new TranslatableComponent("osmium.widget.color_picker"), x + (TEXTURE.getWidth() / 2), y - 20, 0xffffff);
+        blit(matrices, x, y, 0, 0, width, height, width, height);
+        drawCenteredString(matrices, mc.font, OsmiumClient.options.getColorOption(this.optionId).color.toStringNoAlpha(), x + (width / 2), y + height + 20, 0xffffff);
+        drawCenteredString(matrices, mc.font, new TranslatableComponent("osmium.widget.color_picker"), x + (width / 2), y - 20, 0xffffff);
     }
 
     @Override
@@ -108,11 +107,11 @@ public class ColorOptionWidget extends Drawable {
     public Vector2d getImagePixels(int screenX, int screenY) {
         Screen screen = mc.screen;
         // compute scale
-        double imageScale = Math.min(screen.width / TEXTURE.getWidth(), screen.height / TEXTURE.getHeight()) * this.scale;
+        double imageScale = Math.min(screen.width / width, screen.height / height);
 
         // compute image offset
-        double scaledWidth = this.WIDTH * imageScale;
-        double scaledHeight = this.HEIGHT * imageScale;
+        double scaledWidth = width * imageScale;
+        double scaledHeight = height * imageScale;
 
         // clamp image coordinates
         if(screenX < this.x || this.x + scaledWidth < screenX) {
@@ -134,12 +133,16 @@ public class ColorOptionWidget extends Drawable {
     }
 
     public boolean isPositionWithinBounds(int x, int y) {
-        return x > this.x  && x < this.x + this.WIDTH && y > this.y && y < this.y + HEIGHT;
+        return x > this.x  && x < this.x + this.width && y > this.y && y < this.y + height;
     }
 
     
-    public int getColorAtLocation(int[] arr, NativeImage baseImage, int x, int y) {
-        int index = (baseImage.getWidth() * y) + x;
+    public int getColorAtLocation(int @NotNull [] arr, @NotNull NativeImage texture, int x, int y) {
+        float scale = texture.getWidth() / width;
+        int scaledX = (int) (x * scale);
+        int scaledY = (int) (y * scale);
+
+        int index = (texture.getWidth() * scaledY) + scaledX;
         return arr[index];
     }
 

@@ -51,7 +51,7 @@ public class Util {
 
             switch (connection.getResponseCode()) {
                 case 403 -> {
-                    LOGGER.log(Level.INFO, "Could not retrieve github release data due to rate limiting. Unless your debugging you should probably not launch the game 60 times a day");
+                    LOGGER.log(Level.INFO, "Could not retrieve github release data due to rate limiting. Unless your debugging you should probably not launch the game 60 times an hour");
                     return ModConstants.FULL_VERSION_STRING;
                 }
                 case 404 -> {
@@ -99,7 +99,7 @@ public class Util {
 
             switch (connection.getResponseCode()) {
                 case 403 -> {
-                    LOGGER.log(Level.INFO, "Could not retrieve github release data due to rate limiting. Unless your debugging you should probably not launch the game 60 times a day.");
+                    LOGGER.log(Level.INFO, "Could not retrieve github release data due to rate limiting. Unless your debugging you should probably not launch the game 60 times an hour");
                     return "";
                 }
                 case 404 -> {
@@ -140,7 +140,7 @@ public class Util {
 
             switch (connection.getResponseCode()) {
                 case 403 -> {
-                    LOGGER.log(Level.INFO, "Could not retrieve github release data due to rate limiting. Unless your debugging you should probably not launch the game 60 times a day");
+                    LOGGER.log(Level.INFO, "Could not retrieve github release data due to rate limiting. Unless your debugging you should probably not launch the game 60 times an hour");
                     return "";
                 }
                 case 404 -> {

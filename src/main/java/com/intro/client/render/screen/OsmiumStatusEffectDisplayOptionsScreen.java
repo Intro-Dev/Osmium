@@ -24,10 +24,10 @@ public class OsmiumStatusEffectDisplayOptionsScreen extends Screen {
 
     @Override
     protected void init() {
-        Button backButton = new Button(this.width / 2 - 100, this.height / 6 + 200, 200, 20, new TranslatableComponent("osmium.options.video_options.back"), (buttonWidget) -> mc.setScreen(this.parent));
+        Button backButton = new Button(this.width / 2 - 100, this.height / 4 + 220, 200, 20, new TranslatableComponent("osmium.options.video_options.back"), (buttonWidget) -> mc.setScreen(this.parent));
 
-        EnumSelectWidget displayModeWidget = new EnumSelectWidget(this.width / 2 - 175, this.height / 6 + 20, 150, 20, Options.StatusEffectDisplayMode, "osmium.options.status_effect_display_");
-        DoubleSliderWidget maxDisplayedWidget = new DoubleSliderWidget(mc, this.width / 2 + 25, this.height / 6 + 20, 150, 20, Options.MaxStatusEffectsDisplayed, "osmium.options.max_status_display", 0, 10, 1);
+        EnumSelectWidget displayModeWidget = new EnumSelectWidget(this.width / 2 - 175, this.height / 4 + 120, 150, 20, Options.StatusEffectDisplayMode, "osmium.options.status_effect_display_");
+        DoubleSliderWidget maxDisplayedWidget = new DoubleSliderWidget(mc, this.width / 2 + 25, this.height / 4 + 120, 150, 20, Options.MaxStatusEffectsDisplayed, "osmium.options.max_status_display", 0, 10, 1);
 
 
         this.addRenderableWidget(backButton);
@@ -45,7 +45,7 @@ public class OsmiumStatusEffectDisplayOptionsScreen extends Screen {
     @Override
     public void render(PoseStack matrices, int mouseX, int mouseY, float delta) {
         this.renderBackground(matrices);
-        drawCenteredString(matrices, mc.font, new TranslatableComponent("osmium.options.status_effect_display_settings"), this.width / 2, 15, 0xffffff);
+        drawCenteredString(matrices, mc.font, new TranslatableComponent("osmium.options.status_effect_display_settings"), this.width / 2, this.height / 4 - 50, 0xffffff);
         drawString(matrices, mc.font, new TranslatableComponent("osmium.version"), 20, this.height - 20, 0xffffff);
         super.render(matrices, mouseX, mouseY, delta);
     }
