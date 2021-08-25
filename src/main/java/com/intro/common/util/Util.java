@@ -6,14 +6,21 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.google.gson.stream.JsonReader;
 import com.intro.common.ModConstants;
+import net.fabricmc.loader.api.FabricLoader;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.List;
 import java.util.Objects;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipFile;
 
 public class Util {
 
@@ -161,5 +168,28 @@ public class Util {
             LOGGER.log(Level.WARN, "Failed to get latest version download url!");
         }
         return "";
+    }
+
+    /**
+     * Adapted from ModManager by DeathsGun under Apache 2.0 license
+     * ModManager GitHub https://github.com/DeathsGun/ModManager
+     *
+     * @author DeathsGun
+     */
+    public static Path getModJarPath(String modId, String name) throws IOException {
+        List<Path> jars = Files.list(FabricLoader.getInstance().getGameDir().resolve("mods")).filter(file -> file.toFile().getName().endsWith(".jar")).toList();
+        for(Path jarPath : jars) {
+            ZipFile zipFile = new ZipFile(jarPath.toFile());
+            ZipEntry entry = zipFile.getEntry("fabric.mod.json");
+            JsonReader reader = new JsonReader(new InputStreamReader(zipFile.getInputStream(entry)));
+            JsonParser parser = new JsonParser();
+            JsonElement rootElement = parser.parse(reader);
+            JsonObject jsonContent = rootElement.getAsJsonObject();
+            zipFile.close();
+            if (jsonContent.get("id").getAsString().equals(modId) || jsonContent.get("name").getAsString().equals(name)) {
+                return jarPath;
+            }
+        }
+        return null;
     }
 }

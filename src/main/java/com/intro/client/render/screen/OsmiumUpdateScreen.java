@@ -19,6 +19,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.nio.file.Path;
 
 public class OsmiumUpdateScreen extends Screen  {
 
@@ -30,6 +31,7 @@ public class OsmiumUpdateScreen extends Screen  {
     private ProgressBarWidget progressBar;
     private Button declineButton;
     private Button retryButton;
+    private Button continueButton;
 
     private final String latestReleaseName = Util.getLatestReleaseName();
     private final String latestReleaseTag = Util.getLatestGithubReleaseTag();
@@ -51,6 +53,9 @@ public class OsmiumUpdateScreen extends Screen  {
         progressBar.visible = false;
         retryButton = new Button(this.width / 2 - 100, this.height / 6 + 200, 200, 20, new TranslatableComponent("osmium.retry"), this::startDownload);
         retryButton.visible = false;
+        continueButton = new Button(this.width / 2 - 100, this.height / 6 + 200, 200, 20, new TranslatableComponent("osmium.decline_update"),button -> mc.setScreen(parent));
+        continueButton.visible = false;
+
 
         this.addRenderableWidget(acceptButton);
         this.addRenderableWidget(declineButton);
@@ -74,8 +79,8 @@ public class OsmiumUpdateScreen extends Screen  {
     @Override
     public void render(PoseStack matrices, int mouseX, int mouseY, float delta) {
         this.renderBackground(matrices);
-        drawCenteredString(matrices, mc.font, new TranslatableComponent("osmium.update_available"), this.width / 2, this.height / 6, Colors.WHITE.getColor().getInt());
-        drawCenteredString(matrices, mc.font, errorText, this.width / 2, this.height / 6 + 250, Colors.RED.getColor().getInt());
+        drawCenteredString(matrices, mc.font, new TranslatableComponent("osmium.update_available"), this.width / 2, this.height / 3, Colors.WHITE.getColor().getInt());
+        drawCenteredString(matrices, mc.font, errorText, this.width / 2, this.height / 3 + 250, Colors.RED.getColor().getInt());
         drawCenteredString(matrices, mc.font, new TextComponent("Current version: " + ModConstants.UPDATE_STRING + "-" + ModConstants.MINECRAFT_VERSION_STRING + ", New version: " + latestReleaseTag), this.width / 2, this.height / 6 + 40, Colors.WHITE.getColor().getInt());
 
         super.render(matrices, mouseX, mouseY, delta);
@@ -111,8 +116,11 @@ public class OsmiumUpdateScreen extends Screen  {
                 fileOutputStream.close();
                 connection.disconnect();
 
-                errorText = "Update successful! Exit the game and delete the old jar.";
-
+                Path oldJarPath = Util.getModJarPath("osmium", "Osmium");
+                oldJarPath.toFile().deleteOnExit();
+                errorText = "Update successful! Update will be applied on game shutdown.";
+                retryButton.visible = false;
+                continueButton.visible = true;
             } catch (Exception e) {
                 OsmiumClient.LOGGER.log(Level.ERROR, "Update Error: " + e + ", Try manually updating if this issue persists");
                 errorText = "Update Error: " + e + ", Try manually updating if this issue persists";
