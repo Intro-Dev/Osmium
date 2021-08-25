@@ -21,7 +21,7 @@ public abstract class Drawable extends GuiComponent implements Widget, GuiEventL
     public int posX = 0, posY = 0;
     public int width = 0, height = 0;
 
-    public static final int HITBOX_PADDING = 20;
+    public static final int HITBOX_PADDING = 40;
     public boolean visible = true;
     
     public abstract void render(PoseStack stack);
@@ -47,6 +47,8 @@ public abstract class Drawable extends GuiComponent implements Widget, GuiEventL
     public boolean isPositionWithinBounds(int x, int y) {
         return x > this.posX - HITBOX_PADDING && x < this.posX + this.width + HITBOX_PADDING && y > this.posY - HITBOX_PADDING && y < this.posY + height + HITBOX_PADDING;
     }
+
+
 
 
 }

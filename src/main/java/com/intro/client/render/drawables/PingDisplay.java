@@ -1,9 +1,12 @@
 package com.intro.client.render.drawables;
 
+import com.intro.client.OsmiumClient;
 import com.intro.client.module.event.Event;
 import com.intro.client.module.event.EventTick;
 import com.intro.client.render.Color;
 import com.intro.client.render.Colors;
+import com.intro.common.config.Options;
+import com.intro.common.config.options.ElementPositionOption;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientPacketListener;
@@ -39,13 +42,16 @@ public class PingDisplay extends Scalable {
 
     @Override
     public void render(PoseStack stack) {
-        if(firstRun) {
-            this.width = 40;
-            this.height = mc.font.lineHeight * 2;
-            firstRun = false;
+        if(OsmiumClient.options.getBooleanOption(Options.PingDisplayEnabled).variable) {
+            if(firstRun) {
+                this.width = 40;
+                this.height = mc.font.lineHeight * 2;
+                firstRun = false;
+            }
+            OsmiumClient.options.put(Options.CpsDisplayPosition, new ElementPositionOption(Options.CpsDisplayPosition, this.posX, this.posY, this.scale));
+            fill(stack, posX, posY, posX + width, posY + height, BG_COLOR);
+            drawCenteredString(stack, mc.font, currentPing + " ms", posX + (width / 2), posY + (height / 4), color);
         }
-        fill(stack, posX, posY, posX + width, posY + height, BG_COLOR);
-        drawCenteredString(stack, mc.font, currentPing + " ms", posX + (width / 2), posY + (height / 4), color);
     }
 
     @Override

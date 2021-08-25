@@ -58,8 +58,8 @@ public class Options {
         return (DoubleOption) get(identifier);
     }
 
-    public Vector2Option getVector2Option(String identifier) {
-        return (Vector2Option) get(identifier);
+    public ElementPositionOption getElementPositionOption(String identifier) {
+        return (ElementPositionOption) get(identifier);
     }
 
     public ColorOption getColorOption(String identifier) {
@@ -97,7 +97,9 @@ public class Options {
     public static final String ArmorDisplayEnabled = "ArmorDisplayEnabled";
     public static final String ArmorDisplayPosition = "ArmorDisplayPosition";
     public static final String PingDisplayEnabled = "PingDisplayEnabled";
+    public static final String PingDisplayPosition = "PingDisplayPosition";
     public static final String CpsDisplayEnabled = "CpsDisplayEnabled";
+    public static final String CpsDisplayPosition = "CpsDisplayPosition";
 
 
 
@@ -122,8 +124,8 @@ public class Options {
         put(FpsEnabled, new BooleanOption(FpsEnabled, false));
         put(CustomCapeMode, new EnumOption(CustomCapeMode, CapeRenderingMode.DISABLED));
         put(NoFireEnabled, new BooleanOption(NoFireEnabled, false));
-        put(ToggleSprintPosition, new Vector2Option(ToggleSprintPosition, 5, 5));
-        put(FpsDisplayPosition, new Vector2Option(FpsDisplayPosition, 5, 5));
+        put(ToggleSprintPosition, new ElementPositionOption(ToggleSprintPosition, 5, 5));
+        put(FpsDisplayPosition, new ElementPositionOption(FpsDisplayPosition, 5, 5));
         put(ToggleSneakEnabled, new BooleanOption(ToggleSneakEnabled, false));
         put(FireworksDisabled, new BooleanOption(FireworksDisabled, false));
         put(FlyBoostAmount, new DoubleOption(FlyBoostAmount, 1d));
@@ -133,13 +135,15 @@ public class Options {
         put(BlockOutlineColor, new ColorOption(BlockOutlineColor, Colors.TRANSPARENT.getColor()));
         put(BlockOutlineAlpha, new DoubleOption(BlockOutlineAlpha, 1d));
         put(StatusEffectDisplayMode, new EnumOption(StatusEffectDisplayMode, com.intro.common.config.options.StatusEffectDisplayMode.VANILLA));
-        put(StatusEffectDisplayPosition, new Vector2Option(StatusEffectDisplayPosition, 5, 5));
+        put(StatusEffectDisplayPosition, new ElementPositionOption(StatusEffectDisplayPosition, 5, 5));
         put(MaxStatusEffectsDisplayed, new DoubleOption(MaxStatusEffectsDisplayed, 1d));
         put(StatusEffectDisplayScale, new DoubleOption(StatusEffectDisplayScale, 1d));
         put(ArmorDisplayEnabled, new BooleanOption(ArmorDisplayEnabled, false));
-        put(ArmorDisplayPosition, new Vector2Option(ArmorDisplayPosition, 5, 5));
+        put(ArmorDisplayPosition, new ElementPositionOption(ArmorDisplayPosition, 5, 5));
         put(PingDisplayEnabled, new BooleanOption(PingDisplayEnabled, false));
         put(CpsDisplayEnabled, new BooleanOption(CpsDisplayEnabled, false));
+        put(CpsDisplayPosition, new ElementPositionOption(CpsDisplayPosition, 5, 5));
+        put(PingDisplayPosition, new ElementPositionOption(PingDisplayPosition, 5, 5));
     }
 
     public HashMap<String, Option> getValues() {

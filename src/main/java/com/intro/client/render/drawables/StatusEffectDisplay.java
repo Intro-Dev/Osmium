@@ -5,8 +5,8 @@ import com.intro.client.OsmiumClient;
 import com.intro.client.render.Colors;
 import com.intro.client.render.RenderManager;
 import com.intro.common.config.Options;
+import com.intro.common.config.options.ElementPositionOption;
 import com.intro.common.config.options.StatusEffectDisplayMode;
-import com.intro.common.config.options.Vector2Option;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
@@ -20,8 +20,7 @@ import java.util.List;
 public class StatusEffectDisplay extends Scalable {
 
     public StatusEffectDisplay() {
-        this.posX = (int) OsmiumClient.options.getVector2Option(Options.StatusEffectDisplayPosition).x;
-        this.posY = (int) OsmiumClient.options.getVector2Option(Options.StatusEffectDisplayPosition).y;
+        OsmiumClient.options.getElementPositionOption(Options.StatusEffectDisplayPosition).elementPosition.loadToScalable(this);
         this.maxEffectsDisplayed = (int) OsmiumClient.options.getDoubleOption(Options.MaxStatusEffectsDisplayed).variable;
     }
 
@@ -37,7 +36,7 @@ public class StatusEffectDisplay extends Scalable {
         if(mc.player != null && (OsmiumClient.options.getEnumOption(Options.StatusEffectDisplayMode).variable == StatusEffectDisplayMode.CUSTOM || OsmiumClient.options.getEnumOption(Options.StatusEffectDisplayMode).variable == StatusEffectDisplayMode.BOTH)) {
             MobEffectTextureManager spriteManager = mc.getMobEffectTextures();
 
-            OsmiumClient.options.put(Options.StatusEffectDisplayPosition, new Vector2Option(Options.StatusEffectDisplayPosition, this.posX, this.posY));
+            OsmiumClient.options.put(Options.StatusEffectDisplayPosition, new ElementPositionOption(Options.StatusEffectDisplayPosition, this.posX, this.posY, this.scale));
 
             stack.pushPose();
             {

@@ -3,9 +3,10 @@ package com.intro.client.module;
 import com.intro.client.OsmiumClient;
 import com.intro.client.module.event.Event;
 import com.intro.client.module.event.EventTick;
+import com.intro.client.render.Colors;
 import com.intro.client.render.drawables.Text;
 import com.intro.common.config.Options;
-import com.intro.common.config.options.Vector2Option;
+import com.intro.common.config.options.ElementPositionOption;
 import net.minecraft.client.Minecraft;
 
 public class ToggleSneak {
@@ -19,15 +20,8 @@ public class ToggleSneak {
     private final Minecraft mc = Minecraft.getInstance();
 
     public ToggleSneak() {
-        Text tmp;
-        try {
-            tmp = new Text((int) OsmiumClient.options.getVector2Option(Options.ToggleSprintPosition).x, (int) OsmiumClient.options.getVector2Option(Options.ToggleSprintPosition).y, "Sprinting(Toggled)", 0xffffff);
-        } catch (NullPointerException e) {
-            tmp = new Text((int) OsmiumClient.options.getVector2Option(Options.ToggleSprintPosition).x, (int) OsmiumClient.options.getVector2Option(Options.ToggleSprintPosition).y, "Sprinting(Toggled)", 0xffffff);
-        }
-        SprintingText = tmp;
-        SprintingText.guiElement = true;
-        SprintingText.visible = false;
+        SprintingText = new Text(5, 5, "", Colors.TRANSPARENT.getColor().getInt());
+        OsmiumClient.options.getElementPositionOption(Options.ToggleSprintPosition).elementPosition.loadToDrawable(SprintingText);
     }
 
     public void onEvent(Event event) {
@@ -36,7 +30,7 @@ public class ToggleSneak {
                 boolean toggleSprintEnabled = OsmiumClient.options.getBooleanOption(Options.ToggleSprintEnabled).variable;
                 boolean toggleSneakEnabled = OsmiumClient.options.getBooleanOption(Options.ToggleSneakEnabled).variable;
                 if(event instanceof EventTick && event.isPre()) {
-                    OsmiumClient.options.put(Options.ToggleSprintPosition, new Vector2Option(Options.ToggleSprintPosition, SprintingText.posX, SprintingText.posY));
+                    OsmiumClient.options.put(Options.ToggleSprintPosition, new ElementPositionOption(Options.ToggleSprintPosition, SprintingText.posX, SprintingText.posY));
                     if(mc.player.zza > 0 && !mc.player.isUsingItem() && !mc.player.isShiftKeyDown() && !mc.player.horizontalCollision && this.sprinting)
                         mc.player.setSprinting(true);
 

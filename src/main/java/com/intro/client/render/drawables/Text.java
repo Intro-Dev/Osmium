@@ -10,8 +10,6 @@ public class Text extends Scalable {
     public String text = "";
     public int color;
 
-    public static final int HITBOX_PADDING = 20;
-
     private final Minecraft mc = Minecraft.getInstance();
 
     public boolean guiElement = false;

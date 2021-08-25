@@ -5,7 +5,7 @@ import com.intro.client.render.Color;
 import com.intro.client.render.Colors;
 import com.intro.client.render.RenderManager;
 import com.intro.common.config.Options;
-import com.intro.common.config.options.Vector2Option;
+import com.intro.common.config.options.ElementPositionOption;
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.platform.Lighting;
 import com.mojang.blaze3d.systems.RenderSystem;
@@ -27,8 +27,7 @@ import java.util.stream.StreamSupport;
 public class ArmorDisplay extends Scalable {
 
     public ArmorDisplay() {
-        this.posX = (int) OsmiumClient.options.getVector2Option(Options.ArmorDisplayPosition).x;
-        this.posY = (int) OsmiumClient.options.getVector2Option(Options.ArmorDisplayPosition).y;
+        OsmiumClient.options.getElementPositionOption(Options.ArmorDisplayPosition).elementPosition.loadToScalable(this);
         this.width = 20;
         this.height = 190;
     }
@@ -39,7 +38,7 @@ public class ArmorDisplay extends Scalable {
     @Override
     public void render(PoseStack stack) {
         if(mc.player != null && OsmiumClient.options.getBooleanOption(Options.ArmorDisplayEnabled).variable) {
-            OsmiumClient.options.put(Options.ArmorDisplayPosition, new Vector2Option(Options.ArmorDisplayPosition, this.posX, this.posY));
+            OsmiumClient.options.put(Options.ArmorDisplayPosition, new ElementPositionOption(Options.ArmorDisplayPosition, this.posX, this.posY, this.scale));
             int offY = 0;
 
             List<ItemStack> stacks = StreamSupport.stream(mc.player.getArmorSlots().spliterator(), false).collect(Collectors.toList());

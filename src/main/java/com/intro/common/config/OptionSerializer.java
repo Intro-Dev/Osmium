@@ -34,12 +34,13 @@ public class OptionSerializer implements JsonSerializer<Option> {
             returnObject.addProperty("Type", option.type);
             return returnObject;
         }
-        if(src.type.equals("Vector2Option")) {
-            Vector2Option option = (Vector2Option) src;
+        if(src.type.equals("ElementPositionOption")) {
+            ElementPositionOption option = (ElementPositionOption) src;
             JsonObject returnObject = new JsonObject();
             returnObject.addProperty("Identifier", option.identifier);
-            returnObject.addProperty("x", option.x);
-            returnObject.addProperty("y", option.y);
+            returnObject.addProperty("x", option.elementPosition.x);
+            returnObject.addProperty("y", option.elementPosition.y);
+            returnObject.addProperty("scale", option.elementPosition.scale);
             returnObject.addProperty("Type", option.type);
             return returnObject;
         }

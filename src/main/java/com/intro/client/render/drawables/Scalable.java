@@ -35,6 +35,6 @@ public abstract class Scalable extends Drawable {
 
     @Override
     public boolean isPositionWithinBounds(int x, int y) {
-        return x > this.posX - HITBOX_PADDING && x < this.posX + this.getScaledWidth() + HITBOX_PADDING && y > this.posY - HITBOX_PADDING && y < this.posY + this.getScaledHeight() + HITBOX_PADDING;
+        return x > this.posX - HITBOX_PADDING && x < this.posX + this.width + HITBOX_PADDING && y > this.posY - HITBOX_PADDING && y < this.posY + height + HITBOX_PADDING;
     }
 }

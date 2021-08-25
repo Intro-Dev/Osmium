@@ -1,6 +1,9 @@
 package com.intro.client;
 
-import com.intro.client.module.*;
+import com.intro.client.module.EventListenerSupplier;
+import com.intro.client.module.FullBright;
+import com.intro.client.module.Gui;
+import com.intro.client.module.ToggleSneak;
 import com.intro.client.module.event.Event;
 import com.intro.client.module.event.EventType;
 import com.intro.client.network.ClientNetworkHandler;
@@ -38,14 +41,12 @@ public class OsmiumClient implements ClientModInitializer {
         ToggleSneak toggleSneak = new ToggleSneak();
         FullBright fullbright = new FullBright();
         Gui gui = new Gui();
-        FpsModule fpsModule = new FpsModule();
         CapeHandler handler = new CapeHandler();
 
         EVENT_BUS.registerCallback(toggleSneak::onEvent, EventType.EVENT_TICK);
         EVENT_BUS.registerCallback(fullbright::onEvent, EventType.EVENT_TICK);
         EVENT_BUS.registerCallback(gui::onEvent, EventType.EVENT_TICK);
         EVENT_BUS.registerCallback(handler::handleEvents, new EventType[] { EventType.EVENT_ADD_PLAYER, EventType.EVENT_REMOVE_PLAYER } );
-        EVENT_BUS.registerCallback(fpsModule::onEvent, EventType.EVENT_TICK);
         EVENT_BUS.registerCallback(PingDisplay.getInstance()::onEvent, EventType.EVENT_TICK);
         // EVENT_BUS.registerCallback((event) -> System.out.println(((BooleanOption) OsmiumClient.options.get(OsmiumClient.options.NoFireEnabled.identifier)).variable), EventType.EVENT_TICK);
     }
