@@ -68,7 +68,7 @@ public class OsmiumOptionsScreen extends Screen {
         BooleanButtonWidget fullBrightWidget = new BooleanButtonWidget(this.width / 2 - 275, this.height / 4 + 80 + globalOffset, 150, 20, Options.FullbrightEnabled, "osmium.options.full_bright_");
         BooleanButtonWidget hurtBobWidget = new BooleanButtonWidget(this.width / 2 + 125, this.height / 4 + 80 + globalOffset, 150, 20, Options.HurtbobbingEnabled, "osmium.options.hurt_bobbing_");
         BooleanButtonWidget noFireWidget = new BooleanButtonWidget(this.width / 2 - 275, this.height / 4 + 120 + globalOffset, 150, 20, Options.NoFireEnabled, "osmium.options.no_fire_");
-        BooleanButtonWidget fpsWidget = new BooleanButtonWidget(this.width / 2 - 75, this.height / 4 + 160 + globalOffset, 150, 20, Options.FpsEnabled, "osmium.options.fps_");
+        Button openWidgetScreen = new Button(this.width / 2 - 75, this.height / 4 + 160 + globalOffset, 150, 20, new TranslatableComponent("osmium.options.widgets_screen"), button -> mc.setScreen(new OsmiumWidgetsScreen(this)));
         EnumSelectWidget smoothSneakWidget = new EnumSelectWidget(this.width / 2 + 125, this.height / 4 + 120 + globalOffset, 150, 20, Options.SneakMode, "osmium.options.sneak_");
 
         Button openVideoOptions = new Button(this.width / 2 - 75, this.height / 4 + 120 + globalOffset, 150, 20, new TranslatableComponent("osmium.options.video_options"), (Button) -> mc.setScreen(new OsmiumVideoOptionsScreen(this)));
@@ -94,7 +94,7 @@ public class OsmiumOptionsScreen extends Screen {
         this.addRenderableWidget(openVideoOptions);
         this.addRenderableWidget(backButton);
         this.addRenderableWidget(openGuiEditing);
-        this.addRenderableWidget(fpsWidget);
+        this.addRenderableWidget(openWidgetScreen);
         this.addRenderableWidget(openGithubWidget);
     }
 

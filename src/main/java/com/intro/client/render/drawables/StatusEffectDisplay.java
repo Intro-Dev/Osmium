@@ -17,7 +17,7 @@ import net.minecraft.world.effect.MobEffectInstance;
 
 import java.util.List;
 
-public class StatusEffectDisplay extends Drawable {
+public class StatusEffectDisplay extends Scalable {
 
     public StatusEffectDisplay() {
         this.posX = (int) OsmiumClient.options.getVector2Option(Options.StatusEffectDisplayPosition).x;
@@ -29,8 +29,6 @@ public class StatusEffectDisplay extends Drawable {
     private final Minecraft mc = Minecraft.getInstance();
 
     private static StatusEffectDisplay instance;
-
-    public final float scale = 1f;
 
     public int maxEffectsDisplayed;
 
@@ -47,8 +45,8 @@ public class StatusEffectDisplay extends Drawable {
                 List<MobEffectInstance> effects = mc.player.getActiveEffects().stream().toList();
                 effects = Ordering.natural().reverse().sortedCopy(effects);
 
-                this.width = (int) (32 * scale);
-                this.height = (int) ((effects.size() * 56 * scale) + (40 * scale));
+                this.width = 32;
+                this.height = (effects.size() * 56) + (40);
                 this.maxEffectsDisplayed = (int) OsmiumClient.options.getDoubleOption(Options.MaxStatusEffectsDisplayed).variable;
 
                 if(effects.size() != 0) {
@@ -80,8 +78,8 @@ public class StatusEffectDisplay extends Drawable {
                         stack.pushPose();
                         {
                             RenderSystem.setShaderTexture(0, sprite.atlas().getId());
-                            blit(stack, this.posX, (int) (this.posY + (offY * scale)),this.getBlitOffset(), (int) (32 * scale), (int) (32 * scale), sprite);
-                            drawCenteredString(stack, mc.font, messageText, this.posX + width / 2, (int) (this.posY + (offY * scale) + (40 * scale)), Colors.WHITE.getColor().getInt());
+                            blit(stack, this.posX, this.posY + offY,this.getBlitOffset(), 32,32, sprite);
+                            drawCenteredString(stack, mc.font, messageText, this.posX + width / 2, this.posY + offY + 40, Colors.WHITE.getColor().getInt());
                         }
                         stack.popPose();
 

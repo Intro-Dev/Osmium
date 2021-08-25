@@ -4,9 +4,7 @@ import com.intro.client.OsmiumClient;
 import com.intro.client.module.event.EventDirection;
 import com.intro.client.module.event.EventRender;
 import com.intro.client.module.event.EventType;
-import com.intro.client.render.drawables.ArmorDisplay;
-import com.intro.client.render.drawables.Drawable;
-import com.intro.client.render.drawables.StatusEffectDisplay;
+import com.intro.client.render.drawables.*;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
 
@@ -19,21 +17,24 @@ public class RenderManager {
     private static final Minecraft mc = Minecraft.getInstance();
 
     public static void initDrawables() {
-        // for some reason ArmorDisplay has to be first, or it doesn't render transparency
-        // I don't know why this happens
-        // why does this happen
-        // well hi there
-        // these features aren't' t done yet
-        // but are still being implemented
          addDrawable(ArmorDisplay.getInstance());
          addDrawable(StatusEffectDisplay.getInstance());
+         addDrawable(PingDisplay.getInstance());
+         addDrawable(CpsDisplay.getInstance());
     }
 
     public static void renderHud(PoseStack stack) {
         mc.getProfiler().push("OsmiumHudRenderer");
         for(Drawable element : drawables) {
             if(element.visible) {
-                element.render(stack);
+                if(element instanceof Scalable scalable) {
+                    stack.pushPose();
+                    scalable.scaleWithPositionIntact(stack);
+                    scalable.render(stack);
+                    stack.popPose();
+                } else {
+                    element.render(stack);
+                }
             }
         }
         mc.getProfiler().pop();

@@ -4,6 +4,7 @@ import com.intro.client.OsmiumClient;
 import com.intro.client.module.event.EventDirection;
 import com.intro.client.module.event.EventTick;
 import com.intro.client.module.event.EventType;
+import com.intro.client.render.drawables.CpsDisplay;
 import com.intro.client.util.OptionUtil;
 import net.minecraft.client.Minecraft;
 import org.apache.logging.log4j.Logger;
@@ -32,6 +33,11 @@ public class MinecraftMixin {
     @Inject(at = @At("HEAD"), method = "close")
     public void close(CallbackInfo ci) {
         OptionUtil.save();
+    }
+
+    @Inject(method = "startAttack", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/player/LocalPlayer;swing(Lnet/minecraft/world/InteractionHand;)V"))
+    public void mouseClick(CallbackInfo ci) {
+        CpsDisplay.getInstance().onClick();
     }
 
 

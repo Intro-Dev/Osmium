@@ -58,6 +58,7 @@
   "osmium.options.video_options.cape_optifine": "Custom Capes: Optifine",
   "osmium.options.video_options.cape_all": "Custom Capes: All",
   "osmium.options.armor_display_enabled": "Armor Display: Enabled",
-  "osmium.options.armor_display_disabled": "Armor Display: Disabled"
+  "osmium.options.armor_display_disabled": "Armor Display: Disabled",
+  "osmium.options.widgets_screen": "Widgets Screen"
 
 }

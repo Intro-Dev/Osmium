@@ -6,6 +6,7 @@ import com.intro.client.module.event.EventType;
 import com.intro.client.network.ClientNetworkHandler;
 import com.intro.client.render.CapeHandler;
 import com.intro.client.render.RenderManager;
+import com.intro.client.render.drawables.PingDisplay;
 import com.intro.client.util.OptionUtil;
 import com.intro.common.config.Options;
 import com.intro.common.util.Util;
@@ -33,7 +34,7 @@ public class OsmiumClient implements ClientModInitializer {
     public static boolean runningLatestVersion = true;
 
 
-    public static void registerModules() {
+    public static void registerCallbacks() {
         ToggleSneak toggleSneak = new ToggleSneak();
         FullBright fullbright = new FullBright();
         Gui gui = new Gui();
@@ -45,6 +46,7 @@ public class OsmiumClient implements ClientModInitializer {
         EVENT_BUS.registerCallback(gui::onEvent, EventType.EVENT_TICK);
         EVENT_BUS.registerCallback(handler::handleEvents, new EventType[] { EventType.EVENT_ADD_PLAYER, EventType.EVENT_REMOVE_PLAYER } );
         EVENT_BUS.registerCallback(fpsModule::onEvent, EventType.EVENT_TICK);
+        EVENT_BUS.registerCallback(PingDisplay.getInstance()::onEvent, EventType.EVENT_TICK);
         // EVENT_BUS.registerCallback((event) -> System.out.println(((BooleanOption) OsmiumClient.options.get(OsmiumClient.options.NoFireEnabled.identifier)).variable), EventType.EVENT_TICK);
     }
 
@@ -58,7 +60,7 @@ public class OsmiumClient implements ClientModInitializer {
         OptionUtil.Options.init();
         OptionUtil.load();
         EVENT_BUS.initListenerMap();
-        registerModules();
+        registerCallbacks();
         registerKeyBindings();
         ClientNetworkHandler.registerPackets();
         RenderManager.initDrawables();

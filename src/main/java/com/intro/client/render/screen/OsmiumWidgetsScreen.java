@@ -1,7 +1,6 @@
 package com.intro.client.render.screen;
 
 import com.intro.client.render.widget.BooleanButtonWidget;
-import com.intro.client.render.widget.EnumSelectWidget;
 import com.intro.client.util.OptionUtil;
 import com.intro.common.config.Options;
 import com.mojang.blaze3d.systems.RenderSystem;
@@ -14,7 +13,7 @@ import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 
-public class OsmiumVideoOptionsScreen extends Screen {
+public class OsmiumWidgetsScreen extends Screen {
 
     private final Screen parent;
     private final Minecraft mc = Minecraft.getInstance();
@@ -24,17 +23,18 @@ public class OsmiumVideoOptionsScreen extends Screen {
     private boolean shouldRenderLogo = true;
     private int finalOffset = 0;
 
-
-
     private final ResourceLocation LOGO_TEXTURE = new ResourceLocation("osmium", "icon.png");
 
-    public OsmiumVideoOptionsScreen(Screen parent) {
-        super(new TranslatableComponent("osmium.options.video_options.title"));
+
+    public OsmiumWidgetsScreen(Screen parent) {
+        super(new TranslatableComponent("osmium.options.widgets_screen"));
         this.parent = parent;
     }
 
     @Override
     protected void init() {
+        Button backButton = new Button(this.width / 2 - 100, this.height / 4 + 220, 200, 20, new TranslatableComponent("osmium.options.video_options.back"), (buttonWidget) -> mc.setScreen(this.parent));
+
 
         // offset because of weird scaling at high gui scales
         if(mc.options.guiScale > 2) {
@@ -54,30 +54,25 @@ public class OsmiumVideoOptionsScreen extends Screen {
             finalOffset += 3;
         }
 
-        Button backButton = new Button(this.width / 2 - 100, this.height / 4 + 225 + globalOffset, 200, 20, new TranslatableComponent("osmium.options.video_options.back"), (Button) -> mc.setScreen(parent));
+        BooleanButtonWidget pingDisplayEnabled = new BooleanButtonWidget(this.width / 2 - 275, this.height / 4 + 80 + globalOffset, 150, 20, Options.PingDisplayEnabled, "osmium.options.ping_display_");
+        BooleanButtonWidget cpsDisplayEnabled = new BooleanButtonWidget(this.width / 2 - 75, this.height / 4 + 80 + globalOffset, 150, 20, Options.CpsDisplayEnabled, "osmium.options.cps_");
+        BooleanButtonWidget fpsDisplayEnabled = new BooleanButtonWidget(this.width / 2 + 125, this.height / 4 + 80 + globalOffset, 150, 20, Options.FpsEnabled, "osmium.options.fps_");
+        BooleanButtonWidget armorDisplayEnabled = new BooleanButtonWidget(this.width / 2 - 275, this.height / 4 + 120 + globalOffset, 150, 20, Options.ArmorDisplayEnabled, "osmium.options.armor_display_");
 
-        Button blockOptionScreenButton = new Button(this.width / 2 - 75, this.height / 4 + 120 + globalOffset, 150, 20, new TranslatableComponent("osmium.options.block_option_settings"), (buttonWidget) -> mc.setScreen(new OsmiumBlockOptionsScreen(this)));
 
-        EnumSelectWidget toggleCapeWidget = new EnumSelectWidget(this.width / 2 - 275, this.height / 4 + 80 + globalOffset, 150, 20, Options.CustomCapeMode,"osmium.options.video_options.cape_");
-        BooleanButtonWidget toggleRainWidget = new BooleanButtonWidget(this.width / 2 - 75, this.height / 4 + 80 + globalOffset, 150, 20, Options.NoRainEnabled, "osmium.options.rain_");
-        BooleanButtonWidget toggleFireworksWidget = new BooleanButtonWidget(this.width / 2 + 125, this.height / 4 + 80 + globalOffset, 150, 20, Options.FireworksDisabled, "osmium.options.fireworks_");
-        BooleanButtonWidget toggleNetherParticlesWidget = new BooleanButtonWidget(this.width / 2 - 275, this.height / 4 + 120 + globalOffset, 150, 20, Options.DecreaseNetherParticles, "osmium.options.nether_particles_");
-
-        Button statusEffectScreenButton = new Button(this.width / 2 + 125, this.height / 4 + 120 + globalOffset, 150, 20, new TranslatableComponent("osmium.options.status_effect_display_settings"), (buttonWidget) -> mc.setScreen(new OsmiumStatusEffectDisplayOptionsScreen(this)));
-
+        this.addRenderableWidget(pingDisplayEnabled);
+        this.addRenderableWidget(cpsDisplayEnabled);
+        this.addRenderableWidget(fpsDisplayEnabled);
+        this.addRenderableWidget(armorDisplayEnabled);
         this.addRenderableWidget(backButton);
-        this.addRenderableWidget(toggleCapeWidget);
-        this.addRenderableWidget(toggleRainWidget);
-        this.addRenderableWidget(toggleFireworksWidget);
-        this.addRenderableWidget(toggleNetherParticlesWidget);
-        this.addRenderableWidget(blockOptionScreenButton);
-        this.addRenderableWidget(statusEffectScreenButton);
+
+
     }
 
     @Override
     public void onClose() {
-        OptionUtil.save();
         super.onClose();
+        OptionUtil.save();
     }
 
     @Override

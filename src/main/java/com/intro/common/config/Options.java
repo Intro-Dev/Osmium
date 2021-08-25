@@ -96,6 +96,8 @@ public class Options {
     public static final String StatusEffectDisplayScale = "StatusEffectDisplayScale";
     public static final String ArmorDisplayEnabled = "ArmorDisplayEnabled";
     public static final String ArmorDisplayPosition = "ArmorDisplayPosition";
+    public static final String PingDisplayEnabled = "PingDisplayEnabled";
+    public static final String CpsDisplayEnabled = "CpsDisplayEnabled";
 
 
 
@@ -136,6 +138,8 @@ public class Options {
         put(StatusEffectDisplayScale, new DoubleOption(StatusEffectDisplayScale, 1d));
         put(ArmorDisplayEnabled, new BooleanOption(ArmorDisplayEnabled, false));
         put(ArmorDisplayPosition, new Vector2Option(ArmorDisplayPosition, 5, 5));
+        put(PingDisplayEnabled, new BooleanOption(PingDisplayEnabled, false));
+        put(CpsDisplayEnabled, new BooleanOption(CpsDisplayEnabled, false));
     }
 
     public HashMap<String, Option> getValues() {

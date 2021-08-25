@@ -6,7 +6,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.network.chat.TextComponent;
 
-public class Text extends Drawable {
+public class Text extends Scalable {
     public String text = "";
     public int color;
 
@@ -100,6 +100,7 @@ public class Text extends Drawable {
             firstRun = false;
         }
         // stack.push();
+
         Font renderer = mc.font;
         renderer.drawShadow(stack, new TextComponent(this.text), this.posX, this.posY, this.color);
         // stack.pop();
