@@ -12,6 +12,7 @@ import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.Mth;
 
 public class OsmiumVideoOptionsScreen extends Screen {
 
@@ -36,30 +37,34 @@ public class OsmiumVideoOptionsScreen extends Screen {
     protected void init() {
 
         // offset because of weird scaling at high gui scales
-        if(mc.options.guiScale > 4) {
-            globalOffset = -64;
-        }
         if(mc.options.guiScale > 2) {
             logoOffset = -40;
         }
         if(mc.options.guiScale > 4) {
             shouldRenderLogo = false;
+            logoOffset = -80;
+            globalOffset = -64;
         }
 
+        // this wonderful bit of code is very inefficient
+        // but, it's only called on init, and it makes a very annoying rendering offset bug go away
+        // so who's laughing
+        while(!(finalOffset > (57 / mc.options.guiScale))) {
+            finalOffset = Mth.clamp(finalOffset, 0, 57 / mc.options.guiScale);
+            finalOffset += 3;
+        }
 
-        finalOffset = 57 / mc.options.guiScale;
+        Button backButton =new Button(this.width / 2 - 100, this.height / 4 + 225 + globalOffset, 200, 20, new TranslatableComponent("osmium.options.video_options.back"), (Button) -> mc.setScreen(parent));
 
-        Button backButton = new Button(this.width / 2 - 100, this.height / 4 + 225, 200, 20, new TranslatableComponent("osmium.options.video_options.back"), (buttonWidget) -> mc.setScreen(this.parent));
+        Button blockOptionScreenButton = new Button(this.width / 2 - 75, this.height / 4 + 120 + globalOffset, 150, 20, new TranslatableComponent("osmium.options.block_option_settings"), (buttonWidget) -> mc.setScreen(new OsmiumBlockOptionsScreen(this)));
 
-        Button blockOptionScreenButton = new Button(this.width / 2 - 75, this.height / 4 + 120, 150, 20, new TranslatableComponent("osmium.options.block_option_settings"), (buttonWidget) -> mc.setScreen(new OsmiumBlockOptionsScreen(this)));
+        EnumSelectWidget toggleCapeWidget = new EnumSelectWidget(this.width / 2 - 275, this.height / 4 + 80 + globalOffset, 150, 20, Options.CustomCapeMode,"osmium.options.video_options.cape_");
+        BooleanButtonWidget toggleRainWidget = new BooleanButtonWidget(this.width / 2 - 75, this.height / 4 + 80 + globalOffset, 150, 20, Options.NoRainEnabled, "osmium.options.rain_");
+        BooleanButtonWidget toggleFireworksWidget = new BooleanButtonWidget(this.width / 2 + 125, this.height / 4 + 80 + globalOffset, 150, 20, Options.FireworksDisabled, "osmium.options.fireworks_");
+        BooleanButtonWidget toggleNetherParticlesWidget = new BooleanButtonWidget(this.width / 2 - 275, this.height / 4 + 120 + globalOffset, 150, 20, Options.DecreaseNetherParticles, "osmium.options.nether_particles_");
 
-        EnumSelectWidget toggleCapeWidget = new EnumSelectWidget(this.width / 2 - 275, this.height / 4 + 80, 150, 20, Options.CustomCapeMode,"osmium.options.video_options.cape_");
-        BooleanButtonWidget toggleRainWidget = new BooleanButtonWidget(this.width / 2 - 75, this.height / 4 + 80, 150, 20, Options.NoRainEnabled, "osmium.options.rain_");
-        BooleanButtonWidget toggleFireworksWidget = new BooleanButtonWidget(this.width / 2 + 125, this.height / 4 + 80, 150, 20, Options.FireworksDisabled, "osmium.options.fireworks_");
-        BooleanButtonWidget toggleNetherParticlesWidget = new BooleanButtonWidget(this.width / 2 - 275, this.height / 4 + 120, 150, 20, Options.DecreaseNetherParticles, "osmium.options.nether_particles_");
-
-        Button statusEffectScreenButton = new Button(this.width / 2 + 125, this.height / 4 + 120, 150, 20, new TranslatableComponent("osmium.options.status_effect_display_settings"), (buttonWidget) -> mc.setScreen(new OsmiumStatusEffectDisplayOptionsScreen(this)));
-        BooleanButtonWidget armorDisplayToggleButton = new BooleanButtonWidget(this.width / 2 - 275, this.height / 4 + 160, 150, 20, Options.ArmorDisplayEnabled, "osmium.options.armor_display_");
+        Button statusEffectScreenButton = new Button(this.width / 2 + 125, this.height / 4 + 120 + globalOffset, 150, 20, new TranslatableComponent("osmium.options.status_effect_display_settings"), (buttonWidget) -> mc.setScreen(new OsmiumStatusEffectDisplayOptionsScreen(this)));
+        BooleanButtonWidget armorDisplayToggleButton = new BooleanButtonWidget(this.width / 2 - 275, this.height / 4 + 160 + globalOffset, 150, 20, Options.ArmorDisplayEnabled, "osmium.options.armor_display_");
 
         this.addRenderableWidget(backButton);
         this.addRenderableWidget(toggleCapeWidget);
@@ -97,7 +102,7 @@ public class OsmiumVideoOptionsScreen extends Screen {
 
         matrices.pushPose();
         matrices.translate(0, finalOffset,0);
-        drawCenteredString(matrices, mc.font, new TranslatableComponent("osmium.version"), this.width / 2, this.height / 8 + 100 + globalOffset + (logoOffset / 2), 0xffffff);
+        drawCenteredString(matrices, mc.font, new TranslatableComponent("osmium.version"), this.width / 2, this.height / 8 + 100 + globalOffset + (logoOffset / 4), 0xffffff);
         matrices.popPose();
         super.render(matrices, mouseX, mouseY, delta);
         RenderSystem.disableBlend();

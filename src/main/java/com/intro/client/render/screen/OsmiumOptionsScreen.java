@@ -30,10 +30,12 @@ public class OsmiumOptionsScreen extends Screen {
 
     private int animationProgress = 0;
 
+    private final Minecraft mc = Minecraft.getInstance();
+
     private int globalOffset = 0;
     private int logoOffset = 0;
     private boolean shouldRenderLogo = true;
-
+    private int bakedMaxAnim = 0;
 
     private final ResourceLocation LOGO_TEXTURE = new ResourceLocation("osmium", "icon.png");
 
@@ -41,8 +43,6 @@ public class OsmiumOptionsScreen extends Screen {
         super(new TranslatableComponent("osmium.options.title"));
         this.parent = parent;
     }
-
-    private final Minecraft mc = Minecraft.getInstance();
 
 
     @Override
@@ -54,15 +54,16 @@ public class OsmiumOptionsScreen extends Screen {
         }
 
         // offset because of weird scaling at high gui scales
-        if(mc.options.guiScale > 4) {
-            globalOffset = -64;
-        }
         if(mc.options.guiScale > 2) {
             logoOffset = -40;
         }
         if(mc.options.guiScale > 4) {
             shouldRenderLogo = false;
+            logoOffset = -80;
+            globalOffset = -64;
+
         }
+        bakedMaxAnim = 57 / mc.options.guiScale;
 
         BooleanButtonWidget fullBrightWidget = new BooleanButtonWidget(this.width / 2 - 275, this.height / 4 + 80 + globalOffset, 150, 20, Options.FullbrightEnabled, "osmium.options.full_bright_");
         BooleanButtonWidget hurtBobWidget = new BooleanButtonWidget(this.width / 2 + 125, this.height / 4 + 80 + globalOffset, 150, 20, Options.HurtbobbingEnabled, "osmium.options.hurt_bobbing_");
@@ -137,16 +138,15 @@ public class OsmiumOptionsScreen extends Screen {
         matrices.pushPose();
         RenderSystem.setShaderColor(shaderColor.getFloatR(), shaderColor.getFloatG(), shaderColor.getFloatB(), ((animationProgress * 4) - 1) / 255f);
         matrices.translate(0, animationProgress,0);
-        drawCenteredString(matrices, mc.font, new TranslatableComponent("osmium.version"), this.width / 2, this.height / 8 + 100 + globalOffset + (logoOffset / 2), 0xffffff);
+        drawCenteredString(matrices, mc.font, new TranslatableComponent("osmium.version"), this.width / 2, this.height / 8 + 100 + globalOffset + (logoOffset / 4), 0xffffff);
         matrices.popPose();
         super.render(matrices, mouseX, mouseY, delta);
         // 57 is the max because of animation progress looking good at 3
-        if(!(animationProgress >= 57 / mc.options.guiScale)) {
-            animationProgress = Mth.clamp(animationProgress, 0, 57);
+        if(!(animationProgress > bakedMaxAnim)) {
+            animationProgress = Mth.clamp(animationProgress, 0, bakedMaxAnim);
             animationProgress += 3;
         }
         RenderSystem.disableBlend();
-        System.out.println(animationProgress);
     }
 
 
