@@ -26,9 +26,11 @@ public abstract class OptionsScreenMixin extends Screen {
 
     @Inject(at = @At("TAIL"), method = "init")
     private void init(CallbackInfo info) {
-        this.addRenderableWidget(new Button(this.width / 2 - 100, this.height / 6 + 200, 200, 20, new TranslatableComponent("osmium.options.title"), (buttonWidget) -> {
-            mc.setScreen(new OsmiumOptionsScreen(this));
-        }));
+        if(this.mc.options.guiScale > 5) {
+            this.addRenderableWidget(new Button(this.width / 2 - 50, this.height / 6 + 140, 100, 20, new TranslatableComponent("osmium.options.title"), (button) -> mc.setScreen(new OsmiumOptionsScreen(this))));
+        } else {
+            this.addRenderableWidget(new Button(this.width / 2 - 100, this.height / 6 + 200, 200, 20, new TranslatableComponent("osmium.options.title"), (buttonWidget) -> mc.setScreen(new OsmiumOptionsScreen(this))));
+        }
     }
 
     @Inject(at = @At("TAIL"), method = "removed")
