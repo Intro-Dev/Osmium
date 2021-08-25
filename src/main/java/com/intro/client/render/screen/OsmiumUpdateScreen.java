@@ -57,6 +57,7 @@ public class OsmiumUpdateScreen extends Screen  {
         continueButton.visible = false;
 
 
+        this.addRenderableWidget(continueButton);
         this.addRenderableWidget(acceptButton);
         this.addRenderableWidget(declineButton);
         this.addRenderableWidget(progressBar);
