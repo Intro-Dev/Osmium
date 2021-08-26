@@ -12,6 +12,7 @@ import net.minecraft.util.Mth;
 public class OsmiumGuiEditScreen extends Screen {
 
     private Drawable currentlyDraggingElement;
+    private boolean firstDraggedElement = true;
 
     public OsmiumGuiEditScreen() {
         super(new TranslatableComponent("osmium.gui_edit.title"));
@@ -19,7 +20,6 @@ public class OsmiumGuiEditScreen extends Screen {
 
     @Override
     protected void init() {
-
     }
 
     @Override
@@ -59,7 +59,6 @@ public class OsmiumGuiEditScreen extends Screen {
                 }
                 return super.mouseDragged(mouseX, mouseX, button, deltaX, deltaY);
             }
-
         }
         return super.mouseDragged(mouseX, mouseY, button, deltaX, deltaY);
     }
@@ -70,10 +69,8 @@ public class OsmiumGuiEditScreen extends Screen {
             if(drawable instanceof Scalable scalable) {
                 if(scalable.isPositionWithinBounds((int) mouseX, (int) mouseY) && drawable.visible) {
                     scalable.scale += scrollDelta * 0.1;
-                    scalable.scale = (float) Mth.clamp(scalable.scale, 0.1, 10);
-                    System.out.println(scalable.scale);
+                    scalable.scale = (float) Mth.clamp(scalable.scale, 0.5, 10);
                     return super.mouseScrolled(mouseX, mouseY, scrollDelta);
-
                 }
             }
         }

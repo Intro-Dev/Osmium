@@ -106,7 +106,7 @@ public class OsmiumOptionsScreen extends Screen {
 
     private void openCredits(@Nullable Button widget) {
         try {
-            Util.OS.WINDOWS.openUri(new URI("https://modrinth.com/mod/osmium"));
+            Util.getPlatform().openUri(new URI("https://modrinth.com/mod/osmium"));
         } catch (URISyntaxException exception) {
             OsmiumClient.LOGGER.warn("Failed in opening modrinth link. How did this even happen?");
         }

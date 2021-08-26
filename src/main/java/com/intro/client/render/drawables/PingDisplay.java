@@ -21,7 +21,7 @@ public class PingDisplay extends Scalable {
 
     private boolean firstRun = true;
 
-    private int color;
+    private final int color;
 
     private final int BG_COLOR = new Color(0.1f, 0.1f, 0.1f, 0.2f).getInt();
 
@@ -34,9 +34,8 @@ public class PingDisplay extends Scalable {
         }
     }
 
-    protected PingDisplay(int x, int y, int color) {
-        this.posX = x;
-        this.posY = y;
+    protected PingDisplay(int color) {
+        OsmiumClient.options.getElementPositionOption(Options.PingDisplayPosition).elementPosition.loadToScalable(this);
         this.color = color;
     }
 
@@ -48,7 +47,7 @@ public class PingDisplay extends Scalable {
                 this.height = mc.font.lineHeight * 2;
                 firstRun = false;
             }
-            OsmiumClient.options.put(Options.CpsDisplayPosition, new ElementPositionOption(Options.CpsDisplayPosition, this.posX, this.posY, this.scale));
+            OsmiumClient.options.put(Options.PingDisplayPosition, new ElementPositionOption(Options.PingDisplayPosition, this.posX, this.posY, this.scale));
             fill(stack, posX, posY, posX + width, posY + height, BG_COLOR);
             drawCenteredString(stack, mc.font, currentPing + " ms", posX + (width / 2), posY + (height / 4), color);
         }
@@ -61,7 +60,7 @@ public class PingDisplay extends Scalable {
 
     public static PingDisplay getInstance() {
         if(INSTANCE == null) {
-            INSTANCE = new PingDisplay(0, 0, Colors.WHITE.getColor().getInt());
+            INSTANCE = new PingDisplay(Colors.WHITE.getColor().getInt());
         }
         return INSTANCE;
     }

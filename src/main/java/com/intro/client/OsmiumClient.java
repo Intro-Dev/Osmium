@@ -48,7 +48,6 @@ public class OsmiumClient implements ClientModInitializer {
         EVENT_BUS.registerCallback(gui::onEvent, EventType.EVENT_TICK);
         EVENT_BUS.registerCallback(handler::handleEvents, new EventType[] { EventType.EVENT_ADD_PLAYER, EventType.EVENT_REMOVE_PLAYER } );
         EVENT_BUS.registerCallback(PingDisplay.getInstance()::onEvent, EventType.EVENT_TICK);
-        // EVENT_BUS.registerCallback((event) -> System.out.println(((BooleanOption) OsmiumClient.options.get(OsmiumClient.options.NoFireEnabled.identifier)).variable), EventType.EVENT_TICK);
     }
 
     public void registerKeyBindings() {

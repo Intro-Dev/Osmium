@@ -4,6 +4,7 @@ import com.intro.client.OsmiumClient;
 import com.intro.client.render.Color;
 import com.intro.client.render.Colors;
 import com.intro.common.config.Options;
+import com.intro.common.config.options.ElementPositionOption;
 import com.intro.common.mixin.client.MinecraftAccessor;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
@@ -14,23 +15,23 @@ public class FpsDisplay extends Scalable {
 
     private boolean firstRun = true;
 
-    private int color;
+    private final int color;
 
     private final int BG_COLOR = new Color(0.1f, 0.1f, 0.1f, 0.2f).getInt();
 
     private final Minecraft mc = Minecraft.getInstance();
 
-    protected FpsDisplay(int x, int y, int color) {
-        this.posX = x;
-        this.posY = y;
+    protected FpsDisplay(int color) {
+        OsmiumClient.options.getElementPositionOption(Options.FpsDisplayPosition).elementPosition.loadToScalable(this);
         this.color = color;
     }
 
     @Override
     public void render(PoseStack stack) {
         if(OsmiumClient.options.getBooleanOption(Options.FpsEnabled).variable) {
+            OsmiumClient.options.put(Options.FpsDisplayPosition, new ElementPositionOption(Options.FpsDisplayPosition, this.posX, this.posY, this.scale));
             if(firstRun) {
-                this.width = 40;
+                this.width = 60;
                 this.height = mc.font.lineHeight * 2;
                 firstRun = false;
             }
@@ -46,7 +47,7 @@ public class FpsDisplay extends Scalable {
 
     public static FpsDisplay getInstance() {
         if(INSTANCE == null) {
-            INSTANCE = new FpsDisplay(0, 0, Colors.WHITE.getColor().getInt());
+            INSTANCE = new FpsDisplay(Colors.WHITE.getColor().getInt());
         }
         return INSTANCE;
     }

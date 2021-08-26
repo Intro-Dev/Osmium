@@ -19,7 +19,7 @@ public class CpsDisplay extends Scalable {
 
     private boolean firstRun = true;
 
-    private int color;
+    private final int color;
 
     private final int BG_COLOR = new Color(0.1f, 0.1f, 0.1f, 0.2f).getInt();
 
@@ -30,9 +30,8 @@ public class CpsDisplay extends Scalable {
         new RemoveClicksTask().schedule(1000);
     }
 
-    protected CpsDisplay(int x, int y, int color) {
-        this.posX = x;
-        this.posY = y;
+    protected CpsDisplay(int color) {
+        OsmiumClient.options.getElementPositionOption(Options.StatusEffectDisplayPosition).elementPosition.loadToScalable(this);
         this.color = color;
     }
 
@@ -40,7 +39,6 @@ public class CpsDisplay extends Scalable {
     public void render(PoseStack stack) {
         if(OsmiumClient.options.getBooleanOption(Options.CpsDisplayEnabled).variable) {
             OsmiumClient.options.put(Options.CpsDisplayPosition, new ElementPositionOption(Options.CpsDisplayPosition, this.posX, this.posY, this.scale));
-
             if(firstRun) {
                 this.width = 40;
                 this.height = mc.font.lineHeight * 2;
@@ -58,7 +56,7 @@ public class CpsDisplay extends Scalable {
 
     public static CpsDisplay getInstance() {
         if(INSTANCE == null) {
-            INSTANCE = new CpsDisplay(0, 0, Colors.WHITE.getColor().getInt());
+            INSTANCE = new CpsDisplay(Colors.WHITE.getColor().getInt());
         }
         return INSTANCE;
     }
@@ -74,6 +72,7 @@ public class CpsDisplay extends Scalable {
         @Override
         public void run() {
             cps--;
+            timer.cancel();
         }
     }
 }

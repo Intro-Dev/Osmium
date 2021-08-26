@@ -125,7 +125,7 @@ public class Options {
         put(CustomCapeMode, new EnumOption(CustomCapeMode, CapeRenderingMode.DISABLED));
         put(NoFireEnabled, new BooleanOption(NoFireEnabled, false));
         put(ToggleSprintPosition, new ElementPositionOption(ToggleSprintPosition, 5, 5));
-        put(FpsDisplayPosition, new ElementPositionOption(FpsDisplayPosition, 5, 5));
+        put(FpsDisplayPosition, new ElementPositionOption(FpsDisplayPosition, 5, 5, 1));
         put(ToggleSneakEnabled, new BooleanOption(ToggleSneakEnabled, false));
         put(FireworksDisabled, new BooleanOption(FireworksDisabled, false));
         put(FlyBoostAmount, new DoubleOption(FlyBoostAmount, 1d));
