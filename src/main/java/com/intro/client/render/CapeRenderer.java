@@ -26,8 +26,8 @@ import java.util.HashMap;
 
 public class CapeRenderer extends RenderLayer<AbstractClientPlayer, PlayerModel<AbstractClientPlayer>> {
 
-    public static final HashMap<String, ResourceLocation> CapeArray = new HashMap<>();
-    public static final ArrayList<String> OptifineCapes = new ArrayList<>();
+    public static HashMap<String, ResourceLocation> CapeArray = new HashMap<>();
+    public static ArrayList<String> OptifineCapes = new ArrayList<>();
 
     public CapeRenderer(RenderLayerParent<AbstractClientPlayer, PlayerModel<AbstractClientPlayer>> parent) {
         super(parent);
@@ -66,18 +66,19 @@ public class CapeRenderer extends RenderLayer<AbstractClientPlayer, PlayerModel<
                 stack.mulPose(Vector3f.YP.rotationDegrees(180.0F - l / 2.0F));
 
                 stack.popPose();
-                if(entity.getStringUUID() != null) {
+                if(entity.getStringUUID() != null && CapeArray.get(entity.getStringUUID()) != null) {
                     if(OsmiumClient.options.getEnumOption(Options.CustomCapeMode).variable == CapeRenderingMode.OPTIFINE && OptifineCapes.contains(entity.getStringUUID())) {
+                        System.out.println(CapeArray.get(entity.getStringUUID()));
                         final VertexConsumer vertexConsumer = multiBuffer.getBuffer(RenderType.entitySolid(CapeArray.get(entity.getStringUUID())));
                         this.getParentModel().renderCloak(stack, vertexConsumer, light, OverlayTexture.NO_OVERLAY);
-                    } else if (OsmiumClient.options.getEnumOption(Options.CustomCapeMode).variable == CapeRenderingMode.ALL){
+                    } else if (OsmiumClient.options.getEnumOption(Options.CustomCapeMode).variable == CapeRenderingMode.ALL) {
+                        System.out.println(CapeArray.get(entity.getStringUUID()));
                         final VertexConsumer vertexConsumer = multiBuffer.getBuffer(RenderType.entitySolid(CapeArray.get(entity.getStringUUID())));
                         this.getParentModel().renderCloak(stack, vertexConsumer, light, OverlayTexture.NO_OVERLAY);
                     }
 
                 }
                 Minecraft.getInstance().getProfiler().pop();
-                stack.popPose();
         }
 
         } catch (Exception e) {

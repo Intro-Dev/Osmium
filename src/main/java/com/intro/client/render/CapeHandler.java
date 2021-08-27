@@ -97,29 +97,26 @@ public class CapeHandler {
 
     public static NativeImage parseCape(NativeImage image) {
 
-                if(image == null) {
-                    System.out.println("Null cape texture being parsed");
-                }
-                int imageWidth = 64;
-                int imageHeight = 32;
-                int imageSrcWidth = image.getWidth();
-                int srcHeight = image.getHeight();
+        if(image == null) {
+            System.out.println("Null cape texture being parsed");
+        }
+        int imageWidth = 64;
+        int imageHeight = 32;
+        int imageSrcWidth = image.getWidth();
+        int srcHeight = image.getHeight();
 
-                for (int imageSrcHeight = image.getHeight(); imageWidth < imageSrcWidth
-                        || imageHeight < imageSrcHeight; imageHeight *= 2) {
-                    imageWidth *= 2;
-                }
+        for (int imageSrcHeight = image.getHeight(); imageWidth < imageSrcWidth || imageHeight < imageSrcHeight; imageHeight *= 2) {
+            imageWidth *= 2;
+        }
 
-                NativeImage imgNew = new NativeImage(imageWidth, imageHeight, true);
-                for (int x = 0; x < imageSrcWidth; x++) {
-                    for (int y = 0; y < srcHeight; y++) {
-                        imgNew.setPixelRGBA(x, y, image.getPixelRGBA(x, y));
-                    }
-                }
-                image.close();
-
-                return imgNew;
-
+        NativeImage imgNew = new NativeImage(imageWidth, imageHeight, true);
+        for (int x = 0; x < imageSrcWidth; x++) {
+            for (int y = 0; y < srcHeight; y++) {
+                imgNew.setPixelRGBA(x, y, image.getPixelRGBA(x, y));
+            }
+        }
+        image.close();
+        return imgNew;
     }
 }
 class CapeDownloader implements Runnable {
@@ -140,7 +137,6 @@ class CapeDownloader implements Runnable {
             CapeRenderer.OptifineCapes.add(playerJoin.entity.getStringUUID());
             return;
         }
-        if(handler.SetCapeFromURL(playerJoin.entity.getStringUUID(), "https://minecraftcapes.net/profile/" + playerJoin.entity.getStringUUID().replace("-", "") + "/cape/map"))
-            return;
+        handler.SetCapeFromURL(playerJoin.entity.getStringUUID(), "https://minecraftcapes.net/profile/" + playerJoin.entity.getStringUUID().replace("-", "") + "/cape/map");
     }
 }
