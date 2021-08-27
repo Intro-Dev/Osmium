@@ -20,7 +20,7 @@ public class ToggleSneak {
     private final Minecraft mc = Minecraft.getInstance();
 
     public ToggleSneak() {
-        SprintingText = new Text(5, 5, "", Colors.TRANSPARENT.getColor().getInt());
+        SprintingText = new Text(5, 5, "", Colors.WHITE.getColor().getInt());
         OsmiumClient.options.getElementPositionOption(Options.ToggleSprintPosition).elementPosition.loadToDrawable(SprintingText);
     }
 

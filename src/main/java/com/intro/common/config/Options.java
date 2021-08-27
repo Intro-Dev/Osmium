@@ -1,5 +1,6 @@
 package com.intro.common.config;
 
+import com.intro.client.render.Color;
 import com.intro.client.render.Colors;
 import com.intro.common.config.options.*;
 
@@ -100,6 +101,11 @@ public class Options {
     public static final String PingDisplayPosition = "PingDisplayPosition";
     public static final String CpsDisplayEnabled = "CpsDisplayEnabled";
     public static final String CpsDisplayPosition = "CpsDisplayPosition";
+    public static final String KeystrokesColor = "KeystrokesColor";
+    public static final String KeystrokesRgb = "KeystrokesRgb";
+    public static final String KeystrokesPosition = "KeystrokesPosition";
+    public static final String KeystrokesEnabled = "KeystrokesEnabled";
+    public static final String KeystrokesAlpha = "KeystrokesAlpha";
 
 
 
@@ -144,6 +150,11 @@ public class Options {
         put(CpsDisplayEnabled, new BooleanOption(CpsDisplayEnabled, false));
         put(CpsDisplayPosition, new ElementPositionOption(CpsDisplayPosition, 5, 5));
         put(PingDisplayPosition, new ElementPositionOption(PingDisplayPosition, 5, 5));
+        put(KeystrokesColor, new ColorOption(KeystrokesColor, new Color(0.1f, 0.1f, 0.1f, 0.2f)));
+        put(KeystrokesRgb, new BooleanOption(KeystrokesRgb, false));
+        put(KeystrokesPosition, new ElementPositionOption(KeystrokesPosition, 5, 5, 1));
+        put(KeystrokesEnabled, new BooleanOption(KeystrokesEnabled, false));
+        put(KeystrokesAlpha, new DoubleOption(KeystrokesAlpha, 1));
     }
 
     public HashMap<String, Option> getValues() {

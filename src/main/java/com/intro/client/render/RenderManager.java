@@ -22,6 +22,7 @@ public class RenderManager {
          addDrawable(PingDisplay.getInstance());
          addDrawable(CpsDisplay.getInstance());
          addDrawable(FpsDisplay.getInstance());
+         addDrawable(Keystrokes.getInstance());
     }
 
     public static void renderHud(PoseStack stack) {

@@ -56,6 +56,7 @@ public class ClientNetworkHandler {
         ClientPlayNetworking.registerGlobalReceiver(NetworkingConstants.RUNNING_OSMIUM_SERVER_PACKET_ID, (client, handler, buf, responseSender) -> {
             isRunningOsmiumServer = true;
             sendToast(Minecraft.getInstance(), new TranslatableComponent("osmium.toast.running_osmium_server"), new TranslatableComponent("osmium.toast.settings_change"));
+            ClientPlayNetworking.send(NetworkingConstants.RUNNING_OSMIUM_CLIENT_PACKET_ID, PacketByteBufs.create());
         });
 
 
@@ -66,8 +67,6 @@ public class ClientNetworkHandler {
             }
             OsmiumClient.options.clearOverwrittenOptions();
         });
-
-        ClientPlayConnectionEvents.JOIN.register(((handler, sender, client) -> ClientPlayNetworking.send(NetworkingConstants.RUNNING_OSMIUM_CLIENT_PACKET_ID, PacketByteBufs.create())));
     }
 
 }

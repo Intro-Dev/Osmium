@@ -36,8 +36,6 @@ public class StatusEffectDisplay extends Scalable {
         if(mc.player != null && (OsmiumClient.options.getEnumOption(Options.StatusEffectDisplayMode).variable == StatusEffectDisplayMode.CUSTOM || OsmiumClient.options.getEnumOption(Options.StatusEffectDisplayMode).variable == StatusEffectDisplayMode.BOTH)) {
             MobEffectTextureManager spriteManager = mc.getMobEffectTextures();
 
-            OsmiumClient.options.put(Options.StatusEffectDisplayPosition, new ElementPositionOption(Options.StatusEffectDisplayPosition, this.posX, this.posY, this.scale));
-
             stack.pushPose();
             {
                 int offY = 0;
@@ -95,12 +93,24 @@ public class StatusEffectDisplay extends Scalable {
     public void destroySelf() {
         RenderManager.drawables.remove(this);
     }
-    
+
+    @Override
+    public void onPositionChange(int newX, int newY, int oldX, int oldY) {
+        OsmiumClient.options.put(Options.StatusEffectDisplayPosition, new ElementPositionOption(Options.StatusEffectDisplayPosition, newX, newY, this.scale));
+
+    }
+
     public static StatusEffectDisplay getInstance() {
         if(instance == null) {
             instance = new StatusEffectDisplay();
             return instance;
         }
         return instance;
+    }
+
+    @Override
+    public void onScaleChange(float oldScale, float newScale) {
+        OsmiumClient.options.put(Options.StatusEffectDisplayPosition, new ElementPositionOption(Options.StatusEffectDisplayPosition, this.posX, this.posY, newScale));
+
     }
 }

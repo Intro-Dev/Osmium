@@ -1,5 +1,6 @@
 package com.intro.client.render.drawables;
 
+import com.intro.client.util.RenderUtil;
 import com.mojang.blaze3d.vertex.PoseStack;
 
 /**
@@ -25,12 +26,12 @@ public abstract class Scalable extends Drawable {
         return (int) (this.posY * scale);
     }
 
+    public abstract void onScaleChange(float oldScale, float newScale);
+
     // transformation matrixes are fun
     // right?
     public void scaleWithPositionIntact(PoseStack stack) {
-        stack.translate((posX + (width / 2f)), (posY + (height / 2f)), 0);
-        stack.scale(scale, scale, 0);
-        stack.translate(-(posX + (width / 2f)), -(posY + (height / 2f)), 0);
+        RenderUtil.positionAccurateScale(stack, scale, posX, posY, width, height);
     }
 
     @Override

@@ -38,7 +38,6 @@ public class CpsDisplay extends Scalable {
     @Override
     public void render(PoseStack stack) {
         if(OsmiumClient.options.getBooleanOption(Options.CpsDisplayEnabled).variable) {
-            OsmiumClient.options.put(Options.CpsDisplayPosition, new ElementPositionOption(Options.CpsDisplayPosition, this.posX, this.posY, this.scale));
             if(firstRun) {
                 this.width = 40;
                 this.height = mc.font.lineHeight * 2;
@@ -54,11 +53,23 @@ public class CpsDisplay extends Scalable {
 
     }
 
+    @Override
+    public void onPositionChange(int newX, int newY, int oldX, int oldY) {
+        OsmiumClient.options.put(Options.CpsDisplayPosition, new ElementPositionOption(Options.CpsDisplayPosition, newX, newY, this.scale));
+
+    }
+
     public static CpsDisplay getInstance() {
         if(INSTANCE == null) {
             INSTANCE = new CpsDisplay(Colors.WHITE.getColor().getInt());
         }
         return INSTANCE;
+    }
+
+    @Override
+    public void onScaleChange(float oldScale, float newScale) {
+        OsmiumClient.options.put(Options.CpsDisplayPosition, new ElementPositionOption(Options.CpsDisplayPosition, this.posX, this.posY, newScale));
+
     }
 
     private class RemoveClicksTask extends TimerTask {

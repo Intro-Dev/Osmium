@@ -52,9 +52,11 @@ public class OsmiumGuiEditScreen extends Screen {
         for(Drawable drawable : RenderManager.drawables) {
             if(drawable.isPositionWithinBounds((int) mouseX, (int) mouseY) && drawable.visible) {
                 if(mouseX + drawable.width < this.width || mouseX - drawable.width < 0) {
+                    drawable.onPositionChange(drawable.posX, drawable.posY, (int) mouseX, drawable.posY);
                     drawable.posX = (int) mouseX;
                 }
                 if(mouseY + drawable.height < this.height || mouseY - drawable.height < 0) {
+                    drawable.onPositionChange(drawable.posX, drawable.posY, drawable.posX, (int) mouseY);
                     drawable.posY = (int) mouseY;
                 }
                 return super.mouseDragged(mouseX, mouseX, button, deltaX, deltaY);
@@ -68,6 +70,7 @@ public class OsmiumGuiEditScreen extends Screen {
         for(Drawable drawable : RenderManager.drawables) {
             if(drawable instanceof Scalable scalable) {
                 if(scalable.isPositionWithinBounds((int) mouseX, (int) mouseY) && drawable.visible) {
+                    scalable.onScaleChange(scalable.scale, (float) (scalable.scale + (scrollDelta * 0.1)));
                     scalable.scale += scrollDelta * 0.1;
                     scalable.scale = (float) Mth.clamp(scalable.scale, 0.5, 10);
                     return super.mouseScrolled(mouseX, mouseY, scrollDelta);

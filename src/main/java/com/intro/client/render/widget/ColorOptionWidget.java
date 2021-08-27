@@ -2,14 +2,17 @@ package com.intro.client.render.widget;
 
 import com.intro.client.OsmiumClient;
 import com.intro.client.render.Color;
-import com.intro.client.render.RenderManager;
-import com.intro.client.render.drawables.Drawable;
 import com.intro.client.util.TextureUtil;
 import com.intro.client.util.Vector2d;
 import com.mojang.blaze3d.platform.NativeImage;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiComponent;
+import net.minecraft.client.gui.components.Widget;
+import net.minecraft.client.gui.components.events.GuiEventListener;
+import net.minecraft.client.gui.narration.NarratableEntry;
+import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.network.chat.TranslatableComponent;
@@ -29,7 +32,7 @@ import org.jetbrains.annotations.NotNull;
  * @see com.intro.common.config.Options
  * @see com.intro.client.render.screen.OsmiumBlockOptionsScreen
  */
-public class ColorOptionWidget extends Drawable {
+public class ColorOptionWidget extends GuiComponent implements Widget, GuiEventListener, NarratableEntry {
 
     private final String optionId;
 
@@ -66,15 +69,6 @@ public class ColorOptionWidget extends Drawable {
         this.TEXTURE = TextureUtil.convertIdentifierToNativeImage(BAKED_TEXTURE);
     }
 
-    @Override
-    public void render(PoseStack stack) {
-        RenderManager.drawables.remove(this);
-    }
-
-    @Override
-    public void destroySelf() {
-
-    }
 
     @Override
     public void render(PoseStack matrices, int mouseX, int mouseY, float delta) {
@@ -99,7 +93,7 @@ public class ColorOptionWidget extends Drawable {
 
             OsmiumClient.options.getColorOption(this.optionId).color = new Color(color);
         }
-        return super.mouseClicked(mouseX, mouseY, button);
+        return GuiEventListener.super.mouseClicked(mouseX, mouseY, button);
     }
 
 
@@ -147,4 +141,13 @@ public class ColorOptionWidget extends Drawable {
     }
 
 
+    @Override
+    public NarrationPriority narrationPriority() {
+        return NarrationPriority.HOVERED;
+    }
+
+    @Override
+    public void updateNarration(NarrationElementOutput narrationElementOutput) {
+
+    }
 }

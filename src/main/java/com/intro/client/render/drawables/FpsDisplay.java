@@ -29,7 +29,6 @@ public class FpsDisplay extends Scalable {
     @Override
     public void render(PoseStack stack) {
         if(OsmiumClient.options.getBooleanOption(Options.FpsEnabled).variable) {
-            OsmiumClient.options.put(Options.FpsDisplayPosition, new ElementPositionOption(Options.FpsDisplayPosition, this.posX, this.posY, this.scale));
             if(firstRun) {
                 this.width = 60;
                 this.height = mc.font.lineHeight * 2;
@@ -45,6 +44,11 @@ public class FpsDisplay extends Scalable {
 
     }
 
+    @Override
+    public void onPositionChange(int newX, int newY, int oldX, int oldY) {
+        OsmiumClient.options.put(Options.FpsDisplayPosition, new ElementPositionOption(Options.FpsDisplayPosition, newX, newY, this.scale));
+    }
+
     public static FpsDisplay getInstance() {
         if(INSTANCE == null) {
             INSTANCE = new FpsDisplay(Colors.WHITE.getColor().getInt());
@@ -52,4 +56,8 @@ public class FpsDisplay extends Scalable {
         return INSTANCE;
     }
 
+    @Override
+    public void onScaleChange(float oldScale, float newScale) {
+        OsmiumClient.options.put(Options.FpsDisplayPosition, new ElementPositionOption(Options.FpsDisplayPosition, this.posX, this.posY, newScale));
+    }
 }

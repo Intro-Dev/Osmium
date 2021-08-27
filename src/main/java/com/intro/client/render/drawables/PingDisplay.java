@@ -11,8 +11,6 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientPacketListener;
 
-import java.util.Objects;
-
 public class PingDisplay extends Scalable {
 
     private static PingDisplay INSTANCE;
@@ -30,7 +28,11 @@ public class PingDisplay extends Scalable {
     public void onEvent(Event event) {
         if(event instanceof EventTick && mc.player != null) {
             ClientPacketListener clientPacketListener = mc.player.connection;
-            currentPing = Objects.requireNonNull(clientPacketListener.getPlayerInfo(mc.player.getUUID())).getLatency();
+            if(clientPacketListener.getPlayerInfo(mc.player.getUUID()) != null) {
+                currentPing = clientPacketListener.getPlayerInfo(mc.player.getUUID()).getLatency();
+            } else {
+                currentPing = 0;
+            }
         }
     }
 
@@ -47,7 +49,6 @@ public class PingDisplay extends Scalable {
                 this.height = mc.font.lineHeight * 2;
                 firstRun = false;
             }
-            OsmiumClient.options.put(Options.PingDisplayPosition, new ElementPositionOption(Options.PingDisplayPosition, this.posX, this.posY, this.scale));
             fill(stack, posX, posY, posX + width, posY + height, BG_COLOR);
             drawCenteredString(stack, mc.font, currentPing + " ms", posX + (width / 2), posY + (height / 4), color);
         }
@@ -58,10 +59,21 @@ public class PingDisplay extends Scalable {
 
     }
 
+    @Override
+    public void onPositionChange(int newX, int newY, int oldX, int oldY) {
+        OsmiumClient.options.put(Options.PingDisplayPosition, new ElementPositionOption(Options.PingDisplayPosition, newX, newY, this.scale));
+
+    }
+
     public static PingDisplay getInstance() {
         if(INSTANCE == null) {
             INSTANCE = new PingDisplay(Colors.WHITE.getColor().getInt());
         }
         return INSTANCE;
+    }
+
+    @Override
+    public void onScaleChange(float oldScale, float newScale) {
+        OsmiumClient.options.put(Options.PingDisplayPosition, new ElementPositionOption(Options.PingDisplayPosition, this.posX, this.posY, newScale));
     }
 }

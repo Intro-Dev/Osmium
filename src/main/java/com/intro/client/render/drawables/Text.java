@@ -81,6 +81,11 @@ public class Text extends Scalable {
         RenderManager.drawables.remove(this);
     }
 
+    @Override
+    public void onPositionChange(int newX, int newY, int oldX, int oldY) {
+
+    }
+
     public int getTextHeight() {
         return this.height;
     }
@@ -102,5 +107,10 @@ public class Text extends Scalable {
         Font renderer = mc.font;
         renderer.drawShadow(stack, new TextComponent(this.text), this.posX, this.posY, this.color);
         // stack.pop();
+    }
+
+    @Override
+    public void onScaleChange(float oldScale, float newScale) {
+
     }
 }

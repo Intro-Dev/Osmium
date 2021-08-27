@@ -38,7 +38,6 @@ public class ArmorDisplay extends Scalable {
     @Override
     public void render(PoseStack stack) {
         if(mc.player != null && OsmiumClient.options.getBooleanOption(Options.ArmorDisplayEnabled).variable) {
-            OsmiumClient.options.put(Options.ArmorDisplayPosition, new ElementPositionOption(Options.ArmorDisplayPosition, this.posX, this.posY, this.scale));
             int offY = 0;
 
             List<ItemStack> stacks = StreamSupport.stream(mc.player.getArmorSlots().spliterator(), false).collect(Collectors.toList());
@@ -117,12 +116,23 @@ public class ArmorDisplay extends Scalable {
     public void destroySelf() {
         RenderManager.drawables.remove(this);
     }
-    
+
+    @Override
+    public void onPositionChange(int newX, int newY, int oldX, int oldY) {
+        OsmiumClient.options.put(Options.ArmorDisplayPosition, new ElementPositionOption(Options.ArmorDisplayPosition, newX, newY, this.scale));
+
+    }
+
     public static ArmorDisplay getInstance() {
         if(instance == null) {
             instance = new ArmorDisplay();
             return instance;
         }
         return instance;
+    }
+
+    @Override
+    public void onScaleChange(float oldScale, float newScale) {
+        OsmiumClient.options.put(Options.ArmorDisplayPosition, new ElementPositionOption(Options.ArmorDisplayPosition, this.posX, this.posY, newScale));
     }
 }

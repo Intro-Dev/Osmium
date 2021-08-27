@@ -58,8 +58,9 @@ public class OsmiumWidgetsScreen extends Screen {
         BooleanButtonWidget cpsDisplayEnabled = new BooleanButtonWidget(this.width / 2 - 75, this.height / 4 + 80 + globalOffset, 150, 20, Options.CpsDisplayEnabled, "osmium.options.cps_");
         BooleanButtonWidget fpsDisplayEnabled = new BooleanButtonWidget(this.width / 2 + 125, this.height / 4 + 80 + globalOffset, 150, 20, Options.FpsEnabled, "osmium.options.fps_");
         BooleanButtonWidget armorDisplayEnabled = new BooleanButtonWidget(this.width / 2 - 275, this.height / 4 + 120 + globalOffset, 150, 20, Options.ArmorDisplayEnabled, "osmium.options.armor_display_");
+        Button openKeystrokesWidget = new Button(this.width / 2 - 75, this.height / 4 + 120 + globalOffset, 150, 20, new TranslatableComponent("osmium.options.keystrokes_settings"), button -> mc.setScreen(new OsmiumKeystrokesScreen(this)));
 
-
+        this.addRenderableWidget(openKeystrokesWidget);
         this.addRenderableWidget(pingDisplayEnabled);
         this.addRenderableWidget(cpsDisplayEnabled);
         this.addRenderableWidget(fpsDisplayEnabled);
