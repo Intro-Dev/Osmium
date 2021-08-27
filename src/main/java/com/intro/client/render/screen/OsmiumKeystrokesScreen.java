@@ -39,7 +39,7 @@ public class OsmiumKeystrokesScreen extends Screen {
         Button resetColorWidget = new Button(this.width / 2 - 175, this.height / 4 + 120, 150, 20, new TranslatableComponent("osmium.options.reset_color"), (buttonWidget) -> OsmiumClient.options.put(Options.KeystrokesColor, new ColorOption(Options.KeystrokesColor, new Color(0.1f, 0.1f, 0.1f, 0.2f))));
         BooleanButtonWidget enabledWidget = new BooleanButtonWidget(this.width / 2 - 175, this.height / 4, 150, 20, Options.KeystrokesEnabled, "osmium.options.keystrokes_");
         BooleanButtonWidget rgbSelectWidget = new BooleanButtonWidget(this.width / 2 - 175, this.height / 4 + 40, 150, 20, Options.KeystrokesRgb, "osmium.options.rgb_");
-        DoubleSliderWidget alphaSelectWidget = new DoubleSliderWidget(mc, this.width / 2 - 175, this.height / 4 + 80, 150, 20, Options.KeystrokesAlpha, "osmium.options.transparency_", 0, 1, 10);
+        DoubleSliderWidget alphaSelectWidget = new DoubleSliderWidget(mc, this.width / 2 - 175, this.height / 4 + 80, 150, 20, Options.KeystrokesAlpha, "osmium.options.transparency", 0, 1, 10);
 
         this.addRenderableWidget(resetColorWidget);
         this.addRenderableWidget(enabledWidget);

@@ -59,6 +59,17 @@
   "osmium.options.video_options.cape_all": "Custom Capes: All",
   "osmium.options.armor_display_enabled": "Armor Display: Enabled",
   "osmium.options.armor_display_disabled": "Armor Display: Disabled",
-  "osmium.options.widgets_screen": "Widgets Screen"
+  "osmium.options.widgets_screen": "Widgets Screen",
+  "osmium.options.ping_display_enabled": "Ping Display: Enabled",
+  "osmium.options.ping_display_disabled": "Ping Display: Disabled",
+  "osmium.options.cps_enabled": "Cps Display: Enabled",
+  "osmium.options.cps_disabled": "Cps Display: Disabled",
+  "osmium.options.keystrokes_settings": "Keystrokes Options",
+  "osmium.options.keystrokes_enabled": "Keystrokes: Enabled",
+  "osmium.options.keystrokes_disabled": "Keystrokes : Disabled",
+  "osmium.options.rgb_enabled": "Rgb: Enabled",
+  "osmium.options.rgb_disabled": "Rgb: Disabled",
+  "osmium.options.reset_color": "Reset Color",
+  "osmium.options.transparency": "Transparency: "
 
 }
