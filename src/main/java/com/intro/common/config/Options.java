@@ -65,7 +65,7 @@ public class Options {
 
     public ColorOption getColorOption(String identifier) {
         return (ColorOption) get(identifier);
-    };
+    }
 
 
     public void put(String identifier, Option option) {
@@ -154,7 +154,7 @@ public class Options {
         put(KeystrokesRgb, new BooleanOption(KeystrokesRgb, false));
         put(KeystrokesPosition, new ElementPositionOption(KeystrokesPosition, 5, 5, 1));
         put(KeystrokesEnabled, new BooleanOption(KeystrokesEnabled, false));
-        put(KeystrokesAlpha, new DoubleOption(KeystrokesAlpha, 1));
+        put(KeystrokesAlpha, new DoubleOption(KeystrokesAlpha, 0.2));
     }
 
     public HashMap<String, Option> getValues() {

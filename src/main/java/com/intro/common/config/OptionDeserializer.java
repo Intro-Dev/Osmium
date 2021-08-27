@@ -20,7 +20,6 @@ public class OptionDeserializer implements JsonDeserializer<Option> {
         if(src.get("Type").getAsString().equals("BooleanOption")) {
             return new BooleanOption( src.get("Identifier").getAsString(), src.get("Value").getAsBoolean());
         }
-
         if(src.get("Type").getAsString().equals("EnumOption")) {
             try {
                 // Loads enum, gets its value from the config file, and creates an EnumOption instance
@@ -39,9 +38,10 @@ public class OptionDeserializer implements JsonDeserializer<Option> {
         if(src.get("Type").getAsString().equals("ColorOption")) {
             return new ColorOption(src.get("Identifier").getAsString(), new Color(src.get("R").getAsInt(), src.get("G").getAsInt(), src.get("B").getAsInt(), src.get("A").getAsInt()));
         }
-        // Options defaultOptions = new Options();
-        // defaultOptions.setDefaults();
-        // return defaultOptions.get(src.get("Identifier").getAsString());
+        // for legacy Vector2d options
+        if(src.get("Type").getAsString().equals("Vector2Option")) {
+            return new ElementPositionOption( src.get("Identifier").getAsString(), src.get("x").getAsDouble(), src.get("y").getAsDouble());
+        }
         return null;
     }
 
