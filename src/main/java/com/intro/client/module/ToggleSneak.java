@@ -43,24 +43,21 @@ public class ToggleSneak {
                         this.sprinting = !this.sprinting;
                     }
 
-                    if(mc.player.isSprinting()) {
-                        if(sprinting) {
-                            this.sprintingText.text = "Sprinting(Toggled)";
-                        } else if(mc.options.keySprint.isDown()) {
-                            this.sprintingText.text = "Sprinting(Key Held)";
-                        } else {
-                            this.sprintingText.text = "Sprinting(Vanilla)";
-                        }
-                    }
-
-                    if(mc.player.isShiftKeyDown()) {
-                        if(sneaking) {
-                            this.sprintingText.text = "Sneaking(Toggled)";
-                        } else if(mc.options.keyShift.isDown()) {
-                            this.sprintingText.text = "Sneaking(Key Held)";
-                        } else {
-                            this.sprintingText.text = "Sneaking(Vanilla)";
-                        }
+                    if((this.sprinting && toggleSprintEnabled) && (!sneaking)) {
+                        sprintingText.visible = true;
+                        sprintingText.text = "Sprinting(Toggled)";
+                    } else if (mc.options.keySprint.isDown() && toggleSprintEnabled) {
+                        sprintingText.visible = true;
+                        sprintingText.text = "Sprinting(Key Down)";
+                    } else if(sneaking && toggleSneakEnabled) {
+                        sprintingText.visible = true;
+                        sprintingText.text = "Sneaking(Toggled)";
+                    } else if (mc.options.keyShift.isDown() && toggleSneakEnabled) {
+                        sprintingText.visible = true;
+                        sprintingText.text = "Sneaking(Key Down)";
+                    } else {
+                        sprintingText.text = "";
+                        sprintingText.visible = false;
                     }
                 }
             } else if(sprintingText.visible) {
