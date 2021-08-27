@@ -29,6 +29,9 @@ public class FpsDisplay extends Scalable {
     @Override
     public void render(PoseStack stack) {
         if(OsmiumClient.options.getBooleanOption(Options.FpsEnabled).variable) {
+
+            this.visible = true;
+
             if(firstRun) {
                 this.width = 60;
                 this.height = mc.font.lineHeight * 2;
@@ -36,6 +39,8 @@ public class FpsDisplay extends Scalable {
             }
             fill(stack, posX, posY, posX + width, posY + height, BG_COLOR);
             drawCenteredString(stack, mc.font, ((MinecraftAccessor) Minecraft.getInstance()).getFps() + " fps", posX + (width / 2), posY + (height / 4), color);
+        } else {
+            this.visible = false;
         }
     }
 

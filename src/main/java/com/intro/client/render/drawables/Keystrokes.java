@@ -38,6 +38,9 @@ public class Keystrokes extends Scalable {
 
 
     protected Keystrokes() {
+        this.width = 192 + (ELEMENT_OFFSET * 3);
+        this.height = 128;
+
         sectionWidth = width / 3;
         sectionHeight = height / 2;
         wKeyPos = new ElementPosition(this.posX + sectionWidth + ELEMENT_OFFSET, this.posY, 1);
@@ -48,16 +51,14 @@ public class Keystrokes extends Scalable {
         aKeyTextPos = new Vector2d(aKeyPos.x + (sectionWidth / 2f), aKeyPos.y + (sectionHeight / 4f));
         sKeyTextPos = new Vector2d(sKeyPos.x + (sectionWidth / 2f), sKeyPos.y + (sectionHeight / 4f));
         dKeyTextPos = new Vector2d(dKeyPos.x + (sectionWidth / 2f), dKeyPos.y + (sectionHeight / 4f));
-
-        this.width = 192 + (ELEMENT_OFFSET * 3);
-        this.height = 128;
-
     }
 
     @Override
     public void render(PoseStack stack) {
 
         if(OsmiumClient.options.getBooleanOption(Options.KeystrokesEnabled).variable) {
+            this.visible = true;
+
             Color temp = OsmiumClient.options.getColorOption(Options.KeystrokesColor).color;
             temp.setA((int) (OsmiumClient.options.getDoubleOption(Options.KeystrokesAlpha).variable * 255));
             int BG_COLOR = temp.getInt();
@@ -82,16 +83,17 @@ public class Keystrokes extends Scalable {
                 fill(stack, dKeyPos.x, dKeyPos.y, dKeyPos.x + sectionWidth, dKeyPos.y + sectionHeight, (mc.options.keyRight.isDown() ? KEY_DOWN_COLOR : BG_COLOR));
             }
 
-            RenderUtil.renderCenteredScaledText(stack, mc.font, mc.options.keyUp.getTranslatedKeyMessage(), ((int) wKeyTextPos.getX()), ((int) wKeyTextPos.getY()), Colors.WHITE.getColor().getInt(), 2f);
-            RenderUtil.renderCenteredScaledText(stack, mc.font, mc.options.keyLeft.getTranslatedKeyMessage(), ((int) aKeyTextPos.getX()), ((int) aKeyTextPos.getY()), Colors.WHITE.getColor().getInt(), 2f);
-            RenderUtil.renderCenteredScaledText(stack, mc.font, mc.options.keyDown.getTranslatedKeyMessage(), ((int) sKeyTextPos.getX()), ((int) sKeyTextPos.getY()), Colors.WHITE.getColor().getInt(), 2f);
-            RenderUtil.renderCenteredScaledText(stack, mc.font, mc.options.keyRight.getTranslatedKeyMessage(), ((int) dKeyTextPos.getX()), ((int) dKeyTextPos.getY()), Colors.WHITE.getColor().getInt(), 2f);
+            RenderUtil.renderCenteredScaledText(stack, mc.font, mc.options.keyUp.getTranslatedKeyMessage().getString().toUpperCase(), ((int) wKeyTextPos.getX()), ((int) wKeyTextPos.getY()), Colors.WHITE.getColor().getInt(), 3f);
+            RenderUtil.renderCenteredScaledText(stack, mc.font, mc.options.keyLeft.getTranslatedKeyMessage().getString().toUpperCase(), ((int) aKeyTextPos.getX()), ((int) aKeyTextPos.getY()), Colors.WHITE.getColor().getInt(), 3f);
+            RenderUtil.renderCenteredScaledText(stack, mc.font, mc.options.keyDown.getTranslatedKeyMessage().getString().toUpperCase(), ((int) sKeyTextPos.getX()), ((int) sKeyTextPos.getY()), Colors.WHITE.getColor().getInt(), 3f);
+            RenderUtil.renderCenteredScaledText(stack, mc.font, mc.options.keyRight.getTranslatedKeyMessage().getString().toUpperCase(), ((int) dKeyTextPos.getX()), ((int) dKeyTextPos.getY()), Colors.WHITE.getColor().getInt(), 3f);
             /*
             vLine(stack, aKeyPos.x + sectionWidth, aKeyPos.y, aKeyPos.y + sectionHeight, Colors.WHITE.getColor().getInt());
             vLine(stack, sKeyPos.x + sectionWidth, sKeyPos.y, sKeyPos.y + sectionHeight, Colors.WHITE.getColor().getInt());
             hLine(stack, wKeyPos.x, wKeyPos.x + sectionWidth, wKeyPos.y + sectionHeight, Colors.WHITE.getColor().getInt());
              */
-
+        } else {
+            this.visible = false;
         }
     }
 

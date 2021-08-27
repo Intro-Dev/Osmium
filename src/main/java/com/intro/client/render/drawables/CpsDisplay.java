@@ -38,6 +38,9 @@ public class CpsDisplay extends Scalable {
     @Override
     public void render(PoseStack stack) {
         if(OsmiumClient.options.getBooleanOption(Options.CpsDisplayEnabled).variable) {
+
+            this.visible = true;
+            System.out.println("drawing");
             if(firstRun) {
                 this.width = 40;
                 this.height = mc.font.lineHeight * 2;
@@ -69,7 +72,6 @@ public class CpsDisplay extends Scalable {
     @Override
     public void onScaleChange(float oldScale, float newScale) {
         OsmiumClient.options.put(Options.CpsDisplayPosition, new ElementPositionOption(Options.CpsDisplayPosition, this.posX, this.posY, newScale));
-
     }
 
     private class RemoveClicksTask extends TimerTask {

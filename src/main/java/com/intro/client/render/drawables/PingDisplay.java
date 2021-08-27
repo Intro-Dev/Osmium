@@ -44,6 +44,7 @@ public class PingDisplay extends Scalable {
     @Override
     public void render(PoseStack stack) {
         if(OsmiumClient.options.getBooleanOption(Options.PingDisplayEnabled).variable) {
+            this.visible = true;
             if(firstRun) {
                 this.width = 40;
                 this.height = mc.font.lineHeight * 2;
@@ -51,6 +52,8 @@ public class PingDisplay extends Scalable {
             }
             fill(stack, posX, posY, posX + width, posY + height, BG_COLOR);
             drawCenteredString(stack, mc.font, currentPing + " ms", posX + (width / 2), posY + (height / 4), color);
+        } else {
+            this.visible = false;
         }
     }
 

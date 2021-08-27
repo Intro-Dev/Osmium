@@ -21,7 +21,20 @@ public class RenderUtil {
         stack.popPose();
     }
 
+    public static void renderScaledText(PoseStack stack, Font font, String text, int x, int y, int color, float scale) {
+        stack.pushPose();
+        int textWidth = font.width(text);
+        int textHeight = font.lineHeight;
+        positionAccurateScale(stack, scale, x, y, textWidth, textHeight);
+        font.drawShadow(stack, text, x, y, color);
+        stack.popPose();
+    }
+
     public static void renderCenteredScaledText(PoseStack stack, Font font, Component text, int x, int y, int color, float scale) {
+        renderScaledText(stack, font, text, (x - font.width(text) / 2), y, color, scale);
+    }
+
+    public static void renderCenteredScaledText(PoseStack stack, Font font, String text, int x, int y, int color, float scale) {
         renderScaledText(stack, font, text, (x - font.width(text) / 2), y, color, scale);
     }
 }

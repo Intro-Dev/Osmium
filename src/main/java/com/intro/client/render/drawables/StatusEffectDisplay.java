@@ -34,8 +34,9 @@ public class StatusEffectDisplay extends Scalable {
     @Override
     public void render(PoseStack stack) {
         if(mc.player != null && (OsmiumClient.options.getEnumOption(Options.StatusEffectDisplayMode).variable == StatusEffectDisplayMode.CUSTOM || OsmiumClient.options.getEnumOption(Options.StatusEffectDisplayMode).variable == StatusEffectDisplayMode.BOTH)) {
-            MobEffectTextureManager spriteManager = mc.getMobEffectTextures();
+            this.visible = true;
 
+            MobEffectTextureManager spriteManager = mc.getMobEffectTextures();
             stack.pushPose();
             {
                 int offY = 0;
@@ -85,6 +86,8 @@ public class StatusEffectDisplay extends Scalable {
                 }
             }
             stack.popPose();
+        } else {
+            this.visible = false;
         }
 
     }

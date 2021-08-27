@@ -38,6 +38,8 @@ public class ArmorDisplay extends Scalable {
     @Override
     public void render(PoseStack stack) {
         if(mc.player != null && OsmiumClient.options.getBooleanOption(Options.ArmorDisplayEnabled).variable) {
+            this.visible = true;
+
             int offY = 0;
 
             List<ItemStack> stacks = StreamSupport.stream(mc.player.getArmorSlots().spliterator(), false).collect(Collectors.toList());
@@ -65,6 +67,8 @@ public class ArmorDisplay extends Scalable {
                 }
                 offY += 32;
             }
+        } else {
+            this.visible = false;
         }
     }
 
