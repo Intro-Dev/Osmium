@@ -18,6 +18,15 @@ public class RgbColorGenerator {
         endColorState = GeneratorState.INCREASING;
     }
 
+    public void setAlpha(int alpha) {
+        Color c1 = new Color(startColor);
+        Color c2 = new Color(endColor);
+        c1.setA(alpha);
+        c2.setA(alpha);
+        startColor = c1.getInt();
+        endColor = c2.getInt();
+    }
+
     public void tick() {
         if(Color.toRGBAB(startColor) >= 255) {
             startColorState = GeneratorState.DECREASING;

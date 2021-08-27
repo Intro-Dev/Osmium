@@ -36,6 +36,7 @@ public class Keystrokes extends Scalable {
 
 
     protected Keystrokes() {
+        OsmiumClient.options.getElementPositionOption(Options.KeystrokesPosition).elementPosition.loadToScalable(this);
         this.width = 212;
         this.height = 138;
 
@@ -67,6 +68,7 @@ public class Keystrokes extends Scalable {
 
             if(OsmiumClient.options.getBooleanOption(Options.KeystrokesRgb).variable) {
                 colorGenerator.tick();
+                colorGenerator.setAlpha((int) (OsmiumClient.options.getDoubleOption(Options.KeystrokesAlpha).variable * 255));
 
                 int rgbColorStart = colorGenerator.getStartColor();
                 int rgbColorEnd = colorGenerator.getEndColor();
@@ -125,6 +127,5 @@ public class Keystrokes extends Scalable {
     @Override
     public void onScaleChange(double oldScale, double newScale) {
         OsmiumClient.options.put(Options.KeystrokesPosition, new ElementPositionOption(Options.KeystrokesPosition, this.posX, this.posY, newScale));
-
     }
 }

@@ -1,6 +1,5 @@
 package com.intro.client.render.screen;
 
-import com.intro.client.render.Colors;
 import com.intro.client.render.RenderManager;
 import com.intro.client.render.drawables.Drawable;
 import com.intro.client.render.drawables.Scalable;
@@ -30,16 +29,6 @@ public class OsmiumGuiEditScreen extends Screen {
     public void render(PoseStack matrices, int mouseX, int mouseY, float delta) {
         this.renderBackground(matrices);
         RenderManager.renderHud(matrices);
-
-        for(Drawable drawable : RenderManager.drawables) {
-            if(drawable instanceof Scalable scalable) {
-                hLine(matrices, scalable.getScaledX(), scalable.getScaledX() + scalable.getScaledWidth(), scalable.getScaledY(), Colors.WHITE.getColor().getInt());
-                hLine(matrices, scalable.getScaledX(), scalable.getScaledX() + scalable.getScaledWidth(), scalable.getScaledY() + scalable.getScaledHeight(), Colors.WHITE.getColor().getInt());
-                vLine(matrices, scalable.getScaledX(), scalable.getScaledY(), scalable.getScaledY() + scalable.getScaledHeight(), Colors.WHITE.getColor().getInt());
-                vLine(matrices, scalable.getScaledX() + scalable.getScaledWidth(), scalable.getScaledY(), scalable.getScaledY() + scalable.getScaledHeight(), Colors.WHITE.getColor().getInt());
-            }
-        }
-
         super.render(matrices, mouseX, mouseY, delta);
     }
 

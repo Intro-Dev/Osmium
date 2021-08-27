@@ -55,7 +55,7 @@ public class OsmiumToggleSneakOptionsScreen extends Screen {
     @Override
     public void render(PoseStack matrices, int mouseX, int mouseY, float delta) {
         this.renderBackground(matrices);
-        drawCenteredString(matrices, mc.font, new TranslatableComponent("osmium.options.toggle_sneak_settings"), this.width / 2, 15, 0xffffff);
+        drawCenteredString(matrices, mc.font, new TranslatableComponent("osmium.options.toggle_sneak_settings"), this.width / 2, this.height / 4 - 50, 0xffffff);
         drawString(matrices, mc.font, new TranslatableComponent("osmium.version"), 20, this.height - 20, 0xffffff);
         super.render(matrices, mouseX, mouseY, delta);
     }

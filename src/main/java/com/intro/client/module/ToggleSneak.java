@@ -61,6 +61,7 @@ public class ToggleSneak {
                     }
                 }
             } else if(sprintingText.visible) {
+                sprintingText.text = "";
                 sprintingText.visible = false;
             }
         }

@@ -26,8 +26,8 @@ public class OsmiumStatusEffectDisplayOptionsScreen extends Screen {
     protected void init() {
         Button backButton = new Button(this.width / 2 - 100, this.height / 4 + 220, 200, 20, new TranslatableComponent("osmium.options.video_options.back"), (buttonWidget) -> mc.setScreen(this.parent));
 
-        EnumSelectWidget displayModeWidget = new EnumSelectWidget(this.width / 2 - 175, this.height / 4 + 120, 150, 20, Options.StatusEffectDisplayMode, "osmium.options.status_effect_display_");
-        DoubleSliderWidget maxDisplayedWidget = new DoubleSliderWidget(mc, this.width / 2 + 25, this.height / 4 + 120, 150, 20, Options.MaxStatusEffectsDisplayed, "osmium.options.max_status_display", 0, 10, 1);
+        EnumSelectWidget displayModeWidget = new EnumSelectWidget(this.width / 2 - 175, this.height / 4 + 80, 150, 20, Options.StatusEffectDisplayMode, "osmium.options.status_effect_display_");
+        DoubleSliderWidget maxDisplayedWidget = new DoubleSliderWidget(mc, this.width / 2 + 25, this.height / 4 + 80, 150, 20, Options.MaxStatusEffectsDisplayed, "osmium.options.max_status_display", 0, 10, 1);
 
 
         this.addRenderableWidget(backButton);
