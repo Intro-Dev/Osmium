@@ -136,7 +136,7 @@ public class ArmorDisplay extends Scalable {
     }
 
     @Override
-    public void onScaleChange(float oldScale, float newScale) {
+    public void onScaleChange(double oldScale, double newScale) {
         OsmiumClient.options.put(Options.ArmorDisplayPosition, new ElementPositionOption(Options.ArmorDisplayPosition, this.posX, this.posY, newScale));
     }
 }

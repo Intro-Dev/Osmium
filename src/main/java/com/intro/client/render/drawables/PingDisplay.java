@@ -76,7 +76,7 @@ public class PingDisplay extends Scalable {
     }
 
     @Override
-    public void onScaleChange(float oldScale, float newScale) {
+    public void onScaleChange(double oldScale, double newScale) {
         OsmiumClient.options.put(Options.PingDisplayPosition, new ElementPositionOption(Options.PingDisplayPosition, this.posX, this.posY, newScale));
     }
 }

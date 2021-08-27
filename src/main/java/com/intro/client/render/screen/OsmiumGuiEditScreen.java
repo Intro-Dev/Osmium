@@ -59,13 +59,24 @@ public class OsmiumGuiEditScreen extends Screen {
     public boolean mouseDragged(double mouseX, double mouseY, int button, double deltaX, double deltaY) {
         for(Drawable drawable : RenderManager.drawables) {
             if(drawable.isPositionWithinBounds((int) mouseX, (int) mouseY) && drawable.visible) {
-                if(mouseX + drawable.width < this.width || mouseX - drawable.width < 0) {
-                    drawable.onPositionChange(drawable.posX, drawable.posY, (int) mouseX, drawable.posY);
-                    drawable.posX = (int) mouseX;
-                }
-                if(mouseY + drawable.height < this.height || mouseY - drawable.height < 0) {
-                    drawable.onPositionChange(drawable.posX, drawable.posY, drawable.posX, (int) mouseY);
-                    drawable.posY = (int) mouseY;
+                if(drawable instanceof Scalable scalable) {
+                    if(mouseX + scalable.getScaledWidth() < this.width || mouseX - scalable.getScaledHeight() < 0) {
+                        scalable.onPositionChange(drawable.posX, drawable.posY, (int) mouseX, drawable.posY);
+                        scalable.setScaledX((int) mouseX);
+                    }
+                    if(mouseY + scalable.getScaledHeight() < this.height || mouseY - scalable.getScaledHeight() < 0) {
+                        scalable.onPositionChange(drawable.posX, drawable.posY, drawable.posX, (int) mouseY);
+                        scalable.setScaledY((int) mouseY);
+                    }
+                } else {
+                    if(mouseX + drawable.width < this.width || mouseX - drawable.width < 0) {
+                        drawable.onPositionChange(drawable.posX, drawable.posY, (int) mouseX, drawable.posY);
+                        drawable.posX = (int) mouseX;
+                    }
+                    if(mouseY + drawable.height < this.height || mouseY - drawable.height < 0) {
+                        drawable.onPositionChange(drawable.posX, drawable.posY, drawable.posX, (int) mouseY);
+                        drawable.posY = (int) mouseY;
+                    }
                 }
                 return super.mouseDragged(mouseX, mouseX, button, deltaX, deltaY);
             }

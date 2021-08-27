@@ -8,7 +8,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
  */
 public abstract class Scalable extends Drawable {
 
-    public float scale = 1f;
+    public double scale = 1f;
 
     public int getScaledWidth() {
         return (int) (this.width * scale);
@@ -26,6 +26,8 @@ public abstract class Scalable extends Drawable {
     // very fun
     // this algorithm was not fun to make
     // probably online somewhere, but I can't find it, so I had to make it myself
+    // x: scaledX, y: x, z: scaledHeight, a: scale
+    // x = y + (z / (2 * a)) - z / 2;
     public int getScaledX() {
         return (int) (posX + (this.getScaledWidth() / (2 * scale)) - this.getScaledWidth() / 2);
     }
@@ -38,12 +40,26 @@ public abstract class Scalable extends Drawable {
         return (int) (posY + (this.getScaledHeight() / (2 * scale)) - this.getScaledHeight() / 2);
     }
 
-    public abstract void onScaleChange(float oldScale, float newScale);
+    // x: scaledX, y: x, z: scaledWidth, a: scale
+    // -y = -x + (z / (2 * a)) - z / 2;
+    // y = x + -(z / (2 * a)) + (z / 2)
+
+    public void setScaledX(int x) {
+        this.posX = (int) -((-x + this.getScaledWidth() / (2 * scale)) - this.getScaledWidth() / 2);
+    }
+
+    public void setScaledY(int y) {
+        this.posY = (int) -((-y + this.getScaledHeight() / (2 * scale)) - this.getScaledHeight() / 2);
+    }
+
+
+
+    public abstract void onScaleChange(double oldScale, double newScale);
 
     // transformation matrices are fun
     // right?
     public void scaleWithPositionIntact(PoseStack stack) {
-        RenderUtil.positionAccurateScale(stack, scale, posX, posY, width, height);
+        RenderUtil.positionAccurateScale(stack, (float) scale, posX, posY, width, height);
     }
 
     @Override

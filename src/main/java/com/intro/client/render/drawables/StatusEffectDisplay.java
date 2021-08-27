@@ -112,7 +112,7 @@ public class StatusEffectDisplay extends Scalable {
     }
 
     @Override
-    public void onScaleChange(float oldScale, float newScale) {
+    public void onScaleChange(double oldScale, double newScale) {
         OsmiumClient.options.put(Options.StatusEffectDisplayPosition, new ElementPositionOption(Options.StatusEffectDisplayPosition, this.posX, this.posY, newScale));
 
     }

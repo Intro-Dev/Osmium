@@ -62,7 +62,7 @@ public class FpsDisplay extends Scalable {
     }
 
     @Override
-    public void onScaleChange(float oldScale, float newScale) {
+    public void onScaleChange(double oldScale, double newScale) {
         OsmiumClient.options.put(Options.FpsDisplayPosition, new ElementPositionOption(Options.FpsDisplayPosition, this.posX, this.posY, newScale));
     }
 }

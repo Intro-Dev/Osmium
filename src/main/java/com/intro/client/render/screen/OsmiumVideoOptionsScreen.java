@@ -63,15 +63,12 @@ public class OsmiumVideoOptionsScreen extends Screen {
         BooleanButtonWidget toggleFireworksWidget = new BooleanButtonWidget(this.width / 2 + 125, this.height / 4 + 80 + globalOffset, 150, 20, Options.FireworksDisabled, "osmium.options.fireworks_");
         BooleanButtonWidget toggleNetherParticlesWidget = new BooleanButtonWidget(this.width / 2 - 275, this.height / 4 + 120 + globalOffset, 150, 20, Options.DecreaseNetherParticles, "osmium.options.nether_particles_");
 
-        Button statusEffectScreenButton = new Button(this.width / 2 + 125, this.height / 4 + 120 + globalOffset, 150, 20, new TranslatableComponent("osmium.options.status_effect_display_settings"), (buttonWidget) -> mc.setScreen(new OsmiumStatusEffectDisplayOptionsScreen(this)));
-
         this.addRenderableWidget(backButton);
         this.addRenderableWidget(toggleCapeWidget);
         this.addRenderableWidget(toggleRainWidget);
         this.addRenderableWidget(toggleFireworksWidget);
         this.addRenderableWidget(toggleNetherParticlesWidget);
         this.addRenderableWidget(blockOptionScreenButton);
-        this.addRenderableWidget(statusEffectScreenButton);
     }
 
     @Override

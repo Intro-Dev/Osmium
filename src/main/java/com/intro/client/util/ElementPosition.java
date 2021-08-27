@@ -6,9 +6,9 @@ import com.intro.client.render.drawables.Scalable;
 public class ElementPosition {
 
     public int x, y;
-    public float scale;
+    public double scale;
 
-    public ElementPosition(int x, int y, float scale) {
+    public ElementPosition(int x, int y, double scale) {
         this.x = x;
         this.y = y;
         this.scale = scale;

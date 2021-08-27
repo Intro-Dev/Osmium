@@ -12,7 +12,7 @@ public class ElementPositionOption extends Option {
         elementPosition = new ElementPosition((int) x, (int) y, 1f);
     }
 
-    public ElementPositionOption(String identifier, double x, double y, float scale) {
+    public ElementPositionOption(String identifier, double x, double y, double scale) {
         super(identifier, "ElementPositionOption");
         elementPosition = new ElementPosition((int) x, (int) y, scale);
     }

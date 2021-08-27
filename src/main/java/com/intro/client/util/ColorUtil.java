@@ -58,4 +58,8 @@ public class ColorUtil {
             c.setA(c.getA() + amount);
         return c.getInt();
     }
+
+    public static int getContrastColor(int color) {
+        return new Color(255-Color.toRGBAR(color), 255-Color.toRGBAG(color), 255 - Color.toRGBAB(color), Color.toRGBAA(color)).getInt();
+    }
 }
