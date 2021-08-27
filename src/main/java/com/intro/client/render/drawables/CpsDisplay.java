@@ -31,16 +31,14 @@ public class CpsDisplay extends Scalable {
     }
 
     protected CpsDisplay(int color) {
-        OsmiumClient.options.getElementPositionOption(Options.StatusEffectDisplayPosition).elementPosition.loadToScalable(this);
+        OsmiumClient.options.getElementPositionOption(Options.CpsDisplayPosition).elementPosition.loadToScalable(this);
         this.color = color;
     }
 
     @Override
     public void render(PoseStack stack) {
         if(OsmiumClient.options.getBooleanOption(Options.CpsDisplayEnabled).variable) {
-
             this.visible = true;
-            System.out.println("drawing");
             if(firstRun) {
                 this.width = 40;
                 this.height = mc.font.lineHeight * 2;
@@ -48,6 +46,8 @@ public class CpsDisplay extends Scalable {
             }
             fill(stack, posX, posY, posX + width, posY + height, BG_COLOR);
             drawCenteredString(stack, mc.font, cps + " cps", posX + (width / 2), posY + (height / 4), color);
+        } else {
+            this.visible = false;
         }
     }
 
@@ -59,7 +59,6 @@ public class CpsDisplay extends Scalable {
     @Override
     public void onPositionChange(int newX, int newY, int oldX, int oldY) {
         OsmiumClient.options.put(Options.CpsDisplayPosition, new ElementPositionOption(Options.CpsDisplayPosition, newX, newY, this.scale));
-
     }
 
     public static CpsDisplay getInstance() {

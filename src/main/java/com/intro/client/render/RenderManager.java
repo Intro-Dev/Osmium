@@ -28,15 +28,13 @@ public class RenderManager {
     public static void renderHud(PoseStack stack) {
         mc.getProfiler().push("OsmiumHudRenderer");
         for(Drawable element : drawables) {
-            if(element.visible) {
-                if(element instanceof Scalable scalable) {
-                    stack.pushPose();
-                    scalable.scaleWithPositionIntact(stack);
-                    scalable.render(stack);
-                    stack.popPose();
-                } else {
-                    element.render(stack);
-                }
+            if(element instanceof Scalable scalable) {
+                stack.pushPose();
+                scalable.scaleWithPositionIntact(stack);
+                scalable.render(stack);
+                stack.popPose();
+            } else {
+                element.render(stack);
             }
         }
         mc.getProfiler().pop();

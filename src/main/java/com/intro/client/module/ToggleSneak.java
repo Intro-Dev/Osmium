@@ -15,13 +15,13 @@ public class ToggleSneak {
 
     public static boolean sneaking = false;
 
-    private final Text SprintingText;
+    private final Text sprintingText;
 
     private final Minecraft mc = Minecraft.getInstance();
 
     public ToggleSneak() {
-        SprintingText = new Text(5, 5, "", Colors.WHITE.getColor().getInt());
-        OsmiumClient.options.getElementPositionOption(Options.ToggleSprintPosition).elementPosition.loadToDrawable(SprintingText);
+        sprintingText = new Text(5, 5, "", Colors.WHITE.getColor().getInt());
+        OsmiumClient.options.getElementPositionOption(Options.ToggleSprintPosition).elementPosition.loadToDrawable(sprintingText);
     }
 
     public void onEvent(Event event) {
@@ -30,7 +30,7 @@ public class ToggleSneak {
                 boolean toggleSprintEnabled = OsmiumClient.options.getBooleanOption(Options.ToggleSprintEnabled).variable;
                 boolean toggleSneakEnabled = OsmiumClient.options.getBooleanOption(Options.ToggleSneakEnabled).variable;
                 if(event instanceof EventTick && event.isPre()) {
-                    OsmiumClient.options.put(Options.ToggleSprintPosition, new ElementPositionOption(Options.ToggleSprintPosition, SprintingText.posX, SprintingText.posY));
+                    OsmiumClient.options.put(Options.ToggleSprintPosition, new ElementPositionOption(Options.ToggleSprintPosition, sprintingText.posX, sprintingText.posY));
                     if(mc.player.zza > 0 && !mc.player.isUsingItem() && !mc.player.isShiftKeyDown() && !mc.player.horizontalCollision && this.sprinting)
                         mc.player.setSprinting(true);
 
@@ -43,27 +43,28 @@ public class ToggleSneak {
                         this.sprinting = !this.sprinting;
                     }
 
-
-
-                    if((this.sprinting && toggleSprintEnabled) && (!sneaking)) {
-                        SprintingText.visible = true;
-                        SprintingText.text = "Sprinting(Toggled)";
-                    } else if (mc.options.keySprint.isDown() && toggleSprintEnabled) {
-                        SprintingText.visible = true;
-                        SprintingText.text = "Sprinting(Key Down)";
-                    } else if(sneaking && toggleSneakEnabled) {
-                        SprintingText.visible = true;
-                        SprintingText.text = "Sneaking(Toggled)";
-                    } else if (mc.options.keyShift.isDown() && toggleSneakEnabled) {
-                        SprintingText.visible = true;
-                        SprintingText.text = "Sneaking(Key Down)";
-                    } else {
-                        SprintingText.visible = false;
+                    if(mc.player.isSprinting()) {
+                        if(sprinting) {
+                            this.sprintingText.text = "Sprinting(Toggled)";
+                        } else if(mc.options.keySprint.isDown()) {
+                            this.sprintingText.text = "Sprinting(Key Held)";
+                        } else {
+                            this.sprintingText.text = "Sprinting(Vanilla)";
+                        }
                     }
 
+                    if(mc.player.isShiftKeyDown()) {
+                        if(sneaking) {
+                            this.sprintingText.text = "Sneaking(Toggled)";
+                        } else if(mc.options.keyShift.isDown()) {
+                            this.sprintingText.text = "Sneaking(Key Held)";
+                        } else {
+                            this.sprintingText.text = "Sneaking(Vanilla)";
+                        }
+                    }
                 }
-            } else if(SprintingText.visible) {
-                SprintingText.visible = false;
+            } else if(sprintingText.visible) {
+                sprintingText.visible = false;
             }
         }
     }

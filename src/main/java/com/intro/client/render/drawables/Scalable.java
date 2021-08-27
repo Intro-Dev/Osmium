@@ -24,6 +24,8 @@ public abstract class Scalable extends Drawable {
      */
     // position accurate scaling
     // very fun
+    // this algorithm was not fun to make
+    // probably online somewhere, but I can't find it, so I had to make it myself
     public int getScaledX() {
         return (int) (posX + (this.getScaledWidth() / (2 * scale)) - this.getScaledWidth() / 2);
     }

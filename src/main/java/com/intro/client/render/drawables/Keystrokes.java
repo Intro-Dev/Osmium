@@ -87,11 +87,6 @@ public class Keystrokes extends Scalable {
             RenderUtil.renderCenteredScaledText(stack, mc.font, mc.options.keyLeft.getTranslatedKeyMessage().getString().toUpperCase(), ((int) aKeyTextPos.getX()), ((int) aKeyTextPos.getY()), Colors.WHITE.getColor().getInt(), 3f);
             RenderUtil.renderCenteredScaledText(stack, mc.font, mc.options.keyDown.getTranslatedKeyMessage().getString().toUpperCase(), ((int) sKeyTextPos.getX()), ((int) sKeyTextPos.getY()), Colors.WHITE.getColor().getInt(), 3f);
             RenderUtil.renderCenteredScaledText(stack, mc.font, mc.options.keyRight.getTranslatedKeyMessage().getString().toUpperCase(), ((int) dKeyTextPos.getX()), ((int) dKeyTextPos.getY()), Colors.WHITE.getColor().getInt(), 3f);
-            /*
-            vLine(stack, aKeyPos.x + sectionWidth, aKeyPos.y, aKeyPos.y + sectionHeight, Colors.WHITE.getColor().getInt());
-            vLine(stack, sKeyPos.x + sectionWidth, sKeyPos.y, sKeyPos.y + sectionHeight, Colors.WHITE.getColor().getInt());
-            hLine(stack, wKeyPos.x, wKeyPos.x + sectionWidth, wKeyPos.y + sectionHeight, Colors.WHITE.getColor().getInt());
-             */
         } else {
             this.visible = false;
         }
