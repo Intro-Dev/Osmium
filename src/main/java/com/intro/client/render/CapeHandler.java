@@ -81,17 +81,6 @@ public class CapeHandler {
         return true;
     }
 
-    public boolean SetCapeFromURL(String uuid, URL capeURL) {
-        try {
-            this.SetCape(uuid, capeURL.openStream());
-            return true;
-        } catch (IOException e) {
-            CapeRenderer.CapeArray.put(uuid, null);
-            e.printStackTrace();
-            return false;
-        }
-    }
-
 
 
 
@@ -99,6 +88,7 @@ public class CapeHandler {
 
         if(image == null) {
             System.out.println("Null cape texture being parsed");
+            return null;
         }
         int imageWidth = 64;
         int imageHeight = 32;
@@ -118,25 +108,27 @@ public class CapeHandler {
         image.close();
         return imgNew;
     }
-}
-class CapeDownloader implements Runnable {
 
-    private final CapeHandler handler;
-    private final EventAddPlayer playerJoin;
+    private static class CapeDownloader implements Runnable {
 
-    public CapeDownloader(CapeHandler handler, EventAddPlayer e) {
-        this.handler = handler;
-        this.playerJoin = e;
-    }
+        private final CapeHandler handler;
+        private final EventAddPlayer playerJoin;
 
-    public void run() {
-
-
-        boolean optifineCapeFound = handler.SetCapeFromURL(playerJoin.entity.getStringUUID(), "http://s.optifine.net/capes/" + playerJoin.entity.getName().getString() + ".png");
-        if(optifineCapeFound) {
-            CapeRenderer.OptifineCapes.add(playerJoin.entity.getStringUUID());
-            return;
+        public CapeDownloader(CapeHandler handler, EventAddPlayer e) {
+            this.handler = handler;
+            this.playerJoin = e;
         }
-        handler.SetCapeFromURL(playerJoin.entity.getStringUUID(), "https://minecraftcapes.net/profile/" + playerJoin.entity.getStringUUID().replace("-", "") + "/cape/map");
+
+        public void run() {
+
+
+            boolean optifineCapeFound = handler.SetCapeFromURL(playerJoin.entity.getStringUUID(), "http://s.optifine.net/capes/" + playerJoin.entity.getName().getString() + ".png");
+            if(optifineCapeFound) {
+                CapeRenderer.OptifineCapes.add(playerJoin.entity.getStringUUID());
+                return;
+            }
+            handler.SetCapeFromURL(playerJoin.entity.getStringUUID(), "https://minecraftcapes.net/profile/" + playerJoin.entity.getStringUUID().replace("-", "") + "/cape/map");
+        }
     }
+
 }
