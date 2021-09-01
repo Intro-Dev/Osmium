@@ -1,7 +1,7 @@
 package com.intro.common.config;
 
 import com.google.gson.*;
-import com.intro.client.render.Color;
+import com.intro.client.render.color.Color;
 import com.intro.client.util.EnumUtil;
 import com.intro.common.config.options.*;
 import org.apache.logging.log4j.LogManager;

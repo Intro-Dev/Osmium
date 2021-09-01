@@ -1,7 +1,7 @@
 package com.intro.client.render.widget;
 
 import com.intro.client.OsmiumClient;
-import com.intro.client.render.Color;
+import com.intro.client.render.color.Color;
 import com.intro.client.util.TextureUtil;
 import com.intro.client.util.Vector2d;
 import com.mojang.blaze3d.platform.NativeImage;
@@ -66,7 +66,7 @@ public class ColorOptionWidget extends GuiComponent implements Widget, GuiEventL
         this.y = y;
         this.width = width;
         this.height = height;
-        this.TEXTURE = TextureUtil.convertIdentifierToNativeImage(BAKED_TEXTURE);
+        this.TEXTURE = TextureUtil.getImageAtLocation(BAKED_TEXTURE);
     }
 
 

@@ -1,7 +1,7 @@
 package com.intro.common.mixin.client;
 
 import com.intro.client.OsmiumClient;
-import com.intro.client.render.Color;
+import com.intro.client.render.color.Color;
 import com.intro.common.config.Options;
 import com.intro.common.config.options.BlockOutlineMode;
 import com.mojang.blaze3d.systems.RenderSystem;

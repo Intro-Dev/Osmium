@@ -1,7 +1,7 @@
 package com.intro.client.render.screen;
 
 import com.intro.client.OsmiumClient;
-import com.intro.client.render.Color;
+import com.intro.client.render.color.Color;
 import com.intro.client.render.widget.BooleanButtonWidget;
 import com.intro.client.render.widget.ColorOptionWidget;
 import com.intro.client.render.widget.DoubleSliderWidget;

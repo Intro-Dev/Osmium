@@ -2,8 +2,8 @@ package com.intro.client.render.drawables;
 
 import com.google.common.collect.Ordering;
 import com.intro.client.OsmiumClient;
-import com.intro.client.render.Colors;
 import com.intro.client.render.RenderManager;
+import com.intro.client.render.color.Colors;
 import com.intro.common.config.Options;
 import com.intro.common.config.options.ElementPositionOption;
 import com.intro.common.config.options.StatusEffectDisplayMode;

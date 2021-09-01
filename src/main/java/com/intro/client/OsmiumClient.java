@@ -7,9 +7,10 @@ import com.intro.client.module.ToggleSneak;
 import com.intro.client.module.event.Event;
 import com.intro.client.module.event.EventType;
 import com.intro.client.network.ClientNetworkHandler;
-import com.intro.client.render.CapeHandler;
 import com.intro.client.render.RenderManager;
+import com.intro.client.render.cape.CapeHandler;
 import com.intro.client.render.drawables.PingDisplay;
+import com.intro.client.render.texture.CapeTextureManager;
 import com.intro.client.util.OptionUtil;
 import com.intro.common.config.Options;
 import com.intro.common.util.Util;
@@ -48,6 +49,7 @@ public class OsmiumClient implements ClientModInitializer {
         EVENT_BUS.registerCallback(gui::onEvent, EventType.EVENT_TICK);
         EVENT_BUS.registerCallback(handler::handleEvents, new EventType[] { EventType.EVENT_ADD_PLAYER, EventType.EVENT_REMOVE_PLAYER } );
         EVENT_BUS.registerCallback(PingDisplay.getInstance()::onEvent, EventType.EVENT_TICK);
+        EVENT_BUS.registerCallback((event -> CapeTextureManager.stitchCapeTextures()), EventType.EVENT_START_GAME);
     }
 
     public void registerKeyBindings() {

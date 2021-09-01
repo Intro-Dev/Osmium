@@ -1,7 +1,7 @@
 package com.intro.client.render.screen;
 
 import com.intro.client.OsmiumClient;
-import com.intro.client.render.Colors;
+import com.intro.client.render.color.Colors;
 import com.intro.client.render.widget.ProgressBarWidget;
 import com.intro.common.ModConstants;
 import com.intro.common.util.Util;

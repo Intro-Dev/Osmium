@@ -7,6 +7,7 @@ import com.intro.client.module.event.EventType;
 import com.intro.client.render.drawables.CpsDisplay;
 import com.intro.client.util.OptionUtil;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.main.GameConfig;
 import org.apache.logging.log4j.Logger;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -38,6 +39,10 @@ public class MinecraftMixin {
     @Inject(method = "startAttack", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/player/LocalPlayer;swing(Lnet/minecraft/world/InteractionHand;)V"))
     public void mouseClick(CallbackInfo ci) {
         CpsDisplay.getInstance().onClick();
+    }
+
+    @Inject(method = "<init>", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/resources/MobEffectTextureManager;<init>(Lnet/minecraft/client/renderer/texture/TextureManager;)V"))
+    public void init(GameConfig gameConfig, CallbackInfo ci) {
     }
 
 

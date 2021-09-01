@@ -1,4 +1,4 @@
-package com.intro.client.render;
+package com.intro.client.render.color;
 
 public class Color {
 

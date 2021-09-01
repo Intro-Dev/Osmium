@@ -3,13 +3,12 @@ package com.intro.client.render.drawables;
 import com.intro.client.OsmiumClient;
 import com.intro.client.module.event.Event;
 import com.intro.client.module.event.EventTick;
-import com.intro.client.render.Color;
-import com.intro.client.render.Colors;
+import com.intro.client.render.color.Color;
+import com.intro.client.render.color.Colors;
 import com.intro.common.config.Options;
 import com.intro.common.config.options.ElementPositionOption;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.multiplayer.ClientPacketListener;
 
 public class PingDisplay extends Scalable {
 
@@ -27,9 +26,8 @@ public class PingDisplay extends Scalable {
 
     public void onEvent(Event event) {
         if(event instanceof EventTick && mc.player != null) {
-            ClientPacketListener clientPacketListener = mc.player.connection;
-            if(clientPacketListener.getPlayerInfo(mc.player.getUUID()) != null) {
-                currentPing = clientPacketListener.getPlayerInfo(mc.player.getUUID()).getLatency();
+            if((mc.getCurrentServer() != null)) {
+                currentPing = (int) mc.getCurrentServer().ping;
             } else {
                 currentPing = 0;
             }

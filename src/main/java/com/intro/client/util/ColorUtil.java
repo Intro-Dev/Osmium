@@ -1,6 +1,6 @@
 package com.intro.client.util;
 
-import com.intro.client.render.Color;
+import com.intro.client.render.color.Color;
 
 public class ColorUtil {
 

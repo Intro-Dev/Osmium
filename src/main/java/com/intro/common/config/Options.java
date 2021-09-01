@@ -1,7 +1,7 @@
 package com.intro.common.config;
 
-import com.intro.client.render.Color;
-import com.intro.client.render.Colors;
+import com.intro.client.render.color.Color;
+import com.intro.client.render.color.Colors;
 import com.intro.common.config.options.*;
 
 import java.util.HashMap;

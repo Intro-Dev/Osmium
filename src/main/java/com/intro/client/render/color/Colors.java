@@ -1,4 +1,4 @@
-package com.intro.client.render;
+package com.intro.client.render.color;
 
 public enum Colors {
     RED(0xff, 0, 0, 0xff),

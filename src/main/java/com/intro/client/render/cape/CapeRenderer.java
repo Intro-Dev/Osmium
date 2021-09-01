@@ -1,6 +1,7 @@
-package com.intro.client.render;
+package com.intro.client.render.cape;
 
 import com.intro.client.OsmiumClient;
+import com.intro.client.render.texture.DynamicAnimation;
 import com.intro.common.config.Options;
 import com.intro.common.config.options.CapeRenderingMode;
 import com.mojang.blaze3d.vertex.PoseStack;
@@ -14,20 +15,13 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.RenderLayerParent;
 import net.minecraft.client.renderer.entity.layers.RenderLayer;
 import net.minecraft.client.renderer.texture.OverlayTexture;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.player.PlayerModelPart;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-
 public class CapeRenderer extends RenderLayer<AbstractClientPlayer, PlayerModel<AbstractClientPlayer>> {
-
-    public static HashMap<String, ResourceLocation> CapeArray = new HashMap<>();
-    public static ArrayList<String> OptifineCapes = new ArrayList<>();
 
     public CapeRenderer(RenderLayerParent<AbstractClientPlayer, PlayerModel<AbstractClientPlayer>> parent) {
         super(parent);
@@ -36,7 +30,7 @@ public class CapeRenderer extends RenderLayer<AbstractClientPlayer, PlayerModel<
     public void render(PoseStack stack, MultiBufferSource multiBuffer, int light, AbstractClientPlayer entity, float limbAngle, float limbDistance, float tickDelta, float animationProgress, float headYaw, float headPitch) {
         try {
             ItemStack itemStack = entity.getItemBySlot(EquipmentSlot.CHEST);
-            if(!itemStack.is(Items.ELYTRA) && !entity.isInvisible() && entity.isCapeLoaded() && entity.isModelPartShown(PlayerModelPart.CAPE) && OsmiumClient.options.getEnumOption(Options.CustomCapeMode).variable == CapeRenderingMode.ALL || OsmiumClient.options.getEnumOption(Options.CustomCapeMode).variable == CapeRenderingMode.OPTIFINE && CapeArray.get(entity.getStringUUID()) != null){
+            if(!itemStack.is(Items.ELYTRA) && !entity.isInvisible() && entity.isCapeLoaded() && entity.isModelPartShown(PlayerModelPart.CAPE) && OsmiumClient.options.getEnumOption(Options.CustomCapeMode).variable == CapeRenderingMode.ALL || OsmiumClient.options.getEnumOption(Options.CustomCapeMode).variable == CapeRenderingMode.OPTIFINE){
                 stack.pushPose();
                 stack.translate(0.0D, 0.0D, 0.125D);
                 double d = Mth.lerp(tickDelta, entity.xCloakO, entity.xCloak) - Mth.lerp(tickDelta, entity.xo, entity.getX());
@@ -48,8 +42,10 @@ public class CapeRenderer extends RenderLayer<AbstractClientPlayer, PlayerModel<
                 float j = (float)e * 10.0F;
                 j = Mth.clamp(j, -6.0F, 32.0F);
                 float k = (float)(d * h + f * i) * 100.0F;
+
                 k = Mth.clamp(k, 0.0F, 150.0F);
                 float l = (float)(d * i - f * h) * 100.0F;
+
                 l = Mth.clamp(l, -20.0F, 20.0F);
                 if (k < 0.0F) {
                     k = 0.0F;
@@ -65,19 +61,27 @@ public class CapeRenderer extends RenderLayer<AbstractClientPlayer, PlayerModel<
                 stack.mulPose(Vector3f.ZP.rotationDegrees(l / 2.0F));
                 stack.mulPose(Vector3f.YP.rotationDegrees(180.0F - l / 2.0F));
 
-                stack.popPose();
-                if(entity.getStringUUID() != null && CapeArray.get(entity.getStringUUID()) != null) {
-                    if(OsmiumClient.options.getEnumOption(Options.CustomCapeMode).variable == CapeRenderingMode.OPTIFINE && OptifineCapes.contains(entity.getStringUUID())) {
-                        System.out.println(CapeArray.get(entity.getStringUUID()));
-                        final VertexConsumer vertexConsumer = multiBuffer.getBuffer(RenderType.entitySolid(CapeArray.get(entity.getStringUUID())));
-                        this.getParentModel().renderCloak(stack, vertexConsumer, light, OverlayTexture.NO_OVERLAY);
-                    } else if (OsmiumClient.options.getEnumOption(Options.CustomCapeMode).variable == CapeRenderingMode.ALL) {
-                        System.out.println(CapeArray.get(entity.getStringUUID()));
-                        final VertexConsumer vertexConsumer = multiBuffer.getBuffer(RenderType.entitySolid(CapeArray.get(entity.getStringUUID())));
-                        this.getParentModel().renderCloak(stack, vertexConsumer, light, OverlayTexture.NO_OVERLAY);
-                    }
 
+                if(CapeHandler.capes.get(entity.getStringUUID()) != null) {
+                    Cape playerCape = CapeHandler.capes.get(entity.getStringUUID());
+
+
+                    if (OsmiumClient.options.getEnumOption(Options.CustomCapeMode).variable == CapeRenderingMode.OPTIFINE && playerCape.isOptifine) {
+                        final VertexConsumer vertexConsumer = multiBuffer.getBuffer(RenderType.entitySolid(playerCape.texture.getAnimationLocation()));
+                        this.getParentModel().renderCloak(stack, vertexConsumer, light, OverlayTexture.NO_OVERLAY);
+                    } else if(OsmiumClient.options.getEnumOption(Options.CustomCapeMode).variable == CapeRenderingMode.ALL) {
+                        final VertexConsumer vertexConsumer = multiBuffer.getBuffer(RenderType.entitySolid(playerCape.texture.getAnimationLocation()));
+                        this.getParentModel().renderCloak(stack, vertexConsumer, light, OverlayTexture.NO_OVERLAY);
+                    } else {
+                        DynamicAnimation capeAnimation = CapeHandler.capes.get(entity.getStringUUID()).texture;
+                        final VertexConsumer vertexConsumer = multiBuffer.getBuffer(RenderType.entitySolid(capeAnimation.getAnimationLocation()));
+                        // NO_OVERLAY offsets for uv
+                        this.getParentModel().renderCloak(stack, vertexConsumer, light, capeAnimation.getPackedAnimationUV());
+                        capeAnimation.nextFrame();
+                    }
                 }
+
+                stack.popPose();
                 Minecraft.getInstance().getProfiler().pop();
         }
 

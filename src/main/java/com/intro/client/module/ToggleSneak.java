@@ -3,7 +3,7 @@ package com.intro.client.module;
 import com.intro.client.OsmiumClient;
 import com.intro.client.module.event.Event;
 import com.intro.client.module.event.EventTick;
-import com.intro.client.render.Colors;
+import com.intro.client.render.color.Colors;
 import com.intro.client.render.drawables.Text;
 import com.intro.common.config.Options;
 import com.intro.common.config.options.ElementPositionOption;

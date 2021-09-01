@@ -1,8 +1,8 @@
 package com.intro.client.render.drawables;
 
 import com.intro.client.OsmiumClient;
-import com.intro.client.render.Color;
-import com.intro.client.render.Colors;
+import com.intro.client.render.color.Color;
+import com.intro.client.render.color.Colors;
 import com.intro.common.config.Options;
 import com.intro.common.config.options.ElementPositionOption;
 import com.mojang.blaze3d.vertex.PoseStack;

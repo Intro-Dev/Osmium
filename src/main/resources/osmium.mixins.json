@@ -30,5 +30,6 @@
     "defaultRequire": 1
   },
   "mixins": [
+    "client.TitleScreenMixin"
   ]
 }

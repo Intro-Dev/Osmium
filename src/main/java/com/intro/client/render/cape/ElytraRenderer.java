@@ -1,4 +1,4 @@
-package com.intro.client.render;
+package com.intro.client.render.cape;
 
 import com.intro.client.OsmiumClient;
 import com.intro.common.config.Options;
@@ -44,9 +44,10 @@ public class ElytraRenderer<T extends LivingEntity, M extends EntityModel<T>> ex
                 this.getParentModel().copyPropertiesTo(this.elytra);
                 this.elytra.setupAnim(entity, limbAngle, tickDelta, animationProgress, headYaw, headPitch);
                 if(entity.getStringUUID() != null) {
-                    if((CapeRenderer.CapeArray.get(entity.getStringUUID()) != null)) {
-                        if(OsmiumClient.options.getEnumOption(Options.CustomCapeMode).variable == CapeRenderingMode.OPTIFINE && CapeRenderer.OptifineCapes.contains(entity.getStringUUID())) {
-                            final VertexConsumer vertexConsumer = ItemRenderer.getArmorFoilBuffer(vertexConsumers, RenderType.armorCutoutNoCull(CapeRenderer.CapeArray.get(entity.getStringUUID())), false, itemStack.hasFoil());
+                    if((CapeHandler.capes.get(entity.getStringUUID()) != null)) {
+                        Cape cape = CapeHandler.capes.get(entity.getStringUUID());
+                        if(OsmiumClient.options.getEnumOption(Options.CustomCapeMode).variable == CapeRenderingMode.OPTIFINE && cape.isOptifine) {
+                            final VertexConsumer vertexConsumer = ItemRenderer.getArmorFoilBuffer(vertexConsumers, RenderType.armorCutoutNoCull(cape.texture.getAnimationLocation()), false, itemStack.hasFoil());
                             this.elytra.renderToBuffer(stack, vertexConsumer, light, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
                         }
                     } else {

@@ -1,7 +1,7 @@
 package com.intro.common.config.options;
 
 import com.intro.client.OsmiumClient;
-import com.intro.client.render.Color;
+import com.intro.client.render.color.Color;
 
 public class ColorOption extends Option {
 

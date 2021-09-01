@@ -1,7 +1,7 @@
 package com.intro.common.mixin.client;
 
-import com.intro.client.render.CapeRenderer;
-import com.intro.client.render.ElytraRenderer;
+import com.intro.client.render.cape.CapeRenderer;
+import com.intro.client.render.cape.ElytraRenderer;
 import net.minecraft.client.model.PlayerModel;
 import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
