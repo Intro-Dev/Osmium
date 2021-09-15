@@ -1,10 +1,14 @@
 package com.intro.client.render.cape;
 
 import com.intro.client.render.texture.DynamicAnimation;
+import net.minecraft.resources.ResourceLocation;
 
 public class Cape {
 
-    public DynamicAnimation texture;
+    private final DynamicAnimation texture;
+    public boolean isOptifine;
+    public boolean isAnimated;
+
 
     public Cape(DynamicAnimation texture, boolean isOptifine, boolean isAnimated) {
         this.texture = texture;
@@ -12,8 +16,19 @@ public class Cape {
         this.isAnimated = isAnimated;
     }
 
-    public boolean isOptifine = false;
-    public boolean isAnimated = false;
+    public ResourceLocation getFrameTexture() {
+        return texture.getCurrentFrameLocation();
+    }
+
+    public void nextFrame() {
+        texture.tick();
+    }
+
+    public void free() {
+        texture.free();
+    }
+
+
 
 
 }

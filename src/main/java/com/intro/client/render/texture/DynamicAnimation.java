@@ -6,69 +6,67 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.AbstractTexture;
 import net.minecraft.client.renderer.texture.DynamicTexture;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.Mth;
 
+import java.util.HashMap;
+
+// the way this is done is really not the best, but minecraft rendering code has forced my hand
+// it registers individual frames and doesn't use UV coordinates
 public class DynamicAnimation implements Cloneable {
 
     public int maxAnimationFrames;
     public int frameWidth, frameHeight;
+
+    private final int frameDelay;
+    private int frameDelayTicker = 0;
+
     private int currentFrame = 0;
 
-    private final ResourceLocation registryName;
-    private final NativeImage image;
+    private final HashMap<Integer, ResourceLocation> frames = new HashMap<>();
+    public final NativeImage image;
 
     private final Minecraft mc = Minecraft.getInstance();
 
-    public DynamicAnimation(NativeImage image, String registryName, int frameWidth, int frameHeight) {
+    public DynamicAnimation(NativeImage image, String registryName, int frameWidth, int frameHeight, int frameDelay) {
+        this.image = image;
         this.frameWidth = frameWidth;
         this.frameHeight = frameHeight;
-        this.registryName = mc.getTextureManager().register(registryName, new DynamicTexture(image));
+        this.frameDelay = frameDelay;
         // offset by 1 to account for the fact that frames start at 0
         this.maxAnimationFrames = (image.getWidth() / frameWidth) - 1;
-        System.out.println(maxAnimationFrames);
-        this.image = image;
+
+        for(int i = 0; i <= maxAnimationFrames; i++) {
+            frames.put(i, mc.getTextureManager().register(registryName + "i", new DynamicTexture(TextureUtil.subImage(image, i * frameWidth, 0, frameWidth, frameHeight))));
+        }
     }
 
-    public NativeImage getCurrentFrameImage() {
-        return TextureUtil.subImage(this.image, this.currentFrame * frameWidth, this.currentFrame * frameHeight, frameWidth, frameHeight);
-    }
 
     public AbstractTexture getTexture() {
-        return mc.getTextureManager().getTexture(registryName);
+        return mc.getTextureManager().getTexture(getCurrentFrameLocation());
     }
 
-    public ResourceLocation getAnimationLocation() {
-        return this.registryName;
+    public ResourceLocation getCurrentFrameLocation() {
+        return frames.get(this.currentFrame);
     }
 
-    public int getAnimationU() {
-        return currentFrame * frameWidth;
+
+    public void tick() {
+        if(frameDelayTicker > frameDelay) {
+            frameDelayTicker = 0;
+            currentFrame++;
+            if(currentFrame > this.maxAnimationFrames) {
+                currentFrame = 0;
+            }
+        } else {
+            frameDelayTicker++;
+        }
+
     }
 
-    public int getAnimationV() {
-        return frameHeight;
-    }
-
-    public void nextFrame() {
-        currentFrame++;
-        currentFrame = Mth.clamp(currentFrame, 0, this.maxAnimationFrames);
-    }
-
-    private int packUvToInt(int i, int j) {
-        return i | j << 16;
-    }
-
-    public int getPackedAnimationUV() {
-        return packUvToInt(this.getAnimationU(), this.getAnimationV());
-    }
-
-    public int getPackedAnimationUVWithOffset(int offU, int offV) {
-        return packUvToInt(this.getAnimationU() + offU, this.getAnimationV() + offV);
-    }
 
     public void free() {
-        mc.getTextureManager().release(registryName);
-        this.image.close();
+        for(ResourceLocation location : frames.values()) {
+            mc.getTextureManager().release(location);
+        }
     }
 
     @Override

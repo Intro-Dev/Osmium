@@ -20,7 +20,9 @@
     "client.PlayerRendererMixin",
     "client.ResourceTextureAccessor",
     "client.ResourceTextureSubclassAccessor",
-    "client.ScreenEffectRendererMixin"
+    "client.ScreenEffectRendererMixin",
+    "client.SimpleReloadableResourceManagerMixin",
+    "client.TitleScreenMixin"
   ],
   "server": [
     "server.MinecraftServerMixin",
@@ -30,6 +32,6 @@
     "defaultRequire": 1
   },
   "mixins": [
-    "client.TitleScreenMixin"
+
   ]
 }
