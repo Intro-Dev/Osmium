@@ -1,6 +1,6 @@
 package com.intro.common.mixin.client;
 
-import com.intro.client.render.texture.CapeTextureManager;
+import com.intro.client.render.cape.CosmeticManager;
 import net.minecraft.server.packs.PackResources;
 import net.minecraft.server.packs.resources.ReloadInstance;
 import net.minecraft.server.packs.resources.SimpleReloadableResourceManager;
@@ -19,6 +19,6 @@ public class SimpleReloadableResourceManagerMixin {
 
     @Inject(method = "createReload", at = @At("RETURN"))
     public void stitchTextures(Executor executor, Executor executor2, CompletableFuture<Unit> completableFuture, List<PackResources> list, CallbackInfoReturnable<ReloadInstance> cir) {
-        CapeTextureManager.genCapes();
+        CosmeticManager.genCapes();
     }
 }

@@ -11,8 +11,10 @@ import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.StringReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.file.Files;
@@ -24,7 +26,7 @@ import java.util.zip.ZipFile;
 
 public class Util {
 
-    public static final Logger LOGGER = LogManager.getLogger();
+    public static final Logger LOGGER = LogManager.getLogger("OsmiumGeneric");
 
     // cache gotten values to prevent rate limiting and to prevent lag due to downloading stuff
     private static String cachedLatestReleaseTag;
@@ -191,6 +193,21 @@ public class Util {
             }
         }
         return null;
+    }
+
+    public static JsonElement getJsonFromString(String string) {
+        JsonReader reader = new JsonReader(new StringReader(string));
+        JsonParser parser = new JsonParser();
+        return parser.parse(reader);
+    }
+
+    public static Path getCosmeticPacksPath() {
+       return FabricLoader.getInstance().getGameDir().resolve("cosmetics");
+    }
+
+    public static String getZipFileSystemPrefix(ZipFile file) {
+        File path = new File(file.getName());
+        return path.getName().replaceAll("\\.zip", "");
     }
 
 }

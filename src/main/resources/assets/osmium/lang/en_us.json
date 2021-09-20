@@ -70,6 +70,9 @@
   "osmium.options.rgb_enabled": "Rgb: Enabled",
   "osmium.options.rgb_disabled": "Rgb: Disabled",
   "osmium.options.reset_color": "Reset Color",
-  "osmium.options.transparency": "Transparency: "
-
+  "osmium.options.transparency": "Transparency: ",
+  "osmium.cape_select": "Select Cape",
+  "osmium_failed_cape_load": "Failed to load custom cape pack",
+  "osmium_failed_cape_load_title": "Error loading capes",
+  "osmium.refresh": "Refresh"
 }

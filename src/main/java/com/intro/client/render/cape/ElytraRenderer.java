@@ -44,8 +44,8 @@ public class ElytraRenderer<T extends LivingEntity, M extends EntityModel<T>> ex
                 this.getParentModel().copyPropertiesTo(this.elytra);
                 this.elytra.setupAnim(entity, limbAngle, tickDelta, animationProgress, headYaw, headPitch);
                 if(entity.getStringUUID() != null) {
-                    if((CapeHandler.capes.get(entity.getStringUUID()) != null)) {
-                        Cape cape = CapeHandler.capes.get(entity.getStringUUID());
+                    if((CapeHandler.playerCapes.get(entity.getStringUUID()) != null)) {
+                        Cape cape = CapeHandler.playerCapes.get(entity.getStringUUID());
                         if(OsmiumClient.options.getEnumOption(Options.CustomCapeMode).variable == CapeRenderingMode.OPTIFINE && cape.isOptifine) {
                             final VertexConsumer vertexConsumer = ItemRenderer.getArmorFoilBuffer(vertexConsumers, RenderType.armorCutoutNoCull(cape.getFrameTexture()), false, itemStack.hasFoil());
                             this.elytra.renderToBuffer(stack, vertexConsumer, light, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);

@@ -28,7 +28,7 @@ public class OsmiumOptionsScreen extends Screen {
 
     private final Screen parent;
 
-    private int animationProgress = 0;
+    private float animationProgress = 0;
 
     private final Minecraft mc = Minecraft.getInstance();
 
@@ -142,10 +142,8 @@ public class OsmiumOptionsScreen extends Screen {
         matrices.popPose();
         super.render(matrices, mouseX, mouseY, delta);
         // 57 is the max because of animation progress looking good at 3
-        if(!(animationProgress > bakedMaxAnim)) {
-            animationProgress = Mth.clamp(animationProgress, 0, bakedMaxAnim);
-            animationProgress += 3;
-        }
+        animationProgress += 10 * delta;
+        animationProgress = Mth.clamp(animationProgress, 0, bakedMaxAnim);
         RenderSystem.disableBlend();
     }
 

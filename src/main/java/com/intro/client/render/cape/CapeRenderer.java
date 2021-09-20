@@ -3,17 +3,20 @@ package com.intro.client.render.cape;
 import com.intro.client.OsmiumClient;
 import com.intro.common.config.Options;
 import com.intro.common.config.options.CapeRenderingMode;
+import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Vector3f;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.PlayerModel;
 import net.minecraft.client.player.AbstractClientPlayer;
+import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.RenderLayerParent;
 import net.minecraft.client.renderer.entity.layers.RenderLayer;
 import net.minecraft.client.renderer.texture.OverlayTexture;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.player.PlayerModelPart;
@@ -59,18 +62,21 @@ public class CapeRenderer extends RenderLayer<AbstractClientPlayer, PlayerModel<
                 stack.mulPose(Vector3f.ZP.rotationDegrees(s / 2.0F));
                 stack.mulPose(Vector3f.YP.rotationDegrees(180.0F - s / 2.0F));
 
-                if(CapeHandler.capes.get(entity.getStringUUID()) != null) {
-                    Cape playerCape = CapeHandler.capes.get(entity.getStringUUID());
+
+                if(CapeHandler.playerCapes.get(entity.getStringUUID()) != null) {
+                    RenderSystem.enableDepthTest();
+                    RenderSystem.setShader(GameRenderer::getPositionTexShader);
+                    Cape playerCape = CapeHandler.playerCapes.get(entity.getStringUUID());
+                    ResourceLocation capeTexture = playerCape.getFrameTexture();
+                    RenderType capeRenderType = RenderType.entitySolid(capeTexture);
                     if (OsmiumClient.options.getEnumOption(Options.CustomCapeMode).variable == CapeRenderingMode.OPTIFINE && playerCape.isOptifine) {
-                        final VertexConsumer vertexConsumer = multiBuffer.getBuffer(RenderType.entitySolid(playerCape.getFrameTexture()));
+                        final VertexConsumer vertexConsumer = multiBuffer.getBuffer(capeRenderType);
                         this.getParentModel().renderCloak(stack, vertexConsumer, light, OverlayTexture.NO_OVERLAY);
                     } else if(OsmiumClient.options.getEnumOption(Options.CustomCapeMode).variable == CapeRenderingMode.ALL) {
-                        final VertexConsumer vertexConsumer = multiBuffer.getBuffer(RenderType.entitySolid(playerCape.getFrameTexture()));
-                        this.getParentModel().renderCloak(stack, vertexConsumer, light, OverlayTexture.NO_OVERLAY);
-                    } else {
-                        final VertexConsumer vertexConsumer = multiBuffer.getBuffer(RenderType.entitySolid(playerCape.getFrameTexture()));
+                        final VertexConsumer vertexConsumer = multiBuffer.getBuffer(capeRenderType);
                         this.getParentModel().renderCloak(stack, vertexConsumer, light, OverlayTexture.NO_OVERLAY);
                     }
+                    RenderSystem.disableDepthTest();
                 }
 
                 stack.popPose();

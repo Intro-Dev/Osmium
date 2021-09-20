@@ -6,8 +6,6 @@ import net.minecraft.client.model.PlayerModel;
 import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.LivingEntityRenderer;
-import net.minecraft.client.renderer.entity.layers.CapeLayer;
-import net.minecraft.client.renderer.entity.layers.ElytraLayer;
 import net.minecraft.client.renderer.entity.player.PlayerRenderer;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -24,7 +22,5 @@ public abstract class PlayerRendererMixin extends LivingEntityRenderer<AbstractC
     public void ConstructorMixinPlayerEntityRenderer(EntityRendererProvider.Context ctx, boolean slim, CallbackInfo ci) {
         this.addLayer(new CapeRenderer(this));
         this.addLayer(new ElytraRenderer<>(this, ctx.getModelSet()));
-        this.layers.removeIf(renderer -> renderer instanceof CapeLayer);
-        this.layers.removeIf(renderer -> renderer instanceof ElytraLayer);
     }
 }

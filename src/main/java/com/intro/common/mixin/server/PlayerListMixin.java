@@ -6,27 +6,18 @@ import com.intro.common.network.NetworkingConstants;
 import com.intro.server.api.OptionApi;
 import com.intro.server.api.PlayerApi;
 import com.intro.server.network.ServerNetworkHandler;
-import com.mojang.authlib.GameProfile;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.minecraft.network.Connection;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.players.PlayerList;
-import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(PlayerList.class)
 public abstract class PlayerListMixin {
-
-    @Shadow @Final private MinecraftServer server;
-
-    @Shadow public abstract void op(GameProfile profile);
-
 
     @Inject(method = "placeNewPlayer", at = @At("TAIL"))
     public void placeNewPlayer(Connection netManager, ServerPlayer player, CallbackInfo ci) {
@@ -42,6 +33,12 @@ public abstract class PlayerListMixin {
             }
             ServerNetworkHandler.sendPacket(player, NetworkingConstants.SET_SETTING_PACKET_ID, byteBuf);
             PlayerApi.registerPlayer(player);
+
+            for(ServerPlayer p : PlayerApi.playersRunningOsmium.values()) {
+                if(PlayerApi.getPlayerProperties(p).capeDataBuffer != null) {
+                    ServerNetworkHandler.sendPacket(player, NetworkingConstants.SET_PLAYER_CAPE_CLIENT_BOUND, PlayerApi.getPlayerProperties(p).capeDataBuffer);
+                }
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }

@@ -4,6 +4,9 @@ import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.intro.client.OsmiumClient;
+import com.intro.client.render.cape.Cape;
+import com.intro.client.render.cape.CapeHandler;
+import com.intro.client.render.cape.CosmeticManager;
 import com.intro.client.util.OptionUtil;
 import com.intro.common.config.OptionDeserializer;
 import com.intro.common.config.OptionSerializer;
@@ -14,10 +17,12 @@ import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.toasts.SystemToast;
+import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TranslatableComponent;
 import org.apache.logging.log4j.Level;
 
+import java.io.IOException;
 import java.lang.reflect.Modifier;
 
 public class ClientNetworkHandler {
@@ -56,9 +61,19 @@ public class ClientNetworkHandler {
         ClientPlayNetworking.registerGlobalReceiver(NetworkingConstants.RUNNING_OSMIUM_SERVER_PACKET_ID, (client, handler, buf, responseSender) -> {
             isRunningOsmiumServer = true;
             sendToast(Minecraft.getInstance(), new TranslatableComponent("osmium.toast.running_osmium_server"), new TranslatableComponent("osmium.toast.settings_change"));
-            ClientPlayNetworking.send(NetworkingConstants.RUNNING_OSMIUM_CLIENT_PACKET_ID, PacketByteBufs.create());
+
         });
 
+        ClientPlayConnectionEvents.JOIN.register((a, b, c) -> {
+            if(isRunningOsmiumServer) {
+                ClientPlayNetworking.send(NetworkingConstants.RUNNING_OSMIUM_CLIENT_PACKET_ID, PacketByteBufs.create());
+                try {
+                    sendCapeSetPacket(CapeHandler.playerCapes.get(Minecraft.getInstance().player.getStringUUID()));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
 
         ClientPlayConnectionEvents.DISCONNECT.register((handler, client) -> {
             isRunningOsmiumServer = false;
@@ -67,6 +82,31 @@ public class ClientNetworkHandler {
             }
             OsmiumClient.options.clearOverwrittenOptions();
         });
+
+        ClientPlayNetworking.registerGlobalReceiver(NetworkingConstants.SET_PLAYER_CAPE_CLIENT_BOUND, (client, handler, buf, responseSender) -> {
+            try {
+                String uuid = buf.readUtf();
+                Cape playerCape = CosmeticManager.readCapeFromByteBuf(buf);
+                CapeHandler.playerCapes.put(uuid, playerCape);
+            } catch (Exception e) {
+                e.printStackTrace();
+                sendToast(Minecraft.getInstance(), new TranslatableComponent("osmium_failed_cape_load_title"), new TranslatableComponent("osmium_failed_cape_load"));
+                }
+        });
+    }
+
+        public static void sendCapeSetPacket(Cape cape) throws IOException {
+        FriendlyByteBuf byteBuf = PacketByteBufs.create();
+        byteBuf.writeUtf(cape.creator);
+        byteBuf.writeUtf(cape.registryName);
+        byteBuf.writeBoolean(cape.isAnimated);
+        byteBuf.writeInt(cape.getTexture().getFrameDelay());
+
+        byte[] imageData = cape.getTexture().image.asByteArray();
+
+        System.out.println(imageData.length);
+        byteBuf.writeBytes(imageData);
+        ClientPlayNetworking.send(NetworkingConstants.SET_PLAYER_CAPE_SERVER_BOUND, byteBuf);
     }
 
 }

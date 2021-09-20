@@ -16,10 +16,20 @@ public class DynamicAnimation implements Cloneable {
     public int maxAnimationFrames;
     public int frameWidth, frameHeight;
 
+    public int getFrameDelay() {
+        return frameDelay;
+    }
+
     private final int frameDelay;
     private int frameDelayTicker = 0;
 
     private int currentFrame = 0;
+
+    public String getRegistryName() {
+        return registryName;
+    }
+
+    private final String registryName;
 
     private final HashMap<Integer, ResourceLocation> frames = new HashMap<>();
     public final NativeImage image;
@@ -34,9 +44,15 @@ public class DynamicAnimation implements Cloneable {
         // offset by 1 to account for the fact that frames start at 0
         this.maxAnimationFrames = (image.getWidth() / frameWidth) - 1;
 
+        this.registryName = registryName;
+
         for(int i = 0; i <= maxAnimationFrames; i++) {
             frames.put(i, mc.getTextureManager().register(registryName + "i", new DynamicTexture(TextureUtil.subImage(image, i * frameWidth, 0, frameWidth, frameHeight))));
         }
+    }
+
+    public ResourceLocation getFrameLocation(int frame) {
+        return frames.get(frame);
     }
 
 
@@ -44,7 +60,7 @@ public class DynamicAnimation implements Cloneable {
         return mc.getTextureManager().getTexture(getCurrentFrameLocation());
     }
 
-    public ResourceLocation getCurrentFrameLocation() {
+    public ResourceLocation getCurrentFrameLocation()    {
         return frames.get(this.currentFrame);
     }
 

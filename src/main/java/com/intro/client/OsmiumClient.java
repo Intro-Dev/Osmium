@@ -28,7 +28,7 @@ public class OsmiumClient implements ClientModInitializer {
 
     public static final String MOD_ID = "osmium";
 
-    public static final Logger LOGGER = LogManager.getLogger();
+    public static final Logger LOGGER = LogManager.getLogger("OsmiumClient");
 
     public static KeyMapping menuKey;
 

@@ -45,7 +45,7 @@ public class ArmorDisplay extends Scalable {
             List<ItemStack> stacks = StreamSupport.stream(mc.player.getArmorSlots().spliterator(), false).collect(Collectors.toList());
             stacks.addAll(StreamSupport.stream(mc.player.getHandSlots().spliterator(), false).collect(Collectors.toList()));
 
-            fill(stack, this.posX - 2, this.posY, this.posX + width + 2, this.posY + height, new Color(0.1f, 0.1f, 0.1f, 0.2f).getInt());
+            fill(stack, this.posX - 2, this.posY, this.posX + width + 2, this.posY + height, Colors.BACKGROUND_GRAY.getColor().getInt());
 
             for(ItemStack itemStack : stacks) {
                 if(itemStack.getMaxDamage() != 0 && itemStack.isDamageableItem()) {

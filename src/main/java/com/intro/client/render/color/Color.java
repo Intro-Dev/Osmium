@@ -140,4 +140,11 @@ public class Color {
         this.a = color.getA();
     }
 
+    public void multiply(double value) {
+        this.r = (int) (r * value);
+        this.g = (int) (g * value);
+        this.b = (int) (b * value);
+        this.a = (int) (a * value);
+    }
+
 }

@@ -1,7 +1,6 @@
 package com.intro.client.render.screen;
 
 import com.intro.client.render.widget.BooleanButtonWidget;
-import com.intro.client.render.widget.EnumSelectWidget;
 import com.intro.client.util.OptionUtil;
 import com.intro.common.config.Options;
 import com.mojang.blaze3d.systems.RenderSystem;
@@ -12,7 +11,6 @@ import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.Mth;
 
 public class OsmiumVideoOptionsScreen extends Screen {
 
@@ -49,22 +47,24 @@ public class OsmiumVideoOptionsScreen extends Screen {
         // this wonderful bit of code is very inefficient
         // but, it's only called on init, and it makes a very annoying rendering offset bug go away
         // so who's laughing
-        while(!(finalOffset > (57 / mc.options.guiScale))) {
-            finalOffset = Mth.clamp(finalOffset, 0, 57 / mc.options.guiScale);
-            finalOffset += 3;
-        }
+        finalOffset = 57 / mc.options.guiScale;
 
         Button backButton = new Button(this.width / 2 - 100, this.height / 4 + 225 + globalOffset, 200, 20, new TranslatableComponent("osmium.options.video_options.back"), (Button) -> mc.setScreen(parent));
 
         Button blockOptionScreenButton = new Button(this.width / 2 - 75, this.height / 4 + 120 + globalOffset, 150, 20, new TranslatableComponent("osmium.options.block_option_settings"), (buttonWidget) -> mc.setScreen(new OsmiumBlockOptionsScreen(this)));
 
-        EnumSelectWidget toggleCapeWidget = new EnumSelectWidget(this.width / 2 - 275, this.height / 4 + 80 + globalOffset, 150, 20, Options.CustomCapeMode,"osmium.options.video_options.cape_");
+        Button openCapeWidget = new Button(this.width / 2 - 275, this.height / 4 + 80 + globalOffset, 150, 20, new TranslatableComponent("osmium.cape_options"), button -> mc.setScreen(new OsmiumCapeOptionsScreen(this)));
         BooleanButtonWidget toggleRainWidget = new BooleanButtonWidget(this.width / 2 - 75, this.height / 4 + 80 + globalOffset, 150, 20, Options.NoRainEnabled, "osmium.options.rain_");
         BooleanButtonWidget toggleFireworksWidget = new BooleanButtonWidget(this.width / 2 + 125, this.height / 4 + 80 + globalOffset, 150, 20, Options.FireworksDisabled, "osmium.options.fireworks_");
         BooleanButtonWidget toggleNetherParticlesWidget = new BooleanButtonWidget(this.width / 2 - 275, this.height / 4 + 120 + globalOffset, 150, 20, Options.DecreaseNetherParticles, "osmium.options.nether_particles_");
 
+
+        if(mc.level == null) {
+            openCapeWidget.active = false;
+        }
+
         this.addRenderableWidget(backButton);
-        this.addRenderableWidget(toggleCapeWidget);
+        this.addRenderableWidget(openCapeWidget);
         this.addRenderableWidget(toggleRainWidget);
         this.addRenderableWidget(toggleFireworksWidget);
         this.addRenderableWidget(toggleNetherParticlesWidget);

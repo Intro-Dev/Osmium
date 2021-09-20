@@ -106,6 +106,8 @@ public class Options {
     public static final String KeystrokesPosition = "KeystrokesPosition";
     public static final String KeystrokesEnabled = "KeystrokesEnabled";
     public static final String KeystrokesAlpha = "KeystrokesAlpha";
+    public static final String AnimateCapes = "AnimateCapes";
+    public static final String ShowOtherPlayersCapes = "ShowOtherPlayersCapes";
 
 
 
@@ -155,6 +157,8 @@ public class Options {
         put(KeystrokesPosition, new ElementPositionOption(KeystrokesPosition, 5, 5, 1));
         put(KeystrokesEnabled, new BooleanOption(KeystrokesEnabled, false));
         put(KeystrokesAlpha, new DoubleOption(KeystrokesAlpha, 0.2));
+        put(AnimateCapes, new BooleanOption(AnimateCapes, true));
+        put(ShowOtherPlayersCapes, new BooleanOption(ShowOtherPlayersCapes, true));
     }
 
     public HashMap<String, Option> getValues() {

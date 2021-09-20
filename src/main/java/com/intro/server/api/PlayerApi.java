@@ -1,6 +1,7 @@
 package com.intro.server.api;
 
 import com.intro.common.api.PlayerProperties;
+import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
 
 import java.util.HashMap;
@@ -30,5 +31,9 @@ public class PlayerApi {
 
     public static PlayerProperties getPlayerProperties(ServerPlayer player) {
         return playerProperties.get(player.getUUID().toString());
+    }
+
+    public static void setPlayerCapeBuffer(String uuid, FriendlyByteBuf byteBuf) {
+        playerProperties.get(uuid).capeDataBuffer = byteBuf;
     }
 }
