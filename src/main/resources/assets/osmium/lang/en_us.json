@@ -71,7 +71,12 @@
   "osmium.options.rgb_disabled": "Rgb: Disabled",
   "osmium.options.reset_color": "Reset Color",
   "osmium.options.transparency": "Transparency: ",
+  "osmium.options.animate_capes_enabled": "Disable animated Capes",
+  "osmium.options.animate_capes_disabled": "Enable animated Capes",
+  "osmium.options.show_other_capes_enabled": "Disable Other Capes",
+  "osmium.options.show_other_capes_disabled": "Enable Other Capes",
   "osmium.cape_select": "Select Cape",
+  "osmium.cape_options": "Cape Options",
   "osmium_failed_cape_load": "Failed to load custom cape pack",
   "osmium_failed_cape_load_title": "Error loading capes",
   "osmium.refresh": "Refresh"
