@@ -40,6 +40,8 @@ public class OsmiumUpdateScreen extends Screen  {
 
     private String errorText = "";
 
+    public static Path OLD_MOD_JAR_PATH;
+
     public OsmiumUpdateScreen(Screen parent) {
         super(new TranslatableComponent("osmium.update_screen.title"));
         this.parent = parent;
@@ -93,8 +95,18 @@ public class OsmiumUpdateScreen extends Screen  {
         @Override
         public void run() {
             try {
+                // this works in the development env but not in production
+                // :)
                 Path oldJarPath = Util.getModJarPath("osmium", "Osmium");
-                oldJarPath.toFile().deleteOnExit();
+                Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+                    try {
+                        Util.forceDelete(oldJarPath.toFile());
+                    } catch (IOException | InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }));
+
+                System.out.println(oldJarPath);
 
                 URL fileUrl = new URL(Util.getLatestReleaseDownloadString());
                 long fileSize = getFileSize(fileUrl);
