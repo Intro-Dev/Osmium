@@ -65,7 +65,7 @@ public class BackAndForwardWidget extends GuiComponent implements Widget, GuiEve
     @Override
     public boolean mouseClicked(double mouseX, double mouseY, int code) {
         if(code == GLFW.GLFW_MOUSE_BUTTON_1) {
-            if(MathUtil.isPositionWithinBounds((int) mouseX, (int) mouseY, x, y, 32, 32)) {
+            if(MathUtil.isPositionWithinBounds((int) mouseX, (int) mouseY, x - 32, y, 32, 32)) {
                 Minecraft.getInstance().getSoundManager().play(SimpleSoundInstance.forUI(SoundEvents.UI_BUTTON_CLICK, 1.0F));
                 value.decrementAndGet();
                 value.set(Mth.clamp(value.get(), min, max));

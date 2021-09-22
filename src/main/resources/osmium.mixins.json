@@ -5,8 +5,10 @@
   "client": [
     "client.AbilitiesMixin",
     "client.CameraMixin",
+    "client.CapeLayerMixin",
     "client.ClientLevelMixin",
     "client.ClientPacketListenerMixin",
+    "client.ElytraLayerMixin",
     "client.FireworkEntityRendererMixin",
     "client.FontInvoker",
     "client.GameRendererMixin",
@@ -33,5 +35,6 @@
     "defaultRequire": 1
   },
   "mixins": [
+
   ]
 }

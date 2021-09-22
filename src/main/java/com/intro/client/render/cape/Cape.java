@@ -21,6 +21,7 @@ public class Cape implements Cloneable {
         this.isOptifine = isOptifine;
         this.isAnimated = isAnimated;
         this.source = source;
+        this.creator = creator;
     }
 
     public DynamicAnimation getTexture() {

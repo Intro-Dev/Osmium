@@ -72,6 +72,13 @@ public class Options {
         options.put(identifier, option);
     }
 
+    public StringOption getStringOption(String identifier) {
+        return (StringOption) get(identifier);
+    }
+
+
+
+
 
     public static final String ToggleSprintEnabled = "ToggleSprintEnabled";
     public static final String FullbrightEnabled = "FullbrightEnabled";
@@ -108,6 +115,7 @@ public class Options {
     public static final String KeystrokesAlpha = "KeystrokesAlpha";
     public static final String AnimateCapes = "AnimateCapes";
     public static final String ShowOtherPlayersCapes = "ShowOtherPlayersCapes";
+    public static final String SetCape = "SetCape";
 
 
 
@@ -159,6 +167,7 @@ public class Options {
         put(KeystrokesAlpha, new DoubleOption(KeystrokesAlpha, 0.2));
         put(AnimateCapes, new BooleanOption(AnimateCapes, true));
         put(ShowOtherPlayersCapes, new BooleanOption(ShowOtherPlayersCapes, true));
+        put(SetCape, new StringOption(SetCape, ""));
     }
 
     public HashMap<String, Option> getValues() {

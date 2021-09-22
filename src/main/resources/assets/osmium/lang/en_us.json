@@ -79,5 +79,5 @@
   "osmium.cape_options": "Cape Options",
   "osmium_failed_cape_load": "Failed to load custom cape pack",
   "osmium_failed_cape_load_title": "Error loading capes",
-  "osmium.refresh": "Refresh"
+  "osmium.refresh_capes": "Refresh Capes"
 }
