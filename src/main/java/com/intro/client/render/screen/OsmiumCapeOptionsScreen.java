@@ -1,8 +1,8 @@
 package com.intro.client.render.screen;
 
+import com.intro.client.OsmiumClient;
 import com.intro.client.network.ClientNetworkHandler;
 import com.intro.client.render.cape.Cape;
-import com.intro.client.render.cape.CapeHandler;
 import com.intro.client.render.cape.CosmeticManager;
 import com.intro.client.render.color.Colors;
 import com.intro.client.render.widget.BackAndForwardWidget;
@@ -11,6 +11,7 @@ import com.intro.client.render.widget.EnumSelectWidget;
 import com.intro.client.util.MathUtil;
 import com.intro.client.util.RenderUtil;
 import com.intro.common.config.Options;
+import com.intro.common.config.options.StringOption;
 import com.mojang.blaze3d.platform.Lighting;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
@@ -21,7 +22,9 @@ import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
+import net.minecraft.client.resources.sounds.SimpleSoundInstance;
 import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
 
@@ -50,8 +53,15 @@ public class OsmiumCapeOptionsScreen extends Screen {
         this.parent = parent;
     }
 
+
     @Override
     protected void init() {
+
+        // set width and height to proper values
+        // this is to make it ignore gui scale;
+        this.width = 1280;
+        this.height = 720;
+
         bgStartHeight = this.height / 2 - 256;
 
         List<Cape> rawCapes = CosmeticManager.getAllCapes().stream().toList();
@@ -70,14 +80,19 @@ public class OsmiumCapeOptionsScreen extends Screen {
         // account for remainder
         capePages.add(rawCapes.subList(i * 6, i * 6 + extraOps));
 
-        Button refreshButton = new Button(this.width / 2 - 250, bgStartHeight + 350, 200, 20, new TranslatableComponent("osmium.refresh"), this::refresh);
+        Button refreshButton = new Button(this.width / 2 - 250, bgStartHeight + 350, 200, 20, new TranslatableComponent("osmium.refresh_capes"), this::refresh);
         EnumSelectWidget toggleCapeWidget = new EnumSelectWidget(this.width / 2 - 250, bgStartHeight + 375 , 200, 20, Options.CustomCapeMode,"osmium.options.video_options.cape_");
         BooleanButtonWidget toggleAnimationWidget = new BooleanButtonWidget(this.width / 2 - 250, bgStartHeight + 400 , 200, 20, Options.AnimateCapes, "osmium.options.animate_capes_");
         BooleanButtonWidget toggleShowOtherCapesWidget = new BooleanButtonWidget(this.width / 2 - 250, bgStartHeight + 425 , 200, 20, Options.ShowOtherPlayersCapes, "osmium.options.show_other_capes_");
 
 
-        forwardWidget = new BackAndForwardWidget(this.width / 2 + 200, bgStartHeight + 475, 20,  currentPage, 0, capePages.size() - 1);
+        Button backButton = new Button(this.width / 2 - 250, bgStartHeight + 475, 200, 20, new TranslatableComponent("osmium.options.video_options.back"), button -> mc.setScreen(this.parent));
 
+        // this widget is 1 pixel off center
+        // :)
+        forwardWidget = new BackAndForwardWidget(this.width / 2 + 184, bgStartHeight + 475, 30,  currentPage, 0, capePages.size() - 1);
+
+        this.addRenderableWidget(backButton);
         this.addRenderableWidget(toggleShowOtherCapesWidget);
         this.addRenderableWidget(toggleAnimationWidget);
         this.addRenderableWidget(forwardWidget);
@@ -90,6 +105,10 @@ public class OsmiumCapeOptionsScreen extends Screen {
         PoseStack entityRenderStack = RenderSystem.getModelViewStack();
         entityRenderStack.pushPose();
         stack.pushPose();
+
+
+        // System.out.println(this.width);
+
 
         zoomInScale += 0.25 * delta;
         zoomInScale = Mth.clamp(zoomInScale, 0, 1);
@@ -104,7 +123,7 @@ public class OsmiumCapeOptionsScreen extends Screen {
         for(int i = 0; i < pageCapes.size(); i++) {
             Cape cape = pageCapes.get(i);
 
-            if(CapeHandler.playerCapes.get(mc.player.getStringUUID()) != null && CapeHandler.playerCapes.get(mc.player.getStringUUID()).registryName.equals(cape.registryName)) {
+            if(CosmeticManager.playerCapes.get(mc.player.getStringUUID()) != null && CosmeticManager.playerCapes.get(mc.player.getStringUUID()).registryName.equals(cape.registryName)) {
                 fill(stack, this.width / 2 + 100, bgStartHeight + 40 + (i * 70), this.width / 2 + 300, bgStartHeight + 100 + (i * 70), Colors.DARK_GRAY.getColor().getInt());
             }
 
@@ -151,9 +170,14 @@ public class OsmiumCapeOptionsScreen extends Screen {
 
         // yes I know this is the worst method of 2d hitbox detection
         // but its only 7 checks, and I can't be bothered over a micro optimization
+
+        System.out.println(this.width);
+
         for(int i = 0; i < pageCapes.size(); i++) {
             if(MathUtil.isPositionWithinBounds((int) mouseX, (int) mouseY, this.width / 2 + 100, bgStartHeight + 40 + (i * 70), 200, 60)) {
-                CapeHandler.playerCapes.put(mc.player.getStringUUID(), pageCapes.get(i));
+                CosmeticManager.playerCapes.put(mc.player.getStringUUID(), pageCapes.get(i));
+                Minecraft.getInstance().getSoundManager().play(SimpleSoundInstance.forUI(SoundEvents.UI_BUTTON_CLICK, 1.0F));
+                OsmiumClient.options.put(Options.SetCape, new StringOption(Options.SetCape, pageCapes.get(i).registryName));
                 try {
                     ClientNetworkHandler.sendCapeSetPacket(pageCapes.get(i));
                 } catch (IOException e) {
@@ -184,8 +208,9 @@ public class OsmiumCapeOptionsScreen extends Screen {
         // account for remainder
         capePages.add(rawCapes.subList(i * 6, i * 6 + extraOps));
 
-        forwardWidget = new BackAndForwardWidget(this.width / 2 + 200, bgStartHeight + 475, 20,  currentPage, 0, capePages.size() - 1);
+        forwardWidget = new BackAndForwardWidget(this.width / 2 + 180, bgStartHeight + 475, 30,  currentPage, 0, capePages.size() - 1);
     }
+
 
     public static void renderEntityInInventory(int x, int y, int scale, float xRot, float yRot, LivingEntity livingEntity) {
         float xRotClamped = Mth.clamp(xRot, -180, 180);

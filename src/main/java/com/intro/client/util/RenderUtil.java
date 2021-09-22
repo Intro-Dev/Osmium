@@ -76,6 +76,16 @@ public class RenderUtil {
         return (c & -67108864) == 0 ? c | -16777216 : c;
     }
 
+    public static Vector2d adjustCordsForSpatialScale(int x, int y, int scaleX, int scaleY, int scale) {
+        x += scaleX;
+        y += scaleY;
+        x *= scale;
+        y *= scale;
+        x -= scaleX;
+        y -= scaleY;
+        return new Vector2d(x, y);
+    }
+
 
 
     public static void drawTextBatch() {

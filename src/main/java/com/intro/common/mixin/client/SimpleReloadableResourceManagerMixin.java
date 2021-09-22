@@ -19,6 +19,6 @@ public class SimpleReloadableResourceManagerMixin {
 
     @Inject(method = "createReload", at = @At("RETURN"))
     public void stitchTextures(Executor executor, Executor executor2, CompletableFuture<Unit> completableFuture, List<PackResources> list, CallbackInfoReturnable<ReloadInstance> cir) {
-        CosmeticManager.genCapes();
+        CosmeticManager.loadCapes();
     }
 }

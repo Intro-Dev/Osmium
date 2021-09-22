@@ -23,6 +23,8 @@ import net.minecraft.world.entity.player.PlayerModelPart;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 
+import java.util.Objects;
+
 public class CapeRenderer extends RenderLayer<AbstractClientPlayer, PlayerModel<AbstractClientPlayer>> {
 
     public CapeRenderer(RenderLayerParent<AbstractClientPlayer, PlayerModel<AbstractClientPlayer>> parent) {
@@ -32,6 +34,10 @@ public class CapeRenderer extends RenderLayer<AbstractClientPlayer, PlayerModel<
     public void render(PoseStack stack, MultiBufferSource multiBuffer, int light, AbstractClientPlayer entity, float limbAngle, float limbDistance, float tickDelta, float animationProgress, float headYaw, float headPitch) {
         try {
             ItemStack itemStack = entity.getItemBySlot(EquipmentSlot.CHEST);
+            if(OsmiumClient.options.getBooleanOption(Options.ShowOtherPlayersCapes).variable && !Objects.equals(entity.getStringUUID(), Minecraft.getInstance().player.getStringUUID())) {
+                return;
+            }
+
             if(!itemStack.is(Items.ELYTRA) && !entity.isInvisible() && entity.isCapeLoaded() && entity.isModelPartShown(PlayerModelPart.CAPE) && OsmiumClient.options.getEnumOption(Options.CustomCapeMode).variable == CapeRenderingMode.ALL || OsmiumClient.options.getEnumOption(Options.CustomCapeMode).variable == CapeRenderingMode.OPTIFINE){
                 Minecraft.getInstance().getProfiler().push("OsmiumCapeRendering");
                 stack.pushPose();
@@ -63,10 +69,10 @@ public class CapeRenderer extends RenderLayer<AbstractClientPlayer, PlayerModel<
                 stack.mulPose(Vector3f.YP.rotationDegrees(180.0F - s / 2.0F));
 
 
-                if(CapeHandler.playerCapes.get(entity.getStringUUID()) != null) {
+                if(CosmeticManager.playerCapes.get(entity.getStringUUID()) != null) {
                     RenderSystem.enableDepthTest();
                     RenderSystem.setShader(GameRenderer::getPositionTexShader);
-                    Cape playerCape = CapeHandler.playerCapes.get(entity.getStringUUID());
+                    Cape playerCape = CosmeticManager.playerCapes.get(entity.getStringUUID());
                     ResourceLocation capeTexture = playerCape.getFrameTexture();
                     RenderType capeRenderType = RenderType.entitySolid(capeTexture);
                     if (OsmiumClient.options.getEnumOption(Options.CustomCapeMode).variable == CapeRenderingMode.OPTIFINE && playerCape.isOptifine) {

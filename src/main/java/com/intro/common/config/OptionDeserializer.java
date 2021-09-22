@@ -42,6 +42,9 @@ public class OptionDeserializer implements JsonDeserializer<Option> {
         if(src.get("Type").getAsString().equals("Vector2Option")) {
             return new ElementPositionOption( src.get("Identifier").getAsString(), src.get("x").getAsDouble(), src.get("y").getAsDouble());
         }
+        if(src.get("Type").getAsString().equals("StringOption")) {
+            return new StringOption(src.get("Identifier").getAsString(), src.get("Value").getAsString());
+        }
         return null;
     }
 

@@ -5,7 +5,6 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.intro.client.OsmiumClient;
 import com.intro.client.render.cape.Cape;
-import com.intro.client.render.cape.CapeHandler;
 import com.intro.client.render.cape.CosmeticManager;
 import com.intro.client.util.OptionUtil;
 import com.intro.common.config.OptionDeserializer;
@@ -68,7 +67,10 @@ public class ClientNetworkHandler {
             if(isRunningOsmiumServer) {
                 ClientPlayNetworking.send(NetworkingConstants.RUNNING_OSMIUM_CLIENT_PACKET_ID, PacketByteBufs.create());
                 try {
-                    sendCapeSetPacket(CapeHandler.playerCapes.get(Minecraft.getInstance().player.getStringUUID()));
+                    if(CosmeticManager.getPreLoadedPlayerCape() != null) {
+                        CosmeticManager.playerCapes.put(Minecraft.getInstance().player.getStringUUID(), CosmeticManager.getPreLoadedPlayerCape());
+                        sendCapeSetPacket(CosmeticManager.playerCapes.get(Minecraft.getInstance().player.getStringUUID()));
+                    }
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -87,11 +89,11 @@ public class ClientNetworkHandler {
             try {
                 String uuid = buf.readUtf();
                 Cape playerCape = CosmeticManager.readCapeFromByteBuf(buf);
-                CapeHandler.playerCapes.put(uuid, playerCape);
+                CosmeticManager.playerCapes.put(uuid, playerCape);
             } catch (Exception e) {
                 e.printStackTrace();
                 sendToast(Minecraft.getInstance(), new TranslatableComponent("osmium_failed_cape_load_title"), new TranslatableComponent("osmium_failed_cape_load"));
-                }
+            }
         });
     }
 
@@ -104,7 +106,6 @@ public class ClientNetworkHandler {
 
         byte[] imageData = cape.getTexture().image.asByteArray();
 
-        System.out.println(imageData.length);
         byteBuf.writeBytes(imageData);
         ClientPlayNetworking.send(NetworkingConstants.SET_PLAYER_CAPE_SERVER_BOUND, byteBuf);
     }
