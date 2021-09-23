@@ -1,4 +1,4 @@
-[![Java CI with Gradle](https://github.com/Intro-Dev/Osmium/actions/workflows/gradle.yml/badge.svg?branch=faric/1.17.x)](https://github.com/Intro-Dev/Osmium/actions/workflows/gradle.yml)
+[![Java CI with Gradle](https://github.com/Intro-Dev/Osmium/actions/workflows/gradle.yml/badge.svg?branch=fabric/1.17.x)](https://github.com/Intro-Dev/Osmium/actions/workflows/gradle.yml)
 
 # Osmium
 
