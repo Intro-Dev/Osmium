@@ -3,41 +3,64 @@ package com.intro.server.network;
 import com.intro.common.network.NetworkingConstants;
 import com.intro.server.OsmiumServer;
 import com.intro.server.api.PlayerApi;
-import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
-import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
-import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
+import io.netty.buffer.Unpooled;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.protocol.game.ClientboundCustomPayloadPacket;
+import net.minecraft.network.protocol.game.ServerboundCustomPayloadPacket;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import org.apache.logging.log4j.Level;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+
 public class ServerNetworkHandler {
+
+    private static HashMap<ResourceLocation, ArrayList<PacketListener>> listeners = new HashMap<>();
+
+    public static void registerPacketListener(ResourceLocation channel, PacketListener listener) {
+        listeners.computeIfAbsent(channel, k -> new ArrayList<>());
+        listeners.get(channel).add(listener);
+    }
+
+    public static void handlePacketEvent(ServerboundCustomPayloadPacket payloadPacket, ServerPlayer player) {
+        listeners.get(payloadPacket.getIdentifier()).forEach(listener -> listener.onPacket(payloadPacket.getData(), player));
+    }
+
+    public static void onDisconnect(ServerPlayer player) {
+        PlayerApi.removePlayerRegistry(player);
+        PlayerApi.playersRunningOsmium.remove(player.getStringUUID());
+    }
+
+
+    @FunctionalInterface
+    private interface PacketListener {
+
+        void onPacket(FriendlyByteBuf buf, ServerPlayer player);
+
+    }
 
 
 
     public static void sendPacket(ServerPlayer client, ResourceLocation channel, FriendlyByteBuf data) {
-        ServerPlayNetworking.send(client, channel, data);
+        client.connection.send(new ClientboundCustomPayloadPacket(channel, data));
     }
 
     public static void registerPackets() {
-        ServerPlayNetworking.registerGlobalReceiver(NetworkingConstants.RUNNING_OSMIUM_CLIENT_PACKET_ID, (server, player, handler, buf, responseSender) -> {
+        registerPacketListener(NetworkingConstants.RUNNING_OSMIUM_CLIENT_PACKET_ID, (buf, player) -> {
             PlayerApi.setRunningOsmium(player, true);
             PlayerApi.playersRunningOsmium.put(player.getUUID().toString(), player);
         });
 
-        ServerPlayConnectionEvents.DISCONNECT.register(((handler, server) -> {
-            PlayerApi.removePlayerRegistry(handler.getPlayer());
-            PlayerApi.playersRunningOsmium.remove(handler.getPlayer().getUUID().toString());
-        }));
 
-        ServerPlayNetworking.registerGlobalReceiver(NetworkingConstants.SET_PLAYER_CAPE_SERVER_BOUND, (server, player, handler, buf, responseSender) -> {
+        registerPacketListener(NetworkingConstants.SET_PLAYER_CAPE_SERVER_BOUND, (buf, player) -> {
 
             if(buf.capacity() > 16384) {
                 OsmiumServer.LOGGER.log(Level.INFO, "Player tried sending massive cape set packet");
                 return;
             }
 
-            FriendlyByteBuf clientSendByteBuf = PacketByteBufs.create();
+            FriendlyByteBuf clientSendByteBuf = createByteBuf();
             clientSendByteBuf.writeUtf(player.getStringUUID());
             clientSendByteBuf.writeBytes(buf);
 
@@ -48,6 +71,10 @@ public class ServerNetworkHandler {
             PlayerApi.setPlayerCapeBuffer(player.getStringUUID(), clientSendByteBuf);
 
         });
+    }
+
+    public static FriendlyByteBuf createByteBuf() {
+        return new FriendlyByteBuf(Unpooled.buffer());
     }
 
 }

@@ -15,13 +15,13 @@ import com.intro.common.config.Options;
 import com.intro.common.util.Util;
 import com.mojang.blaze3d.platform.NativeImage;
 import io.netty.buffer.ByteBufInputStream;
-import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.toasts.SystemToast;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraftforge.fml.loading.FMLPaths;
 
 import java.io.File;
 import java.io.IOException;
@@ -49,6 +49,7 @@ public class CosmeticManager {
 
     // map of all players capes
     public static final HashMap<String, Cape> playerCapes = new HashMap<>();
+
 
 
     private static Cape preLoadedPlayerCape;
@@ -101,7 +102,7 @@ public class CosmeticManager {
         putCape(new Cape(genCapeAnimation(new ResourceLocation("osmium", "textures/cape/osmium_logo_cape.png"), "osmium_logo_cape", 1), false, true, "local", "osmium_logo_cape", "Intro"));
 
         try {
-            File cosmeticsDir = FabricLoader.getInstance().getGameDir().getParent().resolve("cosmetics").toFile();
+            File cosmeticsDir = FMLPaths.GAMEDIR.get().getParent().resolve("cosmetics").toFile();
             if(!Files.exists(cosmeticsDir.toPath())) {
                 Files.createDirectory(cosmeticsDir.toPath());
             }
@@ -174,7 +175,7 @@ public class CosmeticManager {
                     CosmeticManager.playerCapes.put(Minecraft.getInstance().player.getStringUUID(), CosmeticManager.getPreLoadedPlayerCape());
                 }
             }
-            Thread CapeDownloaderThread = new Thread(new CosmeticManager.StandardCapeDownloader((EventAddPlayer) event));
+            Thread CapeDownloaderThread = new Thread(new StandardCapeDownloader((EventAddPlayer) event));
             CapeDownloaderThread.start();
         }
         if (event instanceof EventRemovePlayer) {
@@ -215,7 +216,7 @@ public class CosmeticManager {
     }
 
     public static void setCapeThreaded(String uuid, String url, boolean animated) {
-        Thread customDownloader = new Thread(new CosmeticManager.CustomCapeDownloader(uuid, url, animated));
+        Thread customDownloader = new Thread(new CustomCapeDownloader(uuid, url, animated));
         customDownloader.start();
     }
 

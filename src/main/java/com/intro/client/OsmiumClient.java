@@ -14,17 +14,21 @@ import com.intro.client.util.OptionUtil;
 import com.intro.common.config.Options;
 import com.intro.common.util.Util;
 import com.mojang.blaze3d.platform.InputConstants;
-import net.fabricmc.api.ClientModInitializer;
-import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
 import net.minecraft.client.KeyMapping;
+import net.minecraft.client.Minecraft;
+import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.lwjgl.glfw.GLFW;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
-public class OsmiumClient implements ClientModInitializer {
+@Mod("osmium")
+public class OsmiumClient {
 
     public static final String MOD_ID = "osmium";
 
@@ -35,6 +39,12 @@ public class OsmiumClient implements ClientModInitializer {
     public static final Options options = new Options();
 
     public static boolean runningLatestVersion = true;
+
+    private static final Minecraft mc = Minecraft.getInstance();
+
+    public OsmiumClient() {
+        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::onInitializeClient);
+    }
 
 
     public static void registerCallbacks() {
@@ -49,15 +59,22 @@ public class OsmiumClient implements ClientModInitializer {
         EVENT_BUS.registerCallback(cosmeticManager::handleEvents, new EventType[] { EventType.EVENT_ADD_PLAYER, EventType.EVENT_REMOVE_PLAYER } );
         EVENT_BUS.registerCallback(PingDisplay.getInstance()::onEvent, EventType.EVENT_TICK);
         EVENT_BUS.registerCallback(cosmeticManager::tickCapes, EventType.EVENT_TICK);
+        EVENT_BUS.registerCallback(ClientNetworkHandler::handlePacketEvent, EventType.EVENT_CUSTOM_PACKET);
     }
 
     public void registerKeyBindings() {
         menuKey = new KeyMapping("keys.osmium.MenuKey", InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_RIGHT_SHIFT, "keys.category.osmium.keys");
-        KeyBindingHelper.registerKeyBinding(menuKey);
+        registerKeyBinding(menuKey);
+    }
+
+    public void registerKeyBinding(KeyMapping mapping) {
+        List<KeyMapping> mappings = new ArrayList<>(List.of(mc.options.keyMappings));
+        mappings.add(mapping);
+        mc.options.keyMappings = mappings.toArray(new KeyMapping[0]);
     }
 
 
-    public void onInitializeClient() {
+    public void onInitializeClient(final FMLCommonSetupEvent event) {
         OptionUtil.Options.init();
         OptionUtil.load();
         EVENT_BUS.initListenerMap();
@@ -67,6 +84,7 @@ public class OsmiumClient implements ClientModInitializer {
         RenderManager.initDrawables();
         runningLatestVersion = Util.isRunningLatestVersion();
         System.out.println("Osmium Initialized");
+
     }
 
 

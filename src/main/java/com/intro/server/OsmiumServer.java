@@ -4,16 +4,22 @@ import com.intro.common.util.Util;
 import com.intro.server.api.OptionApi;
 import com.intro.server.command.CommandManager;
 import com.intro.server.network.ServerNetworkHandler;
-import net.fabricmc.api.DedicatedServerModInitializer;
+import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-public class OsmiumServer implements DedicatedServerModInitializer  {
+@Mod("osmium")
+public class OsmiumServer {
 
     public static final Logger LOGGER = LogManager.getLogger("OsmiumServer");
 
-    @Override
-    public void onInitializeServer() {
+    public OsmiumServer() {
+        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::onInitializeServer);
+    }
+
+    public void onInitializeServer(final FMLCommonSetupEvent event) {
         CommandManager.registerCommands();
         ServerNetworkHandler.registerPackets();
         OptionApi.load();

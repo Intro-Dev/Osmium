@@ -9,7 +9,9 @@ public enum EventType {
     EVENT_SETTINGS_CHANGE(5),
     EVENT_SPAWN_ENTITY(6),
     EVENT_START_GAME(7),
-    EVENT_TICK(8);
+    EVENT_TICK(8),
+    EVENT_CUSTOM_PACKET(9),
+    EVENT_DISCONNECT(10);
 
     private final int value;
 

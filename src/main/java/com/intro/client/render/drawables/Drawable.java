@@ -37,8 +37,8 @@ public abstract class Drawable extends GuiComponent implements Widget, GuiEventL
     }
 
     @Override
-    public NarratableEntry.NarrationPriority narrationPriority() {
-        return NarratableEntry.NarrationPriority.NONE;
+    public NarrationPriority narrationPriority() {
+        return NarrationPriority.NONE;
     }
 
     @Override

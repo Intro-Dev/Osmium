@@ -1,7 +1,9 @@
 {
   "required": true,
   "package": "com.intro.common.mixin",
+  "minVersion": "0.8",
   "compatibilityLevel": "JAVA_16",
+  "refmap": "osmium.refmap.json",
   "client": [
     "client.AbilitiesMixin",
     "client.CameraMixin",
@@ -25,16 +27,18 @@
     "client.ResourceTextureSubclassAccessor",
     "client.ScreenEffectRendererMixin",
     "client.SimpleReloadableResourceManagerMixin",
-    "client.TitleScreenMixin"
+    "client.TitleScreenMixin",
+    "client.BufferBuilderAccessor"
   ],
   "server": [
     "server.MinecraftServerMixin",
-    "server.PlayerListMixin"
+    "server.PlayerListMixin",
+    "server.ServerGamePacketListenerImplMixin"
+
   ],
   "injectors": {
     "defaultRequire": 1
   },
   "mixins": [
-
   ]
 }

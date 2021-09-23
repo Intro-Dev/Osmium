@@ -7,7 +7,7 @@ import com.intro.common.config.OptionDeserializer;
 import com.intro.common.config.OptionSerializer;
 import com.intro.common.config.options.Option;
 import com.intro.server.OsmiumServer;
-import net.fabricmc.loader.api.FabricLoader;
+import net.minecraftforge.fml.loading.FMLPaths;
 import org.apache.logging.log4j.Level;
 
 import java.io.File;
@@ -57,7 +57,7 @@ public class OptionApi {
      */
     public static void save() {
         try {
-            File file = Paths.get(FabricLoader.getInstance().getConfigDir().resolve("osmium-server-config.json").toString()).toFile();
+            File file = Paths.get(FMLPaths.CONFIGDIR.get().resolve("osmium-server-config.json").toString()).toFile();
             if(file.createNewFile()) {
                 System.out.println("Couldn't find already existing config file, creating new one.");
                 OsmiumServer.LOGGER.log(Level.ALL, "Couldn't find already existing config file, creating new one.");
@@ -78,7 +78,7 @@ public class OptionApi {
      */
     public static void load() {
         try {
-            File file = Paths.get(FabricLoader.getInstance().getConfigDir().resolve("osmium-server-config.json").toString()).toFile();
+            File file = Paths.get(FMLPaths.CONFIGDIR.get().resolve("osmium-server-config.json").toString()).toFile();
             StringBuilder builder = new StringBuilder();
             boolean createdFile = file.createNewFile();
             Scanner reader = new Scanner(file);

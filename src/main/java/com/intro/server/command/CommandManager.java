@@ -14,12 +14,13 @@ import com.intro.server.network.ServerNetworkHandler;
 import com.mojang.brigadier.arguments.DoubleArgumentType;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.context.CommandContext;
-import net.fabricmc.fabric.api.command.v1.CommandRegistrationCallback;
-import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.RegisterCommandsEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 import org.apache.logging.log4j.Level;
 
 import static net.minecraft.commands.Commands.argument;
@@ -28,12 +29,17 @@ import static net.minecraft.commands.Commands.literal;
 public class CommandManager {
 
     public static void registerCommands() {
-        CommandRegistrationCallback.EVENT.register((dispatcher, dedicated) -> dispatcher.register(literal("osmium").requires(commandSourceStack -> commandSourceStack.hasPermission(3)).then(literal("option").then(literal("set").then(argument("identifier", StringArgumentType.string()).then(argument("double", DoubleArgumentType.doubleArg()).executes(CommandManager::doubleSetCommand))
-                .then(argument("boolean", StringArgumentType.string()).executes(CommandManager::booleanSetCommand))
-                .then(argument("enum_type", StringArgumentType.string()).then(argument("enum_value", StringArgumentType.string()).executes(CommandManager::enumSetCommand)))
-        )).then(literal("refresh").executes(CommandManager::refreshCommand))
+        MinecraftForge.EVENT_BUS.addListener(CommandManager::onCommandRegister);
+    }
+
+    @SubscribeEvent
+    public static void onCommandRegister(RegisterCommandsEvent event) {
+        event.getDispatcher().register(literal("osmium").requires(commandSourceStack -> commandSourceStack.hasPermission(3)).then(literal("option").then(literal("set").then(argument("identifier", StringArgumentType.string()).then(argument("double", DoubleArgumentType.doubleArg()).executes(CommandManager::doubleSetCommand))
+                        .then(argument("boolean", StringArgumentType.string()).executes(CommandManager::booleanSetCommand))
+                        .then(argument("enum_type", StringArgumentType.string()).then(argument("enum_value", StringArgumentType.string()).executes(CommandManager::enumSetCommand)))
+                )).then(literal("refresh").executes(CommandManager::refreshCommand))
                 .then(literal("remove").then(argument("identifier", StringArgumentType.string()).executes(CommandManager::removeCommand)))
-                .then(literal("reset").executes(CommandManager::clearCommand)))));
+                .then(literal("reset").executes(CommandManager::clearCommand))));
     }
 
     public static int doubleSetCommand(CommandContext<CommandSourceStack> context) {
@@ -73,7 +79,7 @@ public class CommandManager {
         for (ServerPlayer player : PlayerApi.playersRunningOsmium.values()) {
             try {
                 OptionSerializer serializer = new OptionSerializer();
-                FriendlyByteBuf byteBuf = PacketByteBufs.create();
+                FriendlyByteBuf byteBuf = ServerNetworkHandler.createByteBuf();
                 // write size so we only have to send one packet
                 byteBuf.writeInt(OptionApi.getServerSetOptions().size());
                 for (Option option : OptionApi.getServerSetOptions()) {

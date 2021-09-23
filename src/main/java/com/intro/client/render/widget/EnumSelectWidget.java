@@ -6,7 +6,6 @@ import com.intro.common.config.options.EnumOption;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.network.chat.TranslatableComponent;
-import org.jetbrains.annotations.NotNull;
 
 public class EnumSelectWidget extends Button {
 
@@ -14,7 +13,7 @@ public class EnumSelectWidget extends Button {
     public final String key;
 
     @SuppressWarnings("unsafe")
-    public EnumSelectWidget(int x, int y, int width, int height, @NotNull String optionId, String key) {
+    public EnumSelectWidget(int x, int y, int width, int height, String optionId, String key) {
         super(x, y, width, height, new TextComponent(""), button -> {
             if(!OsmiumClient.options.getOverwrittenOptions().containsKey(optionId)) {
                 Enum<?> attachedEnum;

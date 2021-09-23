@@ -6,7 +6,6 @@ import com.intro.common.network.NetworkingConstants;
 import com.intro.server.api.OptionApi;
 import com.intro.server.api.PlayerApi;
 import com.intro.server.network.ServerNetworkHandler;
-import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.minecraft.network.Connection;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
@@ -23,8 +22,8 @@ public abstract class PlayerListMixin {
     public void placeNewPlayer(Connection netManager, ServerPlayer player, CallbackInfo ci) {
         OptionSerializer serializer = new OptionSerializer();
         try {
-            ServerNetworkHandler.sendPacket(player, NetworkingConstants.RUNNING_OSMIUM_SERVER_PACKET_ID, PacketByteBufs.create());
-            FriendlyByteBuf byteBuf = PacketByteBufs.create();
+            ServerNetworkHandler.sendPacket(player, NetworkingConstants.RUNNING_OSMIUM_SERVER_PACKET_ID, ServerNetworkHandler.createByteBuf());
+            FriendlyByteBuf byteBuf = ServerNetworkHandler.createByteBuf();
             byteBuf.writeInt(OptionApi.getServerSetOptions().size());
             for (Option option : OptionApi.getServerSetOptions()) {
                 // can't use the GSON object here, or it doesn't serialize properly

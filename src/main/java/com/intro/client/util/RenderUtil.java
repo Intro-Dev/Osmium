@@ -8,6 +8,7 @@ import com.mojang.blaze3d.vertex.BufferBuilder;
 import com.mojang.blaze3d.vertex.BufferUploader;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
+import com.mojang.math.Matrix4f;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.font.FontSet;
 import net.minecraft.client.gui.font.glyphs.BakedGlyph;
@@ -18,7 +19,6 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.util.FormattedCharSequence;
-import org.jetbrains.annotations.ApiStatus;
 
 import java.util.Objects;
 
@@ -31,6 +31,82 @@ public class RenderUtil {
         stack.scale(scale, scale, 0);
         stack.translate(-(x + (width / 2f)), -(y + (height / 2f)), 0);
     }
+
+    public static void positionAccurateScale3d(PoseStack stack, float scale, int x, int y, int z, int width, int height, int depth) {
+        stack.translate((x + (width / 2f)), (y + (height / 2f)), (z + (depth / 2f)));
+        stack.scale(scale, scale, scale);
+        stack.translate(-(x + (width / 2f)), -(y + (height / 2f)), -(z + (depth / 2f)));
+    }
+
+    public static void positionAccurateScale3d(PoseStack stack, float scale, double x, double y, double z) {
+        stack.translate(x, y, z);
+        stack.scale(scale, scale, scale);
+        stack.translate(-x, -y, -z);
+    }
+
+    public static void positionAccurateScale3d(PoseStack stack, float scale, double x, double y, double z, double x2, double y2, double z2) {
+        if(x2 > x) {
+            double tmp = x;
+            x = x2;
+            x2 = tmp;
+        }
+        if(y2 > y) {
+            double tmp = y;
+            y = y2;
+            y2 = tmp;
+        }
+        if(z2 > z) {
+            double tmp = z;
+            z = z2;
+            z2 = tmp;
+        }
+
+        stack.translate(x + ((x - x2) / 2f), y + ((y - y2) / 2f), z + ((z - z2) / 2f));
+        stack.scale(scale, scale, scale);
+        stack.translate(-(x + ((x - x2) / 2f)), -(y + ((y - y2) / 2f)), -(z + ((z - z2) / 2f)));
+    }
+
+    public static void addChainedFilledBoxVertices(PoseStack stack, VertexConsumer vertexConsumer, float x, float y, float z, float x1, float y1, float z1, float x2, float y2, float z2, float r, float g, float b, float a) {
+        Matrix4f matrix4f = stack.last().pose();
+        x1 += x;
+        x2 += x;
+        y1 += y;
+        y2 += y;
+        z1 += z;
+        z2 += z;
+
+        vertexConsumer.vertex(matrix4f, x1, y1, z1).color(r, g, b, a).endVertex();
+        vertexConsumer.vertex(matrix4f, x1, y1, z1).color(r, g, b, a).endVertex();
+        vertexConsumer.vertex(matrix4f, x1, y1, z1).color(r, g, b, a).endVertex();
+        vertexConsumer.vertex(matrix4f, x1, y1, z2).color(r, g, b, a).endVertex();
+        vertexConsumer.vertex(matrix4f, x1, y2, z1).color(r, g, b, a).endVertex();
+        vertexConsumer.vertex(matrix4f, x1, y2, z2).color(r, g, b, a).endVertex();
+        vertexConsumer.vertex(matrix4f, x1, y2, z2).color(r, g, b, a).endVertex();
+        vertexConsumer.vertex(matrix4f, x1, y1, z2).color(r, g, b, a).endVertex();
+        vertexConsumer.vertex(matrix4f, x2, y2, z2).color(r, g, b, a).endVertex();
+        vertexConsumer.vertex(matrix4f, x2, y1, z2).color(r, g, b, a).endVertex();
+        vertexConsumer.vertex(matrix4f, x2, y1, z2).color(r, g, b, a).endVertex();
+        vertexConsumer.vertex(matrix4f, x2, y1, z1).color(r, g, b, a).endVertex();
+        vertexConsumer.vertex(matrix4f, x2, y2, z2).color(r, g, b, a).endVertex();
+        vertexConsumer.vertex(matrix4f, x2, y2, z1).color(r, g, b, a).endVertex();
+        vertexConsumer.vertex(matrix4f, x2, y2, z1).color(r, g, b, a).endVertex();
+        vertexConsumer.vertex(matrix4f, x2, y1, z1).color(r, g, b, a).endVertex();
+        vertexConsumer.vertex(matrix4f, x1, y2, z1).color(r, g, b, a).endVertex();
+        vertexConsumer.vertex(matrix4f, x1, y1, z1).color(r, g, b, a).endVertex();
+        vertexConsumer.vertex(matrix4f, x1, y1, z1).color(r, g, b, a).endVertex();
+        vertexConsumer.vertex(matrix4f, x2, y1, z1).color(r, g, b, a).endVertex();
+        vertexConsumer.vertex(matrix4f, x1, y1, z2).color(r, g, b, a).endVertex();
+        vertexConsumer.vertex(matrix4f, x2, y1, z2).color(r, g, b, a).endVertex();
+        vertexConsumer.vertex(matrix4f, x2, y1, z2).color(r, g, b, a).endVertex();
+        vertexConsumer.vertex(matrix4f, x1, y2, z1).color(r, g, b, a).endVertex();
+        vertexConsumer.vertex(matrix4f, x1, y2, z1).color(r, g, b, a).endVertex();
+        vertexConsumer.vertex(matrix4f, x1, y2, z2).color(r, g, b, a).endVertex();
+        vertexConsumer.vertex(matrix4f, x2, y2, z1).color(r, g, b, a).endVertex();
+        vertexConsumer.vertex(matrix4f, x2, y2, z2).color(r, g, b, a).endVertex();
+        vertexConsumer.vertex(matrix4f, x2, y2, z2).color(r, g, b, a).endVertex();
+        vertexConsumer.vertex(matrix4f, x2, y2, z2).color(r, g, b, a).endVertex();
+    }
+
 
     public static void renderScaledText(PoseStack stack, Font font, Component text, int x, int y, int color, float scale) {
         stack.pushPose();
@@ -92,12 +168,12 @@ public class RenderUtil {
         textRenderer.submitDrawCall();
     }
 
+
     /**
      * <p>Right now this kinda works</p>
      * <p>All render parameters are set, but it only renders black boxes in place of characters</p>
      * <p>Will finish later</p>
      */
-    @ApiStatus.Experimental
     private static class InternalTextRenderer {
 
         private final Font font;

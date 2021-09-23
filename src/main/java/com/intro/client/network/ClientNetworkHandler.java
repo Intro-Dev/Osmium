@@ -4,6 +4,9 @@ import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.intro.client.OsmiumClient;
+import com.intro.client.module.event.Event;
+import com.intro.client.module.event.EventCustomPacket;
+import com.intro.client.module.event.EventType;
 import com.intro.client.render.cape.Cape;
 import com.intro.client.render.cape.CosmeticManager;
 import com.intro.client.util.OptionUtil;
@@ -11,25 +14,43 @@ import com.intro.common.config.OptionDeserializer;
 import com.intro.common.config.OptionSerializer;
 import com.intro.common.config.options.Option;
 import com.intro.common.network.NetworkingConstants;
-import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents;
-import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
-import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
+import io.netty.buffer.Unpooled;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.toasts.SystemToast;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.protocol.game.ServerboundCustomPayloadPacket;
+import net.minecraft.resources.ResourceLocation;
 import org.apache.logging.log4j.Level;
 
 import java.io.IOException;
 import java.lang.reflect.Modifier;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 public class ClientNetworkHandler {
 
     public static boolean isRunningOsmiumServer = false;
 
+    private static HashMap<ResourceLocation, ArrayList<PacketListener>> listeners = new HashMap<>();
+
+    public static void registerPacketListener(ResourceLocation channel, PacketListener listener) {
+        listeners.computeIfAbsent(channel, k -> new ArrayList<>());
+        listeners.get(channel).add(listener);
+    }
+
+    public static void handlePacketEvent(Event event) {
+        EventCustomPacket customPacket = (EventCustomPacket) event;
+        listeners.get(customPacket.getPayload().getIdentifier()).forEach(listener -> listener.onPacket(Minecraft.getInstance(), customPacket.getPayload().getData()));
+    }
+
     private static void sendToast(Minecraft client, Component title, Component description) {
         client.getToasts().addToast(SystemToast.multiline(client, SystemToast.SystemToastIds.TUTORIAL_HINT, title, description));
+    }
+
+    private static void send(ResourceLocation channel, FriendlyByteBuf byteBuf) {
+        Minecraft.getInstance().getConnection().send(new ServerboundCustomPayloadPacket(channel, byteBuf));
     }
 
     private static final Gson GSON = new GsonBuilder()
@@ -41,7 +62,7 @@ public class ClientNetworkHandler {
             .create();
 
     public static void registerPackets() {
-        ClientPlayNetworking.registerGlobalReceiver(NetworkingConstants.SET_SETTING_PACKET_ID, (client, handler, buf, responseSender) -> {
+        registerPacketListener(NetworkingConstants.SET_SETTING_PACKET_ID, (client, buf) -> {
             OptionUtil.setNormalOptions();
             int setCount = buf.readInt();
             for(int i = 0; i < setCount; i++) {
@@ -57,15 +78,15 @@ public class ClientNetworkHandler {
             }
         });
 
-        ClientPlayNetworking.registerGlobalReceiver(NetworkingConstants.RUNNING_OSMIUM_SERVER_PACKET_ID, (client, handler, buf, responseSender) -> {
+        registerPacketListener(NetworkingConstants.RUNNING_OSMIUM_SERVER_PACKET_ID, (client, buf) -> {
             isRunningOsmiumServer = true;
             sendToast(Minecraft.getInstance(), new TranslatableComponent("osmium.toast.running_osmium_server"), new TranslatableComponent("osmium.toast.settings_change"));
 
         });
 
-        ClientPlayConnectionEvents.JOIN.register((a, b, c) -> {
+        OsmiumClient.EVENT_BUS.registerCallback(((event) -> {
             if(isRunningOsmiumServer) {
-                ClientPlayNetworking.send(NetworkingConstants.RUNNING_OSMIUM_CLIENT_PACKET_ID, PacketByteBufs.create());
+                send(NetworkingConstants.RUNNING_OSMIUM_CLIENT_PACKET_ID, create());
                 try {
                     if(CosmeticManager.getPreLoadedPlayerCape() != null) {
                         CosmeticManager.playerCapes.put(Minecraft.getInstance().player.getStringUUID(), CosmeticManager.getPreLoadedPlayerCape());
@@ -75,17 +96,17 @@ public class ClientNetworkHandler {
                     e.printStackTrace();
                 }
             }
-        });
+        }), EventType.EVENT_JOIN_WORLD);
 
-        ClientPlayConnectionEvents.DISCONNECT.register((handler, client) -> {
+        OsmiumClient.EVENT_BUS.registerCallback(((event) -> {
             isRunningOsmiumServer = false;
             for(Option option : OsmiumClient.options.getOverwrittenOptions().values()) {
                 OsmiumClient.options.put(option.identifier, option);
             }
             OsmiumClient.options.clearOverwrittenOptions();
-        });
+        }), EventType.EVENT_DISCONNECT);
 
-        ClientPlayNetworking.registerGlobalReceiver(NetworkingConstants.SET_PLAYER_CAPE_CLIENT_BOUND, (client, handler, buf, responseSender) -> {
+        registerPacketListener(NetworkingConstants.SET_PLAYER_CAPE_CLIENT_BOUND, (client, buf) -> {
             try {
                 String uuid = buf.readUtf();
                 Cape playerCape = CosmeticManager.readCapeFromByteBuf(buf);
@@ -98,7 +119,7 @@ public class ClientNetworkHandler {
     }
 
         public static void sendCapeSetPacket(Cape cape) throws IOException {
-        FriendlyByteBuf byteBuf = PacketByteBufs.create();
+        FriendlyByteBuf byteBuf = create();
         byteBuf.writeUtf(cape.creator);
         byteBuf.writeUtf(cape.registryName);
         byteBuf.writeBoolean(cape.isAnimated);
@@ -107,7 +128,18 @@ public class ClientNetworkHandler {
         byte[] imageData = cape.getTexture().image.asByteArray();
 
         byteBuf.writeBytes(imageData);
-        ClientPlayNetworking.send(NetworkingConstants.SET_PLAYER_CAPE_SERVER_BOUND, byteBuf);
+        send(NetworkingConstants.SET_PLAYER_CAPE_SERVER_BOUND, byteBuf);
+    }
+
+    public static FriendlyByteBuf create() {
+        return new FriendlyByteBuf(Unpooled.buffer());
+    }
+
+    @FunctionalInterface
+    private interface PacketListener {
+
+        void onPacket(Minecraft client, FriendlyByteBuf buf);
+
     }
 
 }

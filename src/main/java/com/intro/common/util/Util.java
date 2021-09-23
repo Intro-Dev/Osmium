@@ -6,7 +6,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.google.gson.stream.JsonReader;
 import com.intro.common.ModConstants;
-import net.fabricmc.loader.api.FabricLoader;
+import net.minecraftforge.fml.loading.FMLPaths;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -180,7 +180,7 @@ public class Util {
      * @author DeathsGun
      */
     public static Path getModJarPath(String modId, String name) throws IOException {
-        List<Path> jars = Files.list(FabricLoader.getInstance().getGameDir().resolve("mods")).filter(file -> file.toFile().getName().endsWith(".jar")).toList();
+        List<Path> jars = Files.list(FMLPaths.MODSDIR.get()).filter(file -> file.toFile().getName().endsWith(".jar")).toList();
         for(Path jarPath : jars) {
             ZipFile zipFile = new ZipFile(jarPath.toFile());
             ZipEntry entry = zipFile.getEntry("fabric.mod.json");
@@ -203,7 +203,7 @@ public class Util {
     }
 
     public static Path getCosmeticPacksPath() {
-       return FabricLoader.getInstance().getGameDir().resolve("cosmetics");
+       return FMLPaths.GAMEDIR.get().resolve("cosmetics");
     }
 
     public static String getZipFileSystemPrefix(ZipFile file) {
@@ -212,7 +212,7 @@ public class Util {
     }
 
     // just tells the os to delete the file
-    // only for windows because windows is the only platform that cares about concurrent file usage
+    // only for windows because windows is the only platform that cares about concurrent file usage enough to block Files.delete()
     public static void forceDelete(File file) throws IOException, InterruptedException {
         if (net.minecraft.Util.getPlatform() == net.minecraft.Util.OS.WINDOWS) {
             new ProcessBuilder("cmd", "/c", "del /f " + '"' + file.getAbsolutePath() + '"').start().waitFor(200, TimeUnit.MILLISECONDS);

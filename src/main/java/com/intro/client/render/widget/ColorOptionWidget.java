@@ -17,7 +17,6 @@ import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
-import org.jetbrains.annotations.NotNull;
 
 
 /**
@@ -131,7 +130,7 @@ public class ColorOptionWidget extends GuiComponent implements Widget, GuiEventL
     }
 
     
-    public int getColorAtLocation(int @NotNull [] arr, @NotNull NativeImage texture, int x, int y) {
+    public int getColorAtLocation(int [] arr, NativeImage texture, int x, int y) {
         float scale = texture.getWidth() / width;
         int scaledX = (int) (x * scale);
         int scaledY = (int) (y * scale);

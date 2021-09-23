@@ -9,7 +9,7 @@ import com.intro.common.config.OptionDeserializer;
 import com.intro.common.config.OptionSerializer;
 import com.intro.common.config.Options;
 import com.intro.common.config.options.Option;
-import net.fabricmc.loader.api.FabricLoader;
+import net.minecraftforge.fml.loading.FMLPaths;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -31,8 +31,6 @@ public class OptionUtil {
     public static final Logger LOGGER = LogManager.getLogger();
 
     public static final Options Options = OsmiumClient.options;
-
-    public static boolean ShouldResaveOptions = false;
 
     private static final Gson GSON = new GsonBuilder()
             .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
@@ -84,7 +82,7 @@ public class OptionUtil {
     }
 
     public static void resetOptionsFile() {
-        File file = Paths.get(FabricLoader.getInstance().getConfigDir().resolve("osmium-options.json").toString()).toFile();
+        File file = Paths.get(FMLPaths.CONFIGDIR.get().resolve("osmium-options.json").toString()).toFile();
         boolean deleted = file.delete();
         if(!deleted) {
             LOGGER.error("Error in resetting osmium config file. If this issue persists file an issue report at https://github.com/Intro-Dev/Osmium/issues");
@@ -116,7 +114,7 @@ public class OptionUtil {
      */
     public static void save() {
         setNormalOptions();
-        saveConfig(FabricLoader.getInstance().getConfigDir().resolve("osmium-options.json").toString());
+        saveConfig(FMLPaths.CONFIGDIR.get().resolve("osmium-options.json").toString());
     }
 
     /**
@@ -137,7 +135,7 @@ public class OptionUtil {
      * <p>A method to quickly load from the default config file</p>
      */
     public static void load() {
-        OptionUtil.loadConfig(FabricLoader.getInstance().getConfigDir().resolve("osmium-options.json").toString());
+        OptionUtil.loadConfig(FMLPaths.CONFIGDIR.get().resolve("osmium-options.json").toString());
     }
 
 

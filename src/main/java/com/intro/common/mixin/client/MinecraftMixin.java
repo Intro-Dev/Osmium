@@ -45,9 +45,6 @@ public class MinecraftMixin {
         CpsDisplay.getInstance().onClick();
     }
 
-    @Inject(method = "<init>", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/resources/MobEffectTextureManager;<init>(Lnet/minecraft/client/renderer/texture/TextureManager;)V"))
-    public void init(GameConfig gameConfig, CallbackInfo ci) {
-    }
 
     @Inject(at = @At("RETURN"), method = "close")
     public void closeReturn(CallbackInfo ci) {

@@ -16,7 +16,6 @@ import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
-import org.jetbrains.annotations.Nullable;
 
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -104,7 +103,7 @@ public class OsmiumOptionsScreen extends Screen {
         OptionUtil.save();
     }
 
-    private void openCredits(@Nullable Button widget) {
+    private void openCredits(Button widget) {
         try {
             Util.getPlatform().openUri(new URI("https://modrinth.com/mod/osmium"));
         } catch (URISyntaxException exception) {

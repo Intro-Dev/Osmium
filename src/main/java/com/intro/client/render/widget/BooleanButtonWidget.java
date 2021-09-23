@@ -3,7 +3,6 @@ package com.intro.client.render.widget;
 import com.intro.client.OsmiumClient;
 import com.intro.common.config.options.BooleanOption;
 import net.minecraft.client.gui.components.Button;
-import net.minecraft.client.gui.narration.NarratableEntry;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.network.chat.TranslatableComponent;
 
@@ -41,7 +40,7 @@ public class BooleanButtonWidget extends Button {
 
 
     @Override
-    public NarratableEntry.NarrationPriority narrationPriority() {
+    public NarrationPriority narrationPriority() {
         return NarrationPriority.HOVERED;
     }
 

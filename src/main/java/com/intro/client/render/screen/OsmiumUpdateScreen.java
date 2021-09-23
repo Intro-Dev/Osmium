@@ -6,12 +6,12 @@ import com.intro.client.render.widget.ProgressBarWidget;
 import com.intro.common.ModConstants;
 import com.intro.common.util.Util;
 import com.mojang.blaze3d.vertex.PoseStack;
-import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraftforge.fml.loading.FMLPaths;
 import org.apache.logging.log4j.Level;
 
 import java.io.BufferedInputStream;
@@ -95,8 +95,6 @@ public class OsmiumUpdateScreen extends Screen  {
         @Override
         public void run() {
             try {
-                // this works in the development env but not in production
-                // :)
                 Path oldJarPath = Util.getModJarPath("osmium", "Osmium");
                 Runtime.getRuntime().addShutdownHook(new Thread(() -> {
                     try {
@@ -106,14 +104,12 @@ public class OsmiumUpdateScreen extends Screen  {
                     }
                 }));
 
-                System.out.println(oldJarPath);
-
                 URL fileUrl = new URL(Util.getLatestReleaseDownloadString());
                 long fileSize = getFileSize(fileUrl);
                 HttpURLConnection connection = (HttpURLConnection) fileUrl.openConnection();
 
                 BufferedInputStream stream = new BufferedInputStream(connection.getInputStream());
-                FileOutputStream fileOutputStream = new FileOutputStream(FabricLoader.getInstance().getGameDir().toString() + "/mods/" + latestReleaseName);
+                FileOutputStream fileOutputStream = new FileOutputStream(FMLPaths.MODSDIR.get().toString() + latestReleaseName);
 
                 double bytesDownloaded = 0;
 
