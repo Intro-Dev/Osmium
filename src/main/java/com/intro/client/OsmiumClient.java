@@ -17,6 +17,7 @@ import com.mojang.blaze3d.platform.InputConstants;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.apache.logging.log4j.LogManager;
@@ -27,7 +28,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-@Mod("osmium")
 public class OsmiumClient {
 
     public static final String MOD_ID = "osmium";
@@ -41,11 +41,6 @@ public class OsmiumClient {
     public static boolean runningLatestVersion = true;
 
     private static final Minecraft mc = Minecraft.getInstance();
-
-    public OsmiumClient() {
-        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::onInitializeClient);
-    }
-
 
     public static void registerCallbacks() {
         ToggleSneak toggleSneak = new ToggleSneak();
@@ -62,19 +57,19 @@ public class OsmiumClient {
         EVENT_BUS.registerCallback(ClientNetworkHandler::handlePacketEvent, EventType.EVENT_CUSTOM_PACKET);
     }
 
-    public void registerKeyBindings() {
+    public static void registerKeyBindings() {
         menuKey = new KeyMapping("keys.osmium.MenuKey", InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_RIGHT_SHIFT, "keys.category.osmium.keys");
         registerKeyBinding(menuKey);
     }
 
-    public void registerKeyBinding(KeyMapping mapping) {
+    public static void registerKeyBinding(KeyMapping mapping) {
         List<KeyMapping> mappings = new ArrayList<>(List.of(mc.options.keyMappings));
         mappings.add(mapping);
         mc.options.keyMappings = mappings.toArray(new KeyMapping[0]);
     }
 
 
-    public void onInitializeClient(final FMLCommonSetupEvent event) {
+    public static void onInitializeClient() {
         OptionUtil.Options.init();
         OptionUtil.load();
         EVENT_BUS.initListenerMap();

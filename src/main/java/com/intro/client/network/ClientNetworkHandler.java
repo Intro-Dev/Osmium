@@ -42,6 +42,7 @@ public class ClientNetworkHandler {
 
     public static void handlePacketEvent(Event event) {
         EventCustomPacket customPacket = (EventCustomPacket) event;
+        listeners.computeIfAbsent(customPacket.getPayload().getIdentifier(), k -> new ArrayList<>());
         listeners.get(customPacket.getPayload().getIdentifier()).forEach(listener -> listener.onPacket(Minecraft.getInstance(), customPacket.getPayload().getData()));
     }
 
