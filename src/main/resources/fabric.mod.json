@@ -4,7 +4,7 @@
   "version": "${version}",
 
   "name": "Osmium",
-  "description": "Osmium adds various QOL and performance enhancing features to Minecraft!",
+  "description": "Osmium adds various QOL features to Minecraft!",
   "authors": [
     "Intro"
   ],
@@ -41,7 +41,7 @@
     "modmenu": {
         "id": "osmium",
         "name": "Osmium",
-        "description": "Osmium adds various QOL and performance enhancing features to Minecraft!",
+        "description": "Osmium adds various QOL features to Minecraft!",
         "icon": "assets/osmium/icon.png"
     }
   }

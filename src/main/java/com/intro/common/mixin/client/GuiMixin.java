@@ -15,10 +15,16 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 public class GuiMixin {
     @Inject(at = @At("TAIL"), method = "render")
-    public void render(PoseStack stack, float f, CallbackInfo info) {
+    public void render(PoseStack stack, float f, CallbackInfo ci) {
         RenderManager.renderHud(stack);
     }
 
+    @Inject(at = @At("HEAD"), method = "render", cancellable = true)
+    public void renderHead(PoseStack stack, float f, CallbackInfo ci) {
+        if(!RenderManager.shouldRenderHud) {
+            ci.cancel();
+        }
+    }
     @Inject(at = @At("HEAD"), method = "renderEffects", cancellable = true)
     public void renderStatusEffectOverlay(PoseStack matrixStack, CallbackInfo ci) {
         if(OsmiumClient.options.getEnumOption(Options.StatusEffectDisplayMode).variable == StatusEffectDisplayMode.CUSTOM)

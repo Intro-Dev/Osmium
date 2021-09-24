@@ -2,11 +2,13 @@ package com.intro.common.mixin.client;
 
 import com.intro.client.OsmiumClient;
 import com.intro.client.render.color.Color;
+import com.intro.client.util.RenderUtil;
 import com.intro.common.config.Options;
 import com.intro.common.config.options.BlockOutlineMode;
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.VertexConsumer;
+import com.mojang.blaze3d.vertex.*;
+import net.minecraft.client.multiplayer.ClientLevel;
+import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.renderer.LevelRenderer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleOptions;
@@ -14,15 +16,22 @@ import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+import java.util.List;
+
 @Mixin(LevelRenderer.class)
-public class LevelRendererMixin {
+public abstract class LevelRendererMixin {
+
+
+    @Shadow private ClientLevel level;
 
 
     @Inject(at = @At("HEAD"), method = "renderSnowAndRain", cancellable = true)
@@ -50,23 +59,46 @@ public class LevelRendererMixin {
         if(OsmiumClient.options.getEnumOption(Options.BlockOutlineMode).variable == BlockOutlineMode.LINES) {
             drawShapeOutline(stack, vertexConsumer, blockState.getShape(entity.level, blockPos, CollisionContext.of(entity)), (double)blockPos.getX() - d, (double)blockPos.getY() - e, (double)blockPos.getZ() - f, OsmiumClient.options.getColorOption(Options.BlockOutlineColor).color);
             ci.cancel();
+        } else if(OsmiumClient.options.getEnumOption(Options.BlockOutlineMode).variable == BlockOutlineMode.QUADS) {
+            drawShapeFull(stack, blockState.getShape(entity.level, blockPos, CollisionContext.of(entity)), (double)blockPos.getX() - d, (double)blockPos.getY() - e, (double)blockPos.getZ() - f, OsmiumClient.options.getColorOption(Options.BlockOutlineColor).color);
+            ci.cancel();
         }
     }
 
     private void drawShapeOutline(PoseStack stack, VertexConsumer vertexConsumer, VoxelShape voxelShape, double x, double y, double z, Color color) {
         PoseStack.Pose pose = stack.last();
-        voxelShape.forAllEdges((k, l, m, n, o, p) -> {
-            float q = (float)(n - k);
-            float r = (float)(o - l);
-            float s = (float)(p - m);
-            float t = Mth.sqrt(q * q + r * r + s * s);
-            q /= t;
-            r /= t;
-            s /= t;
-            RenderSystem.lineWidth(20);
-            vertexConsumer.vertex(pose.pose(), (float)(k + x), (float)(l + y), (float)(m + z)).color(color.getFloatR(), color.getFloatG(), color.getFloatB(), (float) OsmiumClient.options.getDoubleOption(Options.BlockOutlineAlpha).variable).normal(pose.normal(), q, r, s).endVertex();
-            vertexConsumer.vertex(pose.pose(), (float)(n + x), (float)(o + y), (float)(p + z)).color(color.getFloatR(), color.getFloatG(), color.getFloatB(), (float) OsmiumClient.options.getDoubleOption(Options.BlockOutlineAlpha).variable).normal(pose.normal(), q, r, s).endVertex();
+        voxelShape.forAllEdges((edgeX1, edgeY1, edgeZ1, edgeX2, edgeY2, edgeZ2) -> {
+            float edgeXDiff = (float)(edgeX2 - edgeX1);
+            float edgeYDiff = (float)(edgeY2 - edgeY1);
+            float edgeZDiff = (float)(edgeZ2 - edgeZ1);
+            float pythagorean = Mth.sqrt(edgeXDiff * edgeXDiff + edgeYDiff * edgeYDiff + edgeZDiff * edgeZDiff);
+            edgeXDiff /= pythagorean;
+            edgeYDiff /= pythagorean;
+            edgeZDiff /= pythagorean;
+            vertexConsumer.vertex(pose.pose(), (float)(edgeX1 + x), (float)(edgeY1 + y), (float)(edgeZ1 + z)).color(color.getFloatR(), color.getFloatG(), color.getFloatB(), (float) OsmiumClient.options.getDoubleOption(Options.BlockOutlineAlpha).variable).normal(pose.normal(), edgeXDiff, edgeYDiff, edgeZDiff).endVertex();
+            vertexConsumer.vertex(pose.pose(), (float)(edgeX2 + x), (float)(edgeY2 + y), (float)(edgeZ2 + z)).color(color.getFloatR(), color.getFloatG(), color.getFloatB(), (float) OsmiumClient.options.getDoubleOption(Options.BlockOutlineAlpha).variable).normal(pose.normal(), edgeXDiff, edgeYDiff, edgeZDiff).endVertex();
         });
+    }
+
+    private void drawShapeFull(PoseStack stack, VoxelShape voxelShape, double x, double y, double z, Color color) {
+        stack.pushPose();
+        BufferBuilder builder = Tesselator.getInstance().getBuilder();
+        builder.begin(VertexFormat.Mode.TRIANGLE_STRIP, DefaultVertexFormat.POSITION_COLOR);
+        renderVoxelShape(stack, builder, voxelShape, x, y, z, color.getFloatR(), color.getFloatG(), color.getFloatB(), (float) OsmiumClient.options.getDoubleOption(Options.BlockOutlineAlpha).variable, 0.01d);
+        builder.end();
+        RenderSystem.setShader(GameRenderer::getPositionColorShader);
+        RenderSystem.enableDepthTest();
+        BufferUploader.end(builder);
+        RenderSystem.disableDepthTest();
+        stack.popPose();
+    }
+
+    public void renderVoxelShape(PoseStack stack, VertexConsumer vertexConsumer, VoxelShape voxelShape, double x, double y, double z, float r, float g, float b, float a, double expand) {
+        List<AABB> list = voxelShape.toAabbs();
+        for (AABB aABB : list) {
+            aABB = aABB.inflate(expand);
+            RenderUtil.addChainedFilledBoxVertices(stack, vertexConsumer, (float) x, (float) y, (float) z, (float) aABB.minX, (float) aABB.minY, (float) aABB.minZ, (float) aABB.maxX, (float) aABB.maxY, (float) aABB.maxZ, r, g, b, a);
+        }
     }
 
 }

@@ -16,6 +16,8 @@ public class RenderManager {
 
     private static final Minecraft mc = Minecraft.getInstance();
 
+    public static boolean shouldRenderHud = true;
+
     public static void initDrawables() {
          addDrawable(ArmorDisplay.getInstance());
          addDrawable(StatusEffectDisplay.getInstance());

@@ -95,8 +95,6 @@ public class OsmiumUpdateScreen extends Screen  {
         @Override
         public void run() {
             try {
-                // this works in the development env but not in production
-                // :)
                 Path oldJarPath = Util.getModJarPath("osmium", "Osmium");
                 Runtime.getRuntime().addShutdownHook(new Thread(() -> {
                     try {
@@ -105,8 +103,6 @@ public class OsmiumUpdateScreen extends Screen  {
                         e.printStackTrace();
                     }
                 }));
-
-                System.out.println(oldJarPath);
 
                 URL fileUrl = new URL(Util.getLatestReleaseDownloadString());
                 long fileSize = getFileSize(fileUrl);

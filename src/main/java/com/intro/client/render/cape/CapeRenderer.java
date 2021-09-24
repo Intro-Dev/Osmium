@@ -31,7 +31,7 @@ public class CapeRenderer extends RenderLayer<AbstractClientPlayer, PlayerModel<
         super(parent);
     }
 
-    public void render(PoseStack stack, MultiBufferSource multiBuffer, int light, AbstractClientPlayer entity, float limbAngle, float limbDistance, float tickDelta, float animationProgress, float headYaw, float headPitch) {
+        public void render(PoseStack stack, MultiBufferSource multiBuffer, int light, AbstractClientPlayer entity, float limbAngle, float limbDistance, float tickDelta, float animationProgress, float headYaw, float headPitch) {
         try {
             ItemStack itemStack = entity.getItemBySlot(EquipmentSlot.CHEST);
             if(OsmiumClient.options.getBooleanOption(Options.ShowOtherPlayersCapes).variable && !Objects.equals(entity.getStringUUID(), Minecraft.getInstance().player.getStringUUID())) {
@@ -77,6 +77,8 @@ public class CapeRenderer extends RenderLayer<AbstractClientPlayer, PlayerModel<
                     RenderType capeRenderType = RenderType.entitySolid(capeTexture);
                     if (OsmiumClient.options.getEnumOption(Options.CustomCapeMode).variable == CapeRenderingMode.OPTIFINE && playerCape.isOptifine) {
                         final VertexConsumer vertexConsumer = multiBuffer.getBuffer(capeRenderType);
+                        // the way mojang renders capes is horrifically inefficient
+                        // and the thing is it would require a custom implementation of half the rendering engine to do it any other way
                         this.getParentModel().renderCloak(stack, vertexConsumer, light, OverlayTexture.NO_OVERLAY);
                     } else if(OsmiumClient.options.getEnumOption(Options.CustomCapeMode).variable == CapeRenderingMode.ALL) {
                         final VertexConsumer vertexConsumer = multiBuffer.getBuffer(capeRenderType);

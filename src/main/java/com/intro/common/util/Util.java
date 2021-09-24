@@ -212,7 +212,7 @@ public class Util {
     }
 
     // just tells the os to delete the file
-    // only for windows because windows is the only platform that cares about concurrent file usage
+    // only for windows because windows is the only platform that cares about concurrent file usage enough to block Files.delete()
     public static void forceDelete(File file) throws IOException, InterruptedException {
         if (net.minecraft.Util.getPlatform() == net.minecraft.Util.OS.WINDOWS) {
             new ProcessBuilder("cmd", "/c", "del /f " + '"' + file.getAbsolutePath() + '"').start().waitFor(200, TimeUnit.MILLISECONDS);

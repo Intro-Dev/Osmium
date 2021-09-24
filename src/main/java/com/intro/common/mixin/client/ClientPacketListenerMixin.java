@@ -20,4 +20,5 @@ public class ClientPacketListenerMixin {
         OsmiumClient.EVENT_BUS.postEvent(new EventJoinWorld(packet), EventType.EVENT_JOIN_WORLD);
         OsmiumClient.EVENT_BUS.postEvent(new EventAddPlayer(Minecraft.getInstance().player), EventType.EVENT_ADD_PLAYER);
     }
+
 }

@@ -51,6 +51,7 @@ public class CosmeticManager {
     public static final HashMap<String, Cape> playerCapes = new HashMap<>();
 
 
+
     private static Cape preLoadedPlayerCape;
 
     public static Cape getPreLoadedPlayerCape() {

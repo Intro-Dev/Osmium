@@ -2,6 +2,7 @@ package com.intro.client.render.screen;
 
 import com.intro.client.OsmiumClient;
 import com.intro.client.network.ClientNetworkHandler;
+import com.intro.client.render.RenderManager;
 import com.intro.client.render.cape.Cape;
 import com.intro.client.render.cape.CosmeticManager;
 import com.intro.client.render.color.Colors;
@@ -48,19 +49,22 @@ public class OsmiumCapeOptionsScreen extends Screen {
     private int bgStartHeight = 0;
     private BackAndForwardWidget forwardWidget;
 
+    private final int tempGuiScale;
+
     public OsmiumCapeOptionsScreen(Screen parent) {
         super(new TranslatableComponent("osmium.cape_options"));
         this.parent = parent;
+        // evil laughing
+        tempGuiScale = mc.options.guiScale;
+        mc.options.guiScale = 2;
+        mc.resizeDisplay();
+        RenderManager.shouldRenderHud = false;
     }
 
 
     @Override
     protected void init() {
 
-        // set width and height to proper values
-        // this is to make it ignore gui scale;
-        this.width = 1280;
-        this.height = 720;
 
         bgStartHeight = this.height / 2 - 256;
 
@@ -105,10 +109,6 @@ public class OsmiumCapeOptionsScreen extends Screen {
         PoseStack entityRenderStack = RenderSystem.getModelViewStack();
         entityRenderStack.pushPose();
         stack.pushPose();
-
-
-        // System.out.println(this.width);
-
 
         zoomInScale += 0.25 * delta;
         zoomInScale = Mth.clamp(zoomInScale, 0, 1);
@@ -262,4 +262,11 @@ public class OsmiumCapeOptionsScreen extends Screen {
         Lighting.setupFor3DItems();
     }
 
+    @Override
+    public void onClose() {
+        mc.options.guiScale = tempGuiScale;
+        mc.resizeDisplay();
+        RenderManager.shouldRenderHud = true;
+        super.onClose();
+    }
 }

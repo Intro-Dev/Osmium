@@ -28,6 +28,7 @@ public class ClientNetworkHandler {
 
     public static boolean isRunningOsmiumServer = false;
 
+
     private static void sendToast(Minecraft client, Component title, Component description) {
         client.getToasts().addToast(SystemToast.multiline(client, SystemToast.SystemToastIds.TUTORIAL_HINT, title, description));
     }
@@ -109,5 +110,6 @@ public class ClientNetworkHandler {
         byteBuf.writeBytes(imageData);
         ClientPlayNetworking.send(NetworkingConstants.SET_PLAYER_CAPE_SERVER_BOUND, byteBuf);
     }
+
 
 }
