@@ -88,8 +88,6 @@ public class OsmiumCapeOptionsScreen extends Screen {
         int standardButtonHeight = (int) (20 * guiScale);
         standardButtonHeight = Mth.clamp(standardButtonHeight, 0, 20);
 
-
-        System.out.println(guiScale);
         int buttonStartHeight = (int) (bgStartHeight + (350 * guiScale));
         int buttonYIncrement = (int) (standardButtonHeight * 1.25);
 

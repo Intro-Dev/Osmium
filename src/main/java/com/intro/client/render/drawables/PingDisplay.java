@@ -9,6 +9,7 @@ import com.intro.common.config.Options;
 import com.intro.common.config.options.ElementPositionOption;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.multiplayer.ClientPacketListener;
 
 public class PingDisplay extends Scalable {
 
@@ -27,7 +28,8 @@ public class PingDisplay extends Scalable {
     public void onEvent(Event event) {
         if(event instanceof EventTick && mc.player != null) {
             if((mc.getCurrentServer() != null)) {
-                currentPing = (int) mc.getCurrentServer().ping;
+                ClientPacketListener clientPacketListener = mc.player.connection;
+                currentPing = clientPacketListener.getPlayerInfo(mc.player.getUUID()).getLatency();
             } else {
                 currentPing = 0;
             }
