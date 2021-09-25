@@ -174,9 +174,10 @@ public class CosmeticManager {
                 if(CosmeticManager.getPreLoadedPlayerCape() != null) {
                     CosmeticManager.playerCapes.put(Minecraft.getInstance().player.getStringUUID(), CosmeticManager.getPreLoadedPlayerCape());
                 }
+            } else {
+                Thread CapeDownloaderThread = new Thread(new CosmeticManager.StandardCapeDownloader((EventAddPlayer) event));
+                CapeDownloaderThread.start();
             }
-            Thread CapeDownloaderThread = new Thread(new CosmeticManager.StandardCapeDownloader((EventAddPlayer) event));
-            CapeDownloaderThread.start();
         }
         if (event instanceof EventRemovePlayer) {
             playerCapes.remove(((EventRemovePlayer) event).entity.getStringUUID());

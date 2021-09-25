@@ -62,6 +62,9 @@ public abstract class LevelRendererMixin {
         } else if(OsmiumClient.options.getEnumOption(Options.BlockOutlineMode).variable == BlockOutlineMode.QUADS) {
             drawShapeFull(stack, blockState.getShape(entity.level, blockPos, CollisionContext.of(entity)), (double)blockPos.getX() - d, (double)blockPos.getY() - e, (double)blockPos.getZ() - f, OsmiumClient.options.getColorOption(Options.BlockOutlineColor).color);
             ci.cancel();
+        } else {
+            drawShapeOutline(stack, vertexConsumer, blockState.getShape(this.level, blockPos, CollisionContext.of(entity)), (double)blockPos.getX() - d, (double)blockPos.getY() - e, (double)blockPos.getZ() - f, new Color(0.0F, 0.0F, 0.0F, 0.4F));
+            ci.cancel();
         }
     }
 
@@ -87,8 +90,10 @@ public abstract class LevelRendererMixin {
         renderVoxelShape(stack, builder, voxelShape, x, y, z, color.getFloatR(), color.getFloatG(), color.getFloatB(), (float) OsmiumClient.options.getDoubleOption(Options.BlockOutlineAlpha).variable, 0.01d);
         builder.end();
         RenderSystem.setShader(GameRenderer::getPositionColorShader);
+        RenderSystem.enableBlend();
         RenderSystem.enableDepthTest();
         BufferUploader.end(builder);
+        RenderSystem.disableBlend();
         RenderSystem.disableDepthTest();
         stack.popPose();
     }

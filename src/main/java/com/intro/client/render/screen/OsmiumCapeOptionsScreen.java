@@ -2,10 +2,10 @@ package com.intro.client.render.screen;
 
 import com.intro.client.OsmiumClient;
 import com.intro.client.network.ClientNetworkHandler;
-import com.intro.client.render.RenderManager;
 import com.intro.client.render.cape.Cape;
 import com.intro.client.render.cape.CosmeticManager;
 import com.intro.client.render.color.Colors;
+import com.intro.client.render.widget.AbstractScalableButton;
 import com.intro.client.render.widget.BackAndForwardWidget;
 import com.intro.client.render.widget.BooleanButtonWidget;
 import com.intro.client.render.widget.EnumSelectWidget;
@@ -49,24 +49,21 @@ public class OsmiumCapeOptionsScreen extends Screen {
     private int bgStartHeight = 0;
     private BackAndForwardWidget forwardWidget;
 
-    private final int tempGuiScale;
+    private double guiScale;
+
 
     public OsmiumCapeOptionsScreen(Screen parent) {
         super(new TranslatableComponent("osmium.cape_options"));
         this.parent = parent;
-        // evil laughing
-        tempGuiScale = mc.options.guiScale;
-        mc.options.guiScale = 2;
-        mc.resizeDisplay();
-        RenderManager.shouldRenderHud = false;
     }
 
 
     @Override
     protected void init() {
 
+        guiScale = 2f / mc.options.guiScale;
 
-        bgStartHeight = this.height / 2 - 256;
+        bgStartHeight = (int) (this.height / 2 - (256 * guiScale));
 
         List<Cape> rawCapes = CosmeticManager.getAllCapes().stream().toList();
         capePages = new ArrayList<>();
@@ -84,17 +81,22 @@ public class OsmiumCapeOptionsScreen extends Screen {
         // account for remainder
         capePages.add(rawCapes.subList(i * 6, i * 6 + extraOps));
 
-        Button refreshButton = new Button(this.width / 2 - 250, bgStartHeight + 350, 200, 20, new TranslatableComponent("osmium.refresh_capes"), this::refresh);
-        EnumSelectWidget toggleCapeWidget = new EnumSelectWidget(this.width / 2 - 250, bgStartHeight + 375 , 200, 20, Options.CustomCapeMode,"osmium.options.video_options.cape_");
-        BooleanButtonWidget toggleAnimationWidget = new BooleanButtonWidget(this.width / 2 - 250, bgStartHeight + 400 , 200, 20, Options.AnimateCapes, "osmium.options.animate_capes_");
-        BooleanButtonWidget toggleShowOtherCapesWidget = new BooleanButtonWidget(this.width / 2 - 250, bgStartHeight + 425 , 200, 20, Options.ShowOtherPlayersCapes, "osmium.options.show_other_capes_");
+        int standardButtonWidth = (int) (200 * guiScale);
+        int standardButtonHeight = (int) (20 * guiScale);
+
+
+        // why are widgets so annoying to scale properly
+        AbstractScalableButton refreshButton = new AbstractScalableButton((int) (this.width / 2 - (250 * guiScale)), (int) (bgStartHeight + (350 * guiScale)), standardButtonWidth, standardButtonHeight, new TranslatableComponent("osmium.refresh_capes"), this::refresh, guiScale);
+        EnumSelectWidget toggleCapeWidget = new EnumSelectWidget(this.width / 2 - 250, bgStartHeight + 375 , standardButtonWidth, 20, Options.CustomCapeMode,"osmium.options.video_options.cape_");
+        BooleanButtonWidget toggleAnimationWidget = new BooleanButtonWidget(this.width / 2 - 250, bgStartHeight + 400 , standardButtonWidth, 20, Options.AnimateCapes, "osmium.options.animate_capes_");
+        BooleanButtonWidget toggleShowOtherCapesWidget = new BooleanButtonWidget(this.width / 2 - 250, bgStartHeight + 425 , standardButtonWidth, 20, Options.ShowOtherPlayersCapes, "osmium.options.show_other_capes_");
 
 
         Button backButton = new Button(this.width / 2 - 250, bgStartHeight + 475, 200, 20, new TranslatableComponent("osmium.options.video_options.back"), button -> mc.setScreen(this.parent));
 
         // this widget is 1 pixel off center
         // :)
-        forwardWidget = new BackAndForwardWidget(this.width / 2 + 184, bgStartHeight + 475, 30,  currentPage, 0, capePages.size() - 1);
+        forwardWidget = new BackAndForwardWidget((int) (this.width / 2 + (184 * guiScale)), (int) (bgStartHeight + (475 * guiScale)), (int) (30 * guiScale),  currentPage, 0, capePages.size() - 1, (float) guiScale);
 
         this.addRenderableWidget(backButton);
         this.addRenderableWidget(toggleShowOtherCapesWidget);
@@ -105,6 +107,7 @@ public class OsmiumCapeOptionsScreen extends Screen {
         super.init();
     }
 
+    // the gore from all the multiplications for gui scaling
     public void render(PoseStack stack, int mouseX, int mouseY, float delta) {
         PoseStack entityRenderStack = RenderSystem.getModelViewStack();
         entityRenderStack.pushPose();
@@ -115,8 +118,8 @@ public class OsmiumCapeOptionsScreen extends Screen {
         entityRenderStack.scale(zoomInScale, zoomInScale, zoomInScale);
         stack.scale(zoomInScale, zoomInScale, 0);
 
-        fill(stack, this.width / 2 - 312, bgStartHeight,this.width / 2 + 312, this.height   / 2 + 256, Colors.BACKGROUND_GRAY.getColor().getInt());
-        drawCenteredString(stack, mc.font, new TranslatableComponent("osmium.cape_select"), this.width / 2 + 200, bgStartHeight + 10, Colors.WHITE.getColor().getInt());
+        fill(stack, (int) (this.width / 2 - (312 * guiScale)), bgStartHeight, (int) (this.width / 2 + (312 * guiScale)), (int) (this.height / 2 + (256 * guiScale)), Colors.BACKGROUND_GRAY.getColor().getInt());
+        RenderUtil.renderScaledText(stack, mc.font, new TranslatableComponent("osmium.cape_select"), (int) (this.width / 2 + (180 * guiScale)), bgStartHeight + (10 * guiScale), Colors.WHITE.getColor().getInt(), (float) guiScale, true);
 
         List<Cape> pageCapes = capePages.get(currentPage.get());
 
@@ -124,25 +127,25 @@ public class OsmiumCapeOptionsScreen extends Screen {
             Cape cape = pageCapes.get(i);
 
             if(CosmeticManager.playerCapes.get(mc.player.getStringUUID()) != null && CosmeticManager.playerCapes.get(mc.player.getStringUUID()).registryName.equals(cape.registryName)) {
-                fill(stack, this.width / 2 + 100, bgStartHeight + 40 + (i * 70), this.width / 2 + 300, bgStartHeight + 100 + (i * 70), Colors.DARK_GRAY.getColor().getInt());
+                fill(stack, (int) (this.width / 2 + (100 * guiScale)), (int) (bgStartHeight + (40 + (i * 70)) * guiScale), (int) (this.width / 2 + (300 * guiScale)), (int) (bgStartHeight + (100 + (i * 70)) * guiScale), Colors.DARK_GRAY.getColor().getInt());
             }
 
-            drawOutlinedBox(stack, this.width / 2 + 100, bgStartHeight + 40 + (i * 70), 200, 60, Colors.WHITE.getColor().getInt());
+            drawOutlinedBox(stack, (int) (this.width / 2 + (100 * guiScale)), (int) (bgStartHeight + (40 + (i * 70)) * guiScale), (int) (200 * guiScale), (int) (60 * guiScale), Colors.WHITE.getColor().getInt());
             stack.pushPose();
-            RenderUtil.positionAccurateScale(stack, 0.5f, this.width / 2 + 70, bgStartHeight + 40 + (i * 70) - 10, 160, 80);
+            RenderUtil.positionAccurateScale(stack, 0.5f, (int) (this.width / 2 + (70 * guiScale)), (int) (bgStartHeight + (40 + (i * 70) - 10) * guiScale), (int) (160 * guiScale), (int) (80 * guiScale));
             // something wacky going on here
             // view stack scaling is slightly off, so we have to change pos a bit
             RenderSystem.setShaderTexture(0, cape.getFrameTexture());
-            blit(stack, this.width / 2 + 70, bgStartHeight + 40 + (i * 70) - 10, 0, 0 , 160, 80, 160, 80);
+            blit(stack, (int) (this.width / 2 + (70 * guiScale)), (int) (bgStartHeight + (40 + (i * 70) - 10) * guiScale), 0, 0 , (int) (160 * guiScale), (int) (80 * guiScale), (int) (160 * guiScale), (int) (80 * guiScale));
             stack.popPose();
 
             //  these coordinates are just insane
-            drawString(stack, mc.font,"Source: " + cape.source, this.width / 2 + 200, bgStartHeight + 40 + (i * 70) + 15, Colors.WHITE.getColor().getInt());
-            drawString(stack, mc.font, "Animated: " + cape.isAnimated, this.width / 2 + 200, bgStartHeight + 40 + (i * 70) + 25, Colors.WHITE.getColor().getInt());
-            drawString(stack, mc.font, "Creator: " + cape.creator, this.width / 2 + 200, bgStartHeight + 40 + (i * 70) + 35, Colors.WHITE.getColor().getInt());
+            RenderUtil.renderScaledText(stack, mc.font,"Source: " + cape.source, (int) (this.width / 2 + (200 * guiScale)), (int) (bgStartHeight + (40 + (i * 70) + 15) * guiScale), Colors.WHITE.getColor().getInt(), (float) guiScale, true);
+            RenderUtil.renderScaledText(stack, mc.font, "Animated: " + cape.isAnimated, (int) (this.width / 2 + (200 * guiScale)), (int) (bgStartHeight + (40 + (i * 70) + 25) * guiScale), Colors.WHITE.getColor().getInt(), (float) guiScale, true);
+            RenderUtil.renderScaledText(stack, mc.font, "Creator: " + cape.creator, (int) (this.width / 2 + (200 * guiScale)), (int) (bgStartHeight + (40 + (i * 70) + 35) * guiScale)  , Colors.WHITE.getColor().getInt(), (float) guiScale, true);
         }
 
-        drawCenteredString(stack, mc.font, currentPage.get() + 1 + "/" +  capePages.size(), this.width / 2 + 200, bgStartHeight + 475, Colors.WHITE.getColor().getInt());
+        RenderUtil.renderScaledText(stack, mc.font, currentPage.get() + 1 + "/" +  capePages.size(), (int) (this.width / 2 + (200 * guiScale)), (int) (bgStartHeight + (475 * guiScale)), Colors.WHITE.getColor().getInt(), (float) guiScale, true);
 
         playerXRot -= 0.15 * delta;
         if(playerXRot <= -179.85) {
@@ -151,7 +154,7 @@ public class OsmiumCapeOptionsScreen extends Screen {
 
         // spent 2 hours fixing depth testing issues because I forgot to scale the ModelViewStack properly
         // please help
-        renderEntityInInventory( this.width / 2 - 150, bgStartHeight + 300, 140, playerXRot, 0, mc.player);
+        renderEntityInInventory((int) (this.width / 2 - (150 * guiScale)), (int) (bgStartHeight + (300 * guiScale)), (int) (140 * guiScale), playerXRot, 0, mc.player);
         stack.popPose();
         entityRenderStack.popPose();
         super.render(stack, mouseX, mouseY, delta);
@@ -174,7 +177,7 @@ public class OsmiumCapeOptionsScreen extends Screen {
         System.out.println(this.width);
 
         for(int i = 0; i < pageCapes.size(); i++) {
-            if(MathUtil.isPositionWithinBounds((int) mouseX, (int) mouseY, this.width / 2 + 100, bgStartHeight + 40 + (i * 70), 200, 60)) {
+            if(MathUtil.isPositionWithinBounds((int) mouseX, (int) mouseY, (int) (this.width / 2 + (100 * guiScale)), (int) (bgStartHeight + (40 + (i * 70)) * guiScale), (int) (200 * guiScale), (int) (60 * guiScale))) {
                 CosmeticManager.playerCapes.put(mc.player.getStringUUID(), pageCapes.get(i));
                 Minecraft.getInstance().getSoundManager().play(SimpleSoundInstance.forUI(SoundEvents.UI_BUTTON_CLICK, 1.0F));
                 OsmiumClient.options.put(Options.SetCape, new StringOption(Options.SetCape, pageCapes.get(i).registryName));
@@ -208,7 +211,8 @@ public class OsmiumCapeOptionsScreen extends Screen {
         // account for remainder
         capePages.add(rawCapes.subList(i * 6, i * 6 + extraOps));
 
-        forwardWidget = new BackAndForwardWidget(this.width / 2 + 180, bgStartHeight + 475, 30,  currentPage, 0, capePages.size() - 1);
+        forwardWidget = new BackAndForwardWidget((int) (this.width / 2 + (184 * guiScale)), (int) (bgStartHeight + (475 * guiScale)), (int) (30 * guiScale),  currentPage, 0, capePages.size() - 1, (float) guiScale);
+
     }
 
 
@@ -264,9 +268,6 @@ public class OsmiumCapeOptionsScreen extends Screen {
 
     @Override
     public void onClose() {
-        mc.options.guiScale = tempGuiScale;
-        mc.resizeDisplay();
-        RenderManager.shouldRenderHud = true;
         super.onClose();
     }
 }

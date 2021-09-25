@@ -30,14 +30,26 @@ public class BackAndForwardWidget extends GuiComponent implements Widget, GuiEve
 
     private int min, max;
 
+    private float scale;
 
-    public BackAndForwardWidget(int centerX, int y, int textureGap, AtomicInteger value, int min, int max) {
+    /**
+     *
+     * @param centerX
+     * @param y
+     * @param textureGap
+     * @param value
+     * @param min
+     * @param max
+     * @param scale how much the texture should be scaled by
+     */
+    public BackAndForwardWidget(int centerX, int y, int textureGap, AtomicInteger value, int min, int max, float scale) {
         this.textureGap = textureGap;
         this.x = centerX;
         this.y = y;
         this.value = value;
         this.min = min;
         this.max = max;
+        this.scale = scale;
     }
 
 
@@ -46,9 +58,9 @@ public class BackAndForwardWidget extends GuiComponent implements Widget, GuiEve
     public void render(PoseStack stack, int mouseX, int mouseY, float delta) {
         RenderSystem.setShader(GameRenderer::getPositionTexShader);
         RenderSystem.setShaderTexture(0, BACK_BUTTON_LOCATION);
-        blit(stack, x - textureGap, y, 0, 0, 32, 32, 32, 32);
+        blit(stack, x - textureGap, y, 0, 0, (int) (32 * scale), (int) (32 * scale), (int) (32 * scale), (int) (32 * scale));
         RenderSystem.setShaderTexture(0, FORWARD_BUTTON_LOCATION);
-        blit(stack, x + textureGap, y, 0, 0, 32, 32, 32, 32);
+        blit(stack, x + textureGap, y, 0, 0, (int) (32 * scale), (int) (32 * scale), (int) (32 * scale), (int) (32 * scale));
     }
 
     @Override

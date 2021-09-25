@@ -33,39 +33,24 @@ public class RenderUtil {
         stack.translate(-(x + (width / 2f)), -(y + (height / 2f)), 0);
     }
 
+    public static void positionAccurateScale(PoseStack stack, float scale, double x, double y, double width, double height) {
+        stack.translate((x + (width / 2f)), (y + (height / 2f)), 0);
+        stack.scale(scale, scale, 0);
+        stack.translate(-(x + (width / 2f)), -(y + (height / 2f)), 0);
+    }
+
     public static void positionAccurateScale3d(PoseStack stack, float scale, int x, int y, int z, int width, int height, int depth) {
         stack.translate((x + (width / 2f)), (y + (height / 2f)), (z + (depth / 2f)));
         stack.scale(scale, scale, scale);
         stack.translate(-(x + (width / 2f)), -(y + (height / 2f)), -(z + (depth / 2f)));
     }
 
-    public static void positionAccurateScale3d(PoseStack stack, float scale, double x, double y, double z) {
-        stack.translate(x, y, z);
+    public static void positionAccurateScale(PoseStack stack, float scale, double x, double y) {
+        stack.translate(x, y, 0);
         stack.scale(scale, scale, scale);
-        stack.translate(-x, -y, -z);
+        stack.translate(-x, -y, 0);
     }
 
-    public static void positionAccurateScale3d(PoseStack stack, float scale, double x, double y, double z, double x2, double y2, double z2) {
-        if(x2 > x) {
-            double tmp = x;
-            x = x2;
-            x2 = tmp;
-        }
-        if(y2 > y) {
-            double tmp = y;
-            y = y2;
-            y2 = tmp;
-        }
-        if(z2 > z) {
-            double tmp = z;
-            z = z2;
-            z2 = tmp;
-        }
-
-        stack.translate(x + ((x - x2) / 2f), y + ((y - y2) / 2f), z + ((z - z2) / 2f));
-        stack.scale(scale, scale, scale);
-        stack.translate(-(x + ((x - x2) / 2f)), -(y + ((y - y2) / 2f)), -(z + ((z - z2) / 2f)));
-    }
 
     public static void addChainedFilledBoxVertices(PoseStack stack, VertexConsumer vertexConsumer, float x, float y, float z, float x1, float y1, float z1, float x2, float y2, float z2, float r, float g, float b, float a) {
         Matrix4f matrix4f = stack.last().pose();
@@ -109,12 +94,17 @@ public class RenderUtil {
     }
 
 
-    public static void renderScaledText(PoseStack stack, Font font, Component text, int x, int y, int color, float scale) {
+    public static void renderScaledText(PoseStack stack, Font font, Component text, double x, double y, int color, float scale, boolean shadowed) {
         stack.pushPose();
-        int textWidth = font.width(text);
-        int textHeight = font.lineHeight;
-        positionAccurateScale(stack, scale, x, y, textWidth, textHeight);
-        font.drawShadow(stack, text, x, y, color);
+        positionAccurateScale(stack, scale, x, y);
+        int ignored = shadowed ? font.drawShadow(stack, text, (int) x, (int) y, color) : font.draw(stack, text, (int) x, (int) y, color);
+        stack.popPose();
+    }
+
+    public static void renderScaledText(PoseStack stack, Font font, String text, double x, double y, int color, float scale, boolean shadowed) {
+        stack.pushPose();
+        positionAccurateScale(stack, scale, x, y);
+        int ignored = shadowed ? font.drawShadow(stack, text, (int) x, (int) y, color) : font.draw(stack, text, (int) x, (int) y, color);
         stack.popPose();
     }
 
@@ -128,7 +118,7 @@ public class RenderUtil {
     }
 
     public static void renderCenteredScaledText(PoseStack stack, Font font, Component text, int x, int y, int color, float scale) {
-        renderScaledText(stack, font, text, (x - font.width(text) / 2), y, color, scale);
+        renderScaledText(stack, font, text.getString(), (int) (x - font.width(text) / 2f), y, color, scale);
     }
 
     public static void renderCenteredScaledText(PoseStack stack, Font font, String text, int x, int y, int color, float scale) {

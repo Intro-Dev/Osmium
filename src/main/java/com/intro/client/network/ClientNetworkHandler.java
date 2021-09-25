@@ -98,17 +98,17 @@ public class ClientNetworkHandler {
         });
     }
 
-        public static void sendCapeSetPacket(Cape cape) throws IOException {
-        FriendlyByteBuf byteBuf = PacketByteBufs.create();
-        byteBuf.writeUtf(cape.creator);
-        byteBuf.writeUtf(cape.registryName);
-        byteBuf.writeBoolean(cape.isAnimated);
-        byteBuf.writeInt(cape.getTexture().getFrameDelay());
-
-        byte[] imageData = cape.getTexture().image.asByteArray();
-
-        byteBuf.writeBytes(imageData);
-        ClientPlayNetworking.send(NetworkingConstants.SET_PLAYER_CAPE_SERVER_BOUND, byteBuf);
+    public static void sendCapeSetPacket(Cape cape) throws IOException {
+        if(isRunningOsmiumServer) {
+            FriendlyByteBuf byteBuf = PacketByteBufs.create();
+            byteBuf.writeUtf(cape.creator);
+            byteBuf.writeUtf(cape.registryName);
+            byteBuf.writeBoolean(cape.isAnimated);
+            byteBuf.writeInt(cape.getTexture().getFrameDelay());
+            byte[] imageData = cape.getTexture().image.asByteArray();
+            byteBuf.writeBytes(imageData);
+            ClientPlayNetworking.send(NetworkingConstants.SET_PLAYER_CAPE_SERVER_BOUND, byteBuf);
+        }
     }
 
 

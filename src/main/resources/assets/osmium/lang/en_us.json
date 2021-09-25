@@ -38,6 +38,7 @@
   "osmium.options.block_overlay_alpha": "Overlay Transparency: ",
   "osmium.options.overlay_vanilla": "BlockOverlay: Vanilla",
   "osmium.options.overlay_lines": "BlockOverlay: Outline",
+  "osmium.options.overlay_quads": "BlockOverlay: Full",
   "osmium.options.block_option_settings": "Block Overlay Settings",
   "osmium.open_credits": "Osmium Modrinth",
   "osmium.options.status_effect_display_settings": "Effect Display Settings",
