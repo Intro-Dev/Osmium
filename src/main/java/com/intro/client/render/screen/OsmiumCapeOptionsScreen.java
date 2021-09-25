@@ -81,22 +81,31 @@ public class OsmiumCapeOptionsScreen extends Screen {
         // account for remainder
         capePages.add(rawCapes.subList(i * 6, i * 6 + extraOps));
 
+        // standard width and heights have to be clamped or the button uv cords are messed up for the whole one person who plays on 1 gui scale
         int standardButtonWidth = (int) (200 * guiScale);
+        standardButtonWidth = Mth.clamp(standardButtonWidth, 0, 200);
+
         int standardButtonHeight = (int) (20 * guiScale);
+        standardButtonHeight = Mth.clamp(standardButtonHeight, 0, 20);
+
+
+        System.out.println(guiScale);
+        int buttonStartHeight = (int) (bgStartHeight + (350 * guiScale));
+        int buttonYIncrement = (int) (standardButtonHeight * 1.25);
 
 
         // why are widgets so annoying to scale properly
-        AbstractScalableButton refreshButton = new AbstractScalableButton((int) (this.width / 2 - (250 * guiScale)), (int) (bgStartHeight + (350 * guiScale)), standardButtonWidth, standardButtonHeight, new TranslatableComponent("osmium.refresh_capes"), this::refresh, guiScale);
-        EnumSelectWidget toggleCapeWidget = new EnumSelectWidget(this.width / 2 - 250, bgStartHeight + 375 , standardButtonWidth, 20, Options.CustomCapeMode,"osmium.options.video_options.cape_");
-        BooleanButtonWidget toggleAnimationWidget = new BooleanButtonWidget(this.width / 2 - 250, bgStartHeight + 400 , standardButtonWidth, 20, Options.AnimateCapes, "osmium.options.animate_capes_");
-        BooleanButtonWidget toggleShowOtherCapesWidget = new BooleanButtonWidget(this.width / 2 - 250, bgStartHeight + 425 , standardButtonWidth, 20, Options.ShowOtherPlayersCapes, "osmium.options.show_other_capes_");
+        AbstractScalableButton refreshButton = new AbstractScalableButton((int) (this.width / 2 - (250 * guiScale)), buttonStartHeight, standardButtonWidth, standardButtonHeight, new TranslatableComponent("osmium.refresh_capes"), this::refresh, guiScale);
+        EnumSelectWidget toggleCapeWidget = new EnumSelectWidget((int) (this.width / 2 - (250 * guiScale)), buttonStartHeight + buttonYIncrement, standardButtonWidth, standardButtonHeight, Options.CustomCapeMode,"osmium.options.video_options.cape_", (float) guiScale);
+        BooleanButtonWidget toggleAnimationWidget = new BooleanButtonWidget((int) (this.width / 2 - (250 * guiScale)), buttonStartHeight + buttonYIncrement * 2, standardButtonWidth, standardButtonHeight, Options.AnimateCapes, "osmium.options.animate_capes_", (float) guiScale);
+        BooleanButtonWidget toggleShowOtherCapesWidget = new BooleanButtonWidget((int) (this.width / 2 - (250 * guiScale)), buttonStartHeight + buttonYIncrement * 3 , standardButtonWidth, standardButtonHeight, Options.ShowOtherPlayersCapes, "osmium.options.show_other_capes_", (float) guiScale);
 
 
-        Button backButton = new Button(this.width / 2 - 250, bgStartHeight + 475, 200, 20, new TranslatableComponent("osmium.options.video_options.back"), button -> mc.setScreen(this.parent));
+        AbstractScalableButton backButton = new AbstractScalableButton((int) (this.width / 2 - (250 * guiScale)), buttonStartHeight + buttonYIncrement * 5, standardButtonWidth, standardButtonHeight   , new TranslatableComponent("osmium.options.video_options.back"), button -> mc.setScreen(this.parent), guiScale);
 
         // this widget is 1 pixel off center
         // :)
-        forwardWidget = new BackAndForwardWidget((int) (this.width / 2 + (184 * guiScale)), (int) (bgStartHeight + (475 * guiScale)), (int) (30 * guiScale),  currentPage, 0, capePages.size() - 1, (float) guiScale);
+        forwardWidget = new BackAndForwardWidget((int) (this.width / 2 + (192 * guiScale)), (int) (bgStartHeight + (475 * guiScale)), (int) (30 * guiScale), currentPage, 0, capePages.size() - 1, (float) guiScale);
 
         this.addRenderableWidget(backButton);
         this.addRenderableWidget(toggleShowOtherCapesWidget);
@@ -172,10 +181,7 @@ public class OsmiumCapeOptionsScreen extends Screen {
         List<Cape> pageCapes = capePages.get(currentPage.get());
 
         // yes I know this is the worst method of 2d hitbox detection
-        // but its only 7 checks, and I can't be bothered over a micro optimization
-
-        System.out.println(this.width);
-
+        // but its only 6 checks, and I can't be bothered over a micro optimization
         for(int i = 0; i < pageCapes.size(); i++) {
             if(MathUtil.isPositionWithinBounds((int) mouseX, (int) mouseY, (int) (this.width / 2 + (100 * guiScale)), (int) (bgStartHeight + (40 + (i * 70)) * guiScale), (int) (200 * guiScale), (int) (60 * guiScale))) {
                 CosmeticManager.playerCapes.put(mc.player.getStringUUID(), pageCapes.get(i));

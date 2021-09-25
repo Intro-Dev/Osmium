@@ -118,7 +118,7 @@ public class RenderUtil {
     }
 
     public static void renderCenteredScaledText(PoseStack stack, Font font, Component text, int x, int y, int color, float scale) {
-        renderScaledText(stack, font, text.getString(), (int) (x - font.width(text) / 2f), y, color, scale);
+        renderScaledText(stack, font, text.getString(), x + font.width(text) / 2, y, color, scale);
     }
 
     public static void renderCenteredScaledText(PoseStack stack, Font font, String text, int x, int y, int color, float scale) {

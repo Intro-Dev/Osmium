@@ -11,7 +11,6 @@ import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.Mth;
 
 public class OsmiumWidgetsScreen extends Screen {
 
@@ -46,13 +45,7 @@ public class OsmiumWidgetsScreen extends Screen {
             globalOffset = -64;
         }
 
-        // this wonderful bit of code is very inefficient
-        // but, it's only called on init, and it makes a very annoying rendering offset bug go away
-        // so who's laughing
-        while(!(finalOffset > (57 / mc.options.guiScale))) {
-            finalOffset = Mth.clamp(finalOffset, 0, 57 / mc.options.guiScale);
-            finalOffset += 3;
-        }
+        finalOffset = 57 / mc.options.guiScale;
 
         BooleanButtonWidget pingDisplayEnabled = new BooleanButtonWidget(this.width / 2 - 275, this.height / 4 + 80 + globalOffset, 150, 20, Options.PingDisplayEnabled, "osmium.options.ping_display_");
         BooleanButtonWidget cpsDisplayEnabled = new BooleanButtonWidget(this.width / 2 - 75, this.height / 4 + 80 + globalOffset, 150, 20, Options.CpsDisplayEnabled, "osmium.options.cps_");

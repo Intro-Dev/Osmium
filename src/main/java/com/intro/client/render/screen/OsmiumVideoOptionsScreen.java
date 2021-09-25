@@ -44,9 +44,6 @@ public class OsmiumVideoOptionsScreen extends Screen {
             globalOffset = -64;
         }
 
-        // this wonderful bit of code is very inefficient
-        // but, it's only called on init, and it makes a very annoying rendering offset bug go away
-        // so who's laughing
         finalOffset = 57 / mc.options.guiScale;
 
         Button backButton = new Button(this.width / 2 - 100, this.height / 4 + 225 + globalOffset, 200, 20, new TranslatableComponent("osmium.options.video_options.back"), (Button) -> mc.setScreen(parent));

@@ -5,6 +5,7 @@ import com.intro.client.render.color.Color;
 import com.intro.client.util.RenderUtil;
 import com.intro.common.config.Options;
 import com.intro.common.config.options.BlockOutlineMode;
+import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
 import net.minecraft.client.multiplayer.ClientLevel;
@@ -92,6 +93,7 @@ public abstract class LevelRendererMixin {
         RenderSystem.setShader(GameRenderer::getPositionColorShader);
         RenderSystem.enableBlend();
         RenderSystem.enableDepthTest();
+        RenderSystem.blendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
         BufferUploader.end(builder);
         RenderSystem.disableBlend();
         RenderSystem.disableDepthTest();
