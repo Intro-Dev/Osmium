@@ -120,8 +120,8 @@ public class ColorOptionWidget extends GuiComponent implements Widget, GuiEventL
         double y = (screenY - this.y) / imageScale;
 
         // de-scale output
-        x *= 2;
-        y *= 2;
+        x *= imageScale;
+        y *= imageScale;
 
         return new Vector2d(x, y);
     }
@@ -132,7 +132,7 @@ public class ColorOptionWidget extends GuiComponent implements Widget, GuiEventL
 
     
     public int getColorAtLocation(int @NotNull [] arr, @NotNull NativeImage texture, int x, int y) {
-        float scale = texture.getWidth() / width;
+        float scale = texture.getWidth() / (float) width;
         int scaledX = (int) (x * scale);
         int scaledY = (int) (y * scale);
 
