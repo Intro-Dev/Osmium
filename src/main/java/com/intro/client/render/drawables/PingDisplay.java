@@ -31,7 +31,11 @@ public class PingDisplay extends Scalable {
         if(event instanceof EventTick && mc.player != null) {
             if((mc.getCurrentServer() != null)) {
                 ClientPacketListener clientPacketListener = mc.player.connection;
-                currentPing = requireNonNull(clientPacketListener.getPlayerInfo(mc.player.getUUID()).getLatency());
+                try {
+                    currentPing = requireNonNull(clientPacketListener.getPlayerInfo(mc.player.getUUID()).getLatency());
+                } catch(NullPointerException) {
+                    currentPing = 0;
+                }
 
             } else {
                 currentPing = 0;
