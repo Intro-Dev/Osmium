@@ -11,6 +11,8 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientPacketListener;
 
+import java.util.Objects;
+
 public class PingDisplay extends Scalable {
 
     private static PingDisplay INSTANCE;
@@ -29,7 +31,8 @@ public class PingDisplay extends Scalable {
         if(event instanceof EventTick && mc.player != null) {
             if((mc.getCurrentServer() != null)) {
                 ClientPacketListener clientPacketListener = mc.player.connection;
-                currentPing = clientPacketListener.getPlayerInfo(mc.player.getUUID()).getLatency();
+                currentPing = Objects.requireNonNull(clientPacketListener.getPlayerInfo(mc.player.getUUID()).getLatency());
+
             } else {
                 currentPing = 0;
             }
