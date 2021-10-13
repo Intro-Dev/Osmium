@@ -11,8 +11,6 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientPacketListener;
 
-import java.util.Objects.requireNonNull;
-
 public class PingDisplay extends Scalable {
 
     private static PingDisplay INSTANCE;
