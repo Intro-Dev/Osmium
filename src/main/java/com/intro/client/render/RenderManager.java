@@ -45,6 +45,7 @@ public class RenderManager {
         mc.getProfiler().pop();
     }
 
+
     public static void postRenderEvents(float tickDelta, long limitTime, PoseStack stack) {
         mc.getProfiler().push("OsmiumRenderer");
         EventRender EventRenderPre = new EventRender(EventDirection.PRE, tickDelta, limitTime, stack);

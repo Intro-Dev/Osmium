@@ -14,9 +14,9 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.block.model.ItemTransforms;
 import net.minecraft.client.renderer.texture.OverlayTexture;
-import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.util.Mth;
+import net.minecraft.world.inventory.InventoryMenu;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 
@@ -80,10 +80,13 @@ public class ArmorDisplay extends Scalable {
         hLine(stack, x, x + barSize + 1, y, color);
     }
 
+    // why is minecraft rendering code so bad
+    // this is the function for rendering a block in the gui,
+    // and you can't even make it any better because the way that its done is so deeply ingrained into the game that it would take a rewrite of half the rendering pipeline to make it any better
     private void renderScaledItemStack(ItemStack item, int x, int y) {
         BakedModel model = mc.getItemRenderer().getModel(item, null, null, 0);
-        mc.getTextureManager().getTexture(TextureAtlas.LOCATION_BLOCKS).setFilter(false, false);
-        RenderSystem.setShaderTexture(0, TextureAtlas.LOCATION_BLOCKS);
+        mc.getTextureManager().getTexture(InventoryMenu.BLOCK_ATLAS).setFilter(false, false);
+        RenderSystem.setShaderTexture(0, InventoryMenu.BLOCK_ATLAS);
         RenderSystem.enableBlend();
         RenderSystem.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
         RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
@@ -97,23 +100,23 @@ public class ArmorDisplay extends Scalable {
         RenderSystem.applyModelViewMatrix();
         PoseStack poseStack2 = new PoseStack();
         MultiBufferSource.BufferSource bufferSource = Minecraft.getInstance().renderBuffers().bufferSource();
-        boolean bl = !model.usesBlockLight();
-        if (bl) {
+        boolean usesLight = !model.usesBlockLight();
+        if (usesLight) {
             Lighting.setupForFlatItems();
         }
-
         mc.getItemRenderer().render(item, ItemTransforms.TransformType.GUI, false, poseStack2, bufferSource, 15728880, OverlayTexture.NO_OVERLAY, model);
         bufferSource.endBatch();
         RenderSystem.enableDepthTest();
-        if (bl) {
+        if (usesLight) {
             Lighting.setupFor3DItems();
         }
 
         poseStack.popPose();
         RenderSystem.applyModelViewMatrix();
+
     }
 
-
+    
 
 
     @Override

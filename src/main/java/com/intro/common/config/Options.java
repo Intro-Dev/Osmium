@@ -76,10 +76,6 @@ public class Options {
         return (StringOption) get(identifier);
     }
 
-
-
-
-
     public static final String ToggleSprintEnabled = "ToggleSprintEnabled";
     public static final String FullbrightEnabled = "FullbrightEnabled";
     public static final String HurtbobbingEnabled = "HurtBobbingEnabled";

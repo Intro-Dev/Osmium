@@ -39,6 +39,18 @@ public class RenderUtil {
         stack.translate(-(x + (width / 2f)), -(y + (height / 2f)), 0);
     }
 
+    public static void positionAccurateXScale(PoseStack stack, int x, float scale) {
+        stack.translate(x, 0, 0);
+        stack.scale(scale,  0, 0);
+        stack.translate(-x, 0, 0);
+    }
+
+    public static void positionAccurateYScale(PoseStack stack, int y, float scale) {
+        stack.translate(0, y, 0);
+        stack.scale(scale,  0, 0);
+        stack.translate(0, -y, 0);
+    }
+
     public static void positionAccurateScale3d(PoseStack stack, float scale, int x, int y, int z, int width, int height, int depth) {
         stack.translate((x + (width / 2f)), (y + (height / 2f)), (z + (depth / 2f)));
         stack.scale(scale, scale, scale);

@@ -66,6 +66,8 @@ public class Keystrokes extends Scalable {
 
             int KEY_DOWN_COLOR;
 
+            // the gore here
+            // :|
             if(OsmiumClient.options.getBooleanOption(Options.KeystrokesRgb).variable) {
                 colorGenerator.tick();
                 colorGenerator.setAlpha((int) (OsmiumClient.options.getDoubleOption(Options.KeystrokesAlpha).variable * 255));
