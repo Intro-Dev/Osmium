@@ -12,7 +12,7 @@ public class Cape implements Cloneable {
     public String source;
     public String registryName;
 
-    public String creator = "unknown";
+    public String creator;
 
 
     public Cape(DynamicAnimation texture, boolean isOptifine, boolean isAnimated, String source, String registryName, String creator) {

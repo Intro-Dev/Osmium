@@ -8,14 +8,17 @@ import com.intro.common.config.options.ElementPositionOption;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
 
-import java.util.Timer;
 import java.util.TimerTask;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class CpsDisplay extends Scalable {
 
     private static CpsDisplay INSTANCE;
 
-    private int cps;
+    private final AtomicInteger cps = new AtomicInteger(0);
 
     private boolean firstRun = true;
 
@@ -25,9 +28,11 @@ public class CpsDisplay extends Scalable {
 
     private final Minecraft mc = Minecraft.getInstance();
 
+    private final ScheduledExecutorService removeClicksExecutor = Executors.newScheduledThreadPool(1);
+
     public void onClick() {
-        cps++;
-        new RemoveClicksTask().schedule(1000);
+        cps.incrementAndGet();
+        removeClicksExecutor.schedule(new RemoveClicksTask(), 1, TimeUnit.SECONDS);
     }
 
     protected CpsDisplay(int color) {
@@ -75,16 +80,9 @@ public class CpsDisplay extends Scalable {
 
     private class RemoveClicksTask extends TimerTask {
 
-        private final Timer timer = new Timer();
-
-        public void schedule(long delay) {
-            timer.schedule(this, delay);
-        }
-
         @Override
         public void run() {
-            cps--;
-            timer.cancel();
+            cps.decrementAndGet();
         }
     }
 }
