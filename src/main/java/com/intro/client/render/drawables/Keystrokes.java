@@ -6,8 +6,11 @@ import com.intro.client.render.color.Colors;
 import com.intro.client.util.*;
 import com.intro.common.config.Options;
 import com.intro.common.config.options.ElementPositionOption;
-import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.vertex.*;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.GameRenderer;
+import net.minecraft.client.renderer.MultiBufferSource;
 
 public class Keystrokes extends Scalable {
 
@@ -66,6 +69,8 @@ public class Keystrokes extends Scalable {
 
             int KEY_DOWN_COLOR;
 
+            MultiBufferSource.BufferSource bufferSource = MultiBufferSource.immediate(Tesselator.getInstance().getBuilder());
+
             // the gore here
             // :|
             if(OsmiumClient.options.getBooleanOption(Options.KeystrokesRgb).variable) {
@@ -76,26 +81,39 @@ public class Keystrokes extends Scalable {
                 int rgbColorEnd = colorGenerator.getEndColor();
                 KEY_DOWN_COLOR = ColorUtil.getContrastColor(rgbColorStart);
 
-                fillGradient(stack, wKeyPos.x, wKeyPos.y, wKeyPos.x + sectionWidth, wKeyPos.y + sectionHeight, (mc.options.keyUp.isDown() ? KEY_DOWN_COLOR : rgbColorStart), rgbColorEnd);
-                fillGradient(stack, aKeyPos.x, aKeyPos.y, aKeyPos.x + sectionWidth, aKeyPos.y + sectionHeight, (mc.options.keyLeft.isDown() ? KEY_DOWN_COLOR : rgbColorStart), rgbColorEnd);
-                fillGradient(stack, sKeyPos.x, sKeyPos.y, sKeyPos.x + sectionWidth, sKeyPos.y + sectionHeight, (mc.options.keyDown.isDown() ? KEY_DOWN_COLOR : rgbColorStart), rgbColorEnd);
-                fillGradient(stack, dKeyPos.x, dKeyPos.y, dKeyPos.x + sectionWidth, dKeyPos.y + sectionHeight, (mc.options.keyRight.isDown() ? KEY_DOWN_COLOR : rgbColorStart), rgbColorEnd);
+                BufferBuilder buffer = Tesselator.getInstance().getBuilder();
+                buffer.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_COLOR);
+                RenderUtil.fillGradient(stack, buffer, wKeyPos.x, wKeyPos.y, sectionWidth, sectionHeight, (mc.options.keyUp.isDown() ? KEY_DOWN_COLOR : rgbColorStart), rgbColorEnd);
+                RenderUtil.fillGradient(stack, buffer, aKeyPos.x, aKeyPos.y, sectionWidth, sectionHeight, (mc.options.keyLeft.isDown() ? KEY_DOWN_COLOR : rgbColorStart), rgbColorEnd);
+                RenderUtil.fillGradient(stack, buffer, sKeyPos.x, sKeyPos.y, sectionWidth, sectionHeight, (mc.options.keyDown.isDown() ? KEY_DOWN_COLOR : rgbColorStart), rgbColorEnd);
+                RenderUtil.fillGradient(stack, buffer, dKeyPos.x, dKeyPos.y, sectionWidth, sectionHeight, (mc.options.keyRight.isDown() ? KEY_DOWN_COLOR : rgbColorStart), rgbColorEnd);
+
             } else {
-
                 KEY_DOWN_COLOR = new Color(0.6f, 0.2f, 0.2f, 0.4f).getInt();
-                fill(stack, wKeyPos.x, wKeyPos.y, wKeyPos.x + sectionWidth, wKeyPos.y + sectionHeight, (mc.options.keyUp.isDown() ? KEY_DOWN_COLOR : BG_COLOR));
-                fill(stack, aKeyPos.x, aKeyPos.y, aKeyPos.x + sectionWidth, aKeyPos.y + sectionHeight, (mc.options.keyLeft.isDown() ? KEY_DOWN_COLOR : BG_COLOR));
-                fill(stack, sKeyPos.x, sKeyPos.y, sKeyPos.x + sectionWidth, sKeyPos.y + sectionHeight, (mc.options.keyDown.isDown() ? KEY_DOWN_COLOR : BG_COLOR));
-                fill(stack, dKeyPos.x, dKeyPos.y, dKeyPos.x + sectionWidth, dKeyPos.y + sectionHeight, (mc.options.keyRight.isDown() ? KEY_DOWN_COLOR : BG_COLOR));
+                BufferBuilder buffer = Tesselator.getInstance().getBuilder();
+                buffer.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_COLOR);
+                RenderUtil.fill(stack, buffer, wKeyPos.x, wKeyPos.y, sectionWidth, sectionHeight, (mc.options.keyUp.isDown() ? KEY_DOWN_COLOR : BG_COLOR));
+                RenderUtil.fill(stack, buffer, aKeyPos.x, aKeyPos.y, sectionWidth, sectionHeight, (mc.options.keyLeft.isDown() ? KEY_DOWN_COLOR : BG_COLOR));
+                RenderUtil.fill(stack, buffer, sKeyPos.x, sKeyPos.y, sectionWidth, sectionHeight, (mc.options.keyDown.isDown() ? KEY_DOWN_COLOR : BG_COLOR));
+                RenderUtil.fill(stack, buffer, dKeyPos.x, dKeyPos.y, sectionWidth, sectionHeight, (mc.options.keyRight.isDown() ? KEY_DOWN_COLOR : BG_COLOR));
             }
+            RenderSystem.disableTexture();
+            RenderSystem.enableBlend();
+            RenderSystem.defaultBlendFunc();
+            RenderSystem.setShader(GameRenderer::getPositionColorShader);
+            Tesselator.getInstance().end();
+            RenderSystem.disableBlend();
+            RenderSystem.enableTexture();
 
-            RenderUtil.renderCenteredScaledText(stack, mc.font, mc.options.keyUp.getTranslatedKeyMessage().getString().toUpperCase(), ((int) wKeyTextPos.getX()), ((int) wKeyTextPos.getY()), Colors.WHITE.getColor().getInt(), 3f);
-            RenderUtil.renderCenteredScaledText(stack, mc.font, mc.options.keyLeft.getTranslatedKeyMessage().getString().toUpperCase(), ((int) aKeyTextPos.getX()), ((int) aKeyTextPos.getY()), Colors.WHITE.getColor().getInt(), 3f);
-            RenderUtil.renderCenteredScaledText(stack, mc.font, mc.options.keyDown.getTranslatedKeyMessage().getString().toUpperCase(), ((int) sKeyTextPos.getX()), ((int) sKeyTextPos.getY()), Colors.WHITE.getColor().getInt(), 3f);
-            RenderUtil.renderCenteredScaledText(stack, mc.font, mc.options.keyRight.getTranslatedKeyMessage().getString().toUpperCase(), ((int) dKeyTextPos.getX()), ((int) dKeyTextPos.getY()), Colors.WHITE.getColor().getInt(), 3f);
+            RenderUtil.renderCenteredScaledText(stack, mc.font, bufferSource, mc.options.keyUp.getTranslatedKeyMessage().getString().toUpperCase(), ((int) wKeyTextPos.getX()), ((int) wKeyTextPos.getY()), Colors.WHITE.getColor().getInt(), 3f);
+            RenderUtil.renderCenteredScaledText(stack, mc.font, bufferSource, mc.options.keyLeft.getTranslatedKeyMessage().getString().toUpperCase(), ((int) aKeyTextPos.getX()), ((int) aKeyTextPos.getY()), Colors.WHITE.getColor().getInt(), 3f);
+            RenderUtil.renderCenteredScaledText(stack, mc.font, bufferSource, mc.options.keyDown.getTranslatedKeyMessage().getString().toUpperCase(), ((int) sKeyTextPos.getX()), ((int) sKeyTextPos.getY()), Colors.WHITE.getColor().getInt(), 3f);
+            RenderUtil.renderCenteredScaledText(stack, mc.font, bufferSource, mc.options.keyRight.getTranslatedKeyMessage().getString().toUpperCase(), ((int) dKeyTextPos.getX()), ((int) dKeyTextPos.getY()), Colors.WHITE.getColor().getInt(), 3f);
+            bufferSource.endBatch();
         } else {
             this.visible = false;
         }
+
     }
 
     @Override

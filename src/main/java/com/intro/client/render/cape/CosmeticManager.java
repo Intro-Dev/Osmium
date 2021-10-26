@@ -127,8 +127,7 @@ public class CosmeticManager {
         InputStream manifestFile = file.getInputStream(file.getEntry(Util.getZipFileSystemPrefix(file) + "/manifest.json"));
 
         JsonReader reader = new JsonReader(new InputStreamReader(manifestFile));
-        JsonParser parser = new JsonParser();
-        JsonObject manifest = (JsonObject) parser.parse(reader);
+        JsonObject manifest = (JsonObject) JsonParser.parseReader(reader);
 
         List<Cape> returns = new ArrayList<>();
 
@@ -222,34 +221,17 @@ public class CosmeticManager {
     }
 
     /**
-     * <p>Used to parse optifine capes to a usable format</p>
-     * <p>Has to be like this because optifine uses a different cape uv format</p>
-     * <p>adapted from of-capes</p>
+     * <p>Parses optifine capes to the vanilla format</p>
      * @param image Source image
      * @return Parsed Image
      */
     public static NativeImage parseOptifineCape(NativeImage image) {
-        int imageWidth = 64;
-        int imageHeight = 32;
-        int imageSrcWidth = image.getWidth();
-        int srcHeight = image.getHeight();
-
-        for (int imageSrcHeight = image.getHeight(); imageWidth < imageSrcWidth || imageHeight < imageSrcHeight; imageHeight *= 2) {
-            imageWidth *= 2;
+        if(image.getWidth() == 64) {
+            return image;
         }
-
-        NativeImage parsedImage = new NativeImage(imageWidth, imageHeight, true);
-
-        for (int x = 0; x < imageSrcWidth; x++) {
-            for (int y = 0; y < srcHeight; y++) {
-                parsedImage.setPixelRGBA(x, y, image.getPixelRGBA(x, y));
-            }
-        }
-
-        image.close();
-
-        return parsedImage;
-
+        NativeImage subImage1 = TextureUtil.subImage(image, 0, 0, 32, 64);
+        NativeImage subImage2 = TextureUtil.subImage(image, 32, 0, 32, 64);
+        return TextureUtil.stitchImagesOnX(subImage1, subImage2);
     }
 
 

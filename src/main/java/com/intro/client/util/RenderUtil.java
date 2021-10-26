@@ -17,7 +17,6 @@ import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
 import net.minecraft.util.FormattedCharSequence;
 import org.jetbrains.annotations.ApiStatus;
 
@@ -113,6 +112,22 @@ public class RenderUtil {
         stack.popPose();
     }
 
+    public static void renderScaledText(PoseStack stack, MultiBufferSource.BufferSource bufferSource, Font font, Component text, double x, double y, int color, float scale, boolean shadowed) {
+        stack.pushPose();
+        positionAccurateScale(stack, scale, x, y);
+        font.drawInBatch(text.getString(), (float) x, (float) y, color, shadowed, stack.last().pose(), bufferSource, false, 0, 15728880, font.isBidirectional());
+        stack.popPose();
+    }
+
+    public static void renderScaledText(PoseStack stack, MultiBufferSource.BufferSource bufferSource, Font font, String text, double x, double y, int color, float scale, boolean shadowed) {
+        stack.pushPose();
+        int textWidth = font.width(text);
+        // translate by text width or else it is off a bit
+        positionAccurateScale(stack, scale, x, y, textWidth, 0);
+        font.drawInBatch(text, (float) x, (float) y, color, shadowed, stack.last().pose(), bufferSource, false, 0, 15728880, font.isBidirectional());
+        stack.popPose();
+    }
+
     public static void renderScaledText(PoseStack stack, Font font, String text, double x, double y, int color, float scale, boolean shadowed) {
         stack.pushPose();
         positionAccurateScale(stack, scale, x, y);
@@ -137,18 +152,28 @@ public class RenderUtil {
         renderScaledText(stack, font, text, (x - font.width(text) / 2), y, color, scale);
     }
 
-    public static void beginTextBatch(Font font, MultiBufferSource buffers, Font.DisplayMode displayMode) {
-        textRenderer = new InternalTextRenderer(font, buffers, displayMode);
+    public static void renderCenteredScaledText(PoseStack stack, Font font, MultiBufferSource.BufferSource bufferSource, String text, int x, int y, int color, float scale) {
+        renderScaledText(stack, bufferSource, font, text, (x - font.width(text) / 2f), y, color, scale, true);
     }
 
-    public static void renderShadowedTextInBatch(PoseStack stack, String text, int x, int y, int color) {
-        FormattedCharSequence sequence = new TextComponent(text).getVisualOrderText();
-        drawInternal(stack, sequence, x, y, color, 15728880, true);
+
+    public static void fillGradient(PoseStack stack, VertexConsumer vertexConsumer, int x, int y, int width, int height, int startColor, int endColor) {
+        Color start = new Color(startColor);
+        Color end = new Color(endColor);
+        Matrix4f matrix4f = stack.last().pose();
+        vertexConsumer.vertex(matrix4f, x + width, y, 0).color(start.getFloatR(), start.getFloatG(), start.getFloatB(), start.getFloatA()).endVertex();
+        vertexConsumer.vertex(matrix4f, x, y, 0).color(start.getFloatR(), start.getFloatG(), start.getFloatB(), start.getFloatA()).endVertex();
+        vertexConsumer.vertex(matrix4f, x, y + height, 0).color(end.getFloatR(), end.getFloatG(), end.getFloatB(), end.getFloatA()).endVertex();
+        vertexConsumer.vertex(matrix4f, x + width, y + height, 0).color(end.getFloatR(), end.getFloatG(), end.getFloatB(), end.getFloatA()).endVertex();
     }
 
-    private static void drawInternal(PoseStack stack, FormattedCharSequence text, int x, int y, int color, int light, boolean shadowed) {
-        color = adjustColorForDrawCall(color);
-        textRenderer.addTextToDrawCall(stack, text, x, y, shadowed, color, light);
+    public static void fill(PoseStack stack, VertexConsumer vertexConsumer, int x, int y, int width, int height, int color) {
+        Matrix4f matrix4f = stack.last().pose();
+        Color c = new Color(color);
+        vertexConsumer.vertex(matrix4f, x + width, y, 0).color(c.getFloatR(), c.getFloatG(), c.getFloatB(), c.getFloatA()).endVertex();
+        vertexConsumer.vertex(matrix4f, x, y, 0).color(c.getFloatR(), c.getFloatG(), c.getFloatB(), c.getFloatA()).endVertex();
+        vertexConsumer.vertex(matrix4f, x, y + height, 0).color(c.getFloatR(), c.getFloatG(), c.getFloatB(), c.getFloatA()).endVertex();
+        vertexConsumer.vertex(matrix4f, x + width, y + height, 0).color(c.getFloatR(), c.getFloatG(), c.getFloatB(), c.getFloatA()).endVertex();
     }
 
     private static int adjustColorForDrawCall(int c) {
@@ -170,6 +195,7 @@ public class RenderUtil {
     public static void drawTextBatch() {
         textRenderer.submitDrawCall();
     }
+
 
 
     /**

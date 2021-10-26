@@ -112,6 +112,7 @@ public class Options {
     public static final String AnimateCapes = "AnimateCapes";
     public static final String ShowOtherPlayersCapes = "ShowOtherPlayersCapes";
     public static final String SetCape = "SetCape";
+    public static final String HypixelApiKey = "HypixelApiKey";
 
 
 
@@ -164,6 +165,7 @@ public class Options {
         put(AnimateCapes, new BooleanOption(AnimateCapes, true));
         put(ShowOtherPlayersCapes, new BooleanOption(ShowOtherPlayersCapes, true));
         put(SetCape, new StringOption(SetCape, ""));
+        put(HypixelApiKey, new StringOption(HypixelApiKey, ""));
     }
 
     public HashMap<String, Option> getValues() {

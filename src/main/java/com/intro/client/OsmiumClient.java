@@ -10,6 +10,7 @@ import com.intro.client.network.ClientNetworkHandler;
 import com.intro.client.render.RenderManager;
 import com.intro.client.render.cape.CosmeticManager;
 import com.intro.client.render.drawables.PingDisplay;
+import com.intro.client.util.HypixelAbstractionLayer;
 import com.intro.client.util.OptionUtil;
 import com.intro.common.config.Options;
 import com.intro.common.util.Util;
@@ -49,6 +50,7 @@ public class OsmiumClient implements ClientModInitializer {
         EVENT_BUS.registerCallback(cosmeticManager::handleEvents, new EventType[] { EventType.EVENT_ADD_PLAYER, EventType.EVENT_REMOVE_PLAYER } );
         EVENT_BUS.registerCallback(PingDisplay.getInstance()::onEvent, EventType.EVENT_TICK);
         EVENT_BUS.registerCallback(cosmeticManager::tickCapes, EventType.EVENT_TICK);
+        EVENT_BUS.registerCallback(HypixelAbstractionLayer::handleDisconnectEvents, EventType.EVENT_REMOVE_PLAYER);
     }
 
     public void registerKeyBindings() {
@@ -65,6 +67,7 @@ public class OsmiumClient implements ClientModInitializer {
         registerKeyBindings();
         ClientNetworkHandler.registerPackets();
         RenderManager.initDrawables();
+        HypixelAbstractionLayer.loadApiKey();
         runningLatestVersion = Util.isRunningLatestVersion();
         System.out.println("Osmium Initialized");
     }

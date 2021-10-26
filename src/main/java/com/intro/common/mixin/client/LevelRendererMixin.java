@@ -21,6 +21,7 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -55,17 +56,18 @@ public abstract class LevelRendererMixin {
         }
     }
 
-    @Inject(method = "renderHitOutline", at = @At("HEAD"), cancellable = true)
-    public void renderBlockOutline(PoseStack stack, VertexConsumer vertexConsumer, Entity entity, double d, double e, double f, BlockPos blockPos, BlockState blockState, CallbackInfo ci) {
+    /**
+     * @author Intro
+     * @reason use custom outline drawing with improved compatibility
+     */
+    @Overwrite
+    private void renderHitOutline(PoseStack stack, VertexConsumer vertexConsumer, Entity entity, double d, double e, double f, BlockPos blockPos, BlockState blockState) {
         if(OsmiumClient.options.getEnumOption(Options.BlockOutlineMode).variable == BlockOutlineMode.LINES) {
             drawShapeOutline(stack, vertexConsumer, blockState.getShape(entity.level, blockPos, CollisionContext.of(entity)), (double)blockPos.getX() - d, (double)blockPos.getY() - e, (double)blockPos.getZ() - f, OsmiumClient.options.getColorOption(Options.BlockOutlineColor).color);
-            ci.cancel();
         } else if(OsmiumClient.options.getEnumOption(Options.BlockOutlineMode).variable == BlockOutlineMode.QUADS) {
             drawShapeFull(stack, blockState.getShape(entity.level, blockPos, CollisionContext.of(entity)), (double)blockPos.getX() - d, (double)blockPos.getY() - e, (double)blockPos.getZ() - f, OsmiumClient.options.getColorOption(Options.BlockOutlineColor).color);
-            ci.cancel();
         } else {
             drawShapeOutline(stack, vertexConsumer, blockState.getShape(this.level, blockPos, CollisionContext.of(entity)), (double)blockPos.getX() - d, (double)blockPos.getY() - e, (double)blockPos.getZ() - f, new Color(0.0F, 0.0F, 0.0F, 0.4F));
-            ci.cancel();
         }
     }
 

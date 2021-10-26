@@ -18,6 +18,7 @@ public class RenderManager {
 
     public static boolean shouldRenderHud = true;
 
+
     public static void initDrawables() {
          addDrawable(ArmorDisplay.getInstance());
          addDrawable(StatusEffectDisplay.getInstance());

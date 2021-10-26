@@ -15,16 +15,24 @@ repositories {
 		name = "ParchmentMC"
 		url = uri("https://maven.parchmentmc.org/")
 	}
+	maven {
+		url 'https://repo.hypixel.net/repository/Hypixel/'
+	}
 }
 
 dependencies {
 	minecraft "com.mojang:minecraft:1.17.1"
+
 	mappings loom.layered {
 		officialMojangMappings()
 		parchment("org.parchmentmc.data:parchment-1.17.1:2021.10.13-nightly-SNAPSHOT")
 	}
+
 	modImplementation "net.fabricmc:fabric-loader:0.11.6"
 	modImplementation "net.fabricmc.fabric-api:fabric-api:0.36.1+1.17"
+
+	include(modImplementation("net.hypixel:hypixel-api-core:4.1"))
+	include(modImplementation("net.hypixel:hypixel-api-transport-apache:4.1"))
 }
 
 processResources {

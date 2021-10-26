@@ -16,7 +16,7 @@
   "osmium.options.sneak_smooth": "Sneak: Smooth",
   "osmium.options.sneak_instant": "Sneak: Instant",
   "osmium.options.video_options.back": "Back",
-  "osmium.version": "Osmium Version 1.2.3",
+  "osmium.version": "Osmium Version 1.3",
   "osmium.gui_edit.title": "Gui Editing",
   "osmium.options.fps_enabled": "Fps Display: Enabled",
   "osmium.options.fps_disabled": "Fps Display: Disabled",
@@ -80,5 +80,6 @@
   "osmium.cape_options": "Cape Options",
   "osmium_failed_cape_load": "Failed to load custom cape pack",
   "osmium_failed_cape_load_title": "Error loading capes",
-  "osmium.refresh_capes": "Refresh Capes"
+  "osmium.refresh_capes": "Refresh Capes",
+  "osmium.level": "Level: "
 }
