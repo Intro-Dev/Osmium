@@ -102,7 +102,7 @@ public class CosmeticManager {
         putCape(new Cape(genCapeAnimation(new ResourceLocation("osmium", "textures/cape/osmium_logo_cape.png"), "osmium_logo_cape", 1), false, true, "local", "osmium_logo_cape", "Intro"));
 
         try {
-            File cosmeticsDir = FabricLoader.getInstance().getGameDir().getParent().resolve("cosmetics").toFile();
+            File cosmeticsDir = FabricLoader.getInstance().getGameDir().resolve("cosmetics").toFile();
             if(!Files.exists(cosmeticsDir.toPath())) {
                 Files.createDirectory(cosmeticsDir.toPath());
             }
