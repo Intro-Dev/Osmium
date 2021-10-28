@@ -57,7 +57,7 @@ public class OptionSerializer implements JsonSerializer<Option> {
             JsonObject returnObject = new JsonObject();
             returnObject.addProperty("Identifier", option.identifier);
             returnObject.addProperty("R", option.color.getR());
-            returnObject.addProperty("G", option.color.getFloatG());
+            returnObject.addProperty("G", option.color.getG());
             returnObject.addProperty("B", option.color.getB());
             returnObject.addProperty("A", option.color.getA());
             returnObject.addProperty("Type", option.type);
