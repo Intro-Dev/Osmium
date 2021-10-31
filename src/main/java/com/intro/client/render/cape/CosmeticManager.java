@@ -31,6 +31,8 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.file.Files;
 import java.util.*;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.zip.ZipFile;
 
 /**
@@ -49,6 +51,8 @@ public class CosmeticManager {
 
     // map of all players capes
     public static final HashMap<String, Cape> playerCapes = new HashMap<>();
+
+    private static final ExecutorService capeDownloaderService = Executors.newFixedThreadPool(4);
 
 
 
@@ -174,8 +178,7 @@ public class CosmeticManager {
                     CosmeticManager.playerCapes.put(Minecraft.getInstance().player.getStringUUID(), CosmeticManager.getPreLoadedPlayerCape());
                 }
             } else {
-                Thread CapeDownloaderThread = new Thread(new CosmeticManager.StandardCapeDownloader((EventAddPlayer) event));
-                CapeDownloaderThread.start();
+                capeDownloaderService.execute(new CosmeticManager.StandardCapeDownloader((EventAddPlayer) event));
             }
         }
         if (event instanceof EventRemovePlayer) {
@@ -215,11 +218,6 @@ public class CosmeticManager {
         }
     }
 
-    public static void setCapeThreaded(String uuid, String url, boolean animated) {
-        Thread customDownloader = new Thread(new CosmeticManager.CustomCapeDownloader(uuid, url, animated));
-        customDownloader.start();
-    }
-
     /**
      * <p>Parses optifine capes to the vanilla format</p>
      * @param image Source image
@@ -241,11 +239,6 @@ public class CosmeticManager {
         } catch (Exception e) {
             e.printStackTrace();
         }
-    }
-
-    public static void setCapeFromResourceLocation(String uuid, String identifier) {
-        Thread multiThreaded = new Thread(() -> playerCapes.put(uuid, CosmeticManager.getCape(identifier).clone()));
-        multiThreaded.start();
     }
 
     private record StandardCapeDownloader(EventAddPlayer playerJoin) implements Runnable {

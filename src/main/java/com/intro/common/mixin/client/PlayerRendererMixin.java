@@ -64,11 +64,13 @@ public abstract class PlayerRendererMixin extends LivingEntityRenderer<AbstractC
             int bitShiftedOpacity = (int)(backgroundOpacity * 255.0F) << 24;
             Font font = this.getFont();
             float h = (float)(-font.width(component) / 2);
-            font.drawInBatch(component, h, (float)deadmauOffset, color, false, matrix4f, multiBufferSource, discrete, bitShiftedOpacity, light);
             if (discrete) {
                 // use default if player is behind a wall to not make sudo-wallhack
-                font.drawInBatch(component, h, (float)deadmauOffset, -1, false, matrix4f, multiBufferSource, false, 0, light);
+                font.drawInBatch(component, h, (float)deadmauOffset, color, false, matrix4f, multiBufferSource, false, 0, light);
+            } else {
+                font.drawInBatch(component, h, (float)deadmauOffset, -1, false, matrix4f, multiBufferSource, false, bitShiftedOpacity, light);
             }
+
 
             poseStack.popPose();
         }

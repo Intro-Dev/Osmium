@@ -3,14 +3,13 @@ package com.intro.client.render.drawables;
 import com.intro.client.OsmiumClient;
 import com.intro.client.render.color.Color;
 import com.intro.client.render.color.Colors;
+import com.intro.client.util.ExecutionUtil;
 import com.intro.common.config.Options;
 import com.intro.common.config.options.ElementPositionOption;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
 
 import java.util.TimerTask;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -28,11 +27,10 @@ public class CpsDisplay extends Scalable {
 
     private final Minecraft mc = Minecraft.getInstance();
 
-    private final ScheduledExecutorService removeClicksExecutor = Executors.newScheduledThreadPool(1);
 
     public void onClick() {
         cps.incrementAndGet();
-        removeClicksExecutor.schedule(new RemoveClicksTask(), 1, TimeUnit.SECONDS);
+        ExecutionUtil.submitScheduledTask(new RemoveClicksTask(), 1, TimeUnit.SECONDS);
     }
 
     protected CpsDisplay(int color) {

@@ -18,6 +18,9 @@ public class RenderManager {
 
     public static boolean shouldRenderHud = true;
 
+    // in external class because mixin hates me
+    public static double scrollOffset = 0d;
+
 
     public static void initDrawables() {
          addDrawable(ArmorDisplay.getInstance());
