@@ -21,7 +21,6 @@ public class RenderManager {
     // in external class because mixin hates me
     public static double scrollOffset = 0d;
 
-
     public static void initDrawables() {
          addDrawable(ArmorDisplay.getInstance());
          addDrawable(StatusEffectDisplay.getInstance());

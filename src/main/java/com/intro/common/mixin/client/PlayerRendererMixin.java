@@ -35,7 +35,7 @@ public abstract class PlayerRendererMixin extends LivingEntityRenderer<AbstractC
         this.addLayer(new ElytraRenderer<>(this, ctx.getModelSet()));
     }
 
-    @Inject(method = "renderNameTag", at = @At(value = "INVOKE", target = "net/minecraft/client/renderer/entity/LivingEntityRenderer.renderNameTag(Lnet/minecraft/world/entity/Entity;Lnet/minecraft/network/chat/Component;Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;I)V"))
+    @Inject(method = "renderNameTag", at = @At(value = "INVOKE", target = "net/minecraft/client/renderer/entity/LivingEntityRenderer.renderNameTag(Lnet/minecraft/world/entity/Entity;Lnet/minecraft/network/chat/Component;Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;I)V", ordinal = 1))
     public void renderLevelHead(AbstractClientPlayer abstractClientPlayer, Component component, PoseStack stack, MultiBufferSource multiBufferSource, int i, CallbackInfo ci) {
         if(HypixelAbstractionLayer.canUseHypixelService()) {
             stack.pushPose();

@@ -9,7 +9,8 @@ public enum EventType {
     EVENT_SETTINGS_CHANGE(5),
     EVENT_SPAWN_ENTITY(6),
     EVENT_START_GAME(7),
-    EVENT_TICK(8);
+    EVENT_TICK(8),
+    EVENT_RECEIVE_CHAT_MESSAGE(9);
 
     private final int value;
 

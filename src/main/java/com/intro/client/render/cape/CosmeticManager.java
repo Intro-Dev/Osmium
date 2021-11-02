@@ -64,8 +64,8 @@ public class CosmeticManager {
 
     private static final Minecraft mc = Minecraft.getInstance();
 
-    private static void sendToast(Minecraft client, Component title, Component description) {
-        client.getToasts().addToast(SystemToast.multiline(client, SystemToast.SystemToastIds.PACK_LOAD_FAILURE, title, description));
+    private static void sendToast(Component title, Component description) {
+        CosmeticManager.mc.getToasts().addToast(SystemToast.multiline(CosmeticManager.mc, SystemToast.SystemToastIds.PACK_LOAD_FAILURE, title, description));
     }
 
     public static void put(String id, Cape cape) {
@@ -118,7 +118,7 @@ public class CosmeticManager {
             }
         } catch (Exception e) {
             e.printStackTrace();
-            sendToast(mc, new TranslatableComponent("osmium_failed_cape_load_title"), new TranslatableComponent("osmium_failed_cape_load"));
+            sendToast(new TranslatableComponent("osmium_failed_cape_load_title"), new TranslatableComponent("osmium_failed_cape_load"));
         }
     }
 
@@ -131,7 +131,8 @@ public class CosmeticManager {
         InputStream manifestFile = file.getInputStream(file.getEntry(Util.getZipFileSystemPrefix(file) + "/manifest.json"));
 
         JsonReader reader = new JsonReader(new InputStreamReader(manifestFile));
-        JsonObject manifest = (JsonObject) JsonParser.parseReader(reader);
+        JsonParser parser = new JsonParser();
+        JsonObject manifest = (JsonObject) parser.parse(reader);
 
         List<Cape> returns = new ArrayList<>();
 
@@ -147,7 +148,7 @@ public class CosmeticManager {
                 returns.add(new Cape(new DynamicAnimation(NativeImage.read(capeImage), creator + "-" + identifier, 64 ,32, frameDelay), false, animated, "cape pack", creator + "-" + identifier, creator));
             } catch (Exception e) {
                 e.printStackTrace();
-                sendToast(mc, new TranslatableComponent("osmium_failed_cape_load_title"), new TranslatableComponent("osmium_failed_cape_load"));
+                sendToast(new TranslatableComponent("osmium_failed_cape_load_title"), new TranslatableComponent("osmium_failed_cape_load"));
             }
         }
 
@@ -172,10 +173,10 @@ public class CosmeticManager {
     }
 
     public void handleEvents(Event event) {
-        if (event instanceof EventAddPlayer) {
-            if(Objects.equals(((EventAddPlayer) event).entity.getStringUUID(), Minecraft.getInstance().player.getStringUUID())) {
+        if (event instanceof EventAddPlayer eventAddPlayer) {
+            if(Objects.equals(eventAddPlayer.entity.getStringUUID(), mc.player.getStringUUID())) {
                 if(CosmeticManager.getPreLoadedPlayerCape() != null) {
-                    CosmeticManager.playerCapes.put(Minecraft.getInstance().player.getStringUUID(), CosmeticManager.getPreLoadedPlayerCape());
+                    CosmeticManager.playerCapes.put(mc.player.getStringUUID(), CosmeticManager.getPreLoadedPlayerCape());
                 }
             } else {
                 capeDownloaderService.execute(new CosmeticManager.StandardCapeDownloader((EventAddPlayer) event));
@@ -227,8 +228,8 @@ public class CosmeticManager {
         if(image.getWidth() == 64) {
             return image;
         }
-        NativeImage subImage1 = TextureUtil.subImage(image, 0, 0, 32, 64);
-        NativeImage subImage2 = TextureUtil.subImage(image, 32, 0, 32, 64);
+        NativeImage subImage1 = TextureUtil.subImage(image, 0, 0, image.getWidth() / 2, 64);
+        NativeImage subImage2 = TextureUtil.subImage(image, image.getWidth() / 2, 0, image.getWidth() / 2, 64);
         return TextureUtil.stitchImagesOnX(subImage1, subImage2);
     }
 
@@ -251,13 +252,6 @@ public class CosmeticManager {
             if(playerCapes.get(playerJoin.entity.getStringUUID()) == null) {
                 setCape(playerJoin.entity.getStringUUID(), "https://minecraftcapes.net/profile/" + playerJoin.entity.getStringUUID().replace("-", "") + "/cape/map", false);
             }
-        }
-    }
-
-    private record CustomCapeDownloader(String uuid, String url, boolean animated) implements Runnable {
-
-        public void run() {
-            setCape(uuid, url, animated);
         }
     }
 

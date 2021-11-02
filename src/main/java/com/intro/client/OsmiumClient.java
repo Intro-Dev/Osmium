@@ -1,9 +1,6 @@
 package com.intro.client;
 
-import com.intro.client.module.EventListenerSupplier;
-import com.intro.client.module.FullBright;
-import com.intro.client.module.Gui;
-import com.intro.client.module.ToggleSneak;
+import com.intro.client.module.*;
 import com.intro.client.module.event.Event;
 import com.intro.client.module.event.EventType;
 import com.intro.client.network.ClientNetworkHandler;
@@ -51,6 +48,7 @@ public class OsmiumClient implements ClientModInitializer {
         EVENT_BUS.registerCallback(PingDisplay.getInstance()::onEvent, EventType.EVENT_TICK);
         EVENT_BUS.registerCallback(cosmeticManager::tickCapes, EventType.EVENT_TICK);
         EVENT_BUS.registerCallback(HypixelAbstractionLayer::handleDisconnectEvents, EventType.EVENT_REMOVE_PLAYER);
+        EVENT_BUS.registerCallback(AutoGG::onEvent, EventType.EVENT_RECEIVE_CHAT_MESSAGE);
     }
 
     public void registerKeyBindings() {
@@ -68,6 +66,7 @@ public class OsmiumClient implements ClientModInitializer {
         ClientNetworkHandler.registerPackets();
         RenderManager.initDrawables();
         HypixelAbstractionLayer.loadApiKey();
+        AutoGG.setupTriggers();
         runningLatestVersion = Util.isRunningLatestVersion();
         System.out.println("Osmium Initialized");
     }
