@@ -80,5 +80,6 @@
   "osmium.cape_options": "Cape Optionen",
   "osmium_failed_cape_load": "Cape Paket konnte nicht geladen werden!",
   "osmium_failed_cape_load_title": "Fehler beim laden der Capes!",
-  "osmium.refresh_capes": "Übersicht neu laden"
+  "osmium.refresh_capes": "Übersicht neu laden",
+  "osmium.level": "Level: "
 }
