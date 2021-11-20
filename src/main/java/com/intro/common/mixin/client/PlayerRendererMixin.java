@@ -1,9 +1,11 @@
 package com.intro.common.mixin.client;
 
+import com.intro.client.OsmiumClient;
 import com.intro.client.render.cape.CapeRenderer;
 import com.intro.client.render.cape.ElytraRenderer;
 import com.intro.client.render.color.Colors;
 import com.intro.client.util.HypixelAbstractionLayer;
+import com.intro.common.config.Options;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Matrix4f;
 import net.minecraft.client.Minecraft;
@@ -37,7 +39,7 @@ public abstract class PlayerRendererMixin extends LivingEntityRenderer<AbstractC
 
     @Inject(method = "renderNameTag", at = @At(value = "INVOKE", target = "net/minecraft/client/renderer/entity/LivingEntityRenderer.renderNameTag(Lnet/minecraft/world/entity/Entity;Lnet/minecraft/network/chat/Component;Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;I)V", ordinal = 1))
     public void renderLevelHead(AbstractClientPlayer abstractClientPlayer, Component component, PoseStack stack, MultiBufferSource multiBufferSource, int i, CallbackInfo ci) {
-        if(HypixelAbstractionLayer.canUseHypixelService()) {
+        if(HypixelAbstractionLayer.canUseHypixelService() && OsmiumClient.options.getBooleanOption(Options.LevelHeadEnabled).variable) {
             stack.pushPose();
             stack.translate(0, 0.25, 0);
             try {

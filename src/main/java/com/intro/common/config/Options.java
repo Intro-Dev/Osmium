@@ -113,6 +113,8 @@ public class Options {
     public static final String ShowOtherPlayersCapes = "ShowOtherPlayersCapes";
     public static final String SetCape = "SetCape";
     public static final String HypixelApiKey = "HypixelApiKey";
+    public static final String LevelHeadEnabled = "LevelHeadEnabled";
+    public static final String AutoGGEnabled = "AutoGGEnabled";
 
 
 
@@ -166,6 +168,9 @@ public class Options {
         put(ShowOtherPlayersCapes, new BooleanOption(ShowOtherPlayersCapes, true));
         put(SetCape, new StringOption(SetCape, ""));
         put(HypixelApiKey, new StringOption(HypixelApiKey, ""));
+        put(LevelHeadEnabled, new BooleanOption(LevelHeadEnabled, false));
+        put(AutoGGEnabled, new BooleanOption(AutoGGEnabled, false));
+
     }
 
     public HashMap<String, Option> getValues() {

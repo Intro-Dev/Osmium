@@ -10,7 +10,6 @@ import com.intro.client.module.event.EventAddPlayer;
 import com.intro.client.module.event.EventRemovePlayer;
 import com.intro.client.render.texture.DynamicAnimation;
 import com.intro.client.util.TextureUtil;
-import com.intro.common.ModConstants;
 import com.intro.common.config.Options;
 import com.intro.common.util.Util;
 import com.mojang.blaze3d.platform.NativeImage;
@@ -77,6 +76,9 @@ public class CosmeticManager {
     }
 
     public static void refresh() {
+        for(Cape cape : capes.values()) {
+            cape.free();
+        }
         capes.clear();
         genCapes();
     }
@@ -175,8 +177,9 @@ public class CosmeticManager {
     public void handleEvents(Event event) {
         if (event instanceof EventAddPlayer eventAddPlayer) {
             if(Objects.equals(eventAddPlayer.entity.getStringUUID(), mc.player.getStringUUID())) {
+                capeDownloaderService.execute(new CosmeticManager.StandardCapeDownloader((EventAddPlayer) event));
                 if(CosmeticManager.getPreLoadedPlayerCape() != null) {
-                    CosmeticManager.playerCapes.put(mc.player.getStringUUID(), CosmeticManager.getPreLoadedPlayerCape());
+                    // CosmeticManager.playerCapes.put(mc.player.getStringUUID(), CosmeticManager.getPreLoadedPlayerCape());
                 }
             } else {
                 capeDownloaderService.execute(new CosmeticManager.StandardCapeDownloader((EventAddPlayer) event));
@@ -224,13 +227,22 @@ public class CosmeticManager {
      * @param image Source image
      * @return Parsed Image
      */
+
     public static NativeImage parseOptifineCape(NativeImage image) {
-        if(image.getWidth() == 64) {
-            return image;
+        int imageWidth = 64;
+        int imageHeight = 32;
+        int imageSrcWidth = image.getWidth();
+        int imageSrcHeight = image.getHeight();
+
+        while (imageWidth < imageSrcWidth || imageHeight < imageSrcHeight)
+        {
+            imageWidth *= 2;
+            imageHeight *= 2;
         }
-        NativeImage subImage1 = TextureUtil.subImage(image, 0, 0, image.getWidth() / 2, 64);
-        NativeImage subImage2 = TextureUtil.subImage(image, image.getWidth() / 2, 0, image.getWidth() / 2, 64);
-        return TextureUtil.stitchImagesOnX(subImage1, subImage2);
+
+        NativeImage subImage = TextureUtil.subImage(image, 0, 0, imageWidth, imageHeight);
+        image.close();
+        return subImage;
     }
 
 
@@ -245,6 +257,7 @@ public class CosmeticManager {
     private record StandardCapeDownloader(EventAddPlayer playerJoin) implements Runnable {
 
         public void run() {
+            /*
             if(ModConstants.DEVELOPER_UUIDS.contains(playerJoin.entity.getStringUUID())) {
                 setCapeFromIdentifier(playerJoin.entity.getStringUUID(), "osmium_logo_cape");
             }
@@ -252,6 +265,9 @@ public class CosmeticManager {
             if(playerCapes.get(playerJoin.entity.getStringUUID()) == null) {
                 setCape(playerJoin.entity.getStringUUID(), "https://minecraftcapes.net/profile/" + playerJoin.entity.getStringUUID().replace("-", "") + "/cape/map", false);
             }
+
+             */
+            // setCape(mc.player.getStringUUID(), "http://s.optifine.net/capes/Agreeably.png", false);
         }
     }
 

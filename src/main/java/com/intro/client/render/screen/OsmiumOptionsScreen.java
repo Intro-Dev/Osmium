@@ -2,10 +2,7 @@ package com.intro.client.render.screen;
 
 import com.intro.client.OsmiumClient;
 import com.intro.client.render.color.Color;
-import com.intro.client.render.widget.BooleanButtonWidget;
-import com.intro.client.render.widget.EnumSelectWidget;
 import com.intro.client.util.OptionUtil;
-import com.intro.common.config.Options;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.Util;
@@ -65,37 +62,27 @@ public class OsmiumOptionsScreen extends Screen {
         }
         bakedMaxAnim = 57 / mc.options.guiScale;
 
-        BooleanButtonWidget fullBrightWidget = new BooleanButtonWidget(this.width / 2 - 275, this.height / 4 + 80 + globalOffset, 150, 20, Options.FullbrightEnabled, "osmium.options.full_bright_");
-        BooleanButtonWidget hurtBobWidget = new BooleanButtonWidget(this.width / 2 + 125, this.height / 4 + 80 + globalOffset, 150, 20, Options.HurtbobbingEnabled, "osmium.options.hurt_bobbing_");
-        BooleanButtonWidget noFireWidget = new BooleanButtonWidget(this.width / 2 - 275, this.height / 4 + 120 + globalOffset, 150, 20, Options.NoFireEnabled, "osmium.options.no_fire_");
-        Button openWidgetScreen = new Button(this.width / 2 - 75, this.height / 4 + 160 + globalOffset, 150, 20, new TranslatableComponent("osmium.options.widgets_screen"), button -> mc.setScreen(new OsmiumWidgetsScreen(this)));
-        EnumSelectWidget smoothSneakWidget = new EnumSelectWidget(this.width / 2 + 125, this.height / 4 + 120 + globalOffset, 150, 20, Options.SneakMode, "osmium.options.sneak_");
-
-        Button openVideoOptions = new Button(this.width / 2 - 75, this.height / 4 + 120 + globalOffset, 150, 20, new TranslatableComponent("osmium.options.video_options"), (Button) -> mc.setScreen(new OsmiumVideoOptionsScreen(this)));
+        Button openGeneralUtilScreen  = new Button(this.width / 2 - 275, this.height / 4 + 80 + globalOffset, 150, 20, new TranslatableComponent("osmium.options.general_mods"), button -> mc.setScreen(new OsmiumGeneralUtilityOptionsScreen(this)));
+        Button openWidgetScreen = new Button(this.width / 2 - 75, this.height / 4 + 80 + globalOffset, 150, 20, new TranslatableComponent("osmium.options.widgets_screen"), button -> mc.setScreen(new OsmiumWidgetsScreen(this)));
+        Button openVideoOptions = new Button(this.width / 2 + 125, this.height / 4 + 80 + globalOffset, 150, 20, new TranslatableComponent("osmium.options.video_options"), (Button) -> mc.setScreen(new OsmiumVideoOptionsScreen(this)));
+        Button openGuiEditing = new Button(this.width / 2 - 275, this.height / 4 + 120 + globalOffset, 150, 20, new TranslatableComponent("osmium.gui_edit.title"), (Button) -> mc.setScreen(new OsmiumGuiEditScreen(this)));
+        Button openHypixelScreen = new Button(this.width / 2+ 125, this.height / 4 + 120 + globalOffset, 150, 20, new TranslatableComponent("osmium.options.hypixel_mods"), (Button) -> mc.setScreen(new OsmiumHypixelModsScreen(this)));
 
         Button backButton = new Button(this.width / 2 - 100, this.height / 4 + 225 + globalOffset, 200, 20, new TranslatableComponent("osmium.options.video_options.back"), (Button) -> mc.setScreen(parent));
-
-        Button openGuiEditing = new Button(this.width / 2 - 275, this.height / 4 + 160 + globalOffset, 150, 20, new TranslatableComponent("osmium.gui_edit.title"), (Button) -> mc.setScreen(new OsmiumGuiEditScreen()));
+        Button openModrinthWidget = new Button(this.width / 2 - 75, this.height / 4 + 120 + globalOffset, 150, 20, new TranslatableComponent("osmium.open_credits"), this::openCredits);
 
         if(mc.level == null) {
             openGuiEditing.active = false;
         }
 
-        Button toggleSneakToggleWidget = new Button(this.width / 2 - 75, this.height / 4 + 80 + globalOffset, 150, 20, new TranslatableComponent("osmium.options.toggle_sneak_settings"), (Button) -> mc.setScreen(new OsmiumToggleSneakOptionsScreen(this)));
 
-        Button openGithubWidget = new Button(this.width / 2 + 125, this.height / 4 + 160 + globalOffset, 150, 20, new TranslatableComponent("osmium.open_credits"), this::openCredits);
-
-
-        this.addRenderableWidget(fullBrightWidget);
-        this.addRenderableWidget(toggleSneakToggleWidget);
-        this.addRenderableWidget(hurtBobWidget);
-        this.addRenderableWidget(noFireWidget);
-        this.addRenderableWidget(smoothSneakWidget);
+        this.addRenderableWidget(openHypixelScreen);
+        this.addRenderableWidget(openGeneralUtilScreen);
         this.addRenderableWidget(openVideoOptions);
         this.addRenderableWidget(backButton);
         this.addRenderableWidget(openGuiEditing);
         this.addRenderableWidget(openWidgetScreen);
-        this.addRenderableWidget(openGithubWidget);
+        this.addRenderableWidget(openModrinthWidget);
     }
 
     @Override
