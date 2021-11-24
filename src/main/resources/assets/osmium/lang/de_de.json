@@ -82,12 +82,12 @@
   "osmium_failed_cape_load_title": "Fehler beim laden der Capes!",
   "osmium.refresh_capes": "Übersicht neu laden",
   "osmium.level": "Level: ",
-  "osmium.options.general_mods": "General",
+  "osmium.options.general_mods": "Allgemeine Mods",
   "osmium.options.hypixel_mods": "Hypixel Mods",
-  "osmium.options.level_head_enabled": "Aktiviert",
-  "osmium.options.level_head_disabled": "Deaktiviert",
-  "osmium.options.auto_gg_enabled": "Aktiviert",
-  "osmium.options.auto_gg_disabled": "Deaktiviert",
-  "osmium.options.api_key": "Hypixel API Schlüssel"
+  "osmium.options.level_head_enabled": "LevelHead: Aktiviert",
+  "osmium.options.level_head_disabled": "LevelHead: Deaktiviert",
+  "osmium.options.auto_gg_enabled": "AutoGG: Aktiviert",
+  "osmium.options.auto_gg_disabled": "AutoGG: Deaktiviert",
+  "osmium.options.api_key": "Hypixel API Schlüssel: "
 
 }
