@@ -81,13 +81,13 @@
   "osmium_failed_cape_load": "Cape Paket konnte nicht geladen werden!",
   "osmium_failed_cape_load_title": "Fehler beim laden der Capes!",
   "osmium.refresh_capes": "Übersicht neu laden",
-  "osmium.level": "PLACEHOLDER",
-  "osmium.options.general_mods": "PLACEHOLDER",
-  "osmium.options.hypixel_mods": "PLACEHOLDER",
-  "osmium.options.level_head_enabled": "PLACEHOLDER",
-  "osmium.options.level_head_disabled": "PLACEHOLDER",
-  "osmium.options.auto_gg_enabled": "PLACEHOLDER",
-  "osmium.options.auto_gg_disabled": "PLACEHOLDER",
-  "osmium.options.api_key": "PLACEHOLDER"
+  "osmium.level": "Level: ",
+  "osmium.options.general_mods": "General",
+  "osmium.options.hypixel_mods": "Hypixel Mods",
+  "osmium.options.level_head_enabled": "Aktiviert",
+  "osmium.options.level_head_disabled": "Deaktiviert",
+  "osmium.options.auto_gg_enabled": "Aktiviert",
+  "osmium.options.auto_gg_disabled": "Deaktiviert",
+  "osmium.options.api_key": "Hypixel API Schlüssel"
 
 }
