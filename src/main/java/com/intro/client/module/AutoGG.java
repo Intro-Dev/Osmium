@@ -8,6 +8,7 @@ import com.google.gson.stream.JsonReader;
 import com.intro.client.OsmiumClient;
 import com.intro.client.module.event.Event;
 import com.intro.client.module.event.EventReceiveChatMessage;
+import com.intro.common.config.Options;
 import net.minecraft.client.Minecraft;
 
 import java.io.IOException;
@@ -50,7 +51,7 @@ public class AutoGG {
     }
 
     public static void onEvent(Event event) {
-        if(System.currentTimeMillis() - lastGG > 1000) {
+        if(System.currentTimeMillis() - lastGG > 1000 && OsmiumClient.options.getBooleanOption(Options.AutoGGEnabled).variable) {
             for(Pattern pattern : triggers) {
                 Matcher matcher = pattern.matcher(((EventReceiveChatMessage) event).getComponent().getString());
                 if(matcher.matches()) {

@@ -7,6 +7,8 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.SimpleTexture;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.ResourceManager;
+import net.minecraft.util.Mth;
+import org.lwjgl.system.MemoryUtil;
 
 public class TextureUtil {
 
@@ -30,15 +32,32 @@ public class TextureUtil {
         return SimpleTexture.TextureImage.load(resourceManager, ((ResourceTextureAccessor) texture).getLocation());
     }
 
+    /**
+     * <p>Current implementation is very fast, but very memory unsafe</p>
+     * @param image the source image
+     * @param x starting x of the subImage
+     * @param y starting y of the subImage
+     * @param width width of the subImage
+     * @param height height of the subImage
+     * @return the subImage
+     */
     public static NativeImage subImage(NativeImage image, int x, int y, int width, int height) {
+        x = Mth.clamp(x, 0, image.getWidth());
+        width = Mth.clamp(width, 0, image.getWidth());
+        y = Mth.clamp(y, 0, image.getHeight());
+        height = Mth.clamp(height, 0, image.getHeight());
+
         NativeImage subImage = new NativeImage(NativeImage.Format.RGBA, width, height, false);
+
         int subY = 0;
-        for(int i = y; i < y + height; i++) {
-            int subX = 0;
-            for(int j = x; j < x + width; j++) {
-                subImage.setPixelRGBA(subX, subY, image.getPixelRGBA(j, i));
-                subX++;
-            }
+
+        for(int i = y; i < y + (height); i++) {
+            // memory hack
+            // uses a single copy per line, as opposed to the massive amounts of reads and writes previously used
+            long imageOffset = (x + (long) i * image.getWidth()) * 4L;
+            long subImageOffset = ((long) subY * width) * 4L;
+            // System.out.println("copying " + image.pixels + imageOffset + " to " + subImage.pixels + subImageOffset + ", bytes: " + width * 4L + ", copyOpNum: " + subY);
+            MemoryUtil.memCopy(image.pixels + imageOffset, subImage.pixels + subImageOffset, width * 4L);
             subY++;
         }
         return subImage;
@@ -51,24 +70,19 @@ public class TextureUtil {
      * @return The stitched image
      */
     public static NativeImage stitchImagesOnX(NativeImage image1, NativeImage image2) {
-        NativeImage stitchedImage = new NativeImage(image1.getWidth() + image2.getWidth(), image1.getHeight(), false);
-
+        /*
         // fill data for image1
         for(int y = 0; y < image1.getHeight(); y++) {
-            for(int x = 0; x < image1.getWidth(); x++) {
-                stitchedImage.setPixelRGBA(x, y, image1.getPixelRGBA(x, y));
-            }
-        }
+            long imageOffset = ((long) y * image1.getWidth()) * 4L;
+            long stitchedImageOffset = ((long) y * image1.getWidth()) * 4L;
+            MemoryUtil.memCopy(image1.pixels + imageOffset, stitchedImage.pixels + stitchedImageOffset, image1.getWidth() * 4L);
+            imageOffset = ((long) y * image2.getWidth()) * 4L;
+            stitchedImageOffset = ((long) y * image2.getWidth()) * 4L;
+            MemoryUtil.memCopy(image1.pixels + imageOffset, stitchedImage.pixels + stitchedImageOffset, image2.getWidth() * 4L);
 
-        // fill data for image 2
-        for(int y = 0; y < image2.getHeight(); y++) {
-            for(int x = image1.getWidth(); x < image1.getWidth() + image2.getWidth(); x++) {
-                stitchedImage.setPixelRGBA(x, y, image2.getPixelRGBA(x - image1.getWidth(), y));
-            }
-        }
 
-        return stitchedImage;
-
+         */
+        return new NativeImage(image1.getWidth() + image2.getWidth(), image1.getHeight(), false);
     }
 
 }

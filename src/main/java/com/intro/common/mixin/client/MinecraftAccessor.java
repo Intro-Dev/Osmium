@@ -8,7 +8,9 @@ import org.spongepowered.asm.mixin.gen.Accessor;
 public interface MinecraftAccessor {
 
     @Accessor
-    int getFps();
+    static int getFps() {
+        return 0;
+    }
 
 
 }

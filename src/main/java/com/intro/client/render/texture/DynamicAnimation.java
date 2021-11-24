@@ -83,6 +83,7 @@ public class DynamicAnimation implements Cloneable {
         for(ResourceLocation location : frames.values()) {
             mc.getTextureManager().release(location);
         }
+        image.close();
     }
 
     @Override

@@ -38,7 +38,7 @@ public class FpsDisplay extends Scalable {
                 firstRun = false;
             }
             fill(stack, posX, posY, posX + width, posY + height, BG_COLOR);
-            drawCenteredString(stack, mc.font, ((MinecraftAccessor) Minecraft.getInstance()).getFps() + " fps", posX + (width / 2), posY + (height / 4), color);
+            drawCenteredString(stack, mc.font, MinecraftAccessor.getFps() + " fps", posX + (width / 2), posY + (height / 4), color);
         } else {
             this.visible = false;
         }

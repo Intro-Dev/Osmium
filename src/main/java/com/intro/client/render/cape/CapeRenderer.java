@@ -74,15 +74,20 @@ public class CapeRenderer extends RenderLayer<AbstractClientPlayer, PlayerModel<
                     RenderSystem.setShader(GameRenderer::getPositionTexShader);
                     Cape playerCape = CosmeticManager.playerCapes.get(entity.getStringUUID());
                     ResourceLocation capeTexture = playerCape.getFrameTexture();
-                    RenderType capeRenderType = RenderType.entitySolid(capeTexture);
-                    if (OsmiumClient.options.getEnumOption(Options.CustomCapeMode).variable == CapeRenderingMode.OPTIFINE && playerCape.isOptifine) {
-                        final VertexConsumer vertexConsumer = multiBuffer.getBuffer(capeRenderType);
-                        // the way mojang renders capes is horrifically inefficient
-                        // and the thing is it would require a custom implementation of half the rendering engine to do it any other way
-                        this.getParentModel().renderCloak(stack, vertexConsumer, light, OverlayTexture.NO_OVERLAY);
-                    } else if(OsmiumClient.options.getEnumOption(Options.CustomCapeMode).variable == CapeRenderingMode.ALL) {
-                        final VertexConsumer vertexConsumer = multiBuffer.getBuffer(capeRenderType);
-                        this.getParentModel().renderCloak(stack, vertexConsumer, light, OverlayTexture.NO_OVERLAY);
+                    // check if cape texture is null
+                    // used to not crash until I optimised sub imaging
+                    // now it creates the texture so fast the render thread can't keep up
+                    if(capeTexture != null) {
+                        RenderType capeRenderType = RenderType.entitySolid(capeTexture);
+                        if (OsmiumClient.options.getEnumOption(Options.CustomCapeMode).variable == CapeRenderingMode.OPTIFINE && playerCape.isOptifine) {
+                            final VertexConsumer vertexConsumer = multiBuffer.getBuffer(capeRenderType);
+                            // the way mojang renders capes is horrifically inefficient
+                            // and the thing is it would require a custom implementation of half the rendering engine to do it any other way
+                            this.getParentModel().renderCloak(stack, vertexConsumer, light, OverlayTexture.NO_OVERLAY);
+                        } else if(OsmiumClient.options.getEnumOption(Options.CustomCapeMode).variable == CapeRenderingMode.ALL) {
+                            final VertexConsumer vertexConsumer = multiBuffer.getBuffer(capeRenderType);
+                            this.getParentModel().renderCloak(stack, vertexConsumer, light, OverlayTexture.NO_OVERLAY);
+                        }
                     }
                     RenderSystem.disableDepthTest();
                 }
