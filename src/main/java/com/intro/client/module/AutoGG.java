@@ -19,8 +19,6 @@ import java.util.HashSet;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static com.google.gson.JsonParser.parseReader;
-
 public class AutoGG {
 
     private static final HashSet<Pattern> triggers = new HashSet<>();
@@ -35,7 +33,8 @@ public class AutoGG {
             connection.setRequestMethod("GET");
             connection.connect();
             JsonReader reader = new JsonReader(new InputStreamReader(connection.getInputStream()));
-            JsonElement rootElement = parseReader(reader);
+            JsonParser parser = new JsonParser();
+            JsonElement rootElement = parser.parse(reader);
             JsonObject responseJson = rootElement.getAsJsonObject();
             JsonObject hypixelTriggers = responseJson.get("servers").getAsJsonArray().get(0).getAsJsonObject();
             JsonArray elements = hypixelTriggers.get("triggers").getAsJsonArray();
