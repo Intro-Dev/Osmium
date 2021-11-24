@@ -5,7 +5,7 @@ import com.intro.client.render.widget.BooleanButtonWidget;
 import com.intro.client.util.HypixelAbstractionLayer;
 import com.intro.client.util.OptionUtil;
 import com.intro.common.config.Options;
-import com.intro.common.config.options.StringOption;
+import com.intro.common.config.options.Option;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
@@ -61,11 +61,11 @@ public class OsmiumHypixelModsScreen extends Screen {
         // max uuid length is 36
         apiEnterBox.setMaxLength(36);
         apiEnterBox.setSuggestion("Enter Hypixel Api Key");
-        apiEnterBox.setValue(OsmiumClient.options.getStringOption(Options.HypixelApiKey).variable);
+        apiEnterBox.setValue(OsmiumClient.options.getStringOption(Options.HypixelApiKey).get());
         // doesn't actually provide the string to the consumer
         // thanks mojang
         apiEnterBox.setResponder((string) -> {
-            OsmiumClient.options.put(Options.HypixelApiKey, new StringOption(Options.HypixelApiKey, apiEnterBox.getValue()));
+            OsmiumClient.options.put(Options.HypixelApiKey, new Option<>(Options.HypixelApiKey, apiEnterBox.getValue()));
             try {
                 HypixelAbstractionLayer.loadApiKey();
             } catch (IllegalArgumentException ignored) {

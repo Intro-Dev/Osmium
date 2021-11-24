@@ -28,9 +28,9 @@ public class CameraMixin {
     public void changeEyeHeight(CallbackInfo info) {
         // smooth but no squish
         if (this.entity != null) {
-            if (OsmiumClient.options.getEnumOption(Options.SneakMode).variable == SneakMode.INSTANT) {
+            if (OsmiumClient.options.getEnumOption(Options.SneakMode).get() == SneakMode.INSTANT) {
                 this.eyeHeight = this.entity.getEyeHeight();
-            } else if (OsmiumClient.options.getEnumOption(Options.SneakMode).variable == SneakMode.SMOOTH) {
+            } else if (OsmiumClient.options.getEnumOption(Options.SneakMode).get() == SneakMode.SMOOTH) {
                 this.eyeHeight = (float) Mth.lerp(0.8, this.eyeHeight, this.entity.getEyeHeight());
             } else {
                 this.eyeHeight += (this.entity.getEyeHeight() - this.eyeHeight) * 0.5F;

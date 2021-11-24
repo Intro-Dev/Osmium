@@ -7,9 +7,10 @@ import com.intro.client.OsmiumClient;
 import com.intro.client.render.cape.Cape;
 import com.intro.client.render.cape.CosmeticManager;
 import com.intro.client.util.OptionUtil;
-import com.intro.common.config.OptionDeserializer;
-import com.intro.common.config.OptionSerializer;
 import com.intro.common.config.options.Option;
+import com.intro.common.config.options.legacy.LegacyOption;
+import com.intro.common.config.options.legacy.LegacyOptionDeserializer;
+import com.intro.common.config.options.legacy.LegacyOptionSerializer;
 import com.intro.common.network.NetworkingConstants;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
@@ -37,8 +38,8 @@ public class ClientNetworkHandler {
             .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
             .setPrettyPrinting()
             .excludeFieldsWithModifiers(Modifier.PRIVATE)
-            .registerTypeAdapter(Option.class, new OptionSerializer())
-            .registerTypeAdapter(Option.class, new OptionDeserializer())
+            .registerTypeAdapter(LegacyOption.class, new LegacyOptionSerializer())
+            .registerTypeAdapter(LegacyOption.class, new LegacyOptionDeserializer())
             .create();
 
     public static void registerPackets() {
@@ -48,9 +49,9 @@ public class ClientNetworkHandler {
             for(int i = 0; i < setCount; i++) {
                 try {
                     String utf = buf.readUtf();
-                    Option option = GSON.fromJson(utf, Option.class);
-                    OsmiumClient.options.putOverwrittenOption(option.identifier, OsmiumClient.options.get(option.identifier));
-                    OsmiumClient.options.put(option.identifier, option);
+                    Option<?> option = GSON.fromJson(utf, Option.class);
+                    OsmiumClient.options.putOverwrittenOption(option.getIdentifier(), OsmiumClient.options.get(option.getIdentifier()));
+                    OsmiumClient.options.put(option.getIdentifier(), option);
                 } catch (Exception e) {
                     e.printStackTrace();
                     OsmiumClient.LOGGER.log(Level.WARN, "Received invalid option data from server!");
@@ -80,8 +81,8 @@ public class ClientNetworkHandler {
 
         ClientPlayConnectionEvents.DISCONNECT.register((handler, client) -> {
             isRunningOsmiumServer = false;
-            for(Option option : OsmiumClient.options.getOverwrittenOptions().values()) {
-                OsmiumClient.options.put(option.identifier, option);
+            for(Option<?> option : OsmiumClient.options.getOverwrittenOptions().values()) {
+                OsmiumClient.options.put(option.getIdentifier(), option);
             }
             OsmiumClient.options.clearOverwrittenOptions();
         });

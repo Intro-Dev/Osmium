@@ -3,9 +3,11 @@ package com.intro.server.api;
 import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.intro.common.config.OptionDeserializer;
-import com.intro.common.config.OptionSerializer;
+import com.intro.common.config.DataFixer;
 import com.intro.common.config.options.Option;
+import com.intro.common.config.options.legacy.LegacyOption;
+import com.intro.common.config.options.legacy.LegacyOptionDeserializer;
+import com.intro.common.config.options.legacy.LegacyOptionSerializer;
 import com.intro.server.OsmiumServer;
 import net.fabricmc.loader.api.FabricLoader;
 import org.apache.logging.log4j.Level;
@@ -24,22 +26,22 @@ public class OptionApi {
             .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
             .setPrettyPrinting()
             .excludeFieldsWithModifiers(Modifier.PRIVATE)
-            .registerTypeAdapter(Option.class, new OptionSerializer())
-            .registerTypeAdapter(Option.class, new OptionDeserializer())
+            .registerTypeAdapter(LegacyOption.class, new LegacyOptionSerializer())
+            .registerTypeAdapter(LegacyOption.class, new LegacyOptionDeserializer())
             .create();
 
-    private static HashMap<String, Option> serverSetOptions = new HashMap<>();
+    private static HashMap<String, Option<?>> serverSetOptions = new HashMap<>();
 
-    public static void addSetOption(Option option) {
-        serverSetOptions.put(option.identifier, option);
+    public static void addSetOption(LegacyOption option) {
+        serverSetOptions.put(option.identifier, DataFixer.fixLegacyOption(option));
         save();
     }
 
-    public static Collection<Option> getServerSetOptions()   {
+    public static Collection<Option<?>> getServerSetOptions()   {
         return serverSetOptions.values().stream().toList();
     }
 
-    public static void removeSetOption(Option option) {
+    public static void removeSetOption(LegacyOption option) {
         serverSetOptions.remove(option.identifier);
         save();
     }
@@ -63,9 +65,7 @@ public class OptionApi {
                 OsmiumServer.LOGGER.log(Level.ALL, "Couldn't find already existing config file, creating new one.");
             }
             FileWriter writer = new FileWriter(file);
-
-            Option[] array = serverSetOptions.values().toArray(new Option[0]);
-
+            Option<?>[] array = serverSetOptions.values().toArray(new Option[0]);
             writer.write(GSON.toJson(array));
             writer.close();
         } catch (Exception e) {
@@ -92,11 +92,11 @@ public class OptionApi {
                 return;
             }
 
-            Option[] array = GSON.fromJson(builder.toString(), Option[].class);
+            Option<?>[] array = GSON.fromJson(builder.toString(), Option[].class);
 
             if(array.length != 0) {
-                for(Option o : array) {
-                    serverSetOptions.put(o.identifier, o);
+                for(Option<?> o : array) {
+                    serverSetOptions.put(o.getIdentifier(), o);
                 }
             }
 

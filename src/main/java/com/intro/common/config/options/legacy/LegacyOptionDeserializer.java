@@ -1,22 +1,21 @@
-package com.intro.common.config;
+package com.intro.common.config.options.legacy;
 
 import com.google.gson.*;
 import com.intro.client.render.color.Color;
 import com.intro.client.util.EnumUtil;
-import com.intro.common.config.options.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.lang.reflect.Type;
 
-public class OptionDeserializer implements JsonDeserializer<Option> {
+public class LegacyOptionDeserializer implements JsonDeserializer<LegacyOption> {
 
     private static final Logger LOGGER = LogManager.getLogger();
 
     @Override
-    public Option deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
+    public LegacyOption deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
         JsonObject src = json.getAsJsonObject();
-        ClassLoader cl = OptionDeserializer.class.getClassLoader();
+        ClassLoader cl = LegacyOptionDeserializer.class.getClassLoader();
         if(src.get("Type").getAsString().equals("BooleanOption")) {
             return new BooleanOption( src.get("Identifier").getAsString(), src.get("Value").getAsBoolean());
         }

@@ -75,7 +75,7 @@ public class ColorOptionWidget extends GuiComponent implements Widget, GuiEventL
         RenderSystem.setShader(GameRenderer::getPositionTexShader);
         RenderSystem.setShaderTexture(0, BAKED_TEXTURE);
         blit(matrices, x, y, 0, 0, width, height, width, height);
-        drawCenteredString(matrices, mc.font, OsmiumClient.options.getColorOption(this.optionId).color.toStringNoAlpha(), x + (width / 2), y + height + 20, 0xffffff);
+        drawCenteredString(matrices, mc.font, OsmiumClient.options.getColorOption(this.optionId).get().toStringNoAlpha(), x + (width / 2), y + height + 20, 0xffffff);
         drawCenteredString(matrices, mc.font, new TranslatableComponent("osmium.widget.color_picker"), x + (width / 2), y - 20, 0xffffff);
     }
 
@@ -91,7 +91,7 @@ public class ColorOptionWidget extends GuiComponent implements Widget, GuiEventL
             bytes = TEXTURE.makePixelArray();
             color = getColorAtLocation(bytes, TEXTURE, (int) vec2.getX(), (int) vec2.getY());
 
-            OsmiumClient.options.getColorOption(this.optionId).color = new Color(color);
+            OsmiumClient.options.getColorOption(this.optionId).set(new Color(color));
         }
         return GuiEventListener.super.mouseClicked(mouseX, mouseY, button);
     }

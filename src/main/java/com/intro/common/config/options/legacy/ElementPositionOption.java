@@ -1,9 +1,8 @@
-package com.intro.common.config.options;
+package com.intro.common.config.options.legacy;
 
-import com.intro.client.OsmiumClient;
 import com.intro.client.util.ElementPosition;
 
-public class ElementPositionOption extends Option {
+public class ElementPositionOption extends LegacyOption {
 
     public ElementPosition elementPosition;
 
@@ -24,12 +23,12 @@ public class ElementPositionOption extends Option {
 
     @Override
     public ElementPositionOption get() {
-        return (ElementPositionOption) OsmiumClient.options.get(this.identifier);
+        throw new UnsupportedOperationException("Tried to call an operation on legacy option: " + this);
     }
 
     @Override
     public void put() {
-        OsmiumClient.options.put(this.identifier, this);
+        throw new UnsupportedOperationException("Tried to call an operation on legacy option: " + this);
     }
 
 

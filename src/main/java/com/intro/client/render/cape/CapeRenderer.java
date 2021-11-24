@@ -34,11 +34,11 @@ public class CapeRenderer extends RenderLayer<AbstractClientPlayer, PlayerModel<
         public void render(PoseStack stack, MultiBufferSource multiBuffer, int light, AbstractClientPlayer entity, float limbAngle, float limbDistance, float tickDelta, float animationProgress, float headYaw, float headPitch) {
         try {
             ItemStack itemStack = entity.getItemBySlot(EquipmentSlot.CHEST);
-            if(OsmiumClient.options.getBooleanOption(Options.ShowOtherPlayersCapes).variable && !Objects.equals(entity.getStringUUID(), Minecraft.getInstance().player.getStringUUID())) {
+            if(OsmiumClient.options.getBooleanOption(Options.ShowOtherPlayersCapes).get() && !Objects.equals(entity.getStringUUID(), Minecraft.getInstance().player.getStringUUID())) {
                 return;
             }
 
-            if(!itemStack.is(Items.ELYTRA) && !entity.isInvisible() && entity.isCapeLoaded() && entity.isModelPartShown(PlayerModelPart.CAPE) && OsmiumClient.options.getEnumOption(Options.CustomCapeMode).variable == CapeRenderingMode.ALL || OsmiumClient.options.getEnumOption(Options.CustomCapeMode).variable == CapeRenderingMode.OPTIFINE){
+            if(!itemStack.is(Items.ELYTRA) && !entity.isInvisible() && entity.isCapeLoaded() && entity.isModelPartShown(PlayerModelPart.CAPE) && OsmiumClient.options.getEnumOption(Options.CustomCapeMode).get() == CapeRenderingMode.ALL || OsmiumClient.options.getEnumOption(Options.CustomCapeMode).get() == CapeRenderingMode.OPTIFINE){
                 Minecraft.getInstance().getProfiler().push("OsmiumCapeRendering");
                 stack.pushPose();
                 stack.translate(0.0D, 0.0D, 0.125D);
@@ -79,12 +79,12 @@ public class CapeRenderer extends RenderLayer<AbstractClientPlayer, PlayerModel<
                     // now it creates the texture so fast the render thread can't keep up
                     if(capeTexture != null) {
                         RenderType capeRenderType = RenderType.entitySolid(capeTexture);
-                        if (OsmiumClient.options.getEnumOption(Options.CustomCapeMode).variable == CapeRenderingMode.OPTIFINE && playerCape.isOptifine) {
+                        if (OsmiumClient.options.getEnumOption(Options.CustomCapeMode).get() == CapeRenderingMode.OPTIFINE && playerCape.isOptifine) {
                             final VertexConsumer vertexConsumer = multiBuffer.getBuffer(capeRenderType);
                             // the way mojang renders capes is horrifically inefficient
                             // and the thing is it would require a custom implementation of half the rendering engine to do it any other way
                             this.getParentModel().renderCloak(stack, vertexConsumer, light, OverlayTexture.NO_OVERLAY);
-                        } else if(OsmiumClient.options.getEnumOption(Options.CustomCapeMode).variable == CapeRenderingMode.ALL) {
+                        } else if(OsmiumClient.options.getEnumOption(Options.CustomCapeMode).get() == CapeRenderingMode.ALL) {
                             final VertexConsumer vertexConsumer = multiBuffer.getBuffer(capeRenderType);
                             this.getParentModel().renderCloak(stack, vertexConsumer, light, OverlayTexture.NO_OVERLAY);
                         }

@@ -1,8 +1,6 @@
-package com.intro.common.config.options;
+package com.intro.common.config.options.legacy;
 
-import com.intro.client.OsmiumClient;
-
-public class DoubleOption extends Option {
+public class DoubleOption extends LegacyOption {
 
     public double variable;
 
@@ -16,12 +14,12 @@ public class DoubleOption extends Option {
 
     @Override
     public DoubleOption get() {
-        return (DoubleOption) OsmiumClient.options.get(this.identifier);
+        throw new UnsupportedOperationException("Tried to call an operation on legacy option: " + this);
     }
 
     @Override
     public void put() {
-        OsmiumClient.options.put(this.identifier, this);
+        throw new UnsupportedOperationException("Tried to call an operation on legacy option: " + this);
     }
 
 

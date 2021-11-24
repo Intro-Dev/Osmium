@@ -1,7 +1,6 @@
 package com.intro.client.render.widget;
 
 import com.intro.client.OsmiumClient;
-import com.intro.common.config.options.DoubleOption;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.AbstractOptionSliderButton;
@@ -19,7 +18,7 @@ public class DoubleSliderWidget extends AbstractOptionSliderButton {
     private final double roundTo;
 
     public DoubleSliderWidget(Minecraft mc, int x, int y, int width, int height, String optionId, String key, double minVal, double maxVal, double roundTo) {
-        super(mc.options, x, y, width, height, OsmiumClient.options.getDoubleOption(optionId).variable);
+        super(mc.options, x, y, width, height, OsmiumClient.options.getDoubleOption(optionId).get());
         this.optionId = optionId;
         this.key = key;
         this.minVal = minVal;
@@ -44,7 +43,7 @@ public class DoubleSliderWidget extends AbstractOptionSliderButton {
         if(!OsmiumClient.options.getOverwrittenOptions().containsKey(optionId)) {
             double scaledVal = (maxVal - minVal) * this.value;
             scaledVal = Mth.clamp(scaledVal, minVal, maxVal);
-            ((DoubleOption) OsmiumClient.options.get(optionId)).variable = Math.round(scaledVal * roundTo) / roundTo;
+            OsmiumClient.options.getDoubleOption(optionId).set(Math.round(scaledVal * roundTo) / roundTo);
         }
     }
 

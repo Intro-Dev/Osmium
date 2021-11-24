@@ -1,20 +1,32 @@
 package com.intro.common.config.options;
 
-public abstract class Option {
+public class Option<T> {
 
-    public final String identifier;
+    private T value;
+    private final String identifier;
 
-    public final String type;
-
-    public Option(String identifier, String type) {
+    public Option(String identifier, T value) {
+        this.value = value;
         this.identifier = identifier;
-        this.type = type;
     }
 
-    public abstract Option get();
+    public T get() {
+        return value;
+    }
 
-    public abstract void put();
+    public void set(T value) {
+        this.value = value;
+    }
 
+    public String getIdentifier() {
+        return identifier;
+    }
 
-
+    @Override
+    public String toString() {
+        return "Option{" +
+                "value=" + value +
+                ", identifier='" + identifier + '\'' +
+                '}';
+    }
 }

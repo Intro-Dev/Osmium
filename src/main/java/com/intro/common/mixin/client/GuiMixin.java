@@ -39,7 +39,7 @@ public class GuiMixin {
     }
     @Inject(at = @At("HEAD"), method = "renderEffects", cancellable = true)
     public void renderStatusEffectOverlay(PoseStack matrixStack, CallbackInfo ci) {
-        if(OsmiumClient.options.getEnumOption(Options.StatusEffectDisplayMode).variable == StatusEffectDisplayMode.CUSTOM)
+        if(OsmiumClient.options.getEnumOption(Options.StatusEffectDisplayMode).get() == StatusEffectDisplayMode.CUSTOM)
             ci.cancel();
     }
 

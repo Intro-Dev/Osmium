@@ -15,7 +15,7 @@ public class GameRendererMixin {
 
     @Inject(at = @At("HEAD"), method = "bobHurt", cancellable = true)
     public void bobViewWhenHurt(PoseStack arg, float f, CallbackInfo info) {
-        if(OsmiumClient.options.getBooleanOption(Options.HurtbobbingEnabled).variable)
+        if(OsmiumClient.options.getBooleanOption(Options.HurtbobbingEnabled).get())
             info.cancel();
     }
 

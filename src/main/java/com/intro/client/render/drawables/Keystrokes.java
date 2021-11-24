@@ -5,7 +5,7 @@ import com.intro.client.render.color.Color;
 import com.intro.client.render.color.Colors;
 import com.intro.client.util.*;
 import com.intro.common.config.Options;
-import com.intro.common.config.options.ElementPositionOption;
+import com.intro.common.config.options.Option;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
 import net.minecraft.client.Minecraft;
@@ -39,7 +39,7 @@ public class Keystrokes extends Scalable {
 
 
     protected Keystrokes() {
-        OsmiumClient.options.getElementPositionOption(Options.KeystrokesPosition).elementPosition.loadToScalable(this);
+        OsmiumClient.options.getElementPositionOption(Options.KeystrokesPosition).get().loadToScalable(this);
         this.width = 212;
         this.height = 138;
 
@@ -60,11 +60,11 @@ public class Keystrokes extends Scalable {
 
     @Override
     public void render(PoseStack stack) {
-        if(OsmiumClient.options.getBooleanOption(Options.KeystrokesEnabled).variable) {
+        if(OsmiumClient.options.getBooleanOption(Options.KeystrokesEnabled).get()) {
             this.visible = true;
 
-            Color temp = OsmiumClient.options.getColorOption(Options.KeystrokesColor).color;
-            temp.setA((int) (OsmiumClient.options.getDoubleOption(Options.KeystrokesAlpha).variable * 255));
+            Color temp = OsmiumClient.options.getColorOption(Options.KeystrokesColor).get();
+            temp.setA((int) (OsmiumClient.options.getDoubleOption(Options.KeystrokesAlpha).get() * 255));
             int BG_COLOR = temp.getInt();
 
             int KEY_DOWN_COLOR;
@@ -73,9 +73,9 @@ public class Keystrokes extends Scalable {
 
             // the gore here
             // :|
-            if(OsmiumClient.options.getBooleanOption(Options.KeystrokesRgb).variable) {
+            if(OsmiumClient.options.getBooleanOption(Options.KeystrokesRgb).get()) {
                 colorGenerator.tick();
-                colorGenerator.setAlpha((int) (OsmiumClient.options.getDoubleOption(Options.KeystrokesAlpha).variable * 255));
+                colorGenerator.setAlpha((int) (OsmiumClient.options.getDoubleOption(Options.KeystrokesAlpha).get() * 255));
 
                 int rgbColorStart = colorGenerator.getStartColor();
                 int rgbColorEnd = colorGenerator.getEndColor();
@@ -134,7 +134,7 @@ public class Keystrokes extends Scalable {
         sKeyTextPos = new Vector2d(sKeyPos.x + (sectionWidth / 2f), sKeyPos.y + (sectionHeight / 4f));
         dKeyTextPos = new Vector2d(dKeyPos.x + (sectionWidth / 2f), dKeyPos.y + (sectionHeight / 4f));
 
-        OsmiumClient.options.put(Options.KeystrokesPosition, new ElementPositionOption(Options.KeystrokesPosition, newX, newY, this.scale));
+        OsmiumClient.options.put(Options.KeystrokesPosition, new Option<>(Options.KeystrokesPosition, new ElementPosition(newX, newY, this.scale)));
     }
 
     public static Keystrokes getInstance() {
@@ -146,6 +146,6 @@ public class Keystrokes extends Scalable {
 
     @Override
     public void onScaleChange(double oldScale, double newScale) {
-        OsmiumClient.options.put(Options.KeystrokesPosition, new ElementPositionOption(Options.KeystrokesPosition, this.posX, this.posY, newScale));
+        OsmiumClient.options.put(Options.KeystrokesPosition, new Option<>(Options.KeystrokesPosition, new ElementPosition(this.posX, this.posY, newScale)));
     }
 }

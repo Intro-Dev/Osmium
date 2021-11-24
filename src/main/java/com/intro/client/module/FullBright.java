@@ -12,7 +12,7 @@ public class FullBright {
 
     public void onEvent(Event event) {
         if(event instanceof EventTick && event.isPost()) {
-            if(OsmiumClient.options.getBooleanOption(Options.FullbrightEnabled).variable)
+            if(OsmiumClient.options.getBooleanOption(Options.FullbrightEnabled).get())
                 mc.options.gamma = 100d;
         }
     }

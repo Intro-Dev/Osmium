@@ -2,7 +2,7 @@ package com.intro.client.render.widget;
 
 import com.intro.client.OsmiumClient;
 import com.intro.client.util.EnumUtil;
-import com.intro.common.config.options.EnumOption;
+import com.intro.common.config.options.Option;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.network.chat.TranslatableComponent;
 import org.jetbrains.annotations.NotNull;
@@ -17,8 +17,8 @@ public class EnumSelectWidget extends AbstractScalableButton {
         super(x, y, width, height, new TextComponent(""), button -> {
             if(!OsmiumClient.options.getOverwrittenOptions().containsKey(optionId)) {
                 Enum<?> attachedEnum;
-                attachedEnum = EnumUtil.nextEnum(OsmiumClient.options.getEnumOption(optionId).variable);
-                OsmiumClient.options.put(optionId, new EnumOption(optionId, attachedEnum));
+                attachedEnum = EnumUtil.nextEnum(OsmiumClient.options.getEnumOption(optionId).get());
+                OsmiumClient.options.put(optionId, new Option<>(optionId, attachedEnum));
                 button.setMessage(new TranslatableComponent(key + attachedEnum.name().toLowerCase()));
             } else {
                 System.out.println("inactive");
@@ -30,7 +30,7 @@ public class EnumSelectWidget extends AbstractScalableButton {
         if(OsmiumClient.options.getOverwrittenOptions().containsKey(optionId)) {
             this.active = false;
         }
-        Enum<?> attachedEnum = OsmiumClient.options.getEnumOption(optionId).variable;
+        Enum<?> attachedEnum = OsmiumClient.options.getEnumOption(optionId).get();
         this.setMessage(new TranslatableComponent(key + attachedEnum.name().toLowerCase()));
 
         this.optionId = optionId;
@@ -41,8 +41,8 @@ public class EnumSelectWidget extends AbstractScalableButton {
         super(x, y, width, height, new TextComponent(""), button -> {
             if(!OsmiumClient.options.getOverwrittenOptions().containsKey(optionId)) {
                 Enum<?> attachedEnum;
-                attachedEnum = EnumUtil.nextEnum(OsmiumClient.options.getEnumOption(optionId).variable);
-                OsmiumClient.options.put(optionId, new EnumOption(optionId, attachedEnum));
+                attachedEnum = EnumUtil.nextEnum(OsmiumClient.options.getEnumOption(optionId).get());
+                OsmiumClient.options.put(optionId, new Option<>(optionId, attachedEnum));
                 button.setMessage(new TranslatableComponent(key + attachedEnum.name().toLowerCase()));
             } else {
                 System.out.println("inactive");
@@ -54,7 +54,7 @@ public class EnumSelectWidget extends AbstractScalableButton {
         if(OsmiumClient.options.getOverwrittenOptions().containsKey(optionId)) {
             this.active = false;
         }
-        Enum<?> attachedEnum = OsmiumClient.options.getEnumOption(optionId).variable;
+        Enum<?> attachedEnum = OsmiumClient.options.getEnumOption(optionId).get();
         this.setMessage(new TranslatableComponent(key + attachedEnum.name().toLowerCase()));
 
         this.optionId = optionId;

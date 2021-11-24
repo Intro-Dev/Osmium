@@ -1,8 +1,6 @@
-package com.intro.common.config.options;
+package com.intro.common.config.options.legacy;
 
-import com.intro.client.OsmiumClient;
-
-public class EnumOption extends Option {
+public class EnumOption extends LegacyOption {
 
     public Enum variable;
 
@@ -16,11 +14,11 @@ public class EnumOption extends Option {
 
     @Override
     public EnumOption get() {
-        return (EnumOption) OsmiumClient.options.get(this.identifier);
+        throw new UnsupportedOperationException("Tried to call an operation on legacy option: " + this);
     }
 
     @Override
     public void put() {
-        OsmiumClient.options.put(this.identifier, this);
+        throw new UnsupportedOperationException("Tried to call an operation on legacy option: " + this);
     }
 }

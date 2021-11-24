@@ -38,20 +38,20 @@ public abstract class LevelRendererMixin {
 
     @Inject(at = @At("HEAD"), method = "renderSnowAndRain", cancellable = true)
     public void RenderWeather(CallbackInfo info) {
-        if(OsmiumClient.options.getBooleanOption(Options.NoRainEnabled).variable) {
+        if(OsmiumClient.options.getBooleanOption(Options.NoRainEnabled).get()) {
             info.cancel();
         }
     }
 
     @Inject(at = @At("HEAD"), method = "addParticle(Lnet/minecraft/core/particles/ParticleOptions;ZZDDDDDD)V", cancellable = true)
     public void addParticle(ParticleOptions particleData, boolean ignoreRange, boolean minimizeLevel, double x, double y, double z, double xSpeed, double ySpeed, double zSpeed, CallbackInfo ci) {
-        if(particleData == ParticleTypes.RAIN && OsmiumClient.options.getBooleanOption(Options.NoRainEnabled).variable) {
+        if(particleData == ParticleTypes.RAIN && OsmiumClient.options.getBooleanOption(Options.NoRainEnabled).get()) {
             ci.cancel();
         }
-        if(particleData == ParticleTypes.FIREWORK && OsmiumClient.options.getBooleanOption(Options.FireworksDisabled).variable) {
+        if(particleData == ParticleTypes.FIREWORK && OsmiumClient.options.getBooleanOption(Options.FireworksDisabled).get()) {
             ci.cancel();
         }
-        if((particleData == ParticleTypes.WARPED_SPORE || particleData == ParticleTypes.CRIMSON_SPORE || particleData == ParticleTypes.SPORE_BLOSSOM_AIR || particleData == ParticleTypes.FALLING_SPORE_BLOSSOM) && OsmiumClient.options.getBooleanOption(Options.DecreaseNetherParticles).variable) {
+        if((particleData == ParticleTypes.WARPED_SPORE || particleData == ParticleTypes.CRIMSON_SPORE || particleData == ParticleTypes.SPORE_BLOSSOM_AIR || particleData == ParticleTypes.FALLING_SPORE_BLOSSOM) && OsmiumClient.options.getBooleanOption(Options.DecreaseNetherParticles).get()) {
             ci.cancel();
         }
     }
@@ -62,10 +62,10 @@ public abstract class LevelRendererMixin {
      */
     @Overwrite
     private void renderHitOutline(PoseStack stack, VertexConsumer vertexConsumer, Entity entity, double d, double e, double f, BlockPos blockPos, BlockState blockState) {
-        if(OsmiumClient.options.getEnumOption(Options.BlockOutlineMode).variable == BlockOutlineMode.LINES) {
-            drawShapeOutline(stack, vertexConsumer, blockState.getShape(entity.level, blockPos, CollisionContext.of(entity)), (double)blockPos.getX() - d, (double)blockPos.getY() - e, (double)blockPos.getZ() - f, OsmiumClient.options.getColorOption(Options.BlockOutlineColor).color);
-        } else if(OsmiumClient.options.getEnumOption(Options.BlockOutlineMode).variable == BlockOutlineMode.QUADS) {
-            drawShapeFull(stack, blockState.getShape(entity.level, blockPos, CollisionContext.of(entity)), (double)blockPos.getX() - d, (double)blockPos.getY() - e, (double)blockPos.getZ() - f, OsmiumClient.options.getColorOption(Options.BlockOutlineColor).color);
+        if(OsmiumClient.options.getEnumOption(Options.BlockOutlineMode).get() == BlockOutlineMode.LINES) {
+            drawShapeOutline(stack, vertexConsumer, blockState.getShape(entity.level, blockPos, CollisionContext.of(entity)), (double)blockPos.getX() - d, (double)blockPos.getY() - e, (double)blockPos.getZ() - f, OsmiumClient.options.getColorOption(Options.BlockOutlineColor).get());
+        } else if(OsmiumClient.options.getEnumOption(Options.BlockOutlineMode).get() == BlockOutlineMode.QUADS) {
+            drawShapeFull(stack, blockState.getShape(entity.level, blockPos, CollisionContext.of(entity)), (double)blockPos.getX() - d, (double)blockPos.getY() - e, (double)blockPos.getZ() - f, OsmiumClient.options.getColorOption(Options.BlockOutlineColor).get());
         } else {
             drawShapeOutline(stack, vertexConsumer, blockState.getShape(this.level, blockPos, CollisionContext.of(entity)), (double)blockPos.getX() - d, (double)blockPos.getY() - e, (double)blockPos.getZ() - f, new Color(0.0F, 0.0F, 0.0F, 0.4F));
         }
@@ -81,8 +81,8 @@ public abstract class LevelRendererMixin {
             edgeXDiff /= pythagorean;
             edgeYDiff /= pythagorean;
             edgeZDiff /= pythagorean;
-            vertexConsumer.vertex(pose.pose(), (float)(edgeX1 + x), (float)(edgeY1 + y), (float)(edgeZ1 + z)).color(color.getFloatR(), color.getFloatG(), color.getFloatB(), (float) OsmiumClient.options.getDoubleOption(Options.BlockOutlineAlpha).variable).normal(pose.normal(), edgeXDiff, edgeYDiff, edgeZDiff).endVertex();
-            vertexConsumer.vertex(pose.pose(), (float)(edgeX2 + x), (float)(edgeY2 + y), (float)(edgeZ2 + z)).color(color.getFloatR(), color.getFloatG(), color.getFloatB(), (float) OsmiumClient.options.getDoubleOption(Options.BlockOutlineAlpha).variable).normal(pose.normal(), edgeXDiff, edgeYDiff, edgeZDiff).endVertex();
+            vertexConsumer.vertex(pose.pose(), (float)(edgeX1 + x), (float)(edgeY1 + y), (float)(edgeZ1 + z)).color(color.getFloatR(), color.getFloatG(), color.getFloatB(), (float) OsmiumClient.options.getDoubleOption(Options.BlockOutlineAlpha).get().byteValue()).normal(pose.normal(), edgeXDiff, edgeYDiff, edgeZDiff).endVertex();
+            vertexConsumer.vertex(pose.pose(), (float)(edgeX2 + x), (float)(edgeY2 + y), (float)(edgeZ2 + z)).color(color.getFloatR(), color.getFloatG(), color.getFloatB(), (float) OsmiumClient.options.getDoubleOption(Options.BlockOutlineAlpha).get().byteValue()).normal(pose.normal(), edgeXDiff, edgeYDiff, edgeZDiff).endVertex();
         });
     }
 
@@ -90,7 +90,7 @@ public abstract class LevelRendererMixin {
         stack.pushPose();
         BufferBuilder builder = Tesselator.getInstance().getBuilder();
         builder.begin(VertexFormat.Mode.TRIANGLE_STRIP, DefaultVertexFormat.POSITION_COLOR);
-        renderVoxelShape(stack, builder, voxelShape, x, y, z, color.getFloatR(), color.getFloatG(), color.getFloatB(), (float) OsmiumClient.options.getDoubleOption(Options.BlockOutlineAlpha).variable, 0.01d);
+        renderVoxelShape(stack, builder, voxelShape, x, y, z, color.getFloatR(), color.getFloatG(), color.getFloatB(), (float) OsmiumClient.options.getDoubleOption(Options.BlockOutlineAlpha).get().byteValue(), 0.01d);
         builder.end();
         RenderSystem.setShader(GameRenderer::getPositionColorShader);
         RenderSystem.enableBlend();

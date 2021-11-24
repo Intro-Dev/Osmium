@@ -4,8 +4,9 @@ import com.intro.client.OsmiumClient;
 import com.intro.client.render.RenderManager;
 import com.intro.client.render.color.Color;
 import com.intro.client.render.color.Colors;
+import com.intro.client.util.ElementPosition;
 import com.intro.common.config.Options;
-import com.intro.common.config.options.ElementPositionOption;
+import com.intro.common.config.options.Option;
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.platform.Lighting;
 import com.mojang.blaze3d.systems.RenderSystem;
@@ -27,7 +28,7 @@ import java.util.stream.StreamSupport;
 public class ArmorDisplay extends Scalable {
 
     public ArmorDisplay() {
-        OsmiumClient.options.getElementPositionOption(Options.ArmorDisplayPosition).elementPosition.loadToScalable(this);
+        OsmiumClient.options.getElementPositionOption(Options.ArmorDisplayPosition).get().loadToScalable(this);
         this.width = 20;
         this.height = 190;
     }
@@ -37,7 +38,7 @@ public class ArmorDisplay extends Scalable {
 
     @Override
     public void render(PoseStack stack) {
-        if(mc.player != null && OsmiumClient.options.getBooleanOption(Options.ArmorDisplayEnabled).variable) {
+        if(mc.player != null && OsmiumClient.options.getBooleanOption(Options.ArmorDisplayEnabled).get()) {
             this.visible = true;
 
             int offY = 0;
@@ -126,7 +127,7 @@ public class ArmorDisplay extends Scalable {
 
     @Override
     public void onPositionChange(int newX, int newY, int oldX, int oldY) {
-        OsmiumClient.options.put(Options.ArmorDisplayPosition, new ElementPositionOption(Options.ArmorDisplayPosition, newX, newY, this.scale));
+        OsmiumClient.options.put(Options.ArmorDisplayPosition, new Option<>(Options.ArmorDisplayPosition, new ElementPosition(newX, newY, this.scale)));
 
     }
 
@@ -140,6 +141,6 @@ public class ArmorDisplay extends Scalable {
 
     @Override
     public void onScaleChange(double oldScale, double newScale) {
-        OsmiumClient.options.put(Options.ArmorDisplayPosition, new ElementPositionOption(Options.ArmorDisplayPosition, this.posX, this.posY, newScale));
+        OsmiumClient.options.put(Options.ArmorDisplayPosition, new Option<>(Options.ArmorDisplayPosition, new ElementPosition(this.posX, this.posY, newScale)));
     }
 }

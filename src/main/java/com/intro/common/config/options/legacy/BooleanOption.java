@@ -1,8 +1,6 @@
-package com.intro.common.config.options;
+package com.intro.common.config.options.legacy;
 
-import com.intro.client.OsmiumClient;
-
-public class BooleanOption extends Option {
+public class BooleanOption extends LegacyOption {
 
     public boolean variable;
 
@@ -16,12 +14,12 @@ public class BooleanOption extends Option {
 
     @Override
     public BooleanOption get() {
-        return (BooleanOption) OsmiumClient.options.get(this.identifier);
+        throw new UnsupportedOperationException("Tried to call an operation on legacy option: " + this);
     }
 
     @Override
     public void put() {
-        OsmiumClient.options.put(this.identifier, this);
+        throw new UnsupportedOperationException("Tried to call an operation on legacy option: " + this);
     }
 
 
