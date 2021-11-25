@@ -59,10 +59,10 @@ public class OsmiumHypixelModsScreen extends Screen {
         EditBox autoggEnterBox = new EditBox(mc.font, this.width / 2 - 2, this.height / 4 + 105 + globalOffset, 75, 20, new TranslatableComponent("osmium.options.auto_gg_string"));
         // Prohibit log/chat spam with this feature
         autoggEnterBox.setMaxLength(24);
-        autoggEnterBox.setValue(OsmiumClient.options.getStringOption(Options.AutoGGString).variable);
+        autoggEnterBox.setValue(OsmiumClient.options.getStringOption(Options.AutoGGString).get());
         // as below with the API key, it isn't provided to the user directly
         autoggEnterBox.setResponder((string) -> {
-            OsmiumClient.options.put(Options.AutoGGString, new StringOption(Options.AutoGGString, autoggEnterBox.getValue()));
+            OsmiumClient.options.put(Options.AutoGGString, new Option<>(Options.AutoGGString, autoggEnterBox.getValue()));
         });
 
         // Here this isn't as important as Hypixel's API keys are always 36 characters long

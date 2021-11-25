@@ -57,7 +57,7 @@ public class AutoGG {
                 Matcher matcher = pattern.matcher(((EventReceiveChatMessage) event).getComponent().getString());
                 if(matcher.matches()) {
                     lastGG = System.currentTimeMillis();
-                    Minecraft.getInstance().player.chat(OsmiumClient.options.getStringOption(Options.AutoGGString).variable);
+                    Minecraft.getInstance().player.chat(OsmiumClient.options.getStringOption(Options.AutoGGString).get());
                 }
             }
         }
