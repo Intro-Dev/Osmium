@@ -88,5 +88,6 @@
   "osmium.options.level_head_disabled": "LevelHead: Deaktiviert",
   "osmium.options.auto_gg_enabled": "AutoGG: Aktiviert",
   "osmium.options.auto_gg_disabled": "AutoGG: Deaktiviert",
-  "osmium.options.api_key": "Hypixel API Schlüssel: "
+  "osmium.options.api_key": "Hypixel API Schlüssel einfügen"
+
 }

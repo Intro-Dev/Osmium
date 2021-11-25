@@ -55,6 +55,7 @@ public class OsmiumHypixelModsScreen extends Screen {
         BooleanButtonWidget levelHeadToggle = new BooleanButtonWidget(this.width / 2 - 275, this.height / 4 + 80 + globalOffset, 150, 20, Options.LevelHeadEnabled, "osmium.options.level_head_");
         BooleanButtonWidget autoGGToggle = new BooleanButtonWidget(this.width / 2 - 75, this.height / 4 + 80 + globalOffset, 150, 20, Options.AutoGGEnabled, "osmium.options.auto_gg_");
 
+
         // mojang really has produced trash here: the suggestion in EditBoxes only goes away when the MaxLength is reached
         EditBox autoggEnterBox = new EditBox(mc.font, this.width / 2 - 2, this.height / 4 + 105 + globalOffset, 75, 20, new TranslatableComponent("osmium.options.auto_gg_string"));
         // Prohibit log/chat spam with this feature
@@ -65,7 +66,7 @@ public class OsmiumHypixelModsScreen extends Screen {
             OsmiumClient.options.put(Options.AutoGGString, new Option<>(Options.AutoGGString, autoggEnterBox.getValue()));
         });
 
-        // Here this isn't as important as Hypixel's API keys are always 36 characters long
+
         EditBox apiEnterBox = new EditBox(mc.font, this.width / 2 - 100, this.height / 4 + 175 + globalOffset, 200, 20, new TranslatableComponent("osmium.options.api_key"));
         // max uuid length is 36
         apiEnterBox.setMaxLength(36);
@@ -123,6 +124,7 @@ public class OsmiumHypixelModsScreen extends Screen {
         matrices.translate(0, finalOffset,0);
         drawString(matrices, mc.font, "GG String: ", this.width / 2 - 73, this.height / 4 + 85 + globalOffset + (logoOffset / 4), 0xffffff);
         matrices.popPose();
+
         super.render(matrices, mouseX, mouseY, delta);
         RenderSystem.disableBlend();
     }

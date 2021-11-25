@@ -23,7 +23,7 @@ repositories {
 }
 
 dependencies {
-	minecraft "com.mojang:minecraft:1.18-pre8"
+	minecraft "com.mojang:minecraft:1.18-rc1"
 
 	mappings(loom.layered {
 		officialMojangMappings()
