@@ -1,11 +1,12 @@
 package com.intro.server.command;
 
 import com.intro.client.util.EnumUtil;
-import com.intro.common.config.OptionSerializer;
-import com.intro.common.config.options.BooleanOption;
-import com.intro.common.config.options.DoubleOption;
-import com.intro.common.config.options.EnumOption;
 import com.intro.common.config.options.Option;
+import com.intro.common.config.options.OptionSerializer;
+import com.intro.common.config.options.legacy.BooleanOption;
+import com.intro.common.config.options.legacy.DoubleOption;
+import com.intro.common.config.options.legacy.EnumOption;
+import com.intro.common.config.options.legacy.LegacyOption;
 import com.intro.common.network.NetworkingConstants;
 import com.intro.server.OsmiumServer;
 import com.intro.server.api.OptionApi;
@@ -27,6 +28,8 @@ import static net.minecraft.commands.Commands.literal;
 
 public class CommandManager {
 
+    private static final OptionSerializer serializer = new OptionSerializer();
+
     public static void registerCommands() {
         CommandRegistrationCallback.EVENT.register((dispatcher, dedicated) -> dispatcher.register(literal("osmium").requires(commandSourceStack -> commandSourceStack.hasPermission(3)).then(literal("option").then(literal("set").then(argument("identifier", StringArgumentType.string()).then(argument("double", DoubleArgumentType.doubleArg()).executes(CommandManager::doubleSetCommand))
                 .then(argument("boolean", StringArgumentType.string()).executes(CommandManager::booleanSetCommand))
@@ -38,33 +41,33 @@ public class CommandManager {
 
     public static int doubleSetCommand(CommandContext<CommandSourceStack> context) {
         try {
-            Option option = new DoubleOption(StringArgumentType.getString(context, "identifier"), DoubleArgumentType.getDouble(context, "double"));
+            LegacyOption option = new DoubleOption(StringArgumentType.getString(context, "identifier"), DoubleArgumentType.getDouble(context, "double"));
             OptionApi.addSetOption(option);
-            context.getSource().sendSuccess(new TextComponent("Set Option value"), true);
+            context.getSource().sendSuccess(new TextComponent("Set LegacyOption value"), true);
         } catch (Exception e) {
-            context.getSource().sendSuccess(new TextComponent("Error: Invalid Option Data"), true);
+            context.getSource().sendSuccess(new TextComponent("Error: Invalid LegacyOption Data"), true);
         }
         return 1;
     }
 
     public static int booleanSetCommand(CommandContext<CommandSourceStack> context) {
         try {
-            Option option = new BooleanOption(StringArgumentType.getString(context, "identifier"), Boolean.parseBoolean(StringArgumentType.getString(context, "boolean")));
+            LegacyOption option = new BooleanOption(StringArgumentType.getString(context, "identifier"), Boolean.parseBoolean(StringArgumentType.getString(context, "boolean")));
             OptionApi.addSetOption(option);
-            context.getSource().sendSuccess(new TextComponent("Set Option value"), true);
+            context.getSource().sendSuccess(new TextComponent("Set LegacyOption value"), true);
         } catch (Exception e) {
-            context.getSource().sendSuccess(new TextComponent("Error: Invalid Option Data"), true);
+            context.getSource().sendSuccess(new TextComponent("Error: Invalid LegacyOption Data"), true);
         }
         return 1;
     }
 
     public static int enumSetCommand(CommandContext<CommandSourceStack> context) {
         try {
-            Option option = new EnumOption(StringArgumentType.getString(context, "identifier"), EnumUtil.loadEnumState(CommandManager.class.getClassLoader(), StringArgumentType.getString(context, "enum_type"), StringArgumentType.getString(context, "enum_value")));
+            LegacyOption option = new EnumOption(StringArgumentType.getString(context, "identifier"), EnumUtil.loadEnumState(CommandManager.class.getClassLoader(), StringArgumentType.getString(context, "enum_type"), StringArgumentType.getString(context, "enum_value")));
             OptionApi.addSetOption(option);
             context.getSource().sendSuccess(new TextComponent("Set option value"), true);
         } catch (Exception e) {
-            context.getSource().sendSuccess(new TextComponent("Error: Invalid Option Data"), true);
+            context.getSource().sendSuccess(new TextComponent("Error: Invalid LegacyOption Data"), true);
         }
         return 1;
     }
@@ -72,11 +75,10 @@ public class CommandManager {
     public static int refreshCommand(CommandContext<CommandSourceStack> context) {
         for (ServerPlayer player : PlayerApi.playersRunningOsmium.values()) {
             try {
-                OptionSerializer serializer = new OptionSerializer();
                 FriendlyByteBuf byteBuf = PacketByteBufs.create();
                 // write size so we only have to send one packet
                 byteBuf.writeInt(OptionApi.getServerSetOptions().size());
-                for (Option option : OptionApi.getServerSetOptions()) {
+                for (Option<?> option : OptionApi.getServerSetOptions()) {
                     String serializedOption = serializer.serialize(option, null, null).toString();
                     byteBuf.writeUtf(serializedOption);
                 }
@@ -91,7 +93,7 @@ public class CommandManager {
 
     public static int removeCommand(CommandContext<CommandSourceStack> context) {
         OptionApi.removeSetOption(StringArgumentType.getString(context, "identifier"));
-        context.getSource().sendSuccess(new TextComponent("Set Option value"), true);
+        context.getSource().sendSuccess(new TextComponent("Set LegacyOption value"), true);
         return 1;
     }
 

@@ -33,7 +33,7 @@ public class HypixelAbstractionLayer {
 
 
     public static void loadApiKey() {
-        API_KEY = OsmiumClient.options.getStringOption(Options.HypixelApiKey).variable;
+        API_KEY = OsmiumClient.options.getStringOption(Options.HypixelApiKey).get();
         if(!API_KEY.equals("")) {
             api = new HypixelAPI(new ApacheHttpClient(UUID.fromString(API_KEY)));
             validApiKey = true;

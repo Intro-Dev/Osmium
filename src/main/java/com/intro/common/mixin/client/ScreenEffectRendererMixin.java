@@ -53,7 +53,7 @@ public class ScreenEffectRendererMixin {
             float u = -0.5F;
             float v = 0.5F;
             float w = -0.5F;
-            if(OsmiumClient.options.getBooleanOption(Options.NoFireEnabled).variable) {
+            if(OsmiumClient.options.getBooleanOption(Options.NoFireEnabled).get()) {
                 stack.translate((float)(-(r * 2 - 1)) * 0.24F, -0.53000001192092896D, 0.0D);
             } else {
                 stack.translate((float)(-(r * 2 - 1)) * 0.24F, -0.30000001192092896D, 0.0D);

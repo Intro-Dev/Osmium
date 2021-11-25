@@ -5,10 +5,14 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonSyntaxException;
 import com.intro.client.OsmiumClient;
-import com.intro.common.config.OptionDeserializer;
-import com.intro.common.config.OptionSerializer;
+import com.intro.common.config.DataFixer;
 import com.intro.common.config.Options;
 import com.intro.common.config.options.Option;
+import com.intro.common.config.options.OptionDeserializer;
+import com.intro.common.config.options.OptionSerializer;
+import com.intro.common.config.options.legacy.LegacyOption;
+import com.intro.common.config.options.legacy.LegacyOptionDeserializer;
+import com.intro.common.config.options.legacy.LegacyOptionSerializer;
 import net.fabricmc.loader.api.FabricLoader;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
@@ -32,12 +36,12 @@ public class OptionUtil {
 
     public static final Options Options = OsmiumClient.options;
 
-    public static boolean ShouldResaveOptions = false;
-
     private static final Gson GSON = new GsonBuilder()
             .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
             .setPrettyPrinting()
             .excludeFieldsWithModifiers(Modifier.PRIVATE)
+            .registerTypeAdapter(LegacyOption.class, new LegacyOptionSerializer())
+            .registerTypeAdapter(LegacyOption.class, new LegacyOptionDeserializer())
             .registerTypeAdapter(Option.class, new OptionSerializer())
             .registerTypeAdapter(Option.class, new OptionDeserializer())
             .create();
@@ -67,11 +71,17 @@ public class OptionUtil {
                 save();
                 return;
             }
-            Option[] arr = GSON.fromJson(builder.toString(), Option[].class);
+            Option<?>[] arr;
+            try {
+                arr = GSON.fromJson(builder.toString(), Option[].class);
+            } catch (NullPointerException e) {
+                LOGGER.log(Level.INFO, "Detected legacy config, fixing up...");
+                arr = DataFixer.fixLegacyOptions(GSON.fromJson(builder.toString(), LegacyOption[].class));
+            }
             OsmiumClient.options.setDefaults();
             if(arr.length != 0) {
-                for(Option o : arr)  {
-                    OsmiumClient.options.put(o.identifier, o);
+                for(Option<?> o : arr)  {
+                    OsmiumClient.options.put(o.getIdentifier(), o);
                 }
             }
         } catch (Exception e) {
@@ -103,7 +113,7 @@ public class OptionUtil {
                 LOGGER.log(Level.ALL, "Couldn't find already existing config file, creating new one.");
             }
             FileWriter writer = new FileWriter(file);
-            Option[] arr = OsmiumClient.options.getOptions().values().toArray(new Option[0]);
+            Option<?>[] arr = OsmiumClient.options.getOptions().values().toArray(new Option<?>[0]);
             writer.write(GSON.toJson(arr));
             writer.close();
         } catch (Exception e) {
@@ -123,9 +133,9 @@ public class OptionUtil {
      * <p>Sets the options back to their player set values</p>
      */
     public static void setNormalOptions() {
-        for(Option option : OsmiumClient.options.getOverwrittenOptions().values()) {
+        for(Option<?> option : OsmiumClient.options.getOverwrittenOptions().values()) {
             if(option != null) {
-                OsmiumClient.options.put(option.identifier, option);
+                OsmiumClient.options.put(option.getIdentifier(), option);
             } else {
                 LOGGER.log(Level.ERROR, "Null option!");
             }

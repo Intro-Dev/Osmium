@@ -1,8 +1,6 @@
-package com.intro.common.config.options;
+package com.intro.common.config.options.legacy;
 
-import com.intro.client.OsmiumClient;
-
-public class StringOption extends Option {
+public class StringOption extends LegacyOption {
 
     public String variable;
 
@@ -16,13 +14,12 @@ public class StringOption extends Option {
 
     @Override
     public StringOption get() {
-        return (StringOption) OsmiumClient.options.get(this.identifier);
+        throw new UnsupportedOperationException("Tried to call an operation on legacy option: " + this);
     }
 
     @Override
     public void put() {
-        OsmiumClient.options.put(this.identifier, this);
+        throw new UnsupportedOperationException("Tried to call an operation on legacy option: " + this);
     }
-
 
 }

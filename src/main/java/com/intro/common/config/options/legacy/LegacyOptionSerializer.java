@@ -1,22 +1,16 @@
-package com.intro.common.config;
+package com.intro.common.config.options.legacy;
 
-import com.google.gson.*;
-import com.intro.common.config.options.*;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonSerializationContext;
+import com.google.gson.JsonSerializer;
 
 import java.lang.reflect.Type;
 
-public class OptionSerializer implements JsonSerializer<Option> {
-
-
-
-
-    public Option deserialize(JsonArray src) {
-
-        return null;
-    }
+public class LegacyOptionSerializer implements JsonSerializer<LegacyOption> {
 
     @Override
-    public JsonElement serialize(Option src, Type typeOfSrc, JsonSerializationContext context) {
+    public JsonElement serialize(LegacyOption src, Type typeOfSrc, JsonSerializationContext context) {
         if(src.type.equals("BooleanOption")) {
             BooleanOption option = (BooleanOption) src;
             JsonObject returnObject = new JsonObject();

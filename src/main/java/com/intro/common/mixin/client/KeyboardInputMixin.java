@@ -29,7 +29,7 @@ public class KeyboardInputMixin extends Input {
             shift = At.Shift.AFTER,
             opcode = Opcodes.PUTFIELD))
     private void tick(boolean slowDown, CallbackInfo ci) {
-        if(ToggleSneak.sneaking && OsmiumClient.options.getBooleanOption(Options.ToggleSneakEnabled).variable) {
+        if(ToggleSneak.sneaking && OsmiumClient.options.getBooleanOption(Options.ToggleSneakEnabled).get()) {
             this.shiftKeyDown = true;
         }
     }

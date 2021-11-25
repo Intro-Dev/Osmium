@@ -39,7 +39,7 @@ public abstract class PlayerRendererMixin extends LivingEntityRenderer<AbstractC
 
     @Inject(method = "renderNameTag", at = @At(value = "INVOKE", target = "net/minecraft/client/renderer/entity/LivingEntityRenderer.renderNameTag(Lnet/minecraft/world/entity/Entity;Lnet/minecraft/network/chat/Component;Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;I)V", ordinal = 1))
     public void renderLevelHead(AbstractClientPlayer abstractClientPlayer, Component component, PoseStack stack, MultiBufferSource multiBufferSource, int i, CallbackInfo ci) {
-        if(HypixelAbstractionLayer.canUseHypixelService() && OsmiumClient.options.getBooleanOption(Options.LevelHeadEnabled).variable) {
+        if(HypixelAbstractionLayer.canUseHypixelService() && OsmiumClient.options.getBooleanOption(Options.LevelHeadEnabled).get()) {
             stack.pushPose();
             stack.translate(0, 0.25, 0);
             try {

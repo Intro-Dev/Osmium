@@ -1,9 +1,8 @@
-package com.intro.common.config.options;
+package com.intro.common.config.options.legacy;
 
-import com.intro.client.OsmiumClient;
 import com.intro.client.render.color.Color;
 
-public class ColorOption extends Option {
+public class ColorOption extends LegacyOption {
 
     public Color color;
 
@@ -17,12 +16,12 @@ public class ColorOption extends Option {
 
     @Override
     public ColorOption get() {
-        return (ColorOption) OsmiumClient.options.get(this.identifier);
+        throw new UnsupportedOperationException("Tried to call an operation on legacy option: " + this);
     }
 
     @Override
     public void put() {
-        OsmiumClient.options.put(this.identifier, this);
+        throw new UnsupportedOperationException("Tried to call an operation on legacy option: " + this);
     }
 
 

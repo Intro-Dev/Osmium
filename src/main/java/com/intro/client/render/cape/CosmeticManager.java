@@ -101,7 +101,7 @@ public class CosmeticManager {
     }
 
     public static void preLoadPlayerCape() {
-        preLoadedPlayerCape = capes.get(OsmiumClient.options.getStringOption(Options.SetCape).variable);
+        preLoadedPlayerCape = capes.get(OsmiumClient.options.getStringOption(Options.SetCape).get());
     }
 
     public static void genCapes() {
@@ -191,7 +191,7 @@ public class CosmeticManager {
     }
 
     public void tickCapes(Event event) {
-        if(event.isPost() && OsmiumClient.options.getBooleanOption(Options.AnimateCapes).variable) {
+        if(event.isPost() && OsmiumClient.options.getBooleanOption(Options.AnimateCapes).get()) {
             for (Cape cape : playerCapes.values()) {
                 if(cape.isAnimated) {
                     cape.nextFrame();

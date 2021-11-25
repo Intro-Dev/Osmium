@@ -2,14 +2,16 @@ package com.intro.common.config;
 
 import com.intro.client.render.color.Color;
 import com.intro.client.render.color.Colors;
-import com.intro.common.config.options.*;
+import com.intro.client.util.ElementPosition;
+import com.intro.common.config.options.CapeRenderingMode;
+import com.intro.common.config.options.Option;
 
 import java.util.HashMap;
 
 /**
  * The Options class stores all OsmiumClient options.
  * All options have a String identifier, which is used to get the option from the HashMap
- * On startup, default options are set first, and are then put to the HashMap from an Option array loaded from a json file
+ * On startup, default options are set first, and are then put to the HashMap from an LegacyOption array loaded from a json file
  *
  * @since 1.0
  * @author Intro
@@ -19,61 +21,57 @@ public class Options {
     /**
      * Cache of all options
      */
-    private final HashMap<String, Option> options = new HashMap<>();
 
-    private final HashMap<String, Option> overwrittenOptions = new HashMap<>();
+    private final HashMap<String, Option<?>> options = new HashMap<>();
 
-    public HashMap<String, Option> getOptions() {
+    private final HashMap<String, Option<?>> overwrittenOptions = new HashMap<>();
+
+    public HashMap<String, Option<?>> getOptions() {
         return options;
     }
 
-    public void putOverwrittenOption(String key, Option value) {
+    public void putOverwrittenOption(String key, Option<?> value) {
         overwrittenOptions.put(key, value);
     }
 
-    public HashMap<String, Option> getOverwrittenOptions() {
+    public HashMap<String, Option<?>> getOverwrittenOptions() {
         return overwrittenOptions;
-    }
-
-    public Option getOverwrittenOption(String key) {
-        return overwrittenOptions.get(key);
     }
 
     public void clearOverwrittenOptions() {
         overwrittenOptions.clear();
     }
 
-    public Option get(String identifier) {
+    public Option<?> get(String identifier) {
         return options.get(identifier);
     }
 
-    public BooleanOption getBooleanOption(String identifier) {
-        return (BooleanOption) get(identifier);
-    }
-
-    public EnumOption getEnumOption(String identifier) {
-        return (EnumOption) get(identifier);
-    }
-
-    public DoubleOption getDoubleOption(String identifier) {
-        return (DoubleOption) get(identifier);
-    }
-
-    public ElementPositionOption getElementPositionOption(String identifier) {
-        return (ElementPositionOption) get(identifier);
-    }
-
-    public ColorOption getColorOption(String identifier) {
-        return (ColorOption) get(identifier);
-    }
-
-
-    public void put(String identifier, Option option) {
+    public void put(String identifier, Option<?> option) {
         options.put(identifier, option);
     }
 
-    public StringOption getStringOption(String identifier) {
-        return (StringOption) get(identifier);
+    public Option<Boolean> getBooleanOption(String identifier) {
+        return (Option<Boolean>) get(identifier);
+    }
+
+    public Option<Enum<?>> getEnumOption(String identifier) {
+        return (Option<Enum<?>>) get(identifier);
+    }
+
+    public Option<ElementPosition> getElementPositionOption(String identifier) {
+        return (Option<ElementPosition>) get(identifier);
+    }
+
+    public Option<String> getStringOption(String identifier) {
+        return (Option<String>) get(identifier);
+    }
+
+    public Option<Double> getDoubleOption(String identifier) {
+        return (Option<Double>) get(identifier);
+    }
+
+    public Option<Color> getColorOption(String identifier) {
+        return (Option<Color>) get(identifier);
     }
 
     public static final String ToggleSprintEnabled = "ToggleSprintEnabled";
@@ -117,6 +115,9 @@ public class Options {
     public static final String LevelHeadEnabled = "LevelHeadEnabled";
     public static final String AutoGGEnabled = "AutoGGEnabled";
 
+    // contains the string for the option schema that the client is using
+    public static final String OPTION_FILE_SCHEMA = "OPTION_FILE_SCHEMA";
+
 
 
 
@@ -132,50 +133,50 @@ public class Options {
      * Assigns the default settings to the option variables.
      */
     public void setDefaults() {
-        put(ToggleSprintEnabled, new BooleanOption(ToggleSprintEnabled, false));
-        put(FullbrightEnabled, new BooleanOption(FullbrightEnabled, false));
-        put(HurtbobbingEnabled, new BooleanOption(HurtbobbingEnabled, false));
-        put(SneakMode, new EnumOption(SneakMode, com.intro.common.config.options.SneakMode.VANILLA));
-        put(NoRainEnabled, new BooleanOption(NoRainEnabled, false));
-        put(FpsEnabled, new BooleanOption(FpsEnabled, false));
-        put(CustomCapeMode, new EnumOption(CustomCapeMode, CapeRenderingMode.DISABLED));
-        put(NoFireEnabled, new BooleanOption(NoFireEnabled, false));
-        put(ToggleSprintPosition, new ElementPositionOption(ToggleSprintPosition, 5, 5));
-        put(FpsDisplayPosition, new ElementPositionOption(FpsDisplayPosition, 5, 5, 1));
-        put(ToggleSneakEnabled, new BooleanOption(ToggleSneakEnabled, false));
-        put(FireworksDisabled, new BooleanOption(FireworksDisabled, false));
-        put(FlyBoostAmount, new DoubleOption(FlyBoostAmount, 1d));
-        put(FlyBoostEnabled, new BooleanOption(FlyBoostEnabled, false));
-        put(DecreaseNetherParticles, new BooleanOption(DecreaseNetherParticles, false));
-        put(BlockOutlineMode, new EnumOption(BlockOutlineMode, com.intro.common.config.options.BlockOutlineMode.VANILLA));
-        put(BlockOutlineColor, new ColorOption(BlockOutlineColor, Colors.TRANSPARENT.getColor()));
-        put(BlockOutlineAlpha, new DoubleOption(BlockOutlineAlpha, 1d));
-        put(StatusEffectDisplayMode, new EnumOption(StatusEffectDisplayMode, com.intro.common.config.options.StatusEffectDisplayMode.VANILLA));
-        put(StatusEffectDisplayPosition, new ElementPositionOption(StatusEffectDisplayPosition, 5, 5));
-        put(MaxStatusEffectsDisplayed, new DoubleOption(MaxStatusEffectsDisplayed, 1d));
-        put(StatusEffectDisplayScale, new DoubleOption(StatusEffectDisplayScale, 1d));
-        put(ArmorDisplayEnabled, new BooleanOption(ArmorDisplayEnabled, false));
-        put(ArmorDisplayPosition, new ElementPositionOption(ArmorDisplayPosition, 5, 5));
-        put(PingDisplayEnabled, new BooleanOption(PingDisplayEnabled, false));
-        put(CpsDisplayEnabled, new BooleanOption(CpsDisplayEnabled, false));
-        put(CpsDisplayPosition, new ElementPositionOption(CpsDisplayPosition, 5, 5));
-        put(PingDisplayPosition, new ElementPositionOption(PingDisplayPosition, 5, 5));
-        put(KeystrokesColor, new ColorOption(KeystrokesColor, new Color(0.1f, 0.1f, 0.1f, 0.2f)));
-        put(KeystrokesRgb, new BooleanOption(KeystrokesRgb, false));
-        put(KeystrokesPosition, new ElementPositionOption(KeystrokesPosition, 5, 5, 1));
-        put(KeystrokesEnabled, new BooleanOption(KeystrokesEnabled, false));
-        put(KeystrokesAlpha, new DoubleOption(KeystrokesAlpha, 0.2));
-        put(AnimateCapes, new BooleanOption(AnimateCapes, true));
-        put(ShowOtherPlayersCapes, new BooleanOption(ShowOtherPlayersCapes, true));
-        put(SetCape, new StringOption(SetCape, ""));
-        put(HypixelApiKey, new StringOption(HypixelApiKey, ""));
-        put(AutoGGString, new StringOption(AutoGGString, "gg"));
-        put(LevelHeadEnabled, new BooleanOption(LevelHeadEnabled, false));
-        put(AutoGGEnabled, new BooleanOption(AutoGGEnabled, false));
+        put(OPTION_FILE_SCHEMA, new Option<>(OPTION_FILE_SCHEMA, "v2"));
 
+        put(ToggleSprintEnabled, new Option<>(ToggleSprintEnabled, false));
+        put(FullbrightEnabled, new Option<>(FullbrightEnabled, false));
+        put(HurtbobbingEnabled, new Option<>(HurtbobbingEnabled, false));
+        put(SneakMode, new Option<>(SneakMode, com.intro.common.config.options.SneakMode.VANILLA));
+        put(NoRainEnabled, new Option<>(NoRainEnabled, false));
+        put(FpsEnabled, new Option<>(FpsEnabled, false));
+        put(CustomCapeMode, new Option<>(CustomCapeMode, CapeRenderingMode.DISABLED));
+        put(NoFireEnabled, new Option<>(NoFireEnabled, false));
+        put(ToggleSprintPosition, new Option<>(ToggleSprintPosition, new ElementPosition(5, 5, 1)));
+        put(FpsDisplayPosition, new Option<>(FpsDisplayPosition, new ElementPosition(5, 5, 1)));
+        put(ToggleSneakEnabled, new Option<>(ToggleSneakEnabled, false));
+        put(FireworksDisabled, new Option<>(FireworksDisabled, false));
+        put(FlyBoostAmount, new Option<>(FlyBoostAmount, 1d));
+        put(FlyBoostEnabled, new Option<>(FlyBoostEnabled, false));
+        put(DecreaseNetherParticles, new Option<>(DecreaseNetherParticles, false));
+        put(BlockOutlineMode, new Option<>(BlockOutlineMode, com.intro.common.config.options.BlockOutlineMode.VANILLA));
+        put(BlockOutlineColor, new Option<>(BlockOutlineColor, Colors.TRANSPARENT.getColor()));
+        put(BlockOutlineAlpha, new Option<>(BlockOutlineAlpha, 1d));
+        put(StatusEffectDisplayMode, new Option<>(StatusEffectDisplayMode, com.intro.common.config.options.StatusEffectDisplayMode.VANILLA));
+        put(StatusEffectDisplayPosition, new Option<>(StatusEffectDisplayPosition, new ElementPosition(5, 5, 1)));
+        put(MaxStatusEffectsDisplayed, new Option<>(MaxStatusEffectsDisplayed, 1d));
+        put(StatusEffectDisplayScale, new Option<>(StatusEffectDisplayScale, 1d));
+        put(ArmorDisplayEnabled, new Option<>(ArmorDisplayEnabled, false));
+        put(ArmorDisplayPosition, new Option<>(ArmorDisplayPosition, new ElementPosition(5, 5, 1)));
+        put(PingDisplayEnabled, new Option<>(PingDisplayEnabled, false));
+        put(CpsDisplayEnabled, new Option<>(CpsDisplayEnabled, false));
+        put(CpsDisplayPosition, new Option<>(CpsDisplayPosition, new ElementPosition(5, 5, 1)));
+        put(PingDisplayPosition, new Option<>(PingDisplayPosition, new ElementPosition(5, 5, 1)));
+        put(KeystrokesColor, new Option<>(KeystrokesColor, new Color(0.1f, 0.1f, 0.1f, 0.2f)));
+        put(KeystrokesRgb, new Option<>(KeystrokesRgb, false));
+        put(KeystrokesPosition, new Option<>(KeystrokesPosition, new ElementPosition(5, 5, 1)));
+        put(KeystrokesEnabled, new Option<>(KeystrokesEnabled, false));
+        put(KeystrokesAlpha, new Option<>(KeystrokesAlpha, 0.2));
+        put(AnimateCapes, new Option<>(AnimateCapes, true));
+        put(ShowOtherPlayersCapes, new Option<>(ShowOtherPlayersCapes, true));
+        put(SetCape, new Option<>(SetCape, ""));
+        put(HypixelApiKey, new Option<>(HypixelApiKey, ""));
+        put(LevelHeadEnabled, new Option<>(LevelHeadEnabled, false));
+        put(AutoGGEnabled, new Option<>(AutoGGEnabled, false));
     }
 
-    public HashMap<String, Option> getValues() {
+    public HashMap<String, Option<?>> getValues() {
         return this.options;
     }
 }

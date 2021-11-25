@@ -15,7 +15,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public class FireworkEntityRendererMixin {
     @Inject(method = "render", at = @At("HEAD"), cancellable = true)
     public void render(FireworkRocketEntity fireworkRocketEntity, float f, float g, PoseStack matrixStack, MultiBufferSource multiBuffer, int i, CallbackInfo ci) {
-        if(OsmiumClient.options.getBooleanOption(Options.FireworksDisabled).variable) {
+        if(OsmiumClient.options.getBooleanOption(Options.FireworksDisabled).get()) {
             ci.cancel();
         }
     }

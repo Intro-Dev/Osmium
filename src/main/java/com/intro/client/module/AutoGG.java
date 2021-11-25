@@ -52,7 +52,7 @@ public class AutoGG {
     }
 
     public static void onEvent(Event event) {
-        if(System.currentTimeMillis() - lastGG > 1000 && OsmiumClient.options.getBooleanOption(Options.AutoGGEnabled).variable) {
+        if(System.currentTimeMillis() - lastGG > 1000 && OsmiumClient.options.getBooleanOption(Options.AutoGGEnabled).get()) {
             for(Pattern pattern : triggers) {
                 Matcher matcher = pattern.matcher(((EventReceiveChatMessage) event).getComponent().getString());
                 if(matcher.matches()) {
