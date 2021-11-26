@@ -176,6 +176,14 @@ public class RenderUtil {
         vertexConsumer.vertex(matrix4f, x + width, y + height, 0).color(c.getFloatR(), c.getFloatG(), c.getFloatB(), c.getFloatA()).endVertex();
     }
 
+    public static void fill(VertexConsumer vertexConsumer, int x, int y, int width, int height, int color) {
+        Color c = new Color(color);
+        vertexConsumer.vertex(x + width, y, 0).color(c.getFloatR(), c.getFloatG(), c.getFloatB(), c.getFloatA()).endVertex();
+        vertexConsumer.vertex(x, y, 0).color(c.getFloatR(), c.getFloatG(), c.getFloatB(), c.getFloatA()).endVertex();
+        vertexConsumer.vertex(x, y + height, 0).color(c.getFloatR(), c.getFloatG(), c.getFloatB(), c.getFloatA()).endVertex();
+        vertexConsumer.vertex(x + width, y + height, 0).color(c.getFloatR(), c.getFloatG(), c.getFloatB(), c.getFloatA()).endVertex();
+    }
+
     private static int adjustColorForDrawCall(int c) {
         return (c & -67108864) == 0 ? c | -16777216 : c;
     }
