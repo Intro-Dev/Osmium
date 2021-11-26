@@ -2,7 +2,9 @@ package com.intro.client.render.screen;
 
 import com.intro.client.OsmiumClient;
 import com.intro.client.render.color.Color;
+import com.intro.client.render.screen.builder.ScreenBuilder;
 import com.intro.client.util.OptionUtil;
+import com.intro.common.config.Options;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.Util;
@@ -62,9 +64,41 @@ public class OsmiumOptionsScreen extends Screen {
         }
         bakedMaxAnim = 57 / mc.options.guiScale;
 
-        Button openGeneralUtilScreen  = new Button(this.width / 2 - 275, this.height / 4 + 80 + globalOffset, 150, 20, new TranslatableComponent("osmium.options.general_mods"), button -> mc.setScreen(new OsmiumGeneralUtilityOptionsScreen(this)));
-        Button openWidgetScreen = new Button(this.width / 2 - 75, this.height / 4 + 80 + globalOffset, 150, 20, new TranslatableComponent("osmium.options.widgets_screen"), button -> mc.setScreen(new OsmiumWidgetsScreen(this)));
-        Button openVideoOptions = new Button(this.width / 2 + 125, this.height / 4 + 80 + globalOffset, 150, 20, new TranslatableComponent("osmium.options.video_options"), (Button) -> mc.setScreen(new OsmiumVideoOptionsScreen(this)));
+        Button openGeneralUtilScreen = new Button(this.width / 2 - 275, this.height / 4 + 80 + globalOffset, 150, 20, new TranslatableComponent("osmium.options.general_mods"), button -> mc.setScreen(ScreenBuilder.newInstance()
+                        .button(Options.FullbrightEnabled, "osmium.options.full_bright_")
+                        .button(Options.HurtbobbingEnabled, "osmium.options.hurt_bobbing_")
+                        .button(Options.NoFireEnabled, "osmium.options.no_fire_")
+                        .button(Options.SneakMode, "osmium.options.sneak_")
+                        .button(new TranslatableComponent("osmium.options.toggle_sneak_settings"), (Button) -> mc.setScreen(ScreenBuilder.newInstance()
+                                .button(Options.ToggleSprintEnabled, "osmium.options.toggle_sprint_")
+                                .button(Options.ToggleSneakEnabled, "osmium.options.toggle_sneak_")
+                                .button(Options.FlyBoostEnabled, "osmium.options.fly_boost_")
+                                .slider(Options.FlyBoostAmount, "osmium.options.fly_boost_amount", 0, 10, 10)
+                                .addBackButton(this)
+                                .build(new TranslatableComponent("osmium.options.toggle_sneak_settings"))
+                        ))
+                        .addBackButton(this)
+                        .build(new TranslatableComponent("osmium.options.general_mods")))
+                );
+        Button openWidgetScreen = new Button(this.width / 2 - 75, this.height / 4 + 80 + globalOffset, 150, 20, new TranslatableComponent("osmium.options.widgets_screen"), button -> mc.setScreen(ScreenBuilder.newInstance()
+                .button(Options.PingDisplayEnabled, "osmium.options.ping_display_")
+                .button(Options.CpsDisplayEnabled, "osmium.options.cps_")
+                .button(Options.FpsEnabled, "osmium.options.fps_")
+                .button(Options.ArmorDisplayEnabled, "osmium.options.armor_display_")
+                .button(new TranslatableComponent("osmium.options.keystrokes_settings"), (buttonWidget) -> mc.setScreen(new OsmiumKeystrokesScreen(this)))
+                .button(new TranslatableComponent("osmium.options.status_effect_display_settings"), (buttonWidget) -> mc.setScreen(new OsmiumStatusEffectDisplayOptionsScreen(this)))
+                .addBackButton(this)
+                .build(new TranslatableComponent("osmium.options.widgets_screen"))
+        ));
+        Button openVideoOptions = new Button(this.width / 2 + 125, this.height / 4 + 80 + globalOffset, 150, 20, new TranslatableComponent("osmium.options.video_options"), (Button) -> mc.setScreen(ScreenBuilder.newInstance()
+                .button(new TranslatableComponent("osmium.cape_options"), button -> mc.setScreen(new OsmiumCapeOptionsScreen(this)))
+                .button(Options.NoRainEnabled, "osmium.options.rain_")
+                .button(Options.FireworksDisabled, "osmium.options.fireworks_")
+                .button(Options.DecreaseNetherParticles, "osmium.options.nether_particles_")
+                .button(new TranslatableComponent("osmium.options.block_option_settings"), (buttonWidget) -> mc.setScreen(new OsmiumBlockOptionsScreen(this)))
+                .addBackButton(this)
+                .build(new TranslatableComponent("osmium.options.video_options.title"))
+        ));
         Button openGuiEditing = new Button(this.width / 2 - 275, this.height / 4 + 120 + globalOffset, 150, 20, new TranslatableComponent("osmium.gui_edit.title"), (Button) -> mc.setScreen(new OsmiumGuiEditScreen(this)));
         Button openHypixelScreen = new Button(this.width / 2+ 125, this.height / 4 + 120 + globalOffset, 150, 20, new TranslatableComponent("osmium.options.hypixel_mods"), (Button) -> mc.setScreen(new OsmiumHypixelModsScreen(this)));
 

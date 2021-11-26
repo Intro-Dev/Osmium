@@ -4,3 +4,7 @@ accessible class net/minecraft/client/renderer/texture/SimpleTexture
 accessible class net/minecraft/client/renderer/texture/SimpleTexture$TextureImage
 accessible class net/minecraft/client/gui/Font$StringRenderOutput
 accessible field com/mojang/blaze3d/platform/NativeImage pixels J
+
+accessible field com/mojang/blaze3d/vertex/VertexBuffer vertextBufferId I
+accessible field com/mojang/blaze3d/vertex/VertexBuffer indexBufferId I
+accessible field com/mojang/blaze3d/vertex/VertexBuffer arrayObjectId I
