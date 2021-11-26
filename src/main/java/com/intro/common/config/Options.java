@@ -111,6 +111,7 @@ public class Options {
     public static final String ShowOtherPlayersCapes = "ShowOtherPlayersCapes";
     public static final String SetCape = "SetCape";
     public static final String HypixelApiKey = "HypixelApiKey";
+    public static final String AutoGGString = "AutoGGString";
     public static final String LevelHeadEnabled = "LevelHeadEnabled";
     public static final String AutoGGEnabled = "AutoGGEnabled";
 
@@ -172,6 +173,7 @@ public class Options {
         put(SetCape, new Option<>(SetCape, ""));
         put(HypixelApiKey, new Option<>(HypixelApiKey, ""));
         put(LevelHeadEnabled, new Option<>(LevelHeadEnabled, false));
+        put(AutoGGString, new Option<>(AutoGGEnabled, "gg"));
         put(AutoGGEnabled, new Option<>(AutoGGEnabled, false));
     }
 
