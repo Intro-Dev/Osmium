@@ -173,6 +173,7 @@ public class Options {
         put(SetCape, new Option<>(SetCape, ""));
         put(HypixelApiKey, new Option<>(HypixelApiKey, ""));
         put(LevelHeadEnabled, new Option<>(LevelHeadEnabled, false));
+        put(AutoGGString, new Option<>(AutoGGEnabled, "gg"));
         put(AutoGGEnabled, new Option<>(AutoGGEnabled, false));
     }
 
