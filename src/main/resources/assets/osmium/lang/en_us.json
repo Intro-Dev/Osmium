@@ -89,4 +89,5 @@
   "osmium.options.auto_gg_enabled": "AutoGG: Enabled",
   "osmium.options.auto_gg_disabled": "AutoGG: Disabled",
   "osmium.options.api_key": "Enter Api Key"
+
 }
