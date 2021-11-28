@@ -39,15 +39,20 @@ public abstract class PlayerRendererMixin extends LivingEntityRenderer<AbstractC
 
     @Inject(method = "renderNameTag", at = @At(value = "INVOKE", target = "net/minecraft/client/renderer/entity/LivingEntityRenderer.renderNameTag(Lnet/minecraft/world/entity/Entity;Lnet/minecraft/network/chat/Component;Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;I)V", ordinal = 1))
     public void renderLevelHead(AbstractClientPlayer abstractClientPlayer, Component component, PoseStack stack, MultiBufferSource multiBufferSource, int i, CallbackInfo ci) {
-        if(HypixelAbstractionLayer.canUseHypixelService() && OsmiumClient.options.getBooleanOption(Options.LevelHeadEnabled).get()) {
-            stack.pushPose();
-            stack.translate(0, 0.25, 0);
-            try {
-                renderCustomColorNameTag(abstractClientPlayer, new TextComponent(new TranslatableComponent("osmium.level").getString() + HypixelAbstractionLayer.getPlayerLevel(abstractClientPlayer.getStringUUID())), stack, multiBufferSource, i, Colors.ORANGE.getColor().getInt());
-            } catch (Exception e) {
-                e.printStackTrace();
+
+        if (Minecraft.getInstance().getCurrentServer() != null) {
+            if (Minecraft.getInstance().getCurrentServer().ip.contains("hypixel.net")) {
+                if (HypixelAbstractionLayer.canUseHypixelService() && OsmiumClient.options.getBooleanOption(Options.LevelHeadEnabled).get()) {
+                    stack.pushPose();
+                    stack.translate(0, 0.25, 0);
+                    try {
+                        renderCustomColorNameTag(abstractClientPlayer, new TextComponent(new TranslatableComponent("osmium.level").getString() + HypixelAbstractionLayer.getPlayerLevel(abstractClientPlayer.getStringUUID())), stack, multiBufferSource, i, Colors.ORANGE.getColor().getInt());
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    stack.popPose();
+                }
             }
-            stack.popPose();
         }
     }
 
