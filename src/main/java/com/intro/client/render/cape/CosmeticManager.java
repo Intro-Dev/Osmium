@@ -201,7 +201,7 @@ public class CosmeticManager {
     }
 
 
-    public static void setCape(String uuid, String url, boolean animated) {
+    public static void setCape(String uuid, String url, boolean animated, boolean optifine) {
         try {
             URL capeUrl = new URL(url);
             HttpURLConnection connection = (HttpURLConnection) capeUrl.openConnection();
@@ -211,7 +211,7 @@ public class CosmeticManager {
                 return;
             }
 
-            if(url.startsWith("http://s.optifine.net/capes/")) {
+            if(optifine) {
                 playerCapes.put(uuid, new Cape(new DynamicAnimation(parseOptifineCape(NativeImage.read(capeUrl.openStream())), uuid.replace("-", ""), 64, 32, 1), true, animated, "optifine", uuid.replace("-", ""), "unknown"));
             } else {
                 playerCapes.put(uuid, new Cape(new DynamicAnimation(NativeImage.read(capeUrl.openStream()), uuid.replace("-", ""), 64, 32, 1), false, animated, url, uuid.replace("-", ""), "unknown"));
@@ -245,29 +245,16 @@ public class CosmeticManager {
         return subImage;
     }
 
-
-    public static void setCapeFromIdentifier(String uuid, String identifier) {
-        try {
-            playerCapes.put(uuid, CosmeticManager.getCape(identifier).clone());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
     private record StandardCapeDownloader(EventAddPlayer playerJoin) implements Runnable {
-
         public void run() {
             /*
-            if(ModConstants.DEVELOPER_UUIDS.contains(playerJoin.entity.getStringUUID())) {
-                setCapeFromIdentifier(playerJoin.entity.getStringUUID(), "osmium_logo_cape");
-            }
-            setCape(playerJoin.entity.getStringUUID(), "http://s.optifine.net/capes/" + playerJoin.entity.getName().getString() + ".png", false);
+            setCape(playerJoin.entity.getStringUUID(), "http://s.optifine.net/capes/" + playerJoin.entity.getName().getString() + ".png", false, true);
             if(playerCapes.get(playerJoin.entity.getStringUUID()) == null) {
-                setCape(playerJoin.entity.getStringUUID(), "https://minecraftcapes.net/profile/" + playerJoin.entity.getStringUUID().replace("-", "") + "/cape/map", false);
+                setCape(playerJoin.entity.getStringUUID(), "https://minecraftcapes.net/profile/" + playerJoin.entity.getStringUUID().replace("-", "") + "/cape/map", false, false);
             }
 
              */
-            // setCape(mc.player.getStringUUID(), "http://s.optifine.net/capes/Agreeably.png", false);
+            setCape(mc.player.getStringUUID(), "http://s.optifine.net/capes/dltto.png", false, true);
         }
     }
 

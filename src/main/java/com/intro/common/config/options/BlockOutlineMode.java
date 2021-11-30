@@ -5,9 +5,6 @@ public enum BlockOutlineMode {
     LINES,
     QUADS;
 
-    // TODO work on quads overlay for the next update
-
-
     private static final BlockOutlineMode[] vals = values();
 
     public BlockOutlineMode next() {
