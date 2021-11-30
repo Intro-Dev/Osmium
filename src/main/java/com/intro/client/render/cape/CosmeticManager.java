@@ -247,14 +247,10 @@ public class CosmeticManager {
 
     private record StandardCapeDownloader(EventAddPlayer playerJoin) implements Runnable {
         public void run() {
-            /*
             setCape(playerJoin.entity.getStringUUID(), "http://s.optifine.net/capes/" + playerJoin.entity.getName().getString() + ".png", false, true);
             if(playerCapes.get(playerJoin.entity.getStringUUID()) == null) {
                 setCape(playerJoin.entity.getStringUUID(), "https://minecraftcapes.net/profile/" + playerJoin.entity.getStringUUID().replace("-", "") + "/cape/map", false, false);
             }
-
-             */
-            setCape(mc.player.getStringUUID(), "http://s.optifine.net/capes/dltto.png", false, true);
         }
     }
 
