@@ -115,7 +115,6 @@ public class Options {
     public static final String LevelHeadEnabled = "LevelHeadEnabled";
     public static final String LevelHeadMode = "LevelHeadMode";
     public static final String AutoGGEnabled = "AutoGGEnabled";
-    public static final String LevelHeadMode = "LevelHeadMode";
 
     // contains the string for the option schema that the client is using
     public static final String OPTION_FILE_SCHEMA = "OPTION_FILE_SCHEMA";
@@ -178,7 +177,6 @@ public class Options {
         put(LevelHeadMode, new Option<>(LevelHeadMode, com.intro.common.config.options.LevelHeadMode.NETWORK_LEVEL));
         put(AutoGGString, new Option<>(AutoGGString, "gg"));
         put(AutoGGEnabled, new Option<>(AutoGGEnabled, false));
-        put(LevelHeadMode, new Option<>(LevelHeadMode, com.intro.common.config.options.LevelHeadMode.NETWORK_LEVEL));
     }
 
     public HashMap<String, Option<?>> getValues() {
