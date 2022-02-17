@@ -1,9 +1,11 @@
 package com.intro.common.config.options;
 
 public enum LevelHeadMode {
-    BEDWARS_LEVEL,
+
     NETWORK_LEVEL,
+    BEDWARS_LEVEL,
     SKYWARS_LEVEL;
+
 
     private static final LevelHeadMode[] vals = values();
 

@@ -55,6 +55,8 @@ public class OsmiumHypixelModsScreen extends Screen {
 
 
         BooleanButtonWidget levelHeadToggle = new BooleanButtonWidget(this.width / 2 - 275, this.height / 4 + 80 + globalOffset, 150, 20, Options.LevelHeadEnabled, "osmium.options.level_head_");
+        EnumSelectWidget LevelHeadModeToggle = new EnumSelectWidget(this.width/2 - 275, this.height/4 + 105 + globalOffset, 150, 20, Options.LevelHeadMode, "osmium.options.level_head_mode_");
+
         BooleanButtonWidget autoGGToggle = new BooleanButtonWidget(this.width / 2 - 75, this.height / 4 + 80 + globalOffset, 150, 20, Options.AutoGGEnabled, "osmium.options.auto_gg_");
         EnumSelectWidget levelHeadModeToggle = new EnumSelectWidget(this.width/2 - 275, this.height/4 + 105 + globalOffset, 150, 20, Options.LevelHeadMode, "osmium.options.level_head_mode_");
 
@@ -88,6 +90,7 @@ public class OsmiumHypixelModsScreen extends Screen {
 
 
         this.addRenderableWidget(levelHeadToggle);
+        this.addRenderableWidget(LevelHeadModeToggle);
         this.addRenderableWidget(autoGGToggle);
         this.addRenderableWidget(autoggEnterBox);
         this.addRenderableWidget(apiEnterBox);

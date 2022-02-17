@@ -50,11 +50,14 @@ public class HypixelAbstractionLayer {
     public static int getPlayerLevel(String uuid) {
        if(loadPlayerDataIfAbsent(uuid)) {
            try {
-               if(OsmiumClient.options.getEnumOption(Options.LevelHeadMode).get()== LevelHeadMode.NETWORK_LEVEL) {
+
+               Enum<?> mode = OsmiumClient.options.getEnumOption(Options.LevelHeadMode).get();
+               System.out.println(cachedPlayerData.get(uuid).get(1, TimeUnit.MICROSECONDS).getPlayer().getRaw());
+               if(mode == LevelHeadMode.NETWORK_LEVEL){
                    return (int) cachedPlayerData.get(uuid).get(1, TimeUnit.MICROSECONDS).getPlayer().getNetworkLevel();
-               }else if(OsmiumClient.options.getEnumOption(Options.LevelHeadMode).get()== LevelHeadMode.BEDWARS_LEVEL) {
-                   return (int) cachedPlayerData.get(uuid).get(1, TimeUnit.MICROSECONDS).getPlayer().getIntProperty("achievements.bedwars_level",0);
-               }else if(OsmiumClient.options.getEnumOption(Options.LevelHeadMode).get()== LevelHeadMode.SKYWARS_LEVEL) {
+               } else if (mode == LevelHeadMode.BEDWARS_LEVEL){
+                   return cachedPlayerData.get(uuid).get(1, TimeUnit.MICROSECONDS).getPlayer().getIntProperty("achievements.bedwars_level", 0);
+               } else if (mode == LevelHeadMode.SKYWARS_LEVEL){
                    String formattedLevel = cachedPlayerData.get(uuid).get(1, TimeUnit.MICROSECONDS).getPlayer().getStringProperty("stats.SkyWars.levelFormatted", "§70⋆");
                    return Integer.parseInt(formattedLevel.substring(2, formattedLevel.length()-1));
                }

@@ -113,6 +113,7 @@ public class Options {
     public static final String HypixelApiKey = "HypixelApiKey";
     public static final String AutoGGString = "AutoGGString";
     public static final String LevelHeadEnabled = "LevelHeadEnabled";
+    public static final String LevelHeadMode = "LevelHeadMode";
     public static final String AutoGGEnabled = "AutoGGEnabled";
     public static final String LevelHeadMode = "LevelHeadMode";
 
@@ -174,6 +175,7 @@ public class Options {
         put(SetCape, new Option<>(SetCape, ""));
         put(HypixelApiKey, new Option<>(HypixelApiKey, ""));
         put(LevelHeadEnabled, new Option<>(LevelHeadEnabled, false));
+        put(LevelHeadMode, new Option<>(LevelHeadMode, com.intro.common.config.options.LevelHeadMode.NETWORK_LEVEL));
         put(AutoGGString, new Option<>(AutoGGString, "gg"));
         put(AutoGGEnabled, new Option<>(AutoGGEnabled, false));
         put(LevelHeadMode, new Option<>(LevelHeadMode, com.intro.common.config.options.LevelHeadMode.NETWORK_LEVEL));
