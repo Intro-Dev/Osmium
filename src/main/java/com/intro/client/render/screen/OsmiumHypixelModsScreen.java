@@ -2,9 +2,11 @@ package com.intro.client.render.screen;
 
 import com.intro.client.OsmiumClient;
 import com.intro.client.render.widget.BooleanButtonWidget;
+import com.intro.client.render.widget.EnumSelectWidget;
 import com.intro.client.util.HypixelAbstractionLayer;
 import com.intro.client.util.OptionUtil;
 import com.intro.common.config.Options;
+import com.intro.common.config.options.LevelHeadMode;
 import com.intro.common.config.options.Option;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
@@ -54,7 +56,7 @@ public class OsmiumHypixelModsScreen extends Screen {
 
         BooleanButtonWidget levelHeadToggle = new BooleanButtonWidget(this.width / 2 - 275, this.height / 4 + 80 + globalOffset, 150, 20, Options.LevelHeadEnabled, "osmium.options.level_head_");
         BooleanButtonWidget autoGGToggle = new BooleanButtonWidget(this.width / 2 - 75, this.height / 4 + 80 + globalOffset, 150, 20, Options.AutoGGEnabled, "osmium.options.auto_gg_");
-
+        EnumSelectWidget levelHeadModeToggle = new EnumSelectWidget(this.width/2 - 275, this.height/4 + 105 + globalOffset, 150, 20, Options.LevelHeadMode, "osmium.options.level_head_mode_");
 
         // mojang really has produced trash here: the suggestion in EditBoxes only goes away when the MaxLength is reached
         EditBox autoggEnterBox = new EditBox(mc.font, this.width / 2 - 2, this.height / 4 + 105 + globalOffset, 75, 20, new TranslatableComponent("osmium.options.auto_gg_string"));
@@ -90,6 +92,7 @@ public class OsmiumHypixelModsScreen extends Screen {
         this.addRenderableWidget(autoggEnterBox);
         this.addRenderableWidget(apiEnterBox);
         this.addRenderableWidget(backButton);
+        this.addRenderableWidget(levelHeadModeToggle);
     }
 
     @Override
