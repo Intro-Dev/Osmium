@@ -52,7 +52,6 @@ public class HypixelAbstractionLayer {
            try {
 
                Enum<?> mode = OsmiumClient.options.getEnumOption(Options.LevelHeadMode).get();
-               System.out.println(cachedPlayerData.get(uuid).get(1, TimeUnit.MICROSECONDS).getPlayer().getRaw());
                if(mode == LevelHeadMode.NETWORK_LEVEL){
                    return (int) cachedPlayerData.get(uuid).get(1, TimeUnit.MICROSECONDS).getPlayer().getNetworkLevel();
                } else if (mode == LevelHeadMode.BEDWARS_LEVEL){
