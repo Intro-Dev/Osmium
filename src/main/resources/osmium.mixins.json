@@ -4,6 +4,7 @@
   "compatibilityLevel": "JAVA_17",
   "client": [
     "client.AbilitiesMixin",
+    "client.AbstractContainerEventHandlerMixin",
     "client.CameraMixin",
     "client.CapeLayerMixin",
     "client.ClientLevelMixin",
@@ -22,10 +23,11 @@
     "client.MinecraftMixin",
     "client.OptionsScreenMixin",
     "client.PlayerRendererMixin",
+    "client.ReloadableResourceManagerMixin",
     "client.ResourceTextureAccessor",
     "client.ResourceTextureSubclassAccessor",
     "client.ScreenEffectRendererMixin",
-    "client.ReloadableResourceManagerMixin",
+    "client.ScreenMixin",
     "client.TitleScreenMixin"
   ],
   "server": [
@@ -36,7 +38,6 @@
     "defaultRequire": 1
   },
   "mixins": [
-    "client.AbstractContainerEventHandlerMixin",
-    "client.ScreenMixin"
+
   ]
 }

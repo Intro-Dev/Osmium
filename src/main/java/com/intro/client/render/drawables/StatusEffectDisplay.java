@@ -22,7 +22,7 @@ public class StatusEffectDisplay extends Scalable {
 
     public StatusEffectDisplay() {
         OsmiumClient.options.getElementPositionOption(Options.StatusEffectDisplayPosition).get().loadToScalable(this);
-        this.maxEffectsDisplayed = (int) OsmiumClient.options.getDoubleOption(Options.MaxStatusEffectsDisplayed).get().byteValue();
+        this.maxEffectsDisplayed = OsmiumClient.options.getDoubleOption(Options.MaxStatusEffectsDisplayed).get().byteValue();
     }
 
 

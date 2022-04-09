@@ -179,7 +179,7 @@ public class CosmeticManager {
             if(Objects.equals(eventAddPlayer.entity.getStringUUID(), mc.player.getStringUUID())) {
                 capeDownloaderService.execute(new CosmeticManager.StandardCapeDownloader((EventAddPlayer) event));
                 if(CosmeticManager.getPreLoadedPlayerCape() != null) {
-                    // CosmeticManager.playerCapes.put(mc.player.getStringUUID(), CosmeticManager.getPreLoadedPlayerCape());
+                    CosmeticManager.playerCapes.put(mc.player.getStringUUID(), CosmeticManager.getPreLoadedPlayerCape());
                 }
             } else {
                 capeDownloaderService.execute(new CosmeticManager.StandardCapeDownloader((EventAddPlayer) event));

@@ -88,6 +88,9 @@
   "osmium.options.level_head_disabled": "LevelHead: Deaktiviert",
   "osmium.options.auto_gg_enabled": "AutoGG: Aktiviert",
   "osmium.options.auto_gg_disabled": "AutoGG: Deaktiviert",
-  "osmium.options.api_key": "Hypixel API Schlüssel einfügen"
+  "osmium.options.api_key": "Hypixel API Schlüssel einfügen",
+  "osmium.options.level_head_mode_network_level": "Mode: Network Level",
+  "osmium.options.level_head_mode_bedwars_level": "Mode: BedWars Level",
+  "osmium.options.level_head_mode_skywars_level": "Mode: SkyWars Level"
 
 }
