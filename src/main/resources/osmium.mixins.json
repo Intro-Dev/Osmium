@@ -25,7 +25,7 @@
     "client.ResourceTextureAccessor",
     "client.ResourceTextureSubclassAccessor",
     "client.ScreenEffectRendererMixin",
-    "client.SimpleReloadableResourceManagerMixin",
+    "client.ReloadableResourceManagerMixin",
     "client.TitleScreenMixin"
   ],
   "server": [
