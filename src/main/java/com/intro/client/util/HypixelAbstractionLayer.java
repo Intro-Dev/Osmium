@@ -4,6 +4,7 @@ import com.intro.client.OsmiumClient;
 import com.intro.client.module.event.Event;
 import com.intro.client.module.event.EventRemovePlayer;
 import com.intro.common.config.Options;
+import com.intro.common.config.options.LevelHeadMode;
 import net.hypixel.api.HypixelAPI;
 import net.hypixel.api.apache.ApacheHttpClient;
 import net.hypixel.api.reply.PlayerReply;
@@ -49,7 +50,16 @@ public class HypixelAbstractionLayer {
     public static int getPlayerLevel(String uuid) {
        if(loadPlayerDataIfAbsent(uuid)) {
            try {
-               return (int) cachedPlayerData.get(uuid).get(1, TimeUnit.MICROSECONDS).getPlayer().getNetworkLevel();
+
+               Enum<?> mode = OsmiumClient.options.getEnumOption(Options.LevelHeadMode).get();
+               if(mode == LevelHeadMode.NETWORK_LEVEL){
+                   return (int) cachedPlayerData.get(uuid).get(1, TimeUnit.MICROSECONDS).getPlayer().getNetworkLevel();
+               } else if (mode == LevelHeadMode.BEDWARS_LEVEL){
+                   return cachedPlayerData.get(uuid).get(1, TimeUnit.MICROSECONDS).getPlayer().getIntProperty("achievements.bedwars_level", 0);
+               } else if (mode == LevelHeadMode.SKYWARS_LEVEL){
+                   String formattedLevel = cachedPlayerData.get(uuid).get(1, TimeUnit.MICROSECONDS).getPlayer().getStringProperty("stats.SkyWars.levelFormatted", "§70⋆");
+                   return Integer.parseInt(formattedLevel.substring(2, formattedLevel.length()-1));
+               }
            } catch (TimeoutException | InterruptedException | ExecutionException e) {
                return 0;
            }
