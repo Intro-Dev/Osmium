@@ -20,7 +20,7 @@ public class DynamicAnimation implements Cloneable {
         return frameDelay;
     }
 
-    private final int frameDelay;
+    public final int frameDelay;
     private int frameDelayTicker = 0;
 
     private int currentFrame = 0;
@@ -32,11 +32,11 @@ public class DynamicAnimation implements Cloneable {
     private final String registryName;
 
     private final HashMap<Integer, ResourceLocation> frames = new HashMap<>();
-    public final NativeImage image;
+    public NativeImage image;
 
-    private final Minecraft mc = Minecraft.getInstance();
 
     public DynamicAnimation(NativeImage image, String registryName, int frameWidth, int frameHeight, int frameDelay) {
+        Minecraft mc = Minecraft.getInstance();
         this.image = image;
         this.frameWidth = frameWidth;
         this.frameHeight = frameHeight;
@@ -57,6 +57,7 @@ public class DynamicAnimation implements Cloneable {
 
 
     public AbstractTexture getTexture() {
+        Minecraft mc = Minecraft.getInstance();
         return mc.getTextureManager().getTexture(getCurrentFrameLocation());
     }
 
@@ -80,10 +81,26 @@ public class DynamicAnimation implements Cloneable {
 
 
     public void free() {
+        Minecraft mc = Minecraft.getInstance();
         for(ResourceLocation location : frames.values()) {
             mc.getTextureManager().release(location);
         }
         image.close();
+    }
+
+    @Override
+    public String toString() {
+        return "DynamicAnimation{" +
+                "maxAnimationFrames=" + maxAnimationFrames +
+                ", frameWidth=" + frameWidth +
+                ", frameHeight=" + frameHeight +
+                ", frameDelay=" + frameDelay +
+                ", frameDelayTicker=" + frameDelayTicker +
+                ", currentFrame=" + currentFrame +
+                ", registryName='" + registryName + '\'' +
+                ", frames=" + frames +
+                ", image=" + image +
+                '}';
     }
 
     @Override

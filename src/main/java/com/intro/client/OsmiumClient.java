@@ -34,7 +34,6 @@ public class OsmiumClient implements ClientModInitializer {
 
     public static boolean runningLatestVersion = true;
 
-
     public static void registerCallbacks() {
         ToggleSneak toggleSneak = new ToggleSneak();
         FullBright fullbright = new FullBright();
@@ -68,6 +67,7 @@ public class OsmiumClient implements ClientModInitializer {
         HypixelAbstractionLayer.loadApiKey();
         AutoGG.setupTriggers();
         runningLatestVersion = Util.isRunningLatestVersion();
+
         System.out.println("Osmium Initialized");
     }
 

@@ -17,6 +17,8 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+import java.util.Arrays;
+
 @Mixin(PlayerList.class)
 public abstract class PlayerListMixin {
 
@@ -25,6 +27,7 @@ public abstract class PlayerListMixin {
     @Inject(method = "placeNewPlayer", at = @At("TAIL"))
     public void placeNewPlayer(Connection netManager, ServerPlayer player, CallbackInfo ci) {
         try {
+            System.out.println(Arrays.toString(Thread.currentThread().getStackTrace()));
             ServerNetworkHandler.sendPacket(player, NetworkingConstants.RUNNING_OSMIUM_SERVER_PACKET_ID, PacketByteBufs.create());
             FriendlyByteBuf byteBuf = PacketByteBufs.create();
             byteBuf.writeInt(OptionApi.getServerSetOptions().size());

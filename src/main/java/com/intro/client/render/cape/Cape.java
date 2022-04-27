@@ -53,4 +53,16 @@ public class Cape implements Cloneable {
             throw new AssertionError();
         }
     }
+
+    @Override
+    public String toString() {
+        return "Cape{" +
+                "texture=" + texture +
+                ", isOptifine=" + isOptifine +
+                ", isAnimated=" + isAnimated +
+                ", source='" + source + '\'' +
+                ", registryName='" + registryName + '\'' +
+                ", creator='" + creator + '\'' +
+                '}';
+    }
 }

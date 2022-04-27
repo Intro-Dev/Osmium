@@ -3,8 +3,10 @@ accessWidener v1 named
 accessible class net/minecraft/client/renderer/texture/SimpleTexture
 accessible class net/minecraft/client/renderer/texture/SimpleTexture$TextureImage
 accessible class net/minecraft/client/gui/Font$StringRenderOutput
-accessible field com/mojang/blaze3d/platform/NativeImage pixels J
 
+accessible field com/mojang/blaze3d/platform/NativeImage pixels J
 accessible field com/mojang/blaze3d/vertex/VertexBuffer vertextBufferId I
 accessible field com/mojang/blaze3d/vertex/VertexBuffer indexBufferId I
 accessible field com/mojang/blaze3d/vertex/VertexBuffer arrayObjectId I
+accessible field net/minecraft/client/Minecraft userApiService Lcom/mojang/authlib/minecraft/UserApiService;
+accessible field net/minecraft/client/Minecraft user Lnet/minecraft/client/User;
