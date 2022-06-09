@@ -4,15 +4,15 @@ import com.intro.client.render.RenderManager;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
-import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.Component;
 
-public class Text extends Scalable {
+public class RenderableText extends Scalable {
     public String text;
     public int color;
 
     private final Minecraft mc = Minecraft.getInstance();
 
-    public Text(int posX, int posY, String text, int color) {
+    public RenderableText(int posX, int posY, String text, int color) {
         this.posX = posX;
         this.posY = posY;
         this.text = text;
@@ -43,7 +43,7 @@ public class Text extends Scalable {
         this.height = mc.font.lineHeight;
 
         Font renderer = mc.font;
-        renderer.drawShadow(stack, new TextComponent(this.text), this.posX, this.posY, this.color);
+        renderer.drawShadow(stack, Component.literal(this.text), this.posX, this.posY, this.color);
     }
 
     @Override

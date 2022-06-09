@@ -12,7 +12,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.renderer.GameRenderer;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import org.jetbrains.annotations.Nullable;
@@ -39,7 +39,7 @@ public class OsmiumOptionsScreen extends Screen {
     private final ResourceLocation LOGO_TEXTURE = new ResourceLocation("osmium", "icon.png");
 
     public OsmiumOptionsScreen(Screen parent) {
-        super(new TranslatableComponent("osmium.options.title"));
+        super(Component.translatable("osmium.options.title"));
         this.parent = parent;
     }
 
@@ -53,43 +53,43 @@ public class OsmiumOptionsScreen extends Screen {
         }
 
         // offset because of weird scaling at high gui scales
-        if(mc.options.guiScale > 2) {
+        if(mc.options.guiScale().get() > 2) {
             logoOffset = -40;
         }
-        if(mc.options.guiScale > 4) {
+        if(mc.options.guiScale().get() > 4) {
             shouldRenderLogo = false;
             logoOffset = -80;
             globalOffset = -64;
 
         }
-        bakedMaxAnim = 57 / mc.options.guiScale;
+        bakedMaxAnim = 57 / mc.options.guiScale().get();
 
-        Button openGeneralUtilScreen = new Button(this.width / 2 - 275, this.height / 4 + 80 + globalOffset, 150, 20, new TranslatableComponent("osmium.options.general_mods"), button -> mc.setScreen(ScreenBuilder.newInstance()
+        Button openGeneralUtilScreen = new Button(this.width / 2 - 275, this.height / 4 + 80 + globalOffset, 150, 20, Component.translatable("osmium.options.general_mods"), button -> mc.setScreen(ScreenBuilder.newInstance()
                         .button(Options.FullbrightEnabled, "osmium.options.full_bright_")
                         .button(Options.HurtbobbingEnabled, "osmium.options.hurt_bobbing_")
                         .button(Options.NoFireEnabled, "osmium.options.no_fire_")
                         .button(Options.SneakMode, "osmium.options.sneak_")
-                        .button(new TranslatableComponent("osmium.options.toggle_sneak_settings"), (Button) -> mc.setScreen(ScreenBuilder.newInstance()
+                        .button(Component.translatable("osmium.options.toggle_sneak_settings"), (Button) -> mc.setScreen(ScreenBuilder.newInstance()
                                 .button(Options.ToggleSprintEnabled, "osmium.options.toggle_sprint_")
                                 .button(Options.ToggleSneakEnabled, "osmium.options.toggle_sneak_")
                                 .button(Options.FlyBoostEnabled, "osmium.options.fly_boost_")
                                 .slider(Options.FlyBoostAmount, "osmium.options.fly_boost_amount", 0, 10, 10)
                                 .addBackButton(this)
-                                .build(new TranslatableComponent("osmium.options.toggle_sneak_settings"))
+                                .build(Component.translatable("osmium.options.toggle_sneak_settings"))
                         ))
                         .addBackButton(this)
-                        .build(new TranslatableComponent("osmium.options.general_mods")))
+                        .build(Component.translatable("osmium.options.general_mods")))
                 );
-        Button openWidgetScreen = new Button(this.width / 2 - 75, this.height / 4 + 80 + globalOffset, 150, 20, new TranslatableComponent("osmium.options.widgets_screen"), button -> mc.setScreen(new OsmiumWidgetOptionsScreen(this)));
+        Button openWidgetScreen = new Button(this.width / 2 - 75, this.height / 4 + 80 + globalOffset, 150, 20, Component.translatable("osmium.options.widgets_screen"), button -> mc.setScreen(new OsmiumWidgetOptionsScreen(this)));
 
-        Button openVideoOptions = new Button(this.width / 2 + 125, this.height / 4 + 80 + globalOffset, 150, 20, new TranslatableComponent("osmium.options.video_options"), (Button) -> mc.setScreen(new OsmiumVideoOptionsScreen(this)));
+        Button openVideoOptions = new Button(this.width / 2 + 125, this.height / 4 + 80 + globalOffset, 150, 20, Component.translatable("osmium.options.video_options"), (Button) -> mc.setScreen(new OsmiumVideoOptionsScreen(this)));
 
-        Button openGuiEditing = new Button(this.width / 2 - 275, this.height / 4 + 120 + globalOffset, 150, 20, new TranslatableComponent("osmium.gui_edit.title"), (Button) -> mc.setScreen(new OsmiumGuiEditScreen(this)));
+        Button openGuiEditing = new Button(this.width / 2 - 275, this.height / 4 + 120 + globalOffset, 150, 20, Component.translatable("osmium.gui_edit.title"), (Button) -> mc.setScreen(new OsmiumGuiEditScreen(this)));
 
-        Button openHypixelScreen = new Button(this.width / 2+ 125, this.height / 4 + 120 + globalOffset, 150, 20, new TranslatableComponent("osmium.options.hypixel_mods"), (Button) -> mc.setScreen(new OsmiumHypixelModsScreen(this)));
+        Button openHypixelScreen = new Button(this.width / 2+ 125, this.height / 4 + 120 + globalOffset, 150, 20, Component.translatable("osmium.options.hypixel_mods"), (Button) -> mc.setScreen(new OsmiumHypixelModsScreen(this)));
 
-        Button backButton = new Button(this.width / 2 - 100, this.height / 4 + 225 + globalOffset, 200, 20, new TranslatableComponent("osmium.options.video_options.back"), (Button) -> mc.setScreen(parent));
-        Button openModrinthWidget = new Button(this.width / 2 - 75, this.height / 4 + 120 + globalOffset, 150, 20, new TranslatableComponent("osmium.open_credits"), this::openCredits);
+        Button backButton = new Button(this.width / 2 - 100, this.height / 4 + 225 + globalOffset, 200, 20, Component.translatable("osmium.options.video_options.back"), (Button) -> mc.setScreen(parent));
+        Button openModrinthWidget = new Button(this.width / 2 - 75, this.height / 4 + 120 + globalOffset, 150, 20, Component.translatable("osmium.open_credits"), this::openCredits);
 
         if(mc.level == null) {
             openGuiEditing.active = false;
@@ -145,7 +145,7 @@ public class OsmiumOptionsScreen extends Screen {
         matrices.pushPose();
         RenderSystem.setShaderColor(shaderColor.getFloatR(), shaderColor.getFloatG(), shaderColor.getFloatB(), ((animationProgress * 4) - 1) / 255f);
         matrices.translate(0, animationProgress,0);
-        drawCenteredString(matrices, mc.font, new TranslatableComponent("osmium.version"), this.width / 2, this.height / 8 + 100 + globalOffset + (logoOffset / 4), 0xffffff);
+        drawCenteredString(matrices, mc.font, Component.translatable("osmium.version"), this.width / 2, this.height / 8 + 100 + globalOffset + (logoOffset / 4), 0xffffff);
         matrices.popPose();
         super.render(matrices, mouseX, mouseY, delta);
         // 57 is the max because of animation progress looking good at 3

@@ -2,7 +2,7 @@ package com.intro.server;
 
 import com.intro.common.util.Util;
 import com.intro.server.api.OptionApi;
-import com.intro.server.command.CommandManager;
+import com.intro.server.command.OsmiumCommandManager;
 import com.intro.server.network.ServerNetworkHandler;
 import net.fabricmc.api.DedicatedServerModInitializer;
 import org.apache.logging.log4j.LogManager;
@@ -14,7 +14,7 @@ public class OsmiumServer implements DedicatedServerModInitializer  {
 
     @Override
     public void onInitializeServer() {
-        CommandManager.registerCommands();
+        OsmiumCommandManager.registerCommands();
         ServerNetworkHandler.registerPackets();
         OptionApi.load();
         if(!Util.isRunningLatestVersion()) {

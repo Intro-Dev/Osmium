@@ -19,6 +19,7 @@
     "client.KeyMappingAccessor",
     "client.LevelRendererAccessor",
     "client.LevelRendererMixin",
+    "client.LightTextureMixin",
     "client.MinecraftAccessor",
     "client.MinecraftMixin",
     "client.OptionsScreenMixin",

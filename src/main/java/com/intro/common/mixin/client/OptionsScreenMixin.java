@@ -9,7 +9,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.OptionsScreen;
 import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.Component;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -20,16 +20,16 @@ public abstract class OptionsScreenMixin extends Screen {
 
     private final Minecraft mc = Minecraft.getInstance();
 
-    protected OptionsScreenMixin(TranslatableComponent title) {
+    protected OptionsScreenMixin(Component title) {
         super(title);
     }
 
     @Inject(at = @At("TAIL"), method = "init")
     private void init(CallbackInfo info) {
-        if(this.mc.options.guiScale > 5) {
-            this.addRenderableWidget(new Button(this.width / 2 - 50, this.height / 6 + 140, 100, 20, new TranslatableComponent("osmium.options.title"), (button) -> mc.setScreen(new OsmiumOptionsScreen(this))));
+        if(this.mc.options.guiScale().get() > 5) {
+            this.addRenderableWidget(new Button(this.width / 2 - 50, this.height / 6 + 140, 100, 20, Component.translatable("osmium.options.title"), (button) -> mc.setScreen(new OsmiumOptionsScreen(this))));
         } else {
-            this.addRenderableWidget(new Button(this.width / 2 - 100, this.height / 6 + 200, 200, 20, new TranslatableComponent("osmium.options.title"), (buttonWidget) -> mc.setScreen(new OsmiumOptionsScreen(this))));
+            this.addRenderableWidget(new Button(this.width / 2 - 100, this.height / 6 + 200, 200, 20, Component.translatable("osmium.options.title"), (buttonWidget) -> mc.setScreen(new OsmiumOptionsScreen(this))));
         }
     }
 

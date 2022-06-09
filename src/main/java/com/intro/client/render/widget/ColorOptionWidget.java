@@ -15,7 +15,7 @@ import net.minecraft.client.gui.narration.NarratableEntry;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.renderer.GameRenderer;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
 
@@ -76,7 +76,7 @@ public class ColorOptionWidget extends GuiComponent implements Widget, GuiEventL
         RenderSystem.setShaderTexture(0, BAKED_TEXTURE);
         blit(matrices, x, y, 0, 0, width, height, width, height);
         drawCenteredString(matrices, mc.font, OsmiumClient.options.getColorOption(this.optionId).get().toStringNoAlpha(), x + (width / 2), y + height + 20, 0xffffff);
-        drawCenteredString(matrices, mc.font, new TranslatableComponent("osmium.widget.color_picker"), x + (width / 2), y - 20, 0xffffff);
+        drawCenteredString(matrices, mc.font, Component.translatable("osmium.widget.color_picker"), x + (width / 2), y - 20, 0xffffff);
     }
 
     @Override

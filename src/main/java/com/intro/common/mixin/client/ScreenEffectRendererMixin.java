@@ -65,8 +65,7 @@ public class ScreenEffectRendererMixin {
             bufferBuilder.vertex(matrix4f, 0.5F, -0.5F, -0.5F).color(1.0F, 1.0F, 1.0F, 0.9F).uv(m, p).endVertex();
             bufferBuilder.vertex(matrix4f, 0.5F, 0.5F, -0.5F).color(1.0F, 1.0F, 1.0F, 0.9F).uv(m, o).endVertex();
             bufferBuilder.vertex(matrix4f, -0.5F, 0.5F, -0.5F).color(1.0F, 1.0F, 1.0F, 0.9F).uv(n, o).endVertex();
-            bufferBuilder.end();
-            BufferUploader.end(bufferBuilder);
+            BufferUploader.draw(bufferBuilder.end());
             stack.popPose();
         }
 

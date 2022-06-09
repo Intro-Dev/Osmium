@@ -35,6 +35,7 @@ public class OsmiumApiImpl implements OsmiumApi {
     private String hostName;
 
     protected OsmiumApiImpl(String hostName) throws IOException {
+
         String mcApiToken = Minecraft.getInstance().user.getAccessToken();
         HashMap<String, String> parameters = new HashMap<>();
         HashMap<String, String> headers = new HashMap<>();

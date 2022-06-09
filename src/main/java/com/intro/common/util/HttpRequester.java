@@ -1,14 +1,5 @@
 package com.intro.common.util;
 
-import org.apache.http.HttpEntity;
-import org.apache.http.client.methods.CloseableHttpResponse;
-import org.apache.http.client.methods.HttpUriRequest;
-import org.apache.http.client.methods.RequestBuilder;
-import org.apache.http.entity.ContentType;
-import org.apache.http.entity.mime.HttpMultipartMode;
-import org.apache.http.entity.mime.MultipartEntityBuilder;
-import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClients;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -83,7 +74,9 @@ public class HttpRequester {
     }
 
 
+    // upload methods disabled so I dont have to use apache http client
    public static HttpResponse uploadFile(HttpRequest request, ShortBuffer fileBuffer, String fileName) throws IOException {
+        /*
        String formattedUrl = request.url();
        if(!request.queryParams().isEmpty()) {
            formattedUrl += "?";
@@ -104,9 +97,15 @@ public class HttpRequester {
        HttpUriRequest multipartRequest = builder.build();
        CloseableHttpResponse response = httpClient.execute(multipartRequest);
        return new HttpResponse(response.getStatusLine().getStatusCode(), new String(response.getEntity().getContent().readAllBytes()));
+
+         */
+       return null;
    }
 
+
+
     public static HttpResponse uploadFileWithOtherFormData(HttpRequest request, ByteBuffer fileBuffer, String fileName, Map<String, String> otherTextFormData) throws IOException {
+        /*
         String formattedUrl = request.url();
         if(!request.queryParams().isEmpty()) {
             formattedUrl += "?";
@@ -133,7 +132,12 @@ public class HttpRequester {
         System.out.println(new String(entity.getContent().readAllBytes()));
         CloseableHttpResponse response = httpClient.execute(multipartRequest);
         return new HttpResponse(response.getStatusLine().getStatusCode(), new String(response.getEntity().getContent().readAllBytes()));
+
+         */
+        return null;
     }
+
+
 
 
 

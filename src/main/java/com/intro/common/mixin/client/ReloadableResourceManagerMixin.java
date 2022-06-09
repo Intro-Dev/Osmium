@@ -22,10 +22,12 @@ public class ReloadableResourceManagerMixin {
     @Inject(method = "createReload", at = @At("RETURN"))
     public void stitchTextures(Executor executor, Executor executor2, CompletableFuture<Unit> completableFuture, List<PackResources> list, CallbackInfoReturnable<ReloadInstance> cir) {
         CosmeticManager.loadCapes();
+
         try {
             OsmiumApi.getInstance().uploadCapeToServers(CosmeticManager.getPreLoadedPlayerCape());
         } catch (IOException e) {
             e.printStackTrace();
         }
+
     }
 }

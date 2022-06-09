@@ -2,8 +2,8 @@ package com.intro.client.render.widget;
 
 import com.intro.client.OsmiumClient;
 import net.minecraft.client.gui.narration.NarratableEntry;
-import net.minecraft.network.chat.TextComponent;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.Component;
+
 
 public class BooleanButtonWidget extends AbstractScalableButton {
 
@@ -11,16 +11,16 @@ public class BooleanButtonWidget extends AbstractScalableButton {
     public final String key;
 
     public BooleanButtonWidget(int x, int y, int width, int height, String optionId, String key) {
-        super(x, y, width, height, new TextComponent(""), button -> {
+        super(x, y, width, height, Component.literal(""), button -> {
             if(!OsmiumClient.options.getOverwrittenOptions().containsKey(optionId)) {
                 OsmiumClient.options.getBooleanOption(optionId).set(!OsmiumClient.options.getBooleanOption(optionId).get());
             } else {
                 button.active = false;
             }
             if(OsmiumClient.options.getBooleanOption(optionId).get()) {
-                button.setMessage(new TranslatableComponent(key + "enabled"));
+                button.setMessage(Component.translatable(key + "enabled"));
             } else {
-                button.setMessage(new TranslatableComponent(key + "disabled"));
+                button.setMessage(Component.translatable(key + "disabled"));
             }
 
         }, 1f);
@@ -30,23 +30,23 @@ public class BooleanButtonWidget extends AbstractScalableButton {
             this.active = false;
         }
         if(OsmiumClient.options.getBooleanOption(optionId).get()) {
-            super.setMessage(new TranslatableComponent(key + "enabled"));
+            super.setMessage(Component.translatable(key + "enabled"));
         } else {
-            super.setMessage(new TranslatableComponent(key + "disabled"));
+            super.setMessage(Component.translatable(key + "disabled"));
         }
     }
 
     public BooleanButtonWidget(int x, int y, int width, int height, String optionId, String key, float scale) {
-        super(x, y, width, height, new TextComponent(""), button -> {
+        super(x, y, width, height, Component.literal(""), button -> {
             if(!OsmiumClient.options.getOverwrittenOptions().containsKey(optionId)) {
                 OsmiumClient.options.getBooleanOption(optionId).set(!OsmiumClient.options.getBooleanOption(optionId).get());
             } else {
                 button.active = false;
             }
             if(OsmiumClient.options.getBooleanOption(optionId).get()) {
-                button.setMessage(new TranslatableComponent(key + "enabled"));
+                button.setMessage(Component.translatable(key + "enabled"));
             } else {
-                button.setMessage(new TranslatableComponent(key + "disabled"));
+                button.setMessage(Component.translatable(key + "disabled"));
             }
 
         }, scale);
@@ -56,9 +56,9 @@ public class BooleanButtonWidget extends AbstractScalableButton {
             this.active = false;
         }
         if(OsmiumClient.options.getBooleanOption(optionId).get()) {
-            super.setMessage(new TranslatableComponent(key + "enabled"));
+            super.setMessage(Component.translatable(key + "enabled"));
         } else {
-            super.setMessage(new TranslatableComponent(key + "disabled"));
+            super.setMessage(Component.translatable(key + "disabled"));
         }
     }
 

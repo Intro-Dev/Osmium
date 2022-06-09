@@ -10,8 +10,7 @@ import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.network.chat.TextComponent;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.Component;
 import org.apache.logging.log4j.Level;
 
 import java.io.BufferedInputStream;
@@ -43,19 +42,19 @@ public class OsmiumUpdateScreen extends Screen  {
     public static Path OLD_MOD_JAR_PATH;
 
     public OsmiumUpdateScreen(Screen parent) {
-        super(new TranslatableComponent("osmium.update_screen.title"));
+        super(Component.translatable("osmium.update_screen.title"));
         this.parent = parent;
     }
 
     @Override
     protected void init() {
-        acceptButton = new Button(this.width / 2 - 175, this.height / 4 + 160, 150, 20, new TranslatableComponent("osmium.download_update"), this::startDownload);
-        declineButton = new Button(this.width / 2 + 25, this.height / 4 + 160, 150, 20, new TranslatableComponent("osmium.decline_update"), (button -> mc.setScreen(parent)));
+        acceptButton = new Button(this.width / 2 - 175, this.height / 4 + 160, 150, 20, Component.translatable("osmium.download_update"), this::startDownload);
+        declineButton = new Button(this.width / 2 + 25, this.height / 4 + 160, 150, 20, Component.translatable("osmium.decline_update"), (button -> mc.setScreen(parent)));
         progressBar = new ProgressBarWidget(this.width / 2 - 100, this.height / 4 + 110, 200);
         progressBar.visible = false;
-        retryButton = new Button(this.width / 2 - 100, this.height / 4 + 160, 200, 20, new TranslatableComponent("osmium.retry"), this::startDownload);
+        retryButton = new Button(this.width / 2 - 100, this.height / 4 + 160, 200, 20, Component.translatable("osmium.retry"), this::startDownload);
         retryButton.visible = false;
-        continueButton = new Button(this.width / 2 - 100, this.height / 4 + 160, 200, 20, new TranslatableComponent("osmium.decline_update"),button -> mc.setScreen(parent));
+        continueButton = new Button(this.width / 2 - 100, this.height / 4 + 160, 200, 20, Component.translatable("osmium.decline_update"),button -> mc.setScreen(parent));
         continueButton.visible = false;
 
 
@@ -82,9 +81,9 @@ public class OsmiumUpdateScreen extends Screen  {
     @Override
     public void render(PoseStack matrices, int mouseX, int mouseY, float delta) {
         this.renderBackground(matrices);
-        drawCenteredString(matrices, mc.font, new TranslatableComponent("osmium.update_available"), this.width / 2, this.height / 4, Colors.WHITE.getColor().getInt());
+        drawCenteredString(matrices, mc.font, Component.translatable("osmium.update_available"), this.width / 2, this.height / 4, Colors.WHITE.getColor().getInt());
         drawCenteredString(matrices, mc.font, errorText, this.width / 2, this.height / 4 + 250, Colors.RED.getColor().getInt());
-        drawCenteredString(matrices, mc.font, new TextComponent("Current version: " + ModConstants.UPDATE_STRING + "-" + ModConstants.MINECRAFT_VERSION_STRING + ", New version: " + latestReleaseTag), this.width / 2, this.height / 4 + 50, Colors.WHITE.getColor().getInt());
+        drawCenteredString(matrices, mc.font, Component.literal("Current version: " + ModConstants.UPDATE_STRING + "-" + ModConstants.MINECRAFT_VERSION_STRING + ", New version: " + latestReleaseTag), this.width / 2, this.height / 4 + 50, Colors.WHITE.getColor().getInt());
 
         super.render(matrices, mouseX, mouseY, delta);
     }

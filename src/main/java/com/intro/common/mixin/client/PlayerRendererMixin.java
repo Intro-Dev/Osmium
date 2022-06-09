@@ -17,8 +17,6 @@ import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.LivingEntityRenderer;
 import net.minecraft.client.renderer.entity.player.PlayerRenderer;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.entity.player.Player;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -46,7 +44,7 @@ public abstract class PlayerRendererMixin extends LivingEntityRenderer<AbstractC
                     stack.pushPose();
                     stack.translate(0, 0.25, 0);
                     try {
-                        renderCustomColorNameTag(abstractClientPlayer, new TextComponent(new TranslatableComponent("osmium.level").getString() + HypixelAbstractionLayer.getPlayerLevel(abstractClientPlayer.getStringUUID())), stack, multiBufferSource, i, Colors.ORANGE.getColor().getInt());
+                        renderCustomColorNameTag(abstractClientPlayer, Component.literal(Component.translatable("osmium.level").getString() + HypixelAbstractionLayer.getPlayerLevel(abstractClientPlayer.getStringUUID())), stack, multiBufferSource, i, Colors.ORANGE.getColor().getInt());
                     } catch (Exception e) {
                         e.printStackTrace();
                     }

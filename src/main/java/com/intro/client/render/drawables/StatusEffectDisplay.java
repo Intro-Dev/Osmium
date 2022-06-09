@@ -13,7 +13,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.resources.MobEffectTextureManager;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.effect.MobEffectInstance;
 
 import java.util.List;
@@ -72,7 +72,7 @@ public class StatusEffectDisplay extends Scalable {
                             formattedTime = mins + ":" + formattedSeconds;
                         }
 
-                        String messageText = new TranslatableComponent(effect.getEffect().getDescriptionId()).getString() + (" " + (effect.getAmplifier() + 1) + ", " + formattedTime);
+                        String messageText = Component.translatable(effect.getEffect().getDescriptionId()).getString() + (" " + (effect.getAmplifier() + 1) + ", " + formattedTime);
 
                         stack.pushPose();
                         {

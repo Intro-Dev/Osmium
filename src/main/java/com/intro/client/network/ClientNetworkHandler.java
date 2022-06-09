@@ -19,7 +19,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.toasts.SystemToast;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 import org.apache.logging.log4j.Level;
 
 import java.io.IOException;
@@ -61,7 +60,7 @@ public class ClientNetworkHandler {
 
         ClientPlayNetworking.registerGlobalReceiver(NetworkingConstants.RUNNING_OSMIUM_SERVER_PACKET_ID, (client, handler, buf, responseSender) -> {
             isRunningOsmiumServer = true;
-            sendToast(Minecraft.getInstance(), new TranslatableComponent("osmium.toast.running_osmium_server"), new TranslatableComponent("osmium.toast.settings_change"));
+            sendToast(Minecraft.getInstance(), Component.translatable("osmium.toast.running_osmium_server"), Component.translatable("osmium.toast.settings_change"));
 
         });
 
@@ -94,7 +93,7 @@ public class ClientNetworkHandler {
                 CosmeticManager.playerCapes.put(uuid, playerCape);
             } catch (Exception e) {
                 e.printStackTrace();
-                sendToast(Minecraft.getInstance(), new TranslatableComponent("osmium_failed_cape_load_title"), new TranslatableComponent("osmium_failed_cape_load"));
+                sendToast(Minecraft.getInstance(), Component.translatable("osmium_failed_cape_load_title"), Component.translatable("osmium_failed_cape_load"));
             }
         });
     }

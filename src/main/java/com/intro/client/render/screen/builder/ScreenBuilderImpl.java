@@ -16,7 +16,6 @@ import net.minecraft.client.gui.narration.NarratableEntry;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
 
 import java.util.ArrayList;
@@ -137,7 +136,7 @@ public class ScreenBuilderImpl implements ScreenBuilder {
 
                 stack.pushPose();
                 stack.translate(0, finalOffset,0);
-                drawCenteredString(stack, mc.font, new TranslatableComponent("osmium.version"), this.width / 2, this.height / 8 + 100 + globalOffset + (logoOffset / 4), 0xffffff);
+                drawCenteredString(stack, mc.font, Component.translatable("osmium.version"), this.width / 2, this.height / 8 + 100 + globalOffset + (logoOffset / 4), 0xffffff);
                 stack.popPose();
                 renderConsumers.forEach(consumer -> consumer.onRender(stack, partialTicks));
                 super.render(stack, mouseX, mouseY, partialTicks);
@@ -146,22 +145,22 @@ public class ScreenBuilderImpl implements ScreenBuilder {
             @Override
             protected void init() {
 
-                if(mc.options.guiScale > 2) {
+                if(mc.options.guiScale().get() > 2) {
                     logoOffset = -40;
                 }
-                if(mc.options.guiScale > 4) {
+                if(mc.options.guiScale().get() > 4) {
                     shouldRenderLogo = false;
                     logoOffset = -80;
                     globalOffset = -64;
                 }
 
-                finalOffset = 57 / mc.options.guiScale;
+                finalOffset = 57 / mc.options.guiScale().get();
 
 
                 widgets.forEach(this::add);
                 initConsumers.forEach(Runnable::run);
                 if(parent != null) {
-                    addRenderableWidget(new Button(this.width / 2 - 100, this.height / 4 + 225, 200, 20, new TranslatableComponent("osmium.options.video_options.back"), (Button) -> mc.setScreen(parent)));
+                    addRenderableWidget(new Button(this.width / 2 - 100, this.height / 4 + 225, 200, 20, Component.translatable("osmium.options.video_options.back"), (Button) -> mc.setScreen(parent)));
                 }
                 super.init();
             }

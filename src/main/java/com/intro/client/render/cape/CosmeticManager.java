@@ -19,7 +19,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.toasts.SystemToast;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
 
 import java.io.File;
@@ -120,7 +119,7 @@ public class CosmeticManager {
             }
         } catch (Exception e) {
             e.printStackTrace();
-            sendToast(new TranslatableComponent("osmium_failed_cape_load_title"), new TranslatableComponent("osmium_failed_cape_load"));
+            sendToast(Component.translatable("osmium_failed_cape_load_title"), Component.translatable("osmium_failed_cape_load"));
         }
     }
 
@@ -150,7 +149,7 @@ public class CosmeticManager {
                 returns.add(new Cape(new DynamicAnimation(NativeImage.read(capeImage), creator + "-" + identifier, 64 ,32, frameDelay), false, animated, "cape pack", creator + "-" + identifier, creator));
             } catch (Exception e) {
                 e.printStackTrace();
-                sendToast(new TranslatableComponent("osmium_failed_cape_load_title"), new TranslatableComponent("osmium_failed_cape_load"));
+                sendToast(Component.translatable("osmium_failed_cape_load_title"), Component.translatable("osmium_failed_cape_load"));
             }
         }
 

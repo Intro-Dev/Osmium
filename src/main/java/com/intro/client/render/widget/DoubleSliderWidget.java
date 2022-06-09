@@ -4,8 +4,7 @@ import com.intro.client.OsmiumClient;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.AbstractOptionSliderButton;
-import net.minecraft.network.chat.TextComponent;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraft.util.Mth;
 
 public class DoubleSliderWidget extends AbstractOptionSliderButton {
@@ -35,7 +34,7 @@ public class DoubleSliderWidget extends AbstractOptionSliderButton {
         }
         double scaledVal = (maxVal - minVal) * this.value;
         scaledVal = Mth.clamp(scaledVal, minVal, maxVal);
-        this.setMessage(new TextComponent(new TranslatableComponent(key).getString() + (Math.round(scaledVal * roundTo) / roundTo)));
+        this.setMessage(Component.literal(Component.translatable(key).getString() + (Math.round(scaledVal * roundTo) / roundTo)));
     }
 
     @Override

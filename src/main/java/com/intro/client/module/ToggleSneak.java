@@ -4,7 +4,7 @@ import com.intro.client.OsmiumClient;
 import com.intro.client.module.event.Event;
 import com.intro.client.module.event.EventTick;
 import com.intro.client.render.color.Colors;
-import com.intro.client.render.drawables.Text;
+import com.intro.client.render.drawables.RenderableText;
 import com.intro.client.util.ElementPosition;
 import com.intro.common.config.Options;
 import com.intro.common.config.options.Option;
@@ -16,12 +16,12 @@ public class ToggleSneak {
 
     public static boolean sneaking = false;
 
-    private final Text sprintingText;
+    private final RenderableText sprintingText;
 
     private final Minecraft mc = Minecraft.getInstance();
 
     public ToggleSneak() {
-        sprintingText = new Text(5, 5, "", Colors.WHITE.getColor().getInt());
+        sprintingText = new RenderableText(5, 5, "", Colors.WHITE.getColor().getInt());
         OsmiumClient.options.getElementPositionOption(Options.ToggleSprintPosition).get().loadToDrawable(sprintingText);
     }
 

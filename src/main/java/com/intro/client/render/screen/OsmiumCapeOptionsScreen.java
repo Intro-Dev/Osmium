@@ -24,7 +24,7 @@ import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
 import net.minecraft.client.resources.sounds.SimpleSoundInstance;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
@@ -53,7 +53,7 @@ public class OsmiumCapeOptionsScreen extends Screen {
 
 
     public OsmiumCapeOptionsScreen(Screen parent) {
-        super(new TranslatableComponent("osmium.cape_options"));
+        super(Component.translatable("osmium.cape_options"));
         this.parent = parent;
     }
 
@@ -61,7 +61,7 @@ public class OsmiumCapeOptionsScreen extends Screen {
     @Override
     protected void init() {
 
-        guiScale = 2f / mc.options.guiScale;
+        guiScale = 2f / mc.options.guiScale().get();
 
         bgStartHeight = (int) (this.height / 2 - (256 * guiScale));
 
@@ -93,13 +93,13 @@ public class OsmiumCapeOptionsScreen extends Screen {
 
 
         // why are widgets so annoying to scale properly
-        AbstractScalableButton refreshButton = new AbstractScalableButton((int) (this.width / 2 - (250 * guiScale)), buttonStartHeight, standardButtonWidth, standardButtonHeight, new TranslatableComponent("osmium.refresh_capes"), this::refresh, guiScale);
+        AbstractScalableButton refreshButton = new AbstractScalableButton((int) (this.width / 2 - (250 * guiScale)), buttonStartHeight, standardButtonWidth, standardButtonHeight, Component.translatable("osmium.refresh_capes"), this::refresh, guiScale);
         EnumSelectWidget toggleCapeWidget = new EnumSelectWidget((int) (this.width / 2 - (250 * guiScale)), buttonStartHeight + buttonYIncrement, standardButtonWidth, standardButtonHeight, Options.CustomCapeMode,"osmium.options.video_options.cape_", (float) guiScale);
         BooleanButtonWidget toggleAnimationWidget = new BooleanButtonWidget((int) (this.width / 2 - (250 * guiScale)), buttonStartHeight + buttonYIncrement * 2, standardButtonWidth, standardButtonHeight, Options.AnimateCapes, "osmium.options.animate_capes_", (float) guiScale);
         BooleanButtonWidget toggleShowOtherCapesWidget = new BooleanButtonWidget((int) (this.width / 2 - (250 * guiScale)), buttonStartHeight + buttonYIncrement * 3 , standardButtonWidth, standardButtonHeight, Options.ShowOtherPlayersCapes, "osmium.options.show_other_capes_", (float) guiScale);
 
 
-        AbstractScalableButton backButton = new AbstractScalableButton((int) (this.width / 2 - (250 * guiScale)), buttonStartHeight + buttonYIncrement * 5, standardButtonWidth, standardButtonHeight   , new TranslatableComponent("osmium.options.video_options.back"), button -> mc.setScreen(this.parent), guiScale);
+        AbstractScalableButton backButton = new AbstractScalableButton((int) (this.width / 2 - (250 * guiScale)), buttonStartHeight + buttonYIncrement * 5, standardButtonWidth, standardButtonHeight, Component.translatable("osmium.options.video_options.back"), button -> mc.setScreen(this.parent), guiScale);
 
         // this widget is 1 pixel off center
         // :)
@@ -126,7 +126,7 @@ public class OsmiumCapeOptionsScreen extends Screen {
         stack.scale(zoomInScale, zoomInScale, 0);
 
         fill(stack, (int) (this.width / 2 - (312 * guiScale)), bgStartHeight, (int) (this.width / 2 + (312 * guiScale)), (int) (this.height / 2 + (256 * guiScale)), Colors.BACKGROUND_GRAY.getColor().getInt());
-        RenderUtil.renderScaledText(stack, mc.font, new TranslatableComponent("osmium.cape_select"), (int) (this.width / 2 + (180 * guiScale)), bgStartHeight + (10 * guiScale), Colors.WHITE.getColor().getInt(), (float) guiScale, true);
+        RenderUtil.renderScaledText(stack, mc.font, Component.translatable("osmium.cape_select"), (int) (this.width / 2 + (180 * guiScale)), bgStartHeight + (10 * guiScale), Colors.WHITE.getColor().getInt(), (float) guiScale, true);
 
         List<Cape> pageCapes = capePages.get(currentPage.get());
 

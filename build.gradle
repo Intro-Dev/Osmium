@@ -1,5 +1,5 @@
 plugins {
-	id 'fabric-loom' version '0.11.+'
+	id 'fabric-loom' version '0.12-SNAPSHOT'
 	id 'maven-publish'
 }
 
@@ -23,10 +23,15 @@ repositories {
 dependencies {
 	minecraft "com.mojang:minecraft:${project.minecraft_version}"
 
+
 	mappings(loom.layered {
+		parchment("org.parchmentmc.data:parchment-1.18.2:2022.06.05@zip")
 		officialMojangMappings()
-		parchment("org.parchmentmc.data:parchment-1.17.1:2021.09.05@zip")
+		//
 	})
+
+
+	// mappings(loom.officialMojangMappings())
 
 	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
 	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
@@ -39,8 +44,11 @@ dependencies {
 		exclude group: "com.google.code.gson", module: "gson"
 		exclude group: "org.apache.httpcomponents", module: "httpclient"
 	})
+	/*
 	include(modImplementation("org.apache.httpcomponents:httpmime:4.5.2"))
 	include(modImplementation("org.apache.httpcomponents:httpclient:4.5.2"))
+
+	 */
 
 }
 

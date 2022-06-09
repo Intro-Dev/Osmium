@@ -12,7 +12,7 @@ import net.minecraft.client.gui.narration.NarrationElementOutput;
  * <p>Generic class for gui drawables</p>
  *
  * @see RenderManager
- * @see Text
+ * @see RenderableText
  * @author Intro
  * @since 1.1.1
  */

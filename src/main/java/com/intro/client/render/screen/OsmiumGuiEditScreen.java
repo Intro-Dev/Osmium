@@ -8,7 +8,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraft.util.Mth;
 
 public class OsmiumGuiEditScreen extends Screen {
@@ -16,13 +16,13 @@ public class OsmiumGuiEditScreen extends Screen {
     private final Screen parent;
 
     public OsmiumGuiEditScreen(Screen parent) {
-        super(new TranslatableComponent("osmium.gui_edit.title"));
+        super(Component.translatable("osmium.gui_edit.title"));
         this.parent = parent;
     }
 
     @Override
     protected void init() {
-        Button backButton = new Button(this.width / 2 - 75, this.height - 40, 150, 20, new TranslatableComponent("osmium.options.video_options.back"), (Button) -> Minecraft.getInstance().setScreen(parent));
+        Button backButton = new Button(this.width / 2 - 75, this.height - 40, 150, 20, Component.translatable("osmium.options.video_options.back"), (Button) -> Minecraft.getInstance().setScreen(parent));
         this.addRenderableWidget(backButton);
     }
 
