@@ -30,6 +30,8 @@ public class OsmiumVideoOptionsScreen extends Screen {
         this.parent = parent;
     }
 
+    Button capeOptionsButton;
+
     @Override
     protected void init() {
 
@@ -50,7 +52,7 @@ public class OsmiumVideoOptionsScreen extends Screen {
         BooleanButtonWidget netherParticlesToggle = new BooleanButtonWidget(this.width / 2 +125, this.height / 4 + 80 + globalOffset, 150, 20, Options.DecreaseNetherParticles, "osmium.options.nether_particles_");
 
         Button blockOptionsButton = new Button(this.width / 2 - 275, this.height / 4 + 120 + globalOffset, 150, 20, Component.translatable("osmium.options.block_option_settings"), (buttonWidget) -> mc.setScreen(new OsmiumBlockOptionsScreen(this)));
-        Button capeOptionsButton = new Button(this.width / 2 - 75, this.height / 4 + 120 + globalOffset, 150, 20, Component.translatable("osmium.cape_options"), (buttonWidget) -> mc.setScreen(new OsmiumCapeOptionsScreen(this)));
+        capeOptionsButton = new Button(this.width / 2 - 75, this.height / 4 + 120 + globalOffset, 150, 20, Component.translatable("osmium.cape_options"), (buttonWidget) -> mc.setScreen(new OsmiumCapeOptionsScreen(this)));
 
         Button backButton = new Button(this.width / 2 - 100, this.height / 4 + 225 + globalOffset, 200, 20, Component.translatable("osmium.options.video_options.back"), (Button) -> mc.setScreen(parent));
 
@@ -65,6 +67,8 @@ public class OsmiumVideoOptionsScreen extends Screen {
 
     public void render(@NotNull PoseStack matrices, int mouseX, int mouseY, float delta){
         this.renderBackground(matrices);
+
+        capeOptionsButton.active = (mc.level != null);
         // set proper shaders
         RenderSystem.setShader(GameRenderer::getPositionColorTexShader);
         RenderSystem.setShaderTexture(0, LOGO_TEXTURE);

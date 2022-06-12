@@ -265,7 +265,7 @@ public class RenderUtil {
         public void submitDrawCall() {
             BufferBuilder builder = (BufferBuilder) this.buffers.getBuffer(textRenderType);
             RenderSystem.setShader(GameRenderer::getRendertypeTextShader);
-            BufferUploader.draw(builder.end());
+            BufferUploader.drawWithShader(builder.end());
         }
 
 

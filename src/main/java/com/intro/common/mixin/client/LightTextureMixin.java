@@ -11,27 +11,30 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 @Mixin(LightTexture.class)
 public class LightTextureMixin {
 
-    private float lastBrightness = 0;
 
-    private long lastCalled = System.currentTimeMillis();
+    private float brightness = 0;
 
-    private boolean alreadyActive = false;
+    private boolean fullbrightPreviouslyEnabled = false;
 
     @Redirect(method = "updateLightTexture", at = @At(value = "INVOKE", target = "Ljava/lang/Double;floatValue()F"))
-    public float changeBrightnessLevel(Double gamma) {
+    public float changeBrightnessLevel(Double inputGamma) {
+        // hardcoded because I cant be bothered to not
+        float increment = 0.0001f;
+        float max = 1f;
+
         if(OsmiumClient.options.getBooleanOption(Options.FullbrightEnabled).get()) {
-            if(!alreadyActive) {
-                lastBrightness = gamma.floatValue();
-                alreadyActive = true;
+            if(!fullbrightPreviouslyEnabled) {
+                brightness = inputGamma.floatValue();
+                fullbrightPreviouslyEnabled = true;
             }
-            float delta = (System.currentTimeMillis() % lastCalled) / 1000f;
-            float currentBrightness = Mth.lerp(delta, lastBrightness, 100);
-            lastBrightness = currentBrightness;
-            lastCalled = System.currentTimeMillis();
-            return currentBrightness;
+            // cool animation
+            brightness += increment;
+            brightness = Mth.clamp(brightness, 0, max);
+            return brightness;
         }
-        alreadyActive = false;
-        lastCalled = System.currentTimeMillis();
-        return gamma.floatValue();
+        brightness -= increment;
+        brightness = Mth.clamp(brightness, inputGamma.floatValue(), max);
+        fullbrightPreviouslyEnabled = false;
+        return brightness;
     }
 }

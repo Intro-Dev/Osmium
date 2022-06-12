@@ -89,16 +89,14 @@ public abstract class LevelRendererMixin {
     private void drawShapeFull(PoseStack stack, VoxelShape voxelShape, double x, double y, double z, Color color) {
         stack.pushPose();
         BufferBuilder builder = Tesselator.getInstance().getBuilder();
-        builder.begin(VertexFormat.Mode.TRIANGLES, DefaultVertexFormat.POSITION_COLOR);
-        renderVoxelShape(stack, builder, voxelShape, x, y, z, color.getFloatR(), color.getFloatG(), color.getFloatB(), (float) OsmiumClient.options.getDoubleOption(Options.BlockOutlineAlpha).get().byteValue(), 0.01d);
+        builder.begin(VertexFormat.Mode.TRIANGLE_STRIP, DefaultVertexFormat.POSITION_COLOR);
+        renderVoxelShape(stack, builder, voxelShape, x, y, z, color.getFloatR(), color.getFloatG(), color.getFloatB(), OsmiumClient.options.getDoubleOption(Options.BlockOutlineAlpha).get().floatValue(), 0.01d);
         BufferBuilder.RenderedBuffer renderedBuffer = builder.end();
         RenderSystem.setShader(GameRenderer::getPositionColorShader);
-        RenderSystem.enableTexture();
         RenderSystem.enableBlend();
         RenderSystem.enableDepthTest();
         RenderSystem.blendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
-        BufferUploader.draw(renderedBuffer);
-        RenderSystem.disableTexture();
+        BufferUploader.drawWithShader(renderedBuffer);
         RenderSystem.disableBlend();
         RenderSystem.disableDepthTest();
         stack.popPose();
