@@ -73,6 +73,15 @@ public interface ScreenBuilder {
     ScreenBuilder button(int x, int y, int width, int height, Component text, Button.OnPress onPress, float scale);
 
     /**
+     * Adds a generic option button. Automatically offsets the buttons each time a new one is added.
+     * Only works with Enum and Boolean options
+     * @param optionId The option to be used
+     * @param translationKey The translation key of the option
+     * @return Returns the current ScreenBuilder
+     */
+    ScreenBuilder button(String optionId, String translationKey, WidgetConsumer afterInit);
+
+    /**
      * Adds a button with custom function
      * @param text Button text
      * @param onPress Button function
@@ -115,6 +124,12 @@ public interface ScreenBuilder {
     interface RenderConsumer {
 
         void onRender(PoseStack stack, float tickDelta);
+
+    }
+
+    interface WidgetConsumer {
+
+        void onTick(Widget widget);
 
     }
 

@@ -116,6 +116,7 @@ public class Options {
     public static final String LevelHeadMode = "LevelHeadMode";
     public static final String AutoGGEnabled = "AutoGGEnabled";
 
+
     // contains the string for the option schema that the client is using
     public static final String OPTION_FILE_SCHEMA = "OPTION_FILE_SCHEMA";
 

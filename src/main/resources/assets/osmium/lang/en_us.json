@@ -16,7 +16,7 @@
   "osmium.options.sneak_smooth": "Sneak: Smooth",
   "osmium.options.sneak_instant": "Sneak: Instant",
   "osmium.options.video_options.back": "Back",
-  "osmium.version": "Osmium Version 1.3.1",
+  "osmium.version": "Osmium Version 1.3.2",
   "osmium.gui_edit.title": "Gui Editing",
   "osmium.options.fps_enabled": "Fps Display: Enabled",
   "osmium.options.fps_disabled": "Fps Display: Disabled",
@@ -91,5 +91,11 @@
   "osmium.options.level_head_mode_skywars_level": "Mode: SkyWars Level",
   "osmium.options.auto_gg_enabled": "AutoGG: Enabled",
   "osmium.options.auto_gg_disabled": "AutoGG: Disabled",
-  "osmium.options.api_key": "Enter Api Key"
+  "osmium.options.api_key": "Enter Api Key",
+  "osmium.compatibility.sneak_tweak_disable": "ToggleSneak disabled for compatibility with SneakTweak",
+  "osmium.compatibility.block_outline_disable": "Block Outline disabled for compatibility with ColorMeOutlines",
+  "osmium.options.cape_screen_level_only": "Cape options can only be opened in a world",
+  "osmium.options.gui_screen_level_only": "Gui editing can only be done in a world"
+
+
 }

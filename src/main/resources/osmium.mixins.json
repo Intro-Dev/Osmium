@@ -1,6 +1,7 @@
 {
   "required": true,
   "package": "com.intro.common.mixin",
+  "plugin": "com.intro.common.mixin.OsmiumMixinPlugin",
   "compatibilityLevel": "JAVA_17",
   "client": [
     "client.AbilitiesMixin",
@@ -18,6 +19,7 @@
     "client.KeyboardInputMixin",
     "client.KeyMappingAccessor",
     "client.LevelRendererAccessor",
+    "client.LevelRendererCompatibilityMixin",
     "client.LevelRendererMixin",
     "client.LightTextureMixin",
     "client.MinecraftAccessor",

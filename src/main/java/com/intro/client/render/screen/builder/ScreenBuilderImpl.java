@@ -18,8 +18,7 @@ import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 public class ScreenBuilderImpl implements ScreenBuilder {
 
@@ -29,6 +28,8 @@ public class ScreenBuilderImpl implements ScreenBuilder {
 
     private final List<RenderConsumer> renderConsumers = new ArrayList<>();
     private final List<Runnable> initConsumers = new ArrayList<>();
+
+    private final Map<Widget, Set<WidgetConsumer>> initWidgetConsumers = new HashMap();
 
     private int widgetX = -275;
     private int widgetY = 80;
@@ -75,6 +76,23 @@ public class ScreenBuilderImpl implements ScreenBuilder {
     }
 
     @Override
+    public ScreenBuilder button(String optionId, String translationKey, WidgetConsumer afterInit) {
+        Option<?> option = OsmiumClient.options.get(optionId);
+        if(option.get() instanceof Boolean) {
+            BooleanButtonWidget widget = new BooleanButtonWidget(mc.getWindow().getGuiScaledWidth() / 2 + widgetX, mc.getWindow().getScreenHeight() / 8 + widgetY, 150, 20, option.getIdentifier(), translationKey);
+            widget(widget);
+            addWidgetConsumer(widget, afterInit);
+        }
+        if (option.get() instanceof Enum<?>) {
+            EnumSelectWidget widget = new EnumSelectWidget(mc.getWindow().getGuiScaledWidth() / 2 + widgetX, mc.getWindow().getScreenHeight() / 8 + widgetY, 150, 20, option.getIdentifier(), translationKey);
+            widget(widget);
+            addWidgetConsumer(widget, afterInit);
+        }
+        incrementButton();
+        return this;
+    }
+
+    @Override
     public ScreenBuilder button(Component text, Button.OnPress onPress) {
         widget(new Button(mc.getWindow().getGuiScaledWidth() / 2 + widgetX, mc.getWindow().getScreenHeight() / 8 + widgetY, 150, 20, text, onPress));
         return this;
@@ -105,6 +123,11 @@ public class ScreenBuilderImpl implements ScreenBuilder {
             widgetX = -275;
             widgetY += 40;
         }
+    }
+
+    private void addWidgetConsumer(Widget widget, WidgetConsumer consumer) {
+        initWidgetConsumers.computeIfAbsent(widget, k -> new HashSet<>());
+        initWidgetConsumers.get(widget).add(consumer);
     }
 
     @Override
@@ -157,7 +180,11 @@ public class ScreenBuilderImpl implements ScreenBuilder {
                 finalOffset = 57 / mc.options.guiScale().get();
 
 
-                widgets.forEach(this::add);
+                widgets.forEach((w) -> {
+                    add(w);
+                    initWidgetConsumers.computeIfAbsent((Widget) w, k -> new HashSet<>());
+                    initWidgetConsumers.get((Widget) w).forEach(consumer -> consumer.onTick((Widget) w));
+                });
                 initConsumers.forEach(Runnable::run);
                 if(parent != null) {
                     addRenderableWidget(new Button(this.width / 2 - 100, this.height / 4 + 225, 200, 20, Component.translatable("osmium.options.video_options.back"), (Button) -> mc.setScreen(parent)));

@@ -14,15 +14,38 @@ public class AbstractScalableButton extends Button {
 
     private double scale;
 
+    public Component getTooltip() {
+        return tooltip;
+    }
+
+    public void setTooltip(Component tooltip) {
+        this.tooltip = tooltip;
+    }
+
+    private Component tooltip;
+
     public AbstractScalableButton(int i, int j, int k, int l, Component component, OnPress onPress, double scale) {
         super(i, j, k, l, component, onPress);
+        this.scale = scale;
+    }
+
+    public double getScale() {
+        return scale;
+    }
+
+    public void setScale(double scale) {
+        this.scale = scale;
+    }
+
+    public AbstractScalableButton(int i, int j, int k, int l, Component component, OnPress onPress, double scale, Component tooltip) {
+        super(i, j, k, l, component, onPress);
+        this.tooltip = tooltip;
         this.scale = scale;
     }
 
     public AbstractScalableButton(int i, int j, int k, int l, Component component, OnPress onPress, OnTooltip onTooltip) {
         super(i, j, k, l, component, onPress, onTooltip);
     }
-
 
     @Override
     public void render(PoseStack stack, int mouseX, int mouseY, float tickDelta) {
@@ -43,6 +66,7 @@ public class AbstractScalableButton extends Button {
             int l = this.active ? 16777215 : 10526880;
             // scale has to be rounded or text rendering looses precision
             RenderUtil.renderScaledText(stack, font, this.getMessage().getString(), this.x + this.width / 2 - (font.width(this.getMessage().getString()) / 2), this.y + (this.height - 8) / 2, l | Mth.ceil(this.alpha * 255.0F) << 24, (float) scale);
+            if(tooltip != null && this.isHovered) Minecraft.getInstance().screen.renderTooltip(stack, tooltip, mouseX, mouseY);
         }
 
     }

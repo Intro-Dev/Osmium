@@ -14,7 +14,6 @@ import org.apache.logging.log4j.Logger;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.StringReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.file.Files;
@@ -78,10 +77,9 @@ public class Util {
             cachedLatestReleaseTag = tag;
             return tag;
         } catch (Exception e) {
-            e.printStackTrace();
             LOGGER.log(Level.WARN, "Failed to get latest version string!");
+            return ModConstants.FULL_VERSION_STRING;
         }
-        return "";
     }
 
     public static boolean isRunningLatestVersion() {
@@ -126,7 +124,6 @@ public class Util {
             cachedLatestReleaseDownload = download;
             return download;
         } catch (Exception e) {
-            e.printStackTrace();
             LOGGER.log(Level.WARN, "Failed to get latest version download url!");
         }
         return "";
@@ -167,7 +164,6 @@ public class Util {
             cachedLatestReleaseName = name;
             return name;
         } catch (Exception e) {
-            e.printStackTrace();
             LOGGER.log(Level.WARN, "Failed to get latest version download url!");
         }
         return "";
@@ -194,12 +190,6 @@ public class Util {
             }
         }
         return null;
-    }
-
-    public static JsonElement getJsonFromString(String string) {
-        JsonReader reader = new JsonReader(new StringReader(string));
-        JsonParser parser = new JsonParser();
-        return parser.parse(reader);
     }
 
     public static Path getCosmeticPacksPath() {
