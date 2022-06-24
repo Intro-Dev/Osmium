@@ -1,22 +1,22 @@
 package com.intro.common.api;
 
 import com.google.gson.Gson;
-import com.intro.client.OsmiumClient;
-import com.intro.client.render.cape.Cape;
-import com.intro.client.render.texture.DynamicAnimation;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+import com.intro.client.render.cosmetic.Cape;
 import com.intro.common.util.HttpRequester;
+import com.intro.common.util.Util;
 import com.mojang.blaze3d.platform.NativeImage;
 import net.minecraft.client.Minecraft;
 import org.apache.logging.log4j.Level;
-import org.lwjgl.system.MemoryUtil;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.ByteBuffer;
-import java.nio.charset.StandardCharsets;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -31,23 +31,33 @@ import java.util.Map;
  */
 public class OsmiumApiImpl implements OsmiumApi {
 
-    private String sessionToken;
-    private String hostName;
+    private final String sessionToken;
+    private final String hostName;
+
+    private final Logger logger = LogManager.getLogger("OsmiumApi");
 
     protected OsmiumApiImpl(String hostName) throws IOException {
-
         String mcApiToken = Minecraft.getInstance().user.getAccessToken();
+        String originalSkinUrl = null;
+        String originalVariant = null;
+
+        HttpRequester.HttpResponse originalSkinString = HttpRequester.fetch(new HttpRequester.HttpRequest("https://api.minecraftservices.com/minecraft/profile", "GET", Map.of("Authorization", "Bearer " + mcApiToken), Map.of()));
+        JsonObject originalSkinJson = JsonParser.parseString(originalSkinString.body()).getAsJsonObject();
+
+        for(JsonElement element : originalSkinJson.get("skins").getAsJsonArray()) {
+            JsonObject object = element.getAsJsonObject();
+            if(object.get("state").getAsString().equals("ACTIVE")) {
+                originalSkinUrl = object.get("url").getAsString();
+                originalVariant = object.get("variant").getAsString();
+            }
+        }
+
         HashMap<String, String> parameters = new HashMap<>();
         HashMap<String, String> headers = new HashMap<>();
-
-
         parameters.put("uuid", Minecraft.getInstance().user.getUuid());
         parameters.put("stage", "initial");
         // uses a short buffer to avoid value overflow
-        HttpRequester.BinaryHttpResponse response = HttpRequester.fetchBin(new HttpRequester.HttpRequest(hostName + "/osmium/v2/login/", "GET", Collections.emptyMap(), parameters));
-
-        System.out.println("Image data: " + Arrays.toString(response.body().array()));
-
+        HttpRequester.BinaryHttpResponse response = HttpRequester.fetchBin(new HttpRequester.HttpRequest(hostName + "/osmium/v2/login", "GET", new HashMap<>(), parameters));
         parameters.clear();
         File outputDir = new File("C:\\Osmium\\osmium-1.17\\osmium\\run\\testing");
         File outputFile = new File("C:\\Osmium\\osmium-1.17\\osmium\\run\\testing\\test.png");
@@ -56,89 +66,64 @@ public class OsmiumApiImpl implements OsmiumApi {
         try (FileOutputStream outputStream = new FileOutputStream(outputFile)) {
             outputStream.write(response.body().array());
         }
-
         headers.put("Authorization", "Bearer " + mcApiToken);
-
+        headers.put("Content-Type",  "application/json");
         Map<String, String> formData = new HashMap<>();
         formData.put("variant", "classic");
         HttpRequester.HttpRequest request = new HttpRequester.HttpRequest("https://api.minecraftservices.com/minecraft/profile/skins", "POST", headers, parameters);
         HttpRequester.HttpResponse resp = HttpRequester.uploadFileWithOtherFormData(request, response.body(), "osverify.png", formData);
-        System.out.println("MJAPI response: " + resp);
+        headers.clear();
         parameters.clear();
+        formData.clear();
         parameters.put("uuid", Minecraft.getInstance().user.getUuid());
         parameters.put("stage", "confirm");
-        HttpRequester.HttpResponse httpResponse = HttpRequester.fetch(new HttpRequester.HttpRequest(hostName + "/osmium/v2/login/", "GET", Collections.emptyMap(), parameters));
-        System.out.println("osauth confirm response: " + httpResponse);
+        HttpRequester.HttpResponse httpResponse = HttpRequester.fetch(new HttpRequester.HttpRequest(hostName + "/osmium/v2/login", "GET", new HashMap<>(), parameters));
+        parameters.clear();
+        logger.log(Level.INFO, "Authenticated with Osmium servers");
         this.hostName = hostName;
-        this.sessionToken = httpResponse.body();
+        this.sessionToken = (String) new Gson().fromJson(httpResponse.body(), Map.class).get("token");
+
+        headers.put("Authorization", "Bearer " + mcApiToken);
+        headers.put("Content-Type",  "application/json");
+        HttpRequester.fetchWithJson(new HttpRequester.HttpRequest("https://api.minecraftservices.com/minecraft/profile/skins", "POST", headers, new HashMap<>()), new Gson().toJson(Map.of("variant", originalVariant.toLowerCase(), "url", originalSkinUrl)));
     }
 
     @Override
-    public void uploadCapeToServers(Cape cape) throws IOException {
+    public void setServerSideCape(Cape cape) throws IOException {
+        logger.log(Level.INFO, "Uploading cape to Osmium servers");
         HashMap<String, String> parameters = new HashMap<>();
         parameters.put("uuid", Minecraft.getInstance().user.getUuid());
         parameters.put("token", sessionToken);
-        HttpRequester.HttpResponse response = HttpRequester.uploadFile(new HttpRequester.HttpRequest(hostName + "/osmium/v2/cape/upload/", "POST", Collections.emptyMap(), parameters), serializeCape(cape).asShortBuffer(), "cape.cape");
-        System.out.println("Upload cape response: " + response);
+
+        HashMap<String, Object> capeData = new HashMap<>();
+        capeData.put("frame_delay", cape.getTexture().frameDelay);
+        capeData.put("animated", cape.animated);
+        capeData.put("creator", cape.creator);
+        capeData.put("name", cape.name);
+
+        String capeJson = new Gson().toJson(capeData);
+        HttpRequester.HttpRequest request = new HttpRequester.HttpRequest(hostName + "/osmium/v2/cape/upload", "POST", new HashMap<>(), parameters);
+        HttpRequester.uploadFileWithOtherFormData(request, ByteBuffer.wrap(cape.getTexture().image.asByteArray()), "cape.png", Util.mutableMapOf(new String[]{"data"}, new String[]{capeJson}));
     }
 
     @Override
-    public Cape getCapeFromServers(String uuid) throws IOException {
+    public NativeImage getCapeTextureFromServers(String uuid) throws IOException {
         HashMap<String, String> parameters = new HashMap<>();
-        parameters.put("uuid", uuid);
-        HttpRequester.BinaryHttpResponse response = HttpRequester.fetchBin(new HttpRequester.HttpRequest(hostName + "/osmium/v2/cape/get/", "GET", Collections.emptyMap(), parameters));
-        return deserializeCape(response.body());
+        parameters.put("uuid", uuid.replace("-", ""));
+        parameters.put("token", sessionToken);
+        HttpRequester.HttpRequest request = new HttpRequester.HttpRequest(hostName + "/osmium/v2/cape/get/texture/", "GET", new HashMap<>(), parameters);
+        HttpRequester.BinaryHttpResponse response = HttpRequester.fetchBin(request);
+        return NativeImage.read(response.body());
     }
 
-    public static ByteBuffer serializeCape(Cape cape) throws IOException {
-        Gson gsonObj = new Gson();
-        int capeTextureSize = cape.getTexture().image.asByteArray().length;
-        Map<String, Object> capeDataMap = new HashMap<>();
-        capeDataMap.put("creator", cape.creator);
-        capeDataMap.put("animated", cape.isAnimated);
-        capeDataMap.put("registry_name", cape.registryName);
-
-        Map<String, Object> dynamicAnimationDataMap = new HashMap<>();
-        DynamicAnimation dyn = cape.getTexture();
-        dynamicAnimationDataMap.put("max_animation_frames", dyn.maxAnimationFrames);
-        dynamicAnimationDataMap.put("frame_width", dyn.frameWidth);
-        dynamicAnimationDataMap.put("frame_height", dyn.frameHeight);
-        dynamicAnimationDataMap.put("frame_delay", dyn.frameDelay);
-
-        String serializedCapeData = gsonObj.toJson(capeDataMap);
-        String serializedDynamicAnimationData = gsonObj.toJson(dynamicAnimationDataMap);
-        ByteBuffer buffer = ByteBuffer.allocate(8 + serializedCapeData.getBytes(StandardCharsets.UTF_8).length + serializedDynamicAnimationData.getBytes(StandardCharsets.UTF_8).length + capeTextureSize);
-        buffer.putInt(0, serializedCapeData.getBytes(StandardCharsets.UTF_8).length);
-        buffer.putInt(4, serializedDynamicAnimationData.getBytes(StandardCharsets.UTF_8).length);
-        buffer.put(8, serializedCapeData.getBytes(StandardCharsets.UTF_8));
-        buffer.put(8 + serializedCapeData.getBytes(StandardCharsets.UTF_8).length, serializedDynamicAnimationData.getBytes(StandardCharsets.UTF_8));
-        buffer.put(8 + serializedCapeData.getBytes(StandardCharsets.UTF_8).length + serializedDynamicAnimationData.getBytes(StandardCharsets.UTF_8).length, dyn.image.asByteArray());
-        return buffer;
-    }
-
-    public static Cape deserializeCape(ByteBuffer buffer) throws IOException {
-        Gson gsonObj = new Gson();
-        int capeDataSize = buffer.getInt(0);
-        int dynamicAnimationDataSize = buffer.getInt(4);
-        String capeData = new String(buffer.array(), 8, capeDataSize, StandardCharsets.UTF_8);
-        String dynamicAnimationData = new String(buffer.array(), 8 + capeDataSize, dynamicAnimationDataSize, StandardCharsets.UTF_8);
-
-        Map<String, Object> capeDataMap = gsonObj.fromJson(capeData, Map.class);
-        Map<String, Object> dynamicAnimationDataMap = gsonObj.fromJson(dynamicAnimationData, Map.class);
-        // done so LWJGL memory utils can read the buffer
-        ByteBuffer nativeBuffer = ByteBuffer.allocateDirect(buffer.capacity() - capeDataSize - dynamicAnimationDataSize - 8);
-        nativeBuffer.put(buffer.slice(capeDataSize + dynamicAnimationDataSize + 8, buffer.capacity() - capeDataSize - dynamicAnimationDataSize - 8));
-        int maxFrames = ((Double) dynamicAnimationDataMap.get("max_animation_frames")).byteValue();
-        int imageWidth = ((Double) dynamicAnimationDataMap.get("frame_width")).byteValue() * maxFrames;
-        int imageHeight = ((Double) dynamicAnimationDataMap.get("frame_height")).byteValue() * maxFrames;
-        NativeImage image = new NativeImage(imageWidth, imageHeight, false);
-        if(buffer.capacity() - capeDataSize - dynamicAnimationDataSize - 8 > imageWidth * imageHeight * 4) {
-            OsmiumClient.LOGGER.log(Level.WARN, "Cape texture size is larger than expected. Someone probably tried a buffer overflow.");
-            return new Cape(new DynamicAnimation(image, (String) capeDataMap.get("registry_name"), ((Double) dynamicAnimationDataMap.get("frame_width")).byteValue(), ((Double) dynamicAnimationDataMap.get("frame_height")).byteValue(), ((Double) dynamicAnimationDataMap.get("frame_delay")).byteValue()), false, (boolean) capeDataMap.get("animated"), "remote_server", (String) capeDataMap.get("registry_name"), (String) capeDataMap.get("creator"));
-        }
-        MemoryUtil.memCopy(MemoryUtil.memAddress(nativeBuffer), image.pixels, nativeBuffer.capacity());
-        System.out.println(image.pixels);
-        return new Cape(new DynamicAnimation(image, (String) capeDataMap.get("registry_name"), ((Double) dynamicAnimationDataMap.get("frame_width")).byteValue(), ((Double) dynamicAnimationDataMap.get("frame_height")).byteValue(), ((Double) dynamicAnimationDataMap.get("frame_delay")).byteValue()), false, (boolean) capeDataMap.get("animated"), "remote_server", (String) capeDataMap.get("registry_name"), (String) capeDataMap.get("creator"));
+    @Override
+    public Map<String, ?> getCapeDataFromServers(String uuid) throws IOException {
+        HashMap<String, String> parameters = new HashMap<>();
+        parameters.put("uuid", uuid.replace("-", ""));
+        parameters.put("token", sessionToken);
+        HttpRequester.HttpRequest request = new HttpRequester.HttpRequest(hostName + "/osmium/v2/cape/get/texture/", "GET", new HashMap<>(), parameters);
+        HttpRequester.HttpResponse response = HttpRequester.fetch(request);
+        return new Gson().fromJson(response.body(), Map.class);
     }
 
 

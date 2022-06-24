@@ -44,12 +44,6 @@ dependencies {
 		exclude group: "com.google.code.gson", module: "gson"
 		exclude group: "org.apache.httpcomponents", module: "httpclient"
 	})
-	/*
-	include(modImplementation("org.apache.httpcomponents:httpmime:4.5.2"))
-	include(modImplementation("org.apache.httpcomponents:httpclient:4.5.2"))
-
-	 */
-
 }
 
 processResources {

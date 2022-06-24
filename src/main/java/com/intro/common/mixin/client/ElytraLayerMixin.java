@@ -1,6 +1,6 @@
 package com.intro.common.mixin.client;
 
-import com.intro.client.render.cape.CosmeticManager;
+import com.intro.client.OsmiumClient;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -23,7 +23,7 @@ public abstract class ElytraLayerMixin<T extends LivingEntity, M extends EntityM
 
     @Inject(method = "render", at = @At("HEAD"), cancellable = true)
     public void render(PoseStack poseStack, MultiBufferSource multiBufferSource, int i, T livingEntity, float f, float g, float h, float j, float k, float l, CallbackInfo ci) {
-        if(CosmeticManager.playerCapes.get(livingEntity.getStringUUID()) != null) {
+        if(OsmiumClient.cosmeticManager.getPlayerCape(livingEntity.getStringUUID()) != null) {
             ci.cancel();
         }
     }

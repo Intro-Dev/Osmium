@@ -18,7 +18,9 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 import java.util.zip.ZipEntry;
@@ -209,6 +211,17 @@ public class Util {
         } else {
             Files.deleteIfExists(file.toPath());
         }
+    }
+
+    public static <K, V> Map<K, V> mutableMapOf(K[] keys, V[] values) {
+        HashMap<K, V> map = new HashMap<>();
+
+        if(keys.length != values.length) throw new IllegalArgumentException("Keys and values must be of same length!");
+
+        for(int i = 0; i < keys.length; i++) {
+            map.put(keys[i], values[i]);
+        }
+        return map;
     }
 
 }

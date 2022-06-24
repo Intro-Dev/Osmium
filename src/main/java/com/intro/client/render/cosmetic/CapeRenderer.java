@@ -1,4 +1,4 @@
-package com.intro.client.render.cape;
+package com.intro.client.render.cosmetic;
 
 import com.intro.client.OsmiumClient;
 import com.intro.common.config.Options;
@@ -22,6 +22,7 @@ import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.player.PlayerModelPart;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import org.apache.logging.log4j.Level;
 
 import java.util.Objects;
 
@@ -42,12 +43,12 @@ public class CapeRenderer extends RenderLayer<AbstractClientPlayer, PlayerModel<
                 Minecraft.getInstance().getProfiler().push("OsmiumCapeRendering");
                 stack.pushPose();
                 stack.translate(0.0D, 0.0D, 0.125D);
-                double d = Mth.lerp((double)tickDelta, player.xCloakO, player.xCloak) - Mth.lerp((double)tickDelta, player.xo, player.getX());
-                double e = Mth.lerp((double)tickDelta, player.yCloakO, player.yCloak) - Mth.lerp((double)tickDelta, player.yo, player.getY());
-                double f = Mth.lerp((double)tickDelta, player.zCloakO, player.zCloak) - Mth.lerp((double)tickDelta, player.zo, player.getZ());
+                double d = Mth.lerp(tickDelta, player.xCloakO, player.xCloak) - Mth.lerp(tickDelta, player.xo, player.getX());
+                double e = Mth.lerp(tickDelta, player.yCloakO, player.yCloak) - Mth.lerp(tickDelta, player.yo, player.getY());
+                double f = Mth.lerp(tickDelta, player.zCloakO, player.zCloak) - Mth.lerp(tickDelta, player.zo, player.getZ());
                 float g = player.yBodyRotO + (player.yBodyRot - player.yBodyRotO);
-                double h = (double)Mth.sin(g * 0.017453292F);
-                double i = (double)(-Mth.cos(g * 0.017453292F));
+                double h = Mth.sin(g * 0.017453292F);
+                double i = -Mth.cos(g * 0.017453292F);
                 float j = (float)e * 10.0F;
                 j = Mth.clamp(j, -6.0F, 32.0F);
                 float k = (float)(d * h + f * i) * 100.0F;
@@ -69,35 +70,29 @@ public class CapeRenderer extends RenderLayer<AbstractClientPlayer, PlayerModel<
                 stack.mulPose(Vector3f.YP.rotationDegrees(180.0F - l / 2.0F));
 
 
-                if(CosmeticManager.playerCapes.get(player.getStringUUID()) != null) {
+                if(OsmiumClient.cosmeticManager.getPlayerCape(player.getStringUUID().replaceAll("-", "")) != null) {
                     RenderSystem.enableDepthTest();
                     RenderSystem.setShader(GameRenderer::getPositionTexShader);
-                    Cape playerCape = CosmeticManager.playerCapes.get(player.getStringUUID());
+                    Cape playerCape = OsmiumClient.cosmeticManager.getPlayerCape(player.getStringUUID().replaceAll("-", ""));
                     ResourceLocation capeTexture = playerCape.getFrameTexture();
                     // check if cape texture is null
                     // used to not crash until I optimised sub imaging
                     // now it creates the texture so fast the render thread can't keep up
                     if(capeTexture != null) {
                         RenderType capeRenderType = RenderType.entitySolid(capeTexture);
-                        if (OsmiumClient.options.getEnumOption(Options.CustomCapeMode).get() == CapeRenderingMode.OPTIFINE && playerCape.isOptifine) {
-                            final VertexConsumer vertexConsumer = multiBuffer.getBuffer(capeRenderType);
-                            // the way mojang renders capes is horrifically inefficient
-                            // and the thing is it would require a custom implementation of half the rendering engine to do it any other way
-                            this.getParentModel().renderCloak(stack, vertexConsumer, light, OverlayTexture.NO_OVERLAY);
-                        } else if(OsmiumClient.options.getEnumOption(Options.CustomCapeMode).get() == CapeRenderingMode.ALL) {
-                            final VertexConsumer vertexConsumer = multiBuffer.getBuffer(capeRenderType);
-                            this.getParentModel().renderCloak(stack, vertexConsumer, light, OverlayTexture.NO_OVERLAY);
-                        }
+                        final VertexConsumer vertexConsumer = multiBuffer.getBuffer(capeRenderType);
+                        // the way mojang renders capes is horrifically inefficient
+                        // and the thing is it would require a custom implementation of half the rendering engine to do it any other way
+                        this.getParentModel().renderCloak(stack, vertexConsumer, light, OverlayTexture.NO_OVERLAY);
                     }
                     RenderSystem.disableDepthTest();
                 }
-
                 stack.popPose();
                 Minecraft.getInstance().getProfiler().pop();
         }
 
         } catch (Exception e) {
-            e.printStackTrace();
+            OsmiumClient.LOGGER.log(Level.WARN, "Error in cape rendering: " + e.getMessage());
         }
     }
 

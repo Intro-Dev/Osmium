@@ -4,8 +4,7 @@ import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.intro.client.OsmiumClient;
-import com.intro.client.render.cape.Cape;
-import com.intro.client.render.cape.CosmeticManager;
+import com.intro.client.render.cosmetic.Cape;
 import com.intro.client.util.OptionUtil;
 import com.intro.common.config.options.Option;
 import com.intro.common.config.options.legacy.LegacyOption;
@@ -67,14 +66,7 @@ public class ClientNetworkHandler {
         ClientPlayConnectionEvents.JOIN.register((a, b, c) -> {
             if(isRunningOsmiumServer) {
                 ClientPlayNetworking.send(NetworkingConstants.RUNNING_OSMIUM_CLIENT_PACKET_ID, PacketByteBufs.create());
-                try {
-                    if(CosmeticManager.getPreLoadedPlayerCape() != null) {
-                        CosmeticManager.playerCapes.put(Minecraft.getInstance().player.getStringUUID(), CosmeticManager.getPreLoadedPlayerCape());
-                        sendCapeSetPacket(CosmeticManager.playerCapes.get(Minecraft.getInstance().player.getStringUUID()));
-                    }
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+
             }
         });
 
@@ -86,24 +78,14 @@ public class ClientNetworkHandler {
             OsmiumClient.options.clearOverwrittenOptions();
         });
 
-        ClientPlayNetworking.registerGlobalReceiver(NetworkingConstants.SET_PLAYER_CAPE_CLIENT_BOUND, (client, handler, buf, responseSender) -> {
-            try {
-                String uuid = buf.readUtf();
-                Cape playerCape = CosmeticManager.readCapeFromByteBuf(buf);
-                CosmeticManager.playerCapes.put(uuid, playerCape);
-            } catch (Exception e) {
-                e.printStackTrace();
-                sendToast(Minecraft.getInstance(), Component.translatable("osmium_failed_cape_load_title"), Component.translatable("osmium_failed_cape_load"));
-            }
-        });
     }
 
     public static void sendCapeSetPacket(Cape cape) throws IOException {
         if(isRunningOsmiumServer) {
             FriendlyByteBuf byteBuf = PacketByteBufs.create();
             byteBuf.writeUtf(cape.creator);
-            byteBuf.writeUtf(cape.registryName);
-            byteBuf.writeBoolean(cape.isAnimated);
+            byteBuf.writeUtf(cape.name);
+            byteBuf.writeBoolean(cape.animated);
             byteBuf.writeInt(cape.getTexture().getFrameDelay());
             byte[] imageData = cape.getTexture().image.asByteArray();
             byteBuf.writeBytes(imageData);

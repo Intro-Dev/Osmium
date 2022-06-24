@@ -1,18 +1,23 @@
 package com.intro.common.api;
 
-import com.intro.client.render.cape.Cape;
+import com.intro.client.render.cosmetic.Cape;
+import com.mojang.blaze3d.platform.NativeImage;
 
-import java.io.IOException;
+import java.util.Map;
 
 public class NonFunctionalOsmiumApi implements OsmiumApi {
     @Override
-    public void uploadCapeToServers(Cape cape) throws IOException {
-        // No-op
+    public void setServerSideCape(Cape cape) {
+
     }
 
     @Override
-    public Cape getCapeFromServers(String uuid) throws IOException {
-        // No-op
+    public NativeImage getCapeTextureFromServers(String uuid) {
+        return null;
+    }
+
+    @Override
+    public Map<String, ?> getCapeDataFromServers(String uuid) {
         return null;
     }
 

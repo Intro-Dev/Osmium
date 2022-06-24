@@ -1,9 +1,9 @@
 package com.intro.common.mixin.client;
 
 import com.intro.client.OsmiumClient;
-import com.intro.client.render.cape.CapeRenderer;
-import com.intro.client.render.cape.ElytraRenderer;
 import com.intro.client.render.color.Colors;
+import com.intro.client.render.cosmetic.CapeRenderer;
+import com.intro.client.render.cosmetic.ElytraRenderer;
 import com.intro.client.util.HypixelAbstractionLayer;
 import com.intro.common.config.Options;
 import com.mojang.blaze3d.vertex.PoseStack;

@@ -1,6 +1,6 @@
 package com.intro.common.mixin.client;
 
-import com.intro.client.render.cape.CosmeticManager;
+import com.intro.client.OsmiumClient;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -15,7 +15,7 @@ public class CapeLayerMixin {
 
     @Inject(method = "render", at = @At("HEAD"), cancellable = true)
     public void render(PoseStack poseStack, MultiBufferSource multiBufferSource, int i, AbstractClientPlayer abstractClientPlayer, float f, float g, float h, float j, float k, float l, CallbackInfo ci) {
-        if(CosmeticManager.playerCapes.get(abstractClientPlayer.getStringUUID()) != null) {
+        if(OsmiumClient.cosmeticManager.getPlayerCape(abstractClientPlayer.getStringUUID()) != null) {
             ci.cancel();
         }
     }

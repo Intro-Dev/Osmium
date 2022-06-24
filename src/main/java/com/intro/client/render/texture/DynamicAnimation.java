@@ -32,8 +32,8 @@ public class DynamicAnimation implements Cloneable {
     private final String registryName;
 
     private final HashMap<Integer, ResourceLocation> frames = new HashMap<>();
-    public NativeImage image;
 
+    public NativeImage image;
 
     public DynamicAnimation(NativeImage image, String registryName, int frameWidth, int frameHeight, int frameDelay) {
         Minecraft mc = Minecraft.getInstance();

@@ -1,4 +1,4 @@
-package com.intro.client.render.cape;
+package com.intro.client.render.cosmetic;
 
 import com.intro.client.render.texture.DynamicAnimation;
 import net.minecraft.resources.ResourceLocation;
@@ -7,19 +7,19 @@ public class Cape implements Cloneable {
 
     private final DynamicAnimation texture;
     public boolean isOptifine;
-    public boolean isAnimated;
+    public boolean animated;
 
     public String source;
-    public String registryName;
+    public String name;
 
     public String creator;
 
 
-    public Cape(DynamicAnimation texture, boolean isOptifine, boolean isAnimated, String source, String registryName, String creator) {
-        this.registryName = registryName;
+    public Cape(DynamicAnimation texture, boolean isOptifine, boolean animated, String source, String name, String creator) {
+        this.name = name;
         this.texture = texture;
         this.isOptifine = isOptifine;
-        this.isAnimated = isAnimated;
+        this.animated = animated;
         this.source = source;
         this.creator = creator;
     }
@@ -59,9 +59,9 @@ public class Cape implements Cloneable {
         return "Cape{" +
                 "texture=" + texture +
                 ", isOptifine=" + isOptifine +
-                ", isAnimated=" + isAnimated +
+                ", isAnimated=" + animated +
                 ", source='" + source + '\'' +
-                ", registryName='" + registryName + '\'' +
+                ", name='" + name + '\'' +
                 ", creator='" + creator + '\'' +
                 '}';
     }

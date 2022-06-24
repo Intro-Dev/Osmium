@@ -2,9 +2,8 @@ package com.intro.client.render.screen;
 
 import com.intro.client.OsmiumClient;
 import com.intro.client.network.ClientNetworkHandler;
-import com.intro.client.render.cape.Cape;
-import com.intro.client.render.cape.CosmeticManager;
 import com.intro.client.render.color.Colors;
+import com.intro.client.render.cosmetic.Cape;
 import com.intro.client.render.widget.AbstractScalableButton;
 import com.intro.client.render.widget.BackAndForwardWidget;
 import com.intro.client.render.widget.BooleanButtonWidget;
@@ -34,6 +33,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
+// I absolutely despise this class
+// But I don't want to spend the time writing a new options screen for the new cape system
+// So the code is just adapted
 public class OsmiumCapeOptionsScreen extends Screen {
 
     private final Minecraft mc = Minecraft.getInstance();
@@ -65,7 +67,7 @@ public class OsmiumCapeOptionsScreen extends Screen {
 
         bgStartHeight = (int) (this.height / 2 - (256 * guiScale));
 
-        List<Cape> rawCapes = CosmeticManager.getAllCapes().stream().toList();
+        List<Cape> rawCapes = OsmiumClient.cosmeticManager.getLocalCapes().stream().toList();
         capePages = new ArrayList<>();
 
         int numOps = rawCapes.size() / 6;
@@ -133,7 +135,7 @@ public class OsmiumCapeOptionsScreen extends Screen {
         for(int i = 0; i < pageCapes.size(); i++) {
             Cape cape = pageCapes.get(i);
 
-            if(CosmeticManager.playerCapes.get(mc.player.getStringUUID()) != null && CosmeticManager.playerCapes.get(mc.player.getStringUUID()).registryName.equals(cape.registryName)) {
+            if(OsmiumClient.cosmeticManager.getPlayerCape(Minecraft.getInstance().user.getUuid().toLowerCase()) != null && OsmiumClient.cosmeticManager.getPlayerCape(Minecraft.getInstance().user.getUuid().toLowerCase()) == cape) {
                 fill(stack, (int) (this.width / 2 + (100 * guiScale)), (int) (bgStartHeight + (40 + (i * 70)) * guiScale), (int) (this.width / 2 + (300 * guiScale)), (int) (bgStartHeight + (100 + (i * 70)) * guiScale), Colors.DARK_GRAY.getColor().getInt());
             }
 
@@ -148,7 +150,7 @@ public class OsmiumCapeOptionsScreen extends Screen {
 
             //  these coordinates are just insane
             RenderUtil.renderScaledText(stack, mc.font,"Source: " + cape.source, (int) (this.width / 2 + (200 * guiScale)), (int) (bgStartHeight + (40 + (i * 70) + 15) * guiScale), Colors.WHITE.getColor().getInt(), (float) guiScale, true);
-            RenderUtil.renderScaledText(stack, mc.font, "Animated: " + cape.isAnimated, (int) (this.width / 2 + (200 * guiScale)), (int) (bgStartHeight + (40 + (i * 70) + 25) * guiScale), Colors.WHITE.getColor().getInt(), (float) guiScale, true);
+            RenderUtil.renderScaledText(stack, mc.font, "Animated: " + cape.animated, (int) (this.width / 2 + (200 * guiScale)), (int) (bgStartHeight + (40 + (i * 70) + 25) * guiScale), Colors.WHITE.getColor().getInt(), (float) guiScale, true);
             RenderUtil.renderScaledText(stack, mc.font, "Creator: " + cape.creator, (int) (this.width / 2 + (200 * guiScale)), (int) (bgStartHeight + (40 + (i * 70) + 35) * guiScale)  , Colors.WHITE.getColor().getInt(), (float) guiScale, true);
         }
 
@@ -182,9 +184,9 @@ public class OsmiumCapeOptionsScreen extends Screen {
         // but its only 6 checks, and I can't be bothered over a micro optimization
         for(int i = 0; i < pageCapes.size(); i++) {
             if(MathUtil.isPositionWithinBounds((int) mouseX, (int) mouseY, (int) (this.width / 2 + (100 * guiScale)), (int) (bgStartHeight + (40 + (i * 70)) * guiScale), (int) (200 * guiScale), (int) (60 * guiScale))) {
-                CosmeticManager.playerCapes.put(mc.player.getStringUUID(), pageCapes.get(i));
+                OsmiumClient.cosmeticManager.setLocalPlayerCape(pageCapes.get(i));
                 Minecraft.getInstance().getSoundManager().play(SimpleSoundInstance.forUI(SoundEvents.UI_BUTTON_CLICK, 1.0F));
-                OsmiumClient.options.put(Options.SetCape, new Option<>(Options.SetCape, pageCapes.get(i).registryName));
+                OsmiumClient.options.put(Options.SetCape, new Option<>(Options.SetCape, pageCapes.get(i).name));
                 try {
                     ClientNetworkHandler.sendCapeSetPacket(pageCapes.get(i));
                 } catch (IOException e) {
@@ -197,9 +199,9 @@ public class OsmiumCapeOptionsScreen extends Screen {
     }
 
     protected void refresh(Button button) {
-        CosmeticManager.refresh();
+        OsmiumClient.cosmeticManager.loadLocalCapes();
 
-        List<Cape> rawCapes = CosmeticManager.getAllCapes().stream().toList();
+        List<Cape> rawCapes = OsmiumClient.cosmeticManager.getLocalCapes().stream().toList();
         capePages = new ArrayList<>();
 
         int numOps = rawCapes.size() / 6;

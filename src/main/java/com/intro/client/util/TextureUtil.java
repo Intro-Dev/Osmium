@@ -8,6 +8,7 @@ import net.minecraft.client.renderer.texture.SimpleTexture;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.util.Mth;
+import org.jetbrains.annotations.NotNull;
 import org.lwjgl.system.MemoryUtil;
 
 public class TextureUtil {
@@ -63,26 +64,25 @@ public class TextureUtil {
         return subImage;
     }
 
-    /**
-     * Stitches two NativeImages of equal height together on the X-Axis
-     * @param image1 An image with the same height as image2
-     * @param image2 An image with the same height as image1
-     * @return The stitched image
-     */
-    public static NativeImage stitchImagesOnX(NativeImage image1, NativeImage image2) {
-        /*
-        // fill data for image1
-        for(int y = 0; y < image1.getHeight(); y++) {
-            long imageOffset = ((long) y * image1.getWidth()) * 4L;
-            long stitchedImageOffset = ((long) y * image1.getWidth()) * 4L;
-            MemoryUtil.memCopy(image1.pixels + imageOffset, stitchedImage.pixels + stitchedImageOffset, image1.getWidth() * 4L);
-            imageOffset = ((long) y * image2.getWidth()) * 4L;
-            stitchedImageOffset = ((long) y * image2.getWidth()) * 4L;
-            MemoryUtil.memCopy(image1.pixels + imageOffset, stitchedImage.pixels + stitchedImageOffset, image2.getWidth() * 4L);
+    public static @NotNull NativeImage overlayOnImage(NativeImage base, NativeImage overlay) {
+        if(overlay.getHeight() > base.getHeight() || overlay.getWidth() > overlay.getWidth()) throw new IllegalArgumentException("Overlay image larger than base!");
 
+        NativeImage returnImage = new NativeImage(base.getWidth(), base.getHeight(), false);
 
-         */
-        return new NativeImage(image1.getWidth() + image2.getWidth(), image1.getHeight(), false);
+        long imageByteSize = ((long) base.getWidth() * base.getHeight()) * 4L;
+
+        MemoryUtil.memCopy(base.pixels, returnImage.pixels, imageByteSize);
+
+        long overlayByteCountPerLine = (overlay.getWidth()) * 4L;
+
+        for(int y = 0; y <= overlay.getHeight(); y++) {
+            long overlayOffset = ((long) y * overlay.getWidth()) * 4L;
+            long baseOffset = ((long) y * returnImage.getWidth()) * 4L;
+            System.out.println("Copying " + overlayByteCountPerLine + " bytes from " + overlayOffset + overlay.pixels + " to " + baseOffset + returnImage.pixels);
+            MemoryUtil.memCopy(overlayOffset + overlay.pixels, baseOffset + returnImage.pixels, overlayByteCountPerLine);
+        }
+
+        return returnImage;
     }
 
 }

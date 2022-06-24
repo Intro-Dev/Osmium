@@ -8,10 +8,11 @@ import com.intro.client.module.event.Event;
 import com.intro.client.module.event.EventType;
 import com.intro.client.network.ClientNetworkHandler;
 import com.intro.client.render.RenderManager;
-import com.intro.client.render.cape.CosmeticManager;
+import com.intro.client.render.cosmetic.CosmeticManager;
 import com.intro.client.render.drawables.PingDisplay;
 import com.intro.client.util.HypixelAbstractionLayer;
 import com.intro.client.util.OptionUtil;
+import com.intro.common.api.OsmiumApi;
 import com.intro.common.config.Options;
 import com.intro.common.util.Util;
 import com.mojang.blaze3d.platform.InputConstants;
@@ -37,16 +38,16 @@ public class OsmiumClient implements ClientModInitializer {
 
     public static boolean runningLatestVersion = true;
 
+    public static CosmeticManager cosmeticManager = new CosmeticManager();
+
     public static void registerCallbacks() {
         ToggleSneak toggleSneak = new ToggleSneak();
         Gui gui = new Gui();
-        CosmeticManager cosmeticManager = new CosmeticManager();
 
         EVENT_BUS.registerCallback(toggleSneak::onEvent, EventType.EVENT_TICK);
         EVENT_BUS.registerCallback(gui::onEvent, EventType.EVENT_TICK);
-        EVENT_BUS.registerCallback(cosmeticManager::handleEvents, new EventType[] { EventType.EVENT_ADD_PLAYER, EventType.EVENT_REMOVE_PLAYER } );
+        EVENT_BUS.registerCallback(cosmeticManager::handleEvents, new EventType[] { EventType.EVENT_ADD_PLAYER, EventType.EVENT_REMOVE_PLAYER, EventType.EVENT_TICK } );
         EVENT_BUS.registerCallback(PingDisplay.getInstance()::onEvent, EventType.EVENT_TICK);
-        EVENT_BUS.registerCallback(cosmeticManager::tickCapes, EventType.EVENT_TICK);
         EVENT_BUS.registerCallback(HypixelAbstractionLayer::handleDisconnectEvents, EventType.EVENT_REMOVE_PLAYER);
         EVENT_BUS.registerCallback(AutoGG::onEvent, EventType.EVENT_RECEIVE_CHAT_MESSAGE);
     }
@@ -68,7 +69,8 @@ public class OsmiumClient implements ClientModInitializer {
         HypixelAbstractionLayer.loadApiKey();
         AutoGG.setupTriggers();
         runningLatestVersion = Util.isRunningLatestVersion();
-
+        // init api
+        OsmiumApi.getInstance();
         System.out.println("Osmium Initialized");
     }
 
