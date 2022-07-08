@@ -70,10 +70,11 @@ public class CapeRenderer extends RenderLayer<AbstractClientPlayer, PlayerModel<
                 stack.mulPose(Vector3f.YP.rotationDegrees(180.0F - l / 2.0F));
 
 
-                if(OsmiumClient.cosmeticManager.getPlayerCape(player.getStringUUID().replaceAll("-", "")) != null) {
+                if(OsmiumClient.cosmeticManager.getCapeFromEntityGotUUID(player.getStringUUID()) != null) {
+
                     RenderSystem.enableDepthTest();
                     RenderSystem.setShader(GameRenderer::getPositionTexShader);
-                    Cape playerCape = OsmiumClient.cosmeticManager.getPlayerCape(player.getStringUUID().replaceAll("-", ""));
+                    Cape playerCape = OsmiumClient.cosmeticManager.getCapeFromEntityGotUUID(player.getStringUUID());
                     ResourceLocation capeTexture = playerCape.getFrameTexture();
                     // check if cape texture is null
                     // used to not crash until I optimised sub imaging

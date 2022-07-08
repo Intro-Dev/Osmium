@@ -8,20 +8,20 @@ public class Cape implements Cloneable {
     private final DynamicAnimation texture;
     public boolean isOptifine;
     public boolean animated;
-
     public String source;
     public String name;
-
     public String creator;
+    public int textureScale;
 
 
-    public Cape(DynamicAnimation texture, boolean isOptifine, boolean animated, String source, String name, String creator) {
+    public Cape(DynamicAnimation texture, boolean isOptifine, boolean animated, String source, String name, String creator, int textureScale) {
         this.name = name;
         this.texture = texture;
         this.isOptifine = isOptifine;
         this.animated = animated;
         this.source = source;
         this.creator = creator;
+        this.textureScale = textureScale;
     }
 
     public DynamicAnimation getTexture() {

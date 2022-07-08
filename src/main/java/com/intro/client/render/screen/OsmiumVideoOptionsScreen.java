@@ -51,10 +51,9 @@ public class OsmiumVideoOptionsScreen extends Screen {
 
         BooleanButtonWidget noRainToggle = new BooleanButtonWidget(this.width / 2 -275, this.height / 4 + 80 + globalOffset, 150, 20, Options.NoRainEnabled, "osmium.options.rain_");
         BooleanButtonWidget fireworksToggle = new BooleanButtonWidget(this.width / 2 -75, this.height / 4 + 80 + globalOffset, 150, 20, Options.FireworksDisabled, "osmium.options.fireworks_");
-        BooleanButtonWidget netherParticlesToggle = new BooleanButtonWidget(this.width / 2 +125, this.height / 4 + 80 + globalOffset, 150, 20, Options.DecreaseNetherParticles, "osmium.options.nether_particles_");
+        BooleanButtonWidget netherParticlesToggle = new BooleanButtonWidget(this.width / 2 + 125, this.height / 4 + 80 + globalOffset, 150, 20, Options.DecreaseNetherParticles, "osmium.options.nether_particles_");
 
         AbstractScalableButton blockOptionsButton = new AbstractScalableButton(this.width / 2 - 275, this.height / 4 + 120 + globalOffset, 150, 20, Component.translatable("osmium.options.block_option_settings"), (buttonWidget) -> mc.setScreen(new OsmiumBlockOptionsScreen(this)), 1f);
-
         // compatibility patch
         if(FabricLoader.getInstance().isModLoaded("colormeoutlines")) {
             blockOptionsButton.active = false;
@@ -62,6 +61,7 @@ public class OsmiumVideoOptionsScreen extends Screen {
         }
 
         capeOptionsButton = new AbstractScalableButton(this.width / 2 - 75, this.height / 4 + 120 + globalOffset, 150, 20, Component.translatable("osmium.cape_options"), (buttonWidget) -> mc.setScreen(new OsmiumCapeOptionsScreen(this)), 1f);
+        BooleanButtonWidget motionBlurToggle = new BooleanButtonWidget(this.width / 2 + 125, this.height / 4 + 120 + globalOffset, 150, 20, Options.MotionBlurEnabled, "osmium.options.motion_blur_");
 
         Button backButton = new Button(this.width / 2 - 100, this.height / 4 + 225 + globalOffset, 200, 20, Component.translatable("osmium.options.video_options.back"), (Button) -> mc.setScreen(parent));
 
@@ -71,6 +71,7 @@ public class OsmiumVideoOptionsScreen extends Screen {
         this.addRenderableWidget(blockOptionsButton);
         this.addRenderableWidget(capeOptionsButton);
         this.addRenderableWidget(backButton);
+        this.addRenderableWidget(motionBlurToggle);
 
     }
 

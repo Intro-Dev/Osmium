@@ -7,9 +7,7 @@ import java.util.Map;
 
 public class NonFunctionalOsmiumApi implements OsmiumApi {
     @Override
-    public void setServerSideCape(Cape cape) {
-
-    }
+    public void setServerSideCape(Cape cape) {}
 
     @Override
     public NativeImage getCapeTextureFromServers(String uuid) {
@@ -20,6 +18,9 @@ public class NonFunctionalOsmiumApi implements OsmiumApi {
     public Map<String, ?> getCapeDataFromServers(String uuid) {
         return null;
     }
+
+    @Override
+    public void sendKeepAlive() {}
 
 
 }

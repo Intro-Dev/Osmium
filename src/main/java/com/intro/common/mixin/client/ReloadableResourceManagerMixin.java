@@ -1,6 +1,7 @@
 package com.intro.common.mixin.client;
 
 import com.intro.client.OsmiumClient;
+import net.minecraft.client.Minecraft;
 import net.minecraft.server.packs.PackResources;
 import net.minecraft.server.packs.resources.ReloadInstance;
 import net.minecraft.server.packs.resources.ReloadableResourceManager;
@@ -20,5 +21,6 @@ public class ReloadableResourceManagerMixin {
     @Inject(method = "createReload", at = @At("RETURN"))
     public void onReload(Executor executor, Executor executor2, CompletableFuture<Unit> completableFuture, List<PackResources> list, CallbackInfoReturnable<ReloadInstance> cir) {
         OsmiumClient.cosmeticManager.loadLocalCapes();
+        if(Minecraft.getInstance().level != null) OsmiumClient.cosmeticManager.refreshDownloadedCapes();
     }
 }

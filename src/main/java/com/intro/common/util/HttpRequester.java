@@ -95,12 +95,17 @@ public class HttpRequester {
 
         connection.connect();
 
-        InputStream stream = connection.getInputStream();
+        InputStream stream = new BufferedInputStream(connection.getInputStream());
+        ByteBuffer responseBuffer;
+        if(connection.getHeaderField("Content-Length") != null) {
+            responseBuffer = ByteBuffer.allocate(Integer.parseInt(connection.getHeaderField("Content-Length")));
+        } else {
+            responseBuffer = ByteBuffer.allocate(stream.available());
+        }
 
-        byte[] bytes = stream.readAllBytes();
-        System.out.println(Arrays.toString(bytes));
-        // can't use ByteBuffer.wrap() because it makes the buffer have a funky pointer that weirds out NativeImage.read()
-        return new BinaryHttpResponse(connection.getResponseCode(), ByteBuffer.allocateDirect(bytes.length).put(bytes));
+        responseBuffer.put(stream.readAllBytes());
+
+        return new BinaryHttpResponse(connection.getResponseCode(), responseBuffer);
     }
 
 
@@ -138,13 +143,17 @@ public class HttpRequester {
         }
 
         byte[] multipartOutput = ArrayUtils.toPrimitive(builder.build(request.headers));
-
+        for(Map.Entry<String, String> entry : request.headers().entrySet()) {
+            System.out.println(entry.getKey() + ", " + entry.getValue());
+        }
         for(Map.Entry<String, String> entry : request.headers().entrySet()) {
             connection.setRequestProperty(entry.getKey(), entry.getValue());
         }
-
-
         connection.setDoOutput(true);
+        connection.setInstanceFollowRedirects(false);
+
+
+
 
         connection.connect();
 
@@ -243,7 +252,15 @@ public class HttpRequester {
                 : resultString;
     }
 
-    public record HttpRequest(String url, String method, Map<String, String> headers, Map<String, String> queryParams) {}
+    public record HttpRequest(String url, String method, Map<String, String> headers, Map<String, String> queryParams) {
+
+    }
+
+    public static enum RedirectMode {
+        STRICT,
+        LAX,
+        NONE
+    }
 
     public static record HttpResponse(int code, String body) {
         @Override

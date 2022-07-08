@@ -15,7 +15,7 @@ public class CapeLayerMixin {
 
     @Inject(method = "render", at = @At("HEAD"), cancellable = true)
     public void render(PoseStack poseStack, MultiBufferSource multiBufferSource, int i, AbstractClientPlayer abstractClientPlayer, float f, float g, float h, float j, float k, float l, CallbackInfo ci) {
-        if(OsmiumClient.cosmeticManager.getPlayerCape(abstractClientPlayer.getStringUUID()) != null) {
+        if(OsmiumClient.cosmeticManager.getCapeFromEntityGotUUID(abstractClientPlayer.getStringUUID()) != null) {
             ci.cancel();
         }
     }

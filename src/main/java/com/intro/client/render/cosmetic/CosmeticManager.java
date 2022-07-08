@@ -27,11 +27,15 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
 import org.apache.logging.log4j.Level;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+import org.lwjgl.system.MemoryUtil;
 
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.nio.ByteBuffer;
 import java.nio.file.Files;
 import java.util.*;
 import java.util.zip.ZipFile;
@@ -51,10 +55,12 @@ public class CosmeticManager {
 
     private final HashSet<Cape> locallyLoadedCapes = new HashSet<>();
 
+    private boolean alreadyAddedLocalPlayersOptifineCape = false;
+
     public void loadLocalCapes() {
         locallyLoadedCapes.clear();
         try {
-            Map<String, ?> defaultCapeParams = ImmutableMap.of("animated", Boolean.TRUE, "creator", "Lobster", "name", "Osmium Logo Cape", "frame_delay", 1);
+            Map<String, ?> defaultCapeParams = ImmutableMap.of("animated", Boolean.TRUE, "creator", "Lobster", "name", "Osmium Logo Cape", "frame_delay", 1, "texture_scale", 1);
             locallyLoadedCapes.add(capeFromMapAndTexture(defaultCapeParams, TextureUtil.getImageAtLocation(new ResourceLocation("osmium", "textures/cape/osmium_logo_cape.png")), "local"));
             File cosmeticsDir = FabricLoader.getInstance().getGameDir().resolve("cosmetics").toFile();
             if(!Files.exists(cosmeticsDir.toPath())) {
@@ -84,7 +90,7 @@ public class CosmeticManager {
         playerCapes.put(Minecraft.getInstance().user.getUuid().toLowerCase(), cape);
         ExecutionUtil.submitTask(() -> {
             try {
-                OsmiumApi.getInstance().setServerSideCape(cape);
+                if(!cape.isOptifine) OsmiumApi.getInstance().setServerSideCape(cape);
             } catch (IOException e) {
                 OsmiumClient.LOGGER.log(Level.WARN, "Unable to set cape on Osmium servers: " + e.getMessage());
             }
@@ -92,14 +98,30 @@ public class CosmeticManager {
         OsmiumClient.options.put(Options.SetCape, new Option<>(Options.SetCape, cape.name));
     }
 
+    public Cape getCapeFromEntityGotUUID(String uuid) {
+        return getPlayerCape(uuid.toLowerCase().replaceAll("-", ""));
+    }
+
     public HashSet<Cape> getLocalCapes() {
         return locallyLoadedCapes;
+    }
+
+    public void refreshDownloadedCapes() {
+        for(String uuid : playerCapes.keySet()) {
+            ExecutionUtil.submitTask(() -> {
+                try {
+                    downloadPlayerCape(Objects.requireNonNull(Minecraft.getInstance().level.getPlayerByUUID(UUID.fromString(uuid))));
+                } catch (Exception e) {
+                    OsmiumClient.LOGGER.log(Level.WARN, "Failed downloading player cape: " + e.getMessage());
+                }
+            });
+        }
     }
 
     public void handleEvents(Event event) {
         if(event instanceof EventTick && OsmiumClient.options.getBooleanOption(Options.AnimateCapes).get()) {
             for(Cape cape : playerCapes.values()) {
-                cape.nextFrame();
+                if(cape != null) cape.nextFrame();
             }
         }
 
@@ -109,6 +131,7 @@ public class CosmeticManager {
                     downloadPlayerCape(addPlayer.entity);
                 } catch (Exception e) {
                     OsmiumClient.LOGGER.log(Level.WARN, "Failed downloading player cape: " + e.getMessage());
+                    e.printStackTrace();
                 }
             });
         }
@@ -128,28 +151,37 @@ public class CosmeticManager {
         return null;
     }
 
-    public void downloadPlayerCape(Player player) throws IOException {
+    public void downloadPlayerCape(@NotNull Player player) {
         boolean hasOptifine = false, hasOsmium = false;
+        Cape optifineCape = null;
+        Cape osmiumCape = null;
         try {
             // will throw error if optifine cape isn't found
-            HttpRequester.fetch(new HttpRequester.HttpRequest("http://s.optifine.net/capes/" + player.getName().getString() + ".png", "GET", Collections.emptyMap(), Collections.emptyMap()));
+            // I just spent 3 days trying to fix png corruption
+            // because I typed fetch instead of fetchBin
+            // please help me
+            optifineCape = deserializeOptifineCape(player.getName().getString(), player.getStringUUID());
             hasOptifine = true;
-            OsmiumApi.getInstance().getCapeDataFromServers(player.getStringUUID());
+            if(player == Minecraft.getInstance().player && !alreadyAddedLocalPlayersOptifineCape) {
+                locallyLoadedCapes.add(optifineCape);
+                alreadyAddedLocalPlayersOptifineCape = true;
+            }
+            osmiumCape = deserializeOsmiumCape(player.getStringUUID().replaceAll("-", ""));
             hasOsmium = true;
-        } catch (IOException ignored) {}
+        } catch (Exception ignored) {
+        }
 
-        // if else gore but oh well
         if(OsmiumClient.options.getEnumOption(Options.CustomCapeMode).get() == CapeRenderingMode.ALL || OsmiumClient.options.getEnumOption(Options.CustomCapeMode).get() == CapeRenderingMode.OPTIFINE) {
             if(OsmiumClient.options.getEnumOption(Options.CustomCapeMode).get() == CapeRenderingMode.OPTIFINE && hasOptifine) {
-                playerCapes.put(player.getStringUUID().replaceAll("-", ""), deserializeOptifineCape(player.getName().getString()));
+                playerCapes.put(player.getStringUUID().replaceAll("-", ""), optifineCape);
                 return;
             }
             if(!hasOsmium && hasOptifine) {
-                playerCapes.put(player.getStringUUID().replaceAll("-", ""), deserializeOptifineCape(player.getName().getString()));
+                playerCapes.put(player.getStringUUID().replaceAll("-", ""), optifineCape);
                 return;
             }
             if(hasOsmium) {
-                playerCapes.put(player.getStringUUID().replaceAll("-", ""), deserializeOsmiumCape(player.getStringUUID().replaceAll("-", "")));
+                playerCapes.put(player.getStringUUID().replaceAll("-", ""), osmiumCape);
             }
         }
     }
@@ -157,31 +189,42 @@ public class CosmeticManager {
     public Cape deserializeSimpleCape(String capeUrl) throws IOException {
         HttpRequester.HttpRequest request = new HttpRequester.HttpRequest(capeUrl, "GET", Collections.emptyMap(), Collections.emptyMap());
         HttpRequester.BinaryHttpResponse response = HttpRequester.fetchBin(request);
-        NativeImage rawTexture = NativeImage.read(response.body());
+        NativeImage rawTexture = NativeImage.read(ByteBuffer.allocateDirect(response.body().capacity()).put(response.body()));
         if(!(rawTexture.getWidth() == 64 && rawTexture.getHeight() == 32)) throw new IOException("Texture at URL is not using the proper cape format!");
         DynamicAnimation capeTexture = new DynamicAnimation(NativeImage.read(response.body()), capeUrl + Math.random(), 64, 32, 0);
         // optifine capes should use the deserializeOptifineCape() method
-        return new Cape(capeTexture, false, false, capeUrl, capeUrl + Math.random(), "Unknown");
+        return new Cape(capeTexture, false, false, capeUrl, capeUrl + Math.random(), "Unknown", 1);
     }
 
-    public Cape deserializeOptifineCape(String playerName) throws IOException {
+    public @Nullable Cape deserializeOptifineCape(String playerName, String playerUUID) throws IOException {
         HttpRequester.HttpRequest request = new HttpRequester.HttpRequest("http://s.optifine.net/capes/" + playerName + ".png", "GET", Collections.emptyMap(), Collections.emptyMap());
         HttpRequester.BinaryHttpResponse response = HttpRequester.fetchBin(request);
-        System.out.println(new String(response.body().array()));
-        NativeImage rawTexture = NativeImage.read(response.body());
-        NativeImage parsedTexture = TextureUtil.overlayOnImage(new NativeImage(64, 32, false), rawTexture);
-        DynamicAnimation capeTexture = new DynamicAnimation(parsedTexture, "optifine-" + playerName, 64, 32, 0);
-        return new Cape(capeTexture, false, false, "Optifine", "Optifine-" + playerName, "Unknown");
+        // stbi_load_from_memory used by NativeImage.read() can only use direct buffers or else it fails to recognize the format
+        // this took longer than im willing to admit figuring out
+        ByteBuffer directBuffer = MemoryUtil.memAlloc(response.body().capacity());
+        directBuffer.put(response.body().array(), 0, response.body().array().length);
+        directBuffer.rewind();
+        NativeImage rawTexture = NativeImage.read(directBuffer);
+        MemoryUtil.memFree(directBuffer);
+        NativeImage parsedTexture;
+        if(rawTexture.getWidth() < 64 && rawTexture.getHeight() < 32) {
+            parsedTexture = TextureUtil.overlayOnImage(new NativeImage(64, 32, false), rawTexture);
+        } else {
+            parsedTexture = rawTexture;
+        }
+        DynamicAnimation capeTexture = new DynamicAnimation(parsedTexture, "optifine-" + playerUUID, 64, 32, 0);
+        return new Cape(capeTexture, true, false, "Optifine", "optifine-" + playerUUID, "Unknown", 1);
     }
 
-    public Cape deserializeOsmiumCape(String playerUUID) throws IOException {
+    public Cape deserializeOsmiumCape(String playerUUID) {
         Map<String, ?> capeData = OsmiumApi.getInstance().getCapeDataFromServers(playerUUID);
         NativeImage rawTexture = OsmiumApi.getInstance().getCapeTextureFromServers(playerUUID);
-
+        if(capeData == null || rawTexture == null) return null;
         return capeFromMapAndTexture(capeData, rawTexture, "osmium-servers");
     }
 
     private static Cape capeFromMapAndTexture(Map<String, ?> capeData, NativeImage texture, String source) {
+        int textureScale = 1;
         int frameDelay = 0;
         boolean animated = false;
         String creator = "Unknown";
@@ -190,10 +233,11 @@ public class CosmeticManager {
         if(capeData.containsKey("animated") && capeData.get("animated").getClass() == Boolean.class) animated = (Boolean) capeData.get("animated");
         if(capeData.containsKey("creator") && capeData.get("creator").getClass() == String.class) creator = (String) capeData.get("creator");
         if(capeData.containsKey("name") && capeData.get("name").getClass() == String.class) name = (String) capeData.get("name");
+        if(capeData.containsKey("texture_scale") && capeData.get("texture_scale").getClass() == Integer.class) textureScale = (Integer) capeData.get("texture_scale");
 
         int capeHash = ImmutableSet.of(frameDelay, animated, creator, texture).hashCode();
         DynamicAnimation capeTexture = new DynamicAnimation(texture, source + "-" + capeHash, 64, 32, frameDelay);
-        return new Cape(capeTexture, false, animated, source, name, creator);
+        return new Cape(capeTexture, false, animated, source, name, creator, textureScale);
 
     }
 

@@ -12,15 +12,16 @@ import java.util.Map;
 public interface OsmiumApi {
 
     void setServerSideCape(Cape cape) throws IOException;
-    NativeImage getCapeTextureFromServers(String uuid) throws IOException;
-    Map<String, ?> getCapeDataFromServers(String uuid) throws IOException;
+    NativeImage getCapeTextureFromServers(String uuid);
+    Map<String, ?> getCapeDataFromServers(String uuid);
+    void sendKeepAlive() throws IOException;
 
     InstanceHolder<OsmiumApi> INSTANCE = new InstanceHolder<>();
 
     static OsmiumApi getInstance() {
         if (INSTANCE.getInstance() == null) {
             try {
-                INSTANCE.setInstance(new OsmiumApiImpl("http://localhost:8080"));
+                INSTANCE.setInstance(new OsmiumApiImpl("https://lobstershack.dev:443/"));
             } catch (Exception e) {
                 OsmiumClient.LOGGER.log(Level.ERROR, "Failed to instantiate OsmiumApi, defaulting to non-functional implementation", e);
                 INSTANCE.setInstance(new NonFunctionalOsmiumApi());

@@ -24,6 +24,11 @@ public class GameRendererMixin {
         RenderManager.postRenderEvents(partialTicks, finishTimeNano, matrixStack);
     }
 
+    @Inject(method = "render", at = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/pipeline/RenderTarget;bindWrite(Z)V"))
+    public void redirectPostShaders(float partialTicks, long nanoTime, boolean renderLevel, CallbackInfo ci) {
+
+    }
+
 
 
 }
