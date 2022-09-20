@@ -8,6 +8,7 @@
     "client.AbstractContainerEventHandlerMixin",
     "client.CameraMixin",
     "client.CapeLayerMixin",
+    "client.ChatListenerMixin",
     "client.ClientLevelMixin",
     "client.ClientPacketListenerMixin",
     "client.ElytraLayerMixin",
@@ -31,7 +32,8 @@
     "client.ResourceTextureSubclassAccessor",
     "client.ScreenEffectRendererMixin",
     "client.ScreenMixin",
-    "client.TitleScreenMixin"
+    "client.TitleScreenMixin",
+    "client.VertexFormatAccessor"
   ],
   "server": [
     "server.MinecraftServerMixin",
@@ -41,6 +43,5 @@
     "defaultRequire": 1
   },
   "mixins": [
-
   ]
 }

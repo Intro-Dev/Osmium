@@ -89,7 +89,7 @@ public class CosmeticManager {
      * @param cape Cape
      */
     public void setLocalPlayerCape(Cape cape) {
-        playerCapes.put(Minecraft.getInstance().user.getUuid().toLowerCase(), cape);
+        playerCapes.put(Minecraft.getInstance().user.getUuid().replaceAll("-", ""), cape);
         ExecutionUtil.submitTask(() -> {
             try {
                 OsmiumApi.getInstance().setServerSideCape(cape);
@@ -159,7 +159,6 @@ public class CosmeticManager {
         Cape optifineCape = null;
         Cape osmiumCape = null;
         try {
-            // will throw error if optifine cape isn't found
             // I just spent 3 days trying to fix png corruption
             // because I typed fetch instead of fetchBin
             // please help me
@@ -179,18 +178,12 @@ public class CosmeticManager {
             OsmiumClient.LOGGER.log(Level.WARN, "Unknown error in downloading checked player cape: ", e);
         }
 
-        if(OsmiumClient.options.getEnumOption(Options.CustomCapeMode).get() == CapeRenderingMode.ALL || OsmiumClient.options.getEnumOption(Options.CustomCapeMode).get() == CapeRenderingMode.OPTIFINE) {
-            if(OsmiumClient.options.getEnumOption(Options.CustomCapeMode).get() == CapeRenderingMode.OPTIFINE && hasOptifine) {
-                playerCapes.put(player.getStringUUID().replaceAll("-", ""), optifineCape);
-                return;
-            }
-            if(!hasOsmium && hasOptifine) {
-                playerCapes.put(player.getStringUUID().replaceAll("-", ""), optifineCape);
-                return;
-            }
-            if(hasOsmium) {
-                playerCapes.put(player.getStringUUID().replaceAll("-", ""), osmiumCape);
-            }
+        if(hasOptifine && !hasOsmium) {
+            playerCapes.put(player.getStringUUID().replaceAll("-", ""), optifineCape);
+            return;
+        }
+        if(hasOsmium) {
+            playerCapes.put(player.getStringUUID().replaceAll("-", ""), osmiumCape);
         }
     }
 

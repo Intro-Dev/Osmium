@@ -12,38 +12,44 @@ import com.mojang.datafixers.util.Pair;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.resources.ResourceLocation;
 import org.apache.logging.log4j.Level;
+import oshi.util.tuples.Triplet;
 
 import java.io.IOException;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class ShaderSystem {
 
-    private static final ConcurrentHashMap<Pair<ResourceLocation, ResourceLocation>, Shader> compiledShaders = new ConcurrentHashMap<>();
+    private static final ConcurrentHashMap<Triplet<ResourceLocation, ResourceLocation, VertexFormat>, Shader> compiledShaders = new ConcurrentHashMap<>();
     private static final ConcurrentHashMap<Pair<Integer, String>, Integer> uniformLocations = new ConcurrentHashMap<>();
 
     private static Shader currentlyUsedShader;
 
-    public static Shader getOrCreateShader(ResourceLocation vertexShaderPath, ResourceLocation fragmentShaderPath) {
-        Pair<ResourceLocation, ResourceLocation> shaderPair = new Pair<>(vertexShaderPath, fragmentShaderPath);
-        compiledShaders.computeIfAbsent(shaderPair, (pair) -> {
+
+    /**
+     * see DefaultVertexFormats for how to name input attributes
+     */
+    public static Shader getOrCreateShader(ResourceLocation vertexShaderPath, ResourceLocation fragmentShaderPath, VertexFormat format) {
+        Triplet<ResourceLocation, ResourceLocation, VertexFormat> triplet = new Triplet<>(vertexShaderPath, fragmentShaderPath, format);
+        compiledShaders.computeIfAbsent(triplet, (element) -> {
             try {
-                return new Shader(vertexShaderPath, fragmentShaderPath);
+                return new Shader(vertexShaderPath, fragmentShaderPath, format);
             } catch (IOException e) {
-                OsmiumClient.LOGGER.log(Level.ERROR, "Failed compilation of shader: " + pair.getFirst() + ", " + pair.getSecond());
+                OsmiumClient.LOGGER.log(Level.ERROR, "Failed compilation of shader: " + element.getA() + ", " + element.getB() + ", format: " + element.getC().toString());
             }
             return null;
         });
-        return compiledShaders.get(shaderPair);
+        return compiledShaders.get(triplet);
     }
 
     public static void reloadShaders() {
-        for(Pair<ResourceLocation, ResourceLocation> pair : compiledShaders.keySet()) {
-            Shader originalShader = compiledShaders.get(pair);
+        for(Triplet<ResourceLocation, ResourceLocation, VertexFormat> triplet : compiledShaders.keySet()) {
+            Shader originalShader = compiledShaders.get(triplet);
             originalShader.close();
             try {
-                compiledShaders.put(pair, new Shader(pair.getFirst(), pair.getSecond()));
+                compiledShaders.put(triplet, new Shader(triplet.getA(), triplet.getB(), triplet.getC()));
             } catch (IOException e) {
-                OsmiumClient.LOGGER.log(Level.ERROR, "Failed reload of shader: " + pair.getFirst() + ", " + pair.getSecond());
+                OsmiumClient.LOGGER.log(Level.ERROR, "Failed reload of shader: " + triplet.getA() + ", " + triplet.getB() + ", format: " + triplet.getC().toString());
+
             }
         }
     }
@@ -75,6 +81,10 @@ public class ShaderSystem {
         Pair<Integer, String> uniformPair = new Pair<>(id, name);
         uniformLocations.computeIfAbsent(uniformPair, (key) -> GlStateManager._glGetUniformLocation(id, name));
         return uniformLocations.get(uniformPair);
+    }
+
+    public static void drawBuffer(BufferBuilder.RenderedBuffer buffer) {
+        BufferUploader.draw(buffer);
     }
 
 

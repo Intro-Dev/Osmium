@@ -67,10 +67,18 @@ public class LevelRendererCompatibilityMixin {
         renderVoxelShape(stack, builder, voxelShape, x, y, z, color.getFloatR(), color.getFloatG(), color.getFloatB(), OsmiumClient.options.getDoubleOption(Options.BlockOutlineAlpha).get().floatValue(), 0.01d);
         BufferBuilder.RenderedBuffer renderedBuffer = builder.end();
         RenderSystem.setShader(GameRenderer::getPositionColorShader);
+
+        /*
+        Shader shader = ShaderSystem.getOrCreateShader(new ResourceLocation("osmium", "/shaders/motion_blur/vert.glsl"), new ResourceLocation("osmium", "/shaders/motion_blur/frag.glsl"), DefaultVertexFormat.POSITION_COLOR);
+        GlUniformMatrix4f viewMatrix = new GlUniformMatrix4f("u_ProjMat", shader);
+        ShaderSystem.useShader(shader);
+        viewMatrix.set(stack.last().pose());
+         */
         RenderSystem.enableBlend();
         RenderSystem.enableDepthTest();
         RenderSystem.blendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
-        BufferUploader.drawWithShader(renderedBuffer);
+        RenderSystem.disableDepthTest();
+        BufferUploader.draw(renderedBuffer);
         RenderSystem.disableBlend();
         RenderSystem.disableDepthTest();
         stack.popPose();

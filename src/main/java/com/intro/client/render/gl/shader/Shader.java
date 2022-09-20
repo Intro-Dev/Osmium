@@ -2,7 +2,10 @@ package com.intro.client.render.gl.shader;
 
 import com.intro.client.OsmiumClient;
 import com.intro.client.util.GlUtil;
+import com.intro.common.mixin.client.VertexFormatAccessor;
 import com.mojang.blaze3d.platform.GlStateManager;
+import com.mojang.blaze3d.vertex.VertexFormat;
+import com.mojang.blaze3d.vertex.VertexFormatElement;
 import net.minecraft.client.Minecraft;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.Resource;
@@ -10,13 +13,14 @@ import org.apache.logging.log4j.Level;
 import org.lwjgl.opengl.GL20;
 
 import java.io.IOException;
+import java.util.Map;
 import java.util.Optional;
 
 public class Shader implements AutoCloseable {
 
     private final int programId;
 
-    protected Shader(ResourceLocation vertexShaderPath, ResourceLocation fragmentShaderPath) throws IOException {
+    protected Shader(ResourceLocation vertexShaderPath, ResourceLocation fragmentShaderPath, VertexFormat format) throws IOException {
         Optional<Resource> vertexShaderResource = Minecraft.getInstance().getResourceManager().getResource(vertexShaderPath);
         Optional<Resource> fragmentShaderResource = Minecraft.getInstance().getResourceManager().getResource(fragmentShaderPath);
         String vertexShaderCode;
@@ -36,6 +40,13 @@ public class Shader implements AutoCloseable {
         GlStateManager.glAttachShader(programId, fragmentShaderId);
         GlStateManager.glLinkProgram(programId);
         GlUtil.checkProgram(programId);
+
+        for(Map.Entry<String, VertexFormatElement> element : ((VertexFormatAccessor) format).getElementMapping().entrySet()) {
+            GlStateManager._glBindAttribLocation(programId, element.getValue().getIndex(), element.getKey());
+            GlUtil.checkError();
+        }
+
+
     }
 
     private static int createShader(String shaderSource, int shaderType) {
@@ -60,9 +71,9 @@ public class Shader implements AutoCloseable {
         }
     }
 
-
     protected void useProgram() {
         GlStateManager._glUseProgram(programId);
+        GlUtil.checkError();
     }
 
     @Override

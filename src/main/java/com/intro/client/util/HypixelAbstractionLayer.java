@@ -5,8 +5,8 @@ import com.intro.client.module.event.Event;
 import com.intro.client.module.event.EventRemovePlayer;
 import com.intro.common.config.Options;
 import com.intro.common.config.options.LevelHeadMode;
+import com.intro.common.util.http.JFetchHypixelHttpClient;
 import net.hypixel.api.HypixelAPI;
-import net.hypixel.api.apache.ApacheHttpClient;
 import net.hypixel.api.reply.PlayerReply;
 
 import java.util.HashMap;
@@ -36,7 +36,7 @@ public class HypixelAbstractionLayer {
     public static void loadApiKey() {
         API_KEY = OsmiumClient.options.getStringOption(Options.HypixelApiKey).get();
         if(!API_KEY.equals("")) {
-            api = new HypixelAPI(new ApacheHttpClient(UUID.fromString(API_KEY)));
+            api = new HypixelAPI(new JFetchHypixelHttpClient(UUID.fromString(API_KEY)));
             validApiKey = true;
         } else {
             validApiKey = false;

@@ -5,6 +5,7 @@ import com.intro.client.util.GlUtil;
 import com.mojang.math.Matrix4f;
 import org.lwjgl.opengl.GL20;
 
+import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
 
 public class GlUniformMatrix4f extends GlUniformVariable<Matrix4f> {
@@ -27,8 +28,9 @@ public class GlUniformMatrix4f extends GlUniformVariable<Matrix4f> {
     @Override
     public void set(Matrix4f value) {
         checkIfCanAccessValue();
+        // has to be a direct buffer because opengl is using a native api layer meaning any buffers that interact with it has to be heap allocated
         // 16 floats with a byte size of 4
-        FloatBuffer buffer = FloatBuffer.allocate(16);
+        FloatBuffer buffer = ByteBuffer.allocateDirect(64).asFloatBuffer();
         value.storeTransposed(buffer);
         GL20.glUniformMatrix4fv(location, true, buffer);
         GlUtil.checkError();

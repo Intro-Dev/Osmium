@@ -3,13 +3,13 @@ package com.intro.client.module;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 import com.google.gson.stream.JsonReader;
 import com.intro.client.OsmiumClient;
 import com.intro.client.module.event.Event;
 import com.intro.client.module.event.EventReceiveChatMessage;
 import com.intro.common.config.Options;
 import net.minecraft.client.Minecraft;
+import net.minecraft.network.chat.Component;
 
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -57,7 +57,7 @@ public class AutoGG {
                 Matcher matcher = pattern.matcher(((EventReceiveChatMessage) event).getComponent().getString());
                 if(matcher.matches()) {
                     lastGG = System.currentTimeMillis();
-                    Minecraft.getInstance().player.chat(OsmiumClient.options.getStringOption(Options.AutoGGString).get());
+                    Minecraft.getInstance().player.chatSigned(OsmiumClient.options.getStringOption(Options.AutoGGString).get(), Component.literal(OsmiumClient.options.getStringOption(Options.AutoGGString).get()));
                 }
             }
         }
