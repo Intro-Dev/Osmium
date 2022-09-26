@@ -9,12 +9,10 @@ import com.intro.common.util.http.JFetchHypixelHttpClient;
 import net.hypixel.api.HypixelAPI;
 import net.hypixel.api.reply.PlayerReply;
 
-import java.util.HashMap;
 import java.util.UUID;
-import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
-import java.util.concurrent.TimeoutException;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
@@ -24,13 +22,18 @@ public class HypixelAbstractionLayer {
 
     private static String API_KEY;
 
-    private static final HashMap<String, CompletableFuture<PlayerReply>> cachedPlayerData = new HashMap<>();
+    private static final ConcurrentHashMap<String, PlayerReply> cachedPlayerData = new ConcurrentHashMap<>();
 
     private static HypixelAPI api;
 
     private static boolean validApiKey = false;
 
     private static final AtomicInteger hypixelApiCalls = new AtomicInteger(0);
+
+    private static void registerApiCall() {
+        hypixelApiCalls.incrementAndGet();
+        ExecutionUtil.submitScheduledTask(hypixelApiCalls::decrementAndGet, 1, TimeUnit.MINUTES);
+    }
 
 
     public static void loadApiKey() {
@@ -49,19 +52,16 @@ public class HypixelAbstractionLayer {
 
     public static int getPlayerLevel(String uuid) {
        if(loadPlayerDataIfAbsent(uuid)) {
-           try {
-
-               Enum<?> mode = OsmiumClient.options.getEnumOption(Options.LevelHeadMode).get();
-               if(mode == LevelHeadMode.NETWORK_LEVEL){
-                   return (int) cachedPlayerData.get(uuid).get(1, TimeUnit.MICROSECONDS).getPlayer().getNetworkLevel();
-               } else if (mode == LevelHeadMode.BEDWARS_LEVEL){
-                   return cachedPlayerData.get(uuid).get(1, TimeUnit.MICROSECONDS).getPlayer().getIntProperty("achievements.bedwars_level", 0);
-               } else if (mode == LevelHeadMode.SKYWARS_LEVEL){
-                   String formattedLevel = cachedPlayerData.get(uuid).get(1, TimeUnit.MICROSECONDS).getPlayer().getStringProperty("stats.SkyWars.levelFormatted", "§70⋆");
-                   return Integer.parseInt(formattedLevel.substring(2, formattedLevel.length()-1));
-               }
-           } catch (TimeoutException | InterruptedException | ExecutionException e) {
-               return 0;
+           Enum<?> mode = OsmiumClient.options.getEnumOption(Options.LevelHeadMode).get();
+           PlayerReply.Player reply = cachedPlayerData.get(uuid).getPlayer();
+           boolean isValid = reply != null && reply.getUuid() != null;
+           if(mode == LevelHeadMode.NETWORK_LEVEL && isValid){
+               return (int) reply.getNetworkLevel();
+           } else if (mode == LevelHeadMode.BEDWARS_LEVEL && isValid){
+               return reply.getIntProperty("achievements.bedwars_level", 0);
+           } else if (mode == LevelHeadMode.SKYWARS_LEVEL && isValid){
+               String formattedLevel = reply.getStringProperty("stats.SkyWars.levelFormatted", "§70⋆");
+               return Integer.parseInt(formattedLevel.substring(2, formattedLevel.length()-1));
            }
        }
        return 0;
@@ -69,13 +69,16 @@ public class HypixelAbstractionLayer {
 
     private static boolean loadPlayerDataIfAbsent(String uuid) {
         if(cachedPlayerData.get(uuid) == null) {
-            // set at 115 to have a buffer in case of disparity between threads
-            if(hypixelApiCalls.get() <= 115) {
-                cachedPlayerData.put(uuid, api.getPlayerByUuid(uuid));
-                hypixelApiCalls.incrementAndGet();
-                ExecutionUtil.submitScheduledTask(hypixelApiCalls::decrementAndGet, 1, TimeUnit.MINUTES);
-                return true;
-            }
+            ExecutionUtil.submitTask(() -> {
+                try {
+                    if(hypixelApiCalls.get() <= 115) {
+                        registerApiCall();
+                        cachedPlayerData.put(uuid, api.getPlayerByUuid(uuid).get());
+                    }
+                } catch (ExecutionException | InterruptedException e) {
+                    cachedPlayerData.put(uuid, new PlayerReply());
+                }
+            });
             return false;
         }
         return true;

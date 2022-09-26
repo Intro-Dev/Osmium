@@ -64,21 +64,12 @@ public class LevelRendererCompatibilityMixin {
         stack.pushPose();
         BufferBuilder builder = Tesselator.getInstance().getBuilder();
         builder.begin(VertexFormat.Mode.TRIANGLE_STRIP, DefaultVertexFormat.POSITION_COLOR);
-        renderVoxelShape(stack, builder, voxelShape, x, y, z, color.getFloatR(), color.getFloatG(), color.getFloatB(), OsmiumClient.options.getDoubleOption(Options.BlockOutlineAlpha).get().floatValue(), 0.01d);
-        BufferBuilder.RenderedBuffer renderedBuffer = builder.end();
+        renderVoxelShape(stack, builder, voxelShape, x, y, z, color.getFloatR(), color.getFloatG(), color.getFloatB(), (float) OsmiumClient.options.getDoubleOption(Options.BlockOutlineAlpha).get().byteValue(), 0.01d);
         RenderSystem.setShader(GameRenderer::getPositionColorShader);
-
-        /*
-        Shader shader = ShaderSystem.getOrCreateShader(new ResourceLocation("osmium", "/shaders/motion_blur/vert.glsl"), new ResourceLocation("osmium", "/shaders/motion_blur/frag.glsl"), DefaultVertexFormat.POSITION_COLOR);
-        GlUniformMatrix4f viewMatrix = new GlUniformMatrix4f("u_ProjMat", shader);
-        ShaderSystem.useShader(shader);
-        viewMatrix.set(stack.last().pose());
-         */
         RenderSystem.enableBlend();
         RenderSystem.enableDepthTest();
         RenderSystem.blendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
-        RenderSystem.disableDepthTest();
-        BufferUploader.draw(renderedBuffer);
+        BufferUploader.draw(builder.end());
         RenderSystem.disableBlend();
         RenderSystem.disableDepthTest();
         stack.popPose();
