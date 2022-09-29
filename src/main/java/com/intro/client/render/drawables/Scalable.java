@@ -1,6 +1,8 @@
 package com.intro.client.render.drawables;
 
+import com.intro.client.util.ElementPosition;
 import com.intro.client.util.RenderUtil;
+import com.intro.common.config.options.Option;
 import com.mojang.blaze3d.vertex.PoseStack;
 
 /**
@@ -8,14 +10,22 @@ import com.mojang.blaze3d.vertex.PoseStack;
  */
 public abstract class Scalable extends Drawable {
 
-    public double scale = 1f;
+    public Scalable(Option<ElementPosition> boundOption) {
+        this.boundOption = boundOption;
+        boundOption.addChangeListener((newPos) -> {
+            this.posX = newPos.x;
+            this.posY = newPos.y;
+        });
+    }
+
+    public Option<ElementPosition> boundOption;
 
     public int getScaledWidth() {
-        return (int) (this.width * scale);
+        return (int) (this.width * boundOption.get().scale);
     }
 
     public int getScaledHeight() {
-        return (int) (this.height * scale);
+        return (int) (this.height * boundOption.get().scale);
     }
 
     /**
@@ -29,7 +39,7 @@ public abstract class Scalable extends Drawable {
     // x: scaledX, y: x, z: scaledHeight, a: scale
     // x = y + (z / (2 * a)) - z / 2;
     public int getScaledX() {
-        return (int) (posX + (this.getScaledWidth() / (2 * scale)) - this.getScaledWidth() / 2);
+        return (int) (posX + (this.getScaledWidth() / (2 * boundOption.get().scale)) - this.getScaledWidth() / 2);
     }
 
     /**
@@ -37,7 +47,7 @@ public abstract class Scalable extends Drawable {
      * <p>Only to be used to gui editing</p>
      */
     public int getScaledY() {
-        return (int) (posY + (this.getScaledHeight() / (2 * scale)) - this.getScaledHeight() / 2);
+        return (int) (posY + (this.getScaledHeight() / (2 * boundOption.get().scale)) - this.getScaledHeight() / 2);
     }
 
     // x: scaledX, y: x, z: scaledWidth, a: scale
@@ -45,21 +55,25 @@ public abstract class Scalable extends Drawable {
     // y = x + -(z / (2 * a)) + (z / 2)
 
     public void setScaledX(int x) {
-        this.posX = (int) -((-x + this.getScaledWidth() / (2 * scale)) - this.getScaledWidth() / 2);
+        this.posX = (int) -((-x + this.getScaledWidth() / (2 * boundOption.get().scale)) - this.getScaledWidth() / 2);
+        boundOption.get().x = posX;
     }
 
     public void setScaledY(int y) {
-        this.posY = (int) -((-y + this.getScaledHeight() / (2 * scale)) - this.getScaledHeight() / 2);
+        this.posY = (int) -((-y + this.getScaledHeight() / (2 * boundOption.get().scale)) - this.getScaledHeight() / 2);
+        boundOption.get().y = posY;
     }
 
+    public void setScale(double scale) {
+        boundOption.get().scale = scale;
+    }
 
-
-    public abstract void onScaleChange(double oldScale, double newScale);
+    public double getScale() { return boundOption.get().scale; }
 
     // transformation matrices are fun
     // right?
     public void scaleWithPositionIntact(PoseStack stack) {
-        RenderUtil.positionAccurateScale(stack, (float) scale, posX, posY, width, height);
+        RenderUtil.positionAccurateScale(stack, (float) boundOption.get().scale, posX, posY, width, height);
     }
 
     @Override

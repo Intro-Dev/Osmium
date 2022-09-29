@@ -9,7 +9,8 @@ public enum Colors {
     WHITE(0xff, 0xff, 0xff, 0xff),
     ORANGE(0xff, 0xa5, 0, 0xff),
     BACKGROUND_GRAY(26, 26, 26, 52),
-    DARK_GRAY(15, 15, 15, 52);
+    DARK_GRAY(15, 15, 15, 52),
+    PURPLE(128, 0, 128, 0xff);
 
     private final Color color;
 

@@ -6,7 +6,7 @@ import com.intro.client.module.event.EventTick;
 import com.intro.client.module.event.EventType;
 import com.intro.client.render.drawables.CpsDisplay;
 import com.intro.client.render.screen.OsmiumUpdateScreen;
-import com.intro.client.util.OptionUtil;
+import com.intro.common.config.Options;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.main.GameConfig;
 import org.apache.logging.log4j.Level;
@@ -33,7 +33,7 @@ public class MinecraftMixin {
 
     @Inject(at = @At("HEAD"), method = "close")
     public void close(CallbackInfo ci) {
-        OptionUtil.save();
+        Options.save();
     }
 
     @Inject(method = "startAttack", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/player/LocalPlayer;swing(Lnet/minecraft/world/InteractionHand;)V"))

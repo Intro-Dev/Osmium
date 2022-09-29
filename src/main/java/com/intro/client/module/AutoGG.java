@@ -52,12 +52,12 @@ public class AutoGG {
     }
 
     public static void onEvent(Event event) {
-        if(System.currentTimeMillis() - lastGG > 1000 && OsmiumClient.options.getBooleanOption(Options.AutoGGEnabled).get()) {
+        if(System.currentTimeMillis() - lastGG > 1000 && Options.AutoGGEnabled.get()) {
             for(Pattern pattern : triggers) {
                 Matcher matcher = pattern.matcher(((EventReceiveChatMessage) event).getComponent().getString());
                 if(matcher.matches()) {
                     lastGG = System.currentTimeMillis();
-                    Minecraft.getInstance().player.chatSigned(OsmiumClient.options.getStringOption(Options.AutoGGString).get(), Component.literal(OsmiumClient.options.getStringOption(Options.AutoGGString).get()));
+                    Minecraft.getInstance().player.chatSigned(Options.AutoGGString.get(), Component.literal(Options.AutoGGString.get()));
                 }
             }
         }

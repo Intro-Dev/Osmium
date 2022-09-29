@@ -11,7 +11,6 @@ import com.intro.client.render.widget.EnumSelectWidget;
 import com.intro.client.util.MathUtil;
 import com.intro.client.util.RenderUtil;
 import com.intro.common.config.Options;
-import com.intro.common.config.options.Option;
 import com.mojang.blaze3d.platform.Lighting;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
@@ -186,7 +185,7 @@ public class OsmiumCapeOptionsScreen extends Screen {
             if(MathUtil.isPositionWithinBounds((int) mouseX, (int) mouseY, (int) (this.width / 2 + (100 * guiScale)), (int) (bgStartHeight + (40 + (i * 70)) * guiScale), (int) (200 * guiScale), (int) (60 * guiScale))) {
                 OsmiumClient.cosmeticManager.setLocalPlayerCape(pageCapes.get(i));
                 Minecraft.getInstance().getSoundManager().play(SimpleSoundInstance.forUI(SoundEvents.UI_BUTTON_CLICK, 1.0F));
-                OsmiumClient.options.put(Options.SetCape, new Option<>(Options.SetCape, pageCapes.get(i).name));
+                Options.SetCape.set(pageCapes.get(i).name);
                 try {
                     ClientNetworkHandler.sendCapeSetPacket(pageCapes.get(i));
                 } catch (IOException e) {

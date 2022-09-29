@@ -1,12 +1,9 @@
 package com.intro.client.render.drawables;
 
-import com.intro.client.OsmiumClient;
 import com.intro.client.render.color.Color;
 import com.intro.client.render.color.Colors;
-import com.intro.client.util.ElementPosition;
 import com.intro.client.util.ExecutionUtil;
 import com.intro.common.config.Options;
-import com.intro.common.config.options.Option;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
 
@@ -35,13 +32,13 @@ public class CpsDisplay extends Scalable {
     }
 
     protected CpsDisplay(int color) {
-        OsmiumClient.options.getElementPositionOption(Options.CpsDisplayPosition).get().loadToScalable(this);
+        super(Options.CpsDisplayPosition);
         this.color = color;
     }
 
     @Override
     public void render(PoseStack stack) {
-        if(OsmiumClient.options.getBooleanOption(Options.CpsDisplayEnabled).get()) {
+        if(Options.CpsDisplayEnabled.get()) {
             this.visible = true;
             if(firstRun) {
                 this.width = 40;
@@ -55,26 +52,11 @@ public class CpsDisplay extends Scalable {
         }
     }
 
-    @Override
-    public void destroySelf() {
-
-    }
-
-    @Override
-    public void onPositionChange(int newX, int newY, int oldX, int oldY) {
-        OsmiumClient.options.put(Options.CpsDisplayPosition, new Option<>(Options.CpsDisplayPosition, new ElementPosition(newX, newY, this.scale)));
-    }
-
     public static CpsDisplay getInstance() {
         if(INSTANCE == null) {
             INSTANCE = new CpsDisplay(Colors.WHITE.getColor().getInt());
         }
         return INSTANCE;
-    }
-
-    @Override
-    public void onScaleChange(double oldScale, double newScale) {
-        OsmiumClient.options.put(Options.CpsDisplayPosition, new Option<>(Options.CpsDisplayPosition, new ElementPosition(this.posX, this.posY, newScale)));
     }
 
     private class RemoveClicksTask extends TimerTask {

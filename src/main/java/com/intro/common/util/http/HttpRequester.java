@@ -30,14 +30,8 @@ public class HttpRequester {
             requestBase.setEntity(request.getEntity());
         }
         CloseableHttpResponse response = instance.execute(base);
-        ByteBuffer responseBuffer;
-        if(response.getFirstHeader("Content-Length") != null) {
-            responseBuffer = ByteBuffer.allocate(Integer.parseInt(response.getFirstHeader("Content-Length").getValue()));
-        } else {
-            responseBuffer = ByteBuffer.allocate(response.getEntity().getContent().available());
-        }
-
-        responseBuffer.put(response.getEntity().getContent().readAllBytes());
+        byte[] bytes = response.getEntity().getContent().readAllBytes();
+        ByteBuffer responseBuffer = ByteBuffer.wrap(bytes);
         HashMap<String, String> responseHeaders = new HashMap<>();
         for(Header header : response.getAllHeaders()) {
             responseHeaders.put(header.getName(), header.getValue());

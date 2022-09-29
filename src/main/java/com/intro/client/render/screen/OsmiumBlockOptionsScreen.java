@@ -3,7 +3,6 @@ package com.intro.client.render.screen;
 import com.intro.client.render.widget.ColorOptionWidget;
 import com.intro.client.render.widget.DoubleSliderWidget;
 import com.intro.client.render.widget.EnumSelectWidget;
-import com.intro.client.util.OptionUtil;
 import com.intro.common.config.Options;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
@@ -48,7 +47,7 @@ public class OsmiumBlockOptionsScreen extends Screen {
     @Override
     public void onClose() {
         super.onClose();
-        OptionUtil.save();
+        Options.save();
     }
 
     @Override

@@ -1,11 +1,9 @@
 package com.intro.client.render.drawables;
 
-import com.intro.client.OsmiumClient;
 import com.intro.client.render.color.Color;
 import com.intro.client.render.color.Colors;
 import com.intro.client.util.*;
 import com.intro.common.config.Options;
-import com.intro.common.config.options.Option;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
 import net.minecraft.client.Minecraft;
@@ -39,7 +37,7 @@ public class Keystrokes extends Scalable {
 
 
     protected Keystrokes() {
-        OsmiumClient.options.getElementPositionOption(Options.KeystrokesPosition).get().loadToScalable(this);
+        super(Options.KeystrokesPosition);
         this.width = 212;
         this.height = 138;
 
@@ -56,15 +54,28 @@ public class Keystrokes extends Scalable {
         aKeyTextPos = new Vector2d(aKeyPos.x + (sectionWidth / 2f), aKeyPos.y + (sectionHeight / 4f));
         sKeyTextPos = new Vector2d(sKeyPos.x + (sectionWidth / 2f), sKeyPos.y + (sectionHeight / 4f));
         dKeyTextPos = new Vector2d(dKeyPos.x + (sectionWidth / 2f), dKeyPos.y + (sectionHeight / 4f));
+
+        boundOption.addChangeListener((newPos) -> {
+            sectionWidth = trueWidth / 3;
+            sectionHeight = trueHeight / 2;
+            wKeyPos = new ElementPosition(newPos.x + sectionWidth + ELEMENT_OFFSET, newPos.y, 1);
+            aKeyPos = new ElementPosition(newPos.x, newPos.y + sectionHeight + ELEMENT_OFFSET, 1);
+            sKeyPos = new ElementPosition(newPos.x + sectionWidth + ELEMENT_OFFSET, newPos.y + sectionHeight + ELEMENT_OFFSET, 1);
+            dKeyPos = new ElementPosition(newPos.x + sectionWidth * 2 + (ELEMENT_OFFSET * 2), newPos.y + sectionHeight + ELEMENT_OFFSET, 1);
+            wKeyTextPos = new Vector2d(wKeyPos.x + (sectionWidth / 2f), wKeyPos.y + (sectionHeight / 4f));
+            aKeyTextPos = new Vector2d(aKeyPos.x + (sectionWidth / 2f), aKeyPos.y + (sectionHeight / 4f));
+            sKeyTextPos = new Vector2d(sKeyPos.x + (sectionWidth / 2f), sKeyPos.y + (sectionHeight / 4f));
+            dKeyTextPos = new Vector2d(dKeyPos.x + (sectionWidth / 2f), dKeyPos.y + (sectionHeight / 4f));
+        });
     }
 
     @Override
     public void render(PoseStack stack) {
-        if(OsmiumClient.options.getBooleanOption(Options.KeystrokesEnabled).get()) {
+        if(Options.KeystrokesEnabled.get()) {
             this.visible = true;
 
-            Color temp = OsmiumClient.options.getColorOption(Options.KeystrokesColor).get();
-            temp.setA((int) (OsmiumClient.options.getDoubleOption(Options.KeystrokesAlpha).get() * 255));
+            Color temp = Options.KeystrokesColor.get();
+            temp.setA((int) (Options.KeystrokesAlpha.get() * 255));
             int BG_COLOR = temp.getInt();
 
             int KEY_DOWN_COLOR;
@@ -73,9 +84,9 @@ public class Keystrokes extends Scalable {
 
             // the gore here
             // :|
-            if(OsmiumClient.options.getBooleanOption(Options.KeystrokesRgb).get()) {
+            if(Options.KeystrokesRgb.get()) {
                 colorGenerator.tick();
-                colorGenerator.setAlpha((int) (OsmiumClient.options.getDoubleOption(Options.KeystrokesAlpha).get() * 255));
+                colorGenerator.setAlpha((int) (Options.KeystrokesAlpha.get() * 255));
 
                 int rgbColorStart = colorGenerator.getStartColor();
                 int rgbColorEnd = colorGenerator.getEndColor();
@@ -116,26 +127,7 @@ public class Keystrokes extends Scalable {
 
     }
 
-    @Override
-    public void destroySelf() {
 
-    }
-
-    @Override
-    public void onPositionChange(int newX, int newY, int oldX, int oldY) {
-        sectionWidth = trueWidth / 3;
-        sectionHeight = trueHeight / 2;
-        wKeyPos = new ElementPosition(this.posX + sectionWidth + ELEMENT_OFFSET, this.posY, 1);
-        aKeyPos = new ElementPosition(this.posX, this.posY + sectionHeight + ELEMENT_OFFSET, 1);
-        sKeyPos = new ElementPosition(this.posX + sectionWidth + ELEMENT_OFFSET, this.posY + sectionHeight + ELEMENT_OFFSET, 1);
-        dKeyPos = new ElementPosition(this.posX + sectionWidth * 2 + (ELEMENT_OFFSET * 2), this.posY + sectionHeight + ELEMENT_OFFSET, 1);
-        wKeyTextPos = new Vector2d(wKeyPos.x + (sectionWidth / 2f), wKeyPos.y + (sectionHeight / 4f));
-        aKeyTextPos = new Vector2d(aKeyPos.x + (sectionWidth / 2f), aKeyPos.y + (sectionHeight / 4f));
-        sKeyTextPos = new Vector2d(sKeyPos.x + (sectionWidth / 2f), sKeyPos.y + (sectionHeight / 4f));
-        dKeyTextPos = new Vector2d(dKeyPos.x + (sectionWidth / 2f), dKeyPos.y + (sectionHeight / 4f));
-
-        OsmiumClient.options.put(Options.KeystrokesPosition, new Option<>(Options.KeystrokesPosition, new ElementPosition(newX, newY, this.scale)));
-    }
 
     public static Keystrokes getInstance() {
         if(INSTANCE == null) {
@@ -144,8 +136,4 @@ public class Keystrokes extends Scalable {
         return INSTANCE;
     }
 
-    @Override
-    public void onScaleChange(double oldScale, double newScale) {
-        OsmiumClient.options.put(Options.KeystrokesPosition, new Option<>(Options.KeystrokesPosition, new ElementPosition(this.posX, this.posY, newScale)));
-    }
 }

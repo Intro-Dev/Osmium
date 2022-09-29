@@ -1,188 +1,238 @@
 package com.intro.common.config;
 
+import com.google.gson.FieldNamingPolicy;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonSyntaxException;
+import com.intro.client.OsmiumClient;
 import com.intro.client.render.color.Color;
 import com.intro.client.render.color.Colors;
 import com.intro.client.util.ElementPosition;
-import com.intro.common.config.options.CapeRenderingMode;
-import com.intro.common.config.options.Option;
+import com.intro.common.ModConstants;
+import com.intro.common.config.options.*;
+import com.intro.common.config.options.legacy.LegacyOption;
+import com.intro.common.config.options.legacy.LegacyOptionDeserializer;
+import com.intro.common.config.options.legacy.LegacyOptionSerializer;
+import net.fabricmc.loader.api.FabricLoader;
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.lang.reflect.Modifier;
+import java.nio.file.Paths;
 import java.util.HashMap;
+import java.util.Scanner;
 
 /**
- * The Options class stores all OsmiumClient options.
- * All options have a String identifier, which is used to get the option from the HashMap
- * On startup, default options are set first, and are then put to the HashMap from an LegacyOption array loaded from a json file
- *
  * @since 1.0
  * @author Intro
  */
 public class Options {
 
-    /**
-     * Cache of all options
-     */
 
-    private final HashMap<String, Option<?>> options = new HashMap<>();
+    private static final HashMap<String, Option<?>> options = new HashMap<>();
 
-    private final HashMap<String, Option<?>> overwrittenOptions = new HashMap<>();
+    private static final HashMap<String, Option<?>> overwrittenOptions = new HashMap<>();
 
-    public HashMap<String, Option<?>> getOptions() {
+    public static HashMap<String, Option<?>> getOptions() {
         return options;
     }
 
-    public void putOverwrittenOption(String key, Option<?> value) {
+    public static void putOverwrittenOption(String key, Option<?> value) {
         overwrittenOptions.put(key, value);
     }
 
-    public HashMap<String, Option<?>> getOverwrittenOptions() {
+    public static HashMap<String, Option<?>> getOverwrittenOptions() {
         return overwrittenOptions;
     }
 
-    public void clearOverwrittenOptions() {
+    public static void clearOverwrittenOptions() {
         overwrittenOptions.clear();
     }
 
-    public Option<?> get(String identifier) {
+    public static Option<?> get(String identifier) {
         return options.get(identifier);
     }
 
-    public void put(String identifier, Option<?> option) {
+    public static void put(String identifier, Option<?> option) {
         options.put(identifier, option);
     }
 
-    public Option<Boolean> getBooleanOption(String identifier) {
-        return (Option<Boolean>) get(identifier);
+
+    public static final Option<String> OPTION_FILE_SCHEMA = new Option<>("OPTION_FILE_SCHEMA", "V3");
+    public static final Option<Boolean> ToggleSprintEnabled = new Option<>("ToggleSprintEnabled", false);
+    public static final Option<Boolean> FulbrightEnabled = new Option<>("FullbrightEnabled", false);
+    public static final Option<Boolean> HurtBobbingEnabled = new Option<>("HurtBobbingEnabled", false);
+    public static final Option<SneakMode> SneakMode = new Option<>("HurtBobbingEnabled", com.intro.common.config.options.SneakMode.VANILLA);
+    public static final Option<Boolean> NoRainEnabled = new Option<>("NoRainEnabled", false);
+    public static final Option<Boolean> FpsEnabled = new Option<>("FpsEnabled", false);
+    public static final Option<CapeRenderingMode> CustomCapeMode = new Option<>("CustomCapeMode", CapeRenderingMode.ALL);
+    public static final Option<Boolean> NoFireEnabled = new Option<>("NoFireEnabled", false);
+    public static final Option<ElementPosition> ToggleSprintPosition = new Option<>("ToggleSprintPosition", new ElementPosition(5, 5, 1));
+    public static final Option<ElementPosition> FpsDisplayPosition = new Option<>("FpsDisplayPosition", new ElementPosition(5, 5, 1));
+    public static final Option<Boolean> ToggleSneakEnabled = new Option<>("ToggleSneakEnabled", false);
+    public static final Option<Boolean> FireworksDisabled = new Option<>("FireworksDisabled", false);
+    public static final Option<Double> FlyBoostAmount = new Option<>("FlyBoostAmount", 1d);
+    public static final Option<Boolean> FlyBoostEnabled = new Option<>("FlyBoostEnabled", false);
+    public static final Option<Boolean> DecreaseNetherParticles = new Option<>("DecreaseNetherParticles", false);
+    public static final Option<com.intro.common.config.options.BlockOutlineMode> BlockOutlineMode = new Option<>("CustomBlockOutline", com.intro.common.config.options.BlockOutlineMode.VANILLA);
+    public static final Option<Color> BlockOutlineColor = new Option<>("BlockOutlineColor", Colors.PURPLE.getColor());
+    public static final Option<Double> BlockOutlineAlpha = new Option<>("BlockOutlineAlpha", 1d);
+    public static final Option<com.intro.common.config.options.StatusEffectDisplayMode> StatusEffectDisplayMode = new Option<>("StatusEffectDisplayMode", com.intro.common.config.options.StatusEffectDisplayMode.VANILLA);
+    public static final Option<ElementPosition> StatusEffectDisplayPosition = new Option<>("StatusEffectDisplayPosition", new ElementPosition(5, 5, 1));
+    public static final Option<Double> MaxStatusEffectsDisplayed = new Option<>("MaxStatusEffectsDisplayed", 1d);
+    public static final Option<Boolean> ArmorDisplayEnabled = new Option<>("ArmorDisplayEnabled", false);
+    public static final Option<ElementPosition> ArmorDisplayPosition = new Option<>("ArmorDisplayPosition", new ElementPosition(5, 5, 1));
+    public static final Option<Boolean> PingDisplayEnabled = new Option<>("PingDisplayEnabled", false);
+    public static final Option<ElementPosition> PingDisplayPosition = new Option<>("PingDisplayPosition", new ElementPosition(5, 5, 1));
+    public static final Option<Boolean> CpsDisplayEnabled = new Option<>("CpsDisplayEnabled", false);
+    public static final Option<ElementPosition> CpsDisplayPosition = new Option<>("CpsDisplayPosition", new ElementPosition(5, 5, 1));
+    public static final Option<Color> KeystrokesColor = new Option<>("BlockOutlineColor", Colors.PURPLE.getColor());
+    public static final Option<Boolean> KeystrokesRgb = new Option<>("KeystrokesRgb", false);
+    public static final Option<ElementPosition> KeystrokesPosition = new Option<>("KeystrokesPosition", new ElementPosition(5, 5, 1));
+    public static final Option<Boolean> KeystrokesEnabled = new Option<>("KeystrokesEnabled", false);
+    public static final Option<Double> KeystrokesAlpha = new Option<>("KeystrokesAlpha", 1d);
+    public static final Option<Boolean> AnimateCapes = new Option<>("AnimateCapes", true);
+    public static final Option<Boolean> ShowOtherPlayersCapes = new Option<>("ShowOtherPlayersCapes", true);
+    public static final Option<String> SetCape = new Option<>("SetCape", "");
+    public static final Option<String> HypixelApiKey = new Option<>("HypixelApiKey", "");
+    public static final Option<String> AutoGGString = new Option<>("AutoGGString", "gg");
+    public static final Option<Boolean> LevelHeadEnabled = new Option<>("LevelHeadEnabled", false);
+    public static final Option<com.intro.common.config.options.LevelHeadMode> LevelHeadMode = new Option<>("LevelHeadMode", com.intro.common.config.options.LevelHeadMode.NETWORK_LEVEL);
+    public static final Option<Boolean> AutoGGEnabled = new Option<>("AutoGGEnabled", false);
+    public static final Option<Boolean> MotionBlurEnabled = new Option<>("MotionBlurEnabled", false);
+
+    public static HashMap<String, Option<?>> getValues() {
+        return options;
     }
 
-    public Option<Enum<?>> getEnumOption(String identifier) {
-        return (Option<Enum<?>>) get(identifier);
+    public static final Logger LOGGER = LogManager.getLogger();
+
+    private static final Gson GSON = new GsonBuilder()
+            .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
+            .setPrettyPrinting()
+            .excludeFieldsWithModifiers(Modifier.PRIVATE)
+            .registerTypeAdapter(LegacyOption.class, new LegacyOptionSerializer())
+            .registerTypeAdapter(LegacyOption.class, new LegacyOptionDeserializer())
+            .registerTypeAdapter(Option.class, new OptionSerializer())
+            .registerTypeAdapter(Option.class, new OptionDeserializer())
+            .create();
+
+
+    public static void loadConfig(String path) {
+        try {
+            File file = Paths.get(path).toFile();
+            StringBuilder builder = new StringBuilder();
+
+            boolean createdFile = file.createNewFile();
+
+            Scanner reader = new Scanner(file);
+
+            while(reader.hasNextLine()) {
+                builder.append(reader.nextLine());
+            }
+
+            reader.close();
+            if(createdFile || !isJSONValid(builder.toString())) {
+                LOGGER.log(Level.WARN, "Config file either didn't exist or is corrupted, creating new one using default settings.");
+                save();
+                return;
+            }
+            Option<?>[] arr;
+            try {
+                arr = GSON.fromJson(builder.toString(), Option[].class);
+            } catch (NullPointerException e) {
+                LOGGER.log(Level.INFO, "Detected legacy config, fixing up...");
+                arr = DataFixer.fixLegacyOptions(GSON.fromJson(builder.toString(), LegacyOption[].class));
+            }
+            if(arr.length != 0) {
+                for(Option<?> o : arr)  {
+                    try {
+                        Options.get(o.getIdentifier()).setUnsafe(o.get());
+                    } catch (ClassCastException e) {
+                        LOGGER.warn("Failed to set option " + o.getIdentifier() + " to value " + o.get() + " of type " + o.get().getClass() + " (Expected value of type " + Options.get(o.getIdentifier()).get().getClass() + ")");
+                    } catch (NullPointerException e) {
+                        LOGGER.warn("Unknown option " + o.getIdentifier() + " found in options file with value " + o.get() + " (Type " + o.get().getClass() + ")");
+                    }
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            LOGGER.warn("Error in loading osmium config, resetting config to avoid crash!");
+            resetOptionsFile();
+        }
     }
 
-    public Option<ElementPosition> getElementPositionOption(String identifier) {
-        return (Option<ElementPosition>) get(identifier);
+    public static void resetOptionsFile() {
+        File file = Paths.get(FabricLoader.getInstance().getConfigDir().resolve("osmium-options.json").toString()).toFile();
+        boolean deleted = file.delete();
+        if(!deleted) {
+            LOGGER.error("Error in resetting osmium config file. If this issue persists file an issue report at https://github.com/Intro-Dev/Osmium/issues");
+        }
     }
 
-    public Option<String> getStringOption(String identifier) {
-        return (Option<String>) get(identifier);
+    /**
+     * <p>Saves the current {@link Options} object in the {@link OsmiumClient} class</p>
+     * @param path The path of the config file
+     */
+    public static void saveConfig(String path) {
+        try {
+            File file = Paths.get(path).toFile();
+            if(file.createNewFile()) {
+                System.out.println("Couldn't find already existing config file, creating new one.");
+                LOGGER.log(Level.ALL, "Couldn't find already existing config file, creating new one.");
+            }
+            FileWriter writer = new FileWriter(file);
+            Option<?>[] arr = Options.getOptions().values().toArray(new Option<?>[0]);
+            writer.write(GSON.toJson(arr));
+            writer.close();
+            if(ModConstants.DEBUG) LOGGER.info("Saved config to file " + path);
+        } catch (Exception e) {
+            LOGGER.warn("Error in saving osmium config!");
+        }
     }
 
-    public Option<Double> getDoubleOption(String identifier) {
-        return (Option<Double>) get(identifier);
+    /**
+     * <p>A method to quickly save to the default config file</p>
+     */
+    public static void save() {
+        setNormalOptions();
+        saveConfig(FabricLoader.getInstance().getConfigDir().resolve("osmium-options.json").toString());
     }
 
-    public Option<Color> getColorOption(String identifier) {
-        return (Option<Color>) get(identifier);
+    /**
+     * <p>Sets the options back to their player set values</p>
+     */
+    public static void setNormalOptions() {
+        for(Option<?> option : Options.getOverwrittenOptions().values()) {
+            if(option != null) {
+                Options.put(option.getIdentifier(), option);
+            } else {
+                LOGGER.log(Level.ERROR, "Null option!");
+            }
+        }
+        Options.clearOverwrittenOptions();
     }
 
-    public static final String ToggleSprintEnabled = "ToggleSprintEnabled";
-    public static final String FullbrightEnabled = "FullbrightEnabled";
-    public static final String HurtbobbingEnabled = "HurtBobbingEnabled";
-    public static final String SneakMode = "SneakMode";
-    public static final String NoRainEnabled = "NoRainEnabled";
-    public static final String FpsEnabled = "FpsEnabled";
-    public static final String CustomCapeMode = "CustomCapeMode";
-    public static final String NoFireEnabled = "NoFireEnabled";
-    public static final String ToggleSprintPosition = "ToggleSprintPosition";
-    public static final String FpsDisplayPosition = "FpsDisplayPosition";
-    public static final String ToggleSneakEnabled = "ToggleSneakEnabled";
-    public static final String FireworksDisabled = "FireworksDisabled";
-    public static final String FlyBoostAmount = "FlyBoostAmount";
-    public static final String FlyBoostEnabled = "FlyBoostEnabled";
-    public static final String DecreaseNetherParticles = "DecreaseNetherParticles";
-    public static final String BlockOutlineMode = "CustomBlockOutline";
-    public static final String BlockOutlineColor = "BlockOutlineColor";
-    public static final String BlockOutlineAlpha = "BlockOutlineAlpha";
-    public static final String StatusEffectDisplayMode = "StatusEffectDisplayMode";
-    public static final String StatusEffectDisplayPosition = "StatusEffectDisplayPosition";
-    public static final String MaxStatusEffectsDisplayed = "MaxStatusEffectsDisplayed";
-    public static final String StatusEffectDisplayScale = "StatusEffectDisplayScale";
-    public static final String ArmorDisplayEnabled = "ArmorDisplayEnabled";
-    public static final String ArmorDisplayPosition = "ArmorDisplayPosition";
-    public static final String PingDisplayEnabled = "PingDisplayEnabled";
-    public static final String PingDisplayPosition = "PingDisplayPosition";
-    public static final String CpsDisplayEnabled = "CpsDisplayEnabled";
-    public static final String CpsDisplayPosition = "CpsDisplayPosition";
-    public static final String KeystrokesColor = "KeystrokesColor";
-    public static final String KeystrokesRgb = "KeystrokesRgb";
-    public static final String KeystrokesPosition = "KeystrokesPosition";
-    public static final String KeystrokesEnabled = "KeystrokesEnabled";
-    public static final String KeystrokesAlpha = "KeystrokesAlpha";
-    public static final String AnimateCapes = "AnimateCapes";
-    public static final String ShowOtherPlayersCapes = "ShowOtherPlayersCapes";
-    public static final String SetCape = "SetCape";
-    public static final String HypixelApiKey = "HypixelApiKey";
-    public static final String AutoGGString = "AutoGGString";
-    public static final String LevelHeadEnabled = "LevelHeadEnabled";
-    public static final String LevelHeadMode = "LevelHeadMode";
-    public static final String AutoGGEnabled = "AutoGGEnabled";
-    public static final String MotionBlurEnabled = "MotionBlurEnabled";
-
-
-    // contains the string for the option schema that the client is using
-    public static final String OPTION_FILE_SCHEMA = "OPTION_FILE_SCHEMA";
-
-
-
-
-    public void init() {
-        // Default inits
-        // Changed to preferences when config is loaded
-        this.setDefaults();
+    /**
+     * <p>A method to quickly load from the default config file</p>
+     */
+    public static void load() {
+        loadConfig(FabricLoader.getInstance().getConfigDir().resolve("osmium-options.json").toString());
     }
-
 
 
     /**
-     * Assigns the default settings to the option variables.
+     * <p>Checks if a string is valid JSON</p>
      */
-    public void setDefaults() {
-        put(OPTION_FILE_SCHEMA, new Option<>(OPTION_FILE_SCHEMA, "v2"));
-
-        put(ToggleSprintEnabled, new Option<>(ToggleSprintEnabled, false));
-        put(FullbrightEnabled, new Option<>(FullbrightEnabled, false));
-        put(HurtbobbingEnabled, new Option<>(HurtbobbingEnabled, false));
-        put(SneakMode, new Option<>(SneakMode, com.intro.common.config.options.SneakMode.VANILLA));
-        put(NoRainEnabled, new Option<>(NoRainEnabled, false));
-        put(FpsEnabled, new Option<>(FpsEnabled, false));
-        put(CustomCapeMode, new Option<>(CustomCapeMode, CapeRenderingMode.DISABLED));
-        put(NoFireEnabled, new Option<>(NoFireEnabled, false));
-        put(ToggleSprintPosition, new Option<>(ToggleSprintPosition, new ElementPosition(5, 5, 1)));
-        put(FpsDisplayPosition, new Option<>(FpsDisplayPosition, new ElementPosition(5, 5, 1)));
-        put(ToggleSneakEnabled, new Option<>(ToggleSneakEnabled, false));
-        put(FireworksDisabled, new Option<>(FireworksDisabled, false));
-        put(FlyBoostAmount, new Option<>(FlyBoostAmount, 1d));
-        put(FlyBoostEnabled, new Option<>(FlyBoostEnabled, false));
-        put(DecreaseNetherParticles, new Option<>(DecreaseNetherParticles, false));
-        put(BlockOutlineMode, new Option<>(BlockOutlineMode, com.intro.common.config.options.BlockOutlineMode.VANILLA));
-        put(BlockOutlineColor, new Option<>(BlockOutlineColor, Colors.TRANSPARENT.getColor()));
-        put(BlockOutlineAlpha, new Option<>(BlockOutlineAlpha, 1d));
-        put(StatusEffectDisplayMode, new Option<>(StatusEffectDisplayMode, com.intro.common.config.options.StatusEffectDisplayMode.VANILLA));
-        put(StatusEffectDisplayPosition, new Option<>(StatusEffectDisplayPosition, new ElementPosition(5, 5, 1)));
-        put(MaxStatusEffectsDisplayed, new Option<>(MaxStatusEffectsDisplayed, 1d));
-        put(StatusEffectDisplayScale, new Option<>(StatusEffectDisplayScale, 1d));
-        put(ArmorDisplayEnabled, new Option<>(ArmorDisplayEnabled, false));
-        put(ArmorDisplayPosition, new Option<>(ArmorDisplayPosition, new ElementPosition(5, 5, 1)));
-        put(PingDisplayEnabled, new Option<>(PingDisplayEnabled, false));
-        put(CpsDisplayEnabled, new Option<>(CpsDisplayEnabled, false));
-        put(CpsDisplayPosition, new Option<>(CpsDisplayPosition, new ElementPosition(5, 5, 1)));
-        put(PingDisplayPosition, new Option<>(PingDisplayPosition, new ElementPosition(5, 5, 1)));
-        put(KeystrokesColor, new Option<>(KeystrokesColor, new Color(0.1f, 0.1f, 0.1f, 0.2f)));
-        put(KeystrokesRgb, new Option<>(KeystrokesRgb, false));
-        put(KeystrokesPosition, new Option<>(KeystrokesPosition, new ElementPosition(5, 5, 1)));
-        put(KeystrokesEnabled, new Option<>(KeystrokesEnabled, false));
-        put(KeystrokesAlpha, new Option<>(KeystrokesAlpha, 0.2));
-        put(AnimateCapes, new Option<>(AnimateCapes, true));
-        put(ShowOtherPlayersCapes, new Option<>(ShowOtherPlayersCapes, true));
-        put(SetCape, new Option<>(SetCape, ""));
-        put(HypixelApiKey, new Option<>(HypixelApiKey, ""));
-        put(LevelHeadEnabled, new Option<>(LevelHeadEnabled, false));
-        put(LevelHeadMode, new Option<>(LevelHeadMode, com.intro.common.config.options.LevelHeadMode.NETWORK_LEVEL));
-        put(AutoGGString, new Option<>(AutoGGString, "gg"));
-        put(AutoGGEnabled, new Option<>(AutoGGEnabled, false));
-        put(MotionBlurEnabled, new Option<>(MotionBlurEnabled, false));
-    }
-
-    public HashMap<String, Option<?>> getValues() {
-        return this.options;
+    public static boolean isJSONValid(String jsonInString) {
+        try {
+            GSON.fromJson(jsonInString, Object.class);
+            return true;
+        } catch(JsonSyntaxException e) {
+            return false;
+        }
     }
 }

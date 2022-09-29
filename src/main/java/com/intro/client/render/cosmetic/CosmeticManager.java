@@ -18,7 +18,6 @@ import com.intro.client.util.TextureUtil;
 import com.intro.common.api.OsmiumApi;
 import com.intro.common.config.Options;
 import com.intro.common.config.options.CapeRenderingMode;
-import com.intro.common.config.options.Option;
 import com.intro.common.util.Util;
 import com.intro.common.util.http.HttpRequestBuilder;
 import com.intro.common.util.http.HttpRequester;
@@ -78,7 +77,7 @@ public class CosmeticManager {
             OsmiumClient.LOGGER.log(Level.WARN, "Failed to load local capes " + e.getMessage());
         }
         locallyLoadedCapes.forEach((cape -> {
-            if(cape.name.equals(OsmiumClient.options.get(Options.SetCape).get())) {
+            if(cape.name.equals(Options.SetCape.get())) {
                 setLocalPlayerCape(cape);
             }
         }));
@@ -98,7 +97,7 @@ public class CosmeticManager {
                 OsmiumClient.LOGGER.log(Level.WARN, "Unable to set cape on Osmium servers: " + e.getMessage());
             }
         });
-        OsmiumClient.options.put(Options.SetCape, new Option<>(Options.SetCape, cape.name));
+        Options.SetCape.set(cape.name);
     }
 
     public Cape getCapeFromEntityGotUUID(String uuid) {
@@ -122,7 +121,7 @@ public class CosmeticManager {
     }
 
     public void handleEvents(Event event) {
-        if(event instanceof EventTick && OsmiumClient.options.getBooleanOption(Options.AnimateCapes).get()) {
+        if(event instanceof EventTick && Options.AnimateCapes.get()) {
             for(Cape cape : playerCapes.values()) {
                 if(cape != null) cape.nextFrame();
             }
@@ -149,8 +148,8 @@ public class CosmeticManager {
     public Cape getPlayerCape(String UUID) {
         Cape cape = playerCapes.get(UUID);
         if(cape == null) return null;
-        if(OsmiumClient.options.getEnumOption(Options.CustomCapeMode).get() == CapeRenderingMode.ALL) return cape;
-        if((OsmiumClient.options.getEnumOption(Options.CustomCapeMode).get() == CapeRenderingMode.OPTIFINE) && cape.isOptifine) return cape;
+        if(Options.CustomCapeMode.get() == CapeRenderingMode.ALL) return cape;
+        if((Options.CustomCapeMode.get() == CapeRenderingMode.OPTIFINE) && cape.isOptifine) return cape;
         return null;
     }
 

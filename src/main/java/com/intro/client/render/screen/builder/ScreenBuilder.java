@@ -1,5 +1,6 @@
 package com.intro.client.render.screen.builder;
 
+import com.intro.common.config.options.Option;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.Widget;
@@ -41,11 +42,11 @@ public interface ScreenBuilder {
     /**
      * Adds a generic option button. Automatically offsets the buttons each time a new one is added.
      * Only works with Enum and Boolean options
-     * @param optionId The option to be used
+     * @param option The option to be used
      * @param translationKey The translation key of the option
      * @return Returns the current ScreenBuilder
      */
-    ScreenBuilder button(String optionId, String translationKey);
+    ScreenBuilder button(Option<?> option, String translationKey);
 
     /**
      * Adds a button with custom function and position
@@ -75,11 +76,11 @@ public interface ScreenBuilder {
     /**
      * Adds a generic option button. Automatically offsets the buttons each time a new one is added.
      * Only works with Enum and Boolean options
-     * @param optionId The option to be used
+     * @param option The option to be used
      * @param translationKey The translation key of the option
      * @return Returns the current ScreenBuilder
      */
-    ScreenBuilder button(String optionId, String translationKey, WidgetConsumer afterInit);
+    ScreenBuilder button(Option<?> option, String translationKey, WidgetConsumer afterInit);
 
     /**
      * Adds a button with custom function
@@ -105,14 +106,14 @@ public interface ScreenBuilder {
 
     /**
      * Adds a double option slider
-     * @param optionId The option to be used
+     * @param option The option to be used
      * @param translationKey The translation key of the option
      * @param minVal The minimum value of the slider
      * @param maxVal The maximum value of the slider
      * @param roundTo The place the slider will round too
      * @return Returns the current ScreenBuilder
      */
-    ScreenBuilder slider(String optionId, String translationKey, double minVal, double maxVal, double roundTo);
+    ScreenBuilder slider(Option<Double> option, String translationKey, double minVal, double maxVal, double roundTo);
 
     /**
      * Builds the given data into a screen

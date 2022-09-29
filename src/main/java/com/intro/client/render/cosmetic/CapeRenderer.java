@@ -35,11 +35,11 @@ public class CapeRenderer extends RenderLayer<AbstractClientPlayer, PlayerModel<
         public void render(PoseStack stack, MultiBufferSource multiBuffer, int light, AbstractClientPlayer player, float limbAngle, float limbDistance, float tickDelta, float animationProgress, float headYaw, float headPitch) {
         try {
             ItemStack itemStack = player.getItemBySlot(EquipmentSlot.CHEST);
-            if(OsmiumClient.options.getBooleanOption(Options.ShowOtherPlayersCapes).get() && !Objects.equals(player.getStringUUID(), Minecraft.getInstance().player.getStringUUID())) {
+            if(Options.ShowOtherPlayersCapes.get() && !Objects.equals(player.getStringUUID(), Minecraft.getInstance().player.getStringUUID())) {
                 return;
             }
 
-            if(!itemStack.is(Items.ELYTRA) && !player.isInvisible() && player.isCapeLoaded() && player.isModelPartShown(PlayerModelPart.CAPE) && OsmiumClient.options.getEnumOption(Options.CustomCapeMode).get() == CapeRenderingMode.ALL || OsmiumClient.options.getEnumOption(Options.CustomCapeMode).get() == CapeRenderingMode.OPTIFINE){
+            if(!itemStack.is(Items.ELYTRA) && !player.isInvisible() && player.isCapeLoaded() && player.isModelPartShown(PlayerModelPart.CAPE) && Options.CustomCapeMode.get() == CapeRenderingMode.ALL || Options.CustomCapeMode.get() == CapeRenderingMode.OPTIFINE){
                 Minecraft.getInstance().getProfiler().push("OsmiumCapeRendering");
                 stack.pushPose();
                 stack.translate(0.0D, 0.0D, 0.125D);

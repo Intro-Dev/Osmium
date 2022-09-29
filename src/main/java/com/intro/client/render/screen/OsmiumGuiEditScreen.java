@@ -3,7 +3,7 @@ package com.intro.client.render.screen;
 import com.intro.client.render.RenderManager;
 import com.intro.client.render.drawables.Drawable;
 import com.intro.client.render.drawables.Scalable;
-import com.intro.client.util.OptionUtil;
+import com.intro.common.config.Options;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.Button;
@@ -28,7 +28,7 @@ public class OsmiumGuiEditScreen extends Screen {
 
     @Override
     public void onClose() {
-        OptionUtil.save();
+        Options.save();
         super.onClose();
     }
 
@@ -59,20 +59,16 @@ public class OsmiumGuiEditScreen extends Screen {
             if(drawable.isPositionWithinBounds((int) mouseX, (int) mouseY) && drawable.visible) {
                 if(drawable instanceof Scalable scalable) {
                     if(mouseX + scalable.getScaledWidth() < this.width || mouseX - scalable.getScaledHeight() < 0) {
-                        scalable.onPositionChange(drawable.posX, drawable.posY, (int) mouseX, drawable.posY);
                         scalable.setScaledX((int) mouseX);
                     }
                     if(mouseY + scalable.getScaledHeight() < this.height || mouseY - scalable.getScaledHeight() < 0) {
-                        scalable.onPositionChange(drawable.posX, drawable.posY, drawable.posX, (int) mouseY);
                         scalable.setScaledY((int) mouseY);
                     }
                 } else {
                     if(mouseX + drawable.width < this.width || mouseX - drawable.width < 0) {
-                        drawable.onPositionChange(drawable.posX, drawable.posY, (int) mouseX, drawable.posY);
                         drawable.posX = (int) mouseX;
                     }
                     if(mouseY + drawable.height < this.height || mouseY - drawable.height < 0) {
-                        drawable.onPositionChange(drawable.posX, drawable.posY, drawable.posX, (int) mouseY);
                         drawable.posY = (int) mouseY;
                     }
                 }
@@ -87,9 +83,8 @@ public class OsmiumGuiEditScreen extends Screen {
         for(Drawable drawable : RenderManager.drawables) {
             if(drawable instanceof Scalable scalable) {
                 if(scalable.isPositionWithinBounds((int) mouseX, (int) mouseY) && drawable.visible) {
-                    scalable.onScaleChange(scalable.scale, (float) (scalable.scale + (scrollDelta * 0.1)));
-                    scalable.scale += scrollDelta * 0.1;
-                    scalable.scale = (float) Mth.clamp(scalable.scale, 0.5, 10);
+                    scalable.setScale(scalable.getScale() + scrollDelta * 0.1);
+                    scalable.setScale(Mth.clamp(scalable.getScale(), 0.5, 10));
                     return super.mouseScrolled(mouseX, mouseY, scrollDelta);
                 }
             }

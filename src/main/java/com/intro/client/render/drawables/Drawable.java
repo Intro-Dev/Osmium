@@ -26,11 +26,6 @@ public abstract class Drawable extends GuiComponent implements Widget, GuiEventL
     
     public abstract void render(PoseStack stack);
 
-    public abstract void destroySelf();
-
-    public abstract void onPositionChange(int newX, int newY, int oldX, int oldY);
-
-
     @Override
     public void render(PoseStack matrices, int mouseX, int mouseY, float delta) {
         this.render(matrices);

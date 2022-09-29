@@ -1,6 +1,5 @@
 package com.intro.common.mixin.client;
 
-import com.intro.client.OsmiumClient;
 import com.intro.common.config.Options;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.Mth;
@@ -20,8 +19,8 @@ public class AbilitiesMixin {
 
     @Inject(method = "getFlyingSpeed", at = @At("HEAD"), cancellable = true)
     public void getFlyingSpeed(CallbackInfoReturnable<Float> cir) {
-        if(flying && mc.player != null && OsmiumClient.options.getBooleanOption(Options.FlyBoostEnabled).get()) {
-            cir.setReturnValue(Mth.clamp((float) OsmiumClient.options.getDoubleOption(Options.FlyBoostAmount).get().byteValue() / 40, 0.05f, 0.5f));
+        if(flying && mc.player != null && Options.FlyBoostEnabled.get()) {
+            cir.setReturnValue(Mth.clamp((float) Options.FlyBoostAmount.get().byteValue() / 40, 0.05f, 0.5f));
         }
     }
 }

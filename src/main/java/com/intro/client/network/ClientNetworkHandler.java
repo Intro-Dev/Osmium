@@ -5,7 +5,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.intro.client.OsmiumClient;
 import com.intro.client.render.cosmetic.Cape;
-import com.intro.client.util.OptionUtil;
+import com.intro.common.config.Options;
 import com.intro.common.config.options.Option;
 import com.intro.common.config.options.legacy.LegacyOption;
 import com.intro.common.config.options.legacy.LegacyOptionDeserializer;
@@ -42,14 +42,14 @@ public class ClientNetworkHandler {
 
     public static void registerPackets() {
         ClientPlayNetworking.registerGlobalReceiver(NetworkingConstants.SET_SETTING_PACKET_ID, (client, handler, buf, responseSender) -> {
-            OptionUtil.setNormalOptions();
+            Options.setNormalOptions();
             int setCount = buf.readInt();
             for(int i = 0; i < setCount; i++) {
                 try {
                     String utf = buf.readUtf();
                     Option<?> option = GSON.fromJson(utf, Option.class);
-                    OsmiumClient.options.putOverwrittenOption(option.getIdentifier(), OsmiumClient.options.get(option.getIdentifier()));
-                    OsmiumClient.options.put(option.getIdentifier(), option);
+                    Options.putOverwrittenOption(option.getIdentifier(), Options.get(option.getIdentifier()));
+                    Options.put(option.getIdentifier(), option);
                 } catch (Exception e) {
                     e.printStackTrace();
                     OsmiumClient.LOGGER.log(Level.WARN, "Received invalid option data from server!");
@@ -72,10 +72,10 @@ public class ClientNetworkHandler {
 
         ClientPlayConnectionEvents.DISCONNECT.register((handler, client) -> {
             isRunningOsmiumServer = false;
-            for(Option<?> option : OsmiumClient.options.getOverwrittenOptions().values()) {
-                OsmiumClient.options.put(option.getIdentifier(), option);
+            for(Option<?> option : Options.getOverwrittenOptions().values()) {
+                Options.put(option.getIdentifier(), option);
             }
-            OsmiumClient.options.clearOverwrittenOptions();
+            Options.clearOverwrittenOptions();
         });
 
     }

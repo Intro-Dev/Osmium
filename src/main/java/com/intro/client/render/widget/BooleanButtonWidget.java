@@ -1,61 +1,62 @@
 package com.intro.client.render.widget;
 
-import com.intro.client.OsmiumClient;
+import com.intro.common.config.Options;
+import com.intro.common.config.options.Option;
 import net.minecraft.client.gui.narration.NarratableEntry;
 import net.minecraft.network.chat.Component;
 
 
 public class BooleanButtonWidget extends AbstractScalableButton {
 
-    public final String optionId;
+    public final Option<Boolean> attachedOption;
     public final String key;
 
-    public BooleanButtonWidget(int x, int y, int width, int height, String optionId, String key) {
+    public BooleanButtonWidget(int x, int y, int width, int height, Option<Boolean> attachedOption, String key) {
         super(x, y, width, height, Component.literal(""), button -> {
-            if(!OsmiumClient.options.getOverwrittenOptions().containsKey(optionId)) {
-                OsmiumClient.options.getBooleanOption(optionId).set(!OsmiumClient.options.getBooleanOption(optionId).get());
+            if(!Options.getOverwrittenOptions().containsKey(attachedOption.getIdentifier())) {
+                attachedOption.set(!attachedOption.get());
             } else {
                 button.active = false;
             }
-            if(OsmiumClient.options.getBooleanOption(optionId).get()) {
+            if(attachedOption.get()) {
                 button.setMessage(Component.translatable(key + "enabled"));
             } else {
                 button.setMessage(Component.translatable(key + "disabled"));
             }
 
         }, 1f);
-        this.optionId = optionId;
+        this.attachedOption = attachedOption;
         this.key = key;
-        if(OsmiumClient.options.getOverwrittenOptions().containsKey(optionId)) {
+        if(Options.getOverwrittenOptions().containsKey(attachedOption.getIdentifier())) {
             this.active = false;
         }
-        if(OsmiumClient.options.getBooleanOption(optionId).get()) {
+        if(attachedOption.get()) {
             super.setMessage(Component.translatable(key + "enabled"));
         } else {
             super.setMessage(Component.translatable(key + "disabled"));
         }
     }
 
-    public BooleanButtonWidget(int x, int y, int width, int height, String optionId, String key, float scale) {
+    public BooleanButtonWidget(int x, int y, int width, int height, Option<Boolean> attachedOption, String key, float scale) {
         super(x, y, width, height, Component.literal(""), button -> {
-            if(!OsmiumClient.options.getOverwrittenOptions().containsKey(optionId)) {
-                OsmiumClient.options.getBooleanOption(optionId).set(!OsmiumClient.options.getBooleanOption(optionId).get());
+            if(!Options.getOverwrittenOptions().containsKey(attachedOption.getIdentifier())) {
+                attachedOption.set(!attachedOption.get());
             } else {
                 button.active = false;
             }
-            if(OsmiumClient.options.getBooleanOption(optionId).get()) {
+            if(attachedOption.get()) {
                 button.setMessage(Component.translatable(key + "enabled"));
             } else {
                 button.setMessage(Component.translatable(key + "disabled"));
             }
 
         }, scale);
-        this.optionId = optionId;
+        this.attachedOption = attachedOption;
         this.key = key;
-        if(OsmiumClient.options.getOverwrittenOptions().containsKey(optionId)) {
+        if(Options.getOverwrittenOptions().containsKey(attachedOption.getIdentifier())) {
             this.active = false;
         }
-        if(OsmiumClient.options.getBooleanOption(optionId).get()) {
+        if(attachedOption.get()) {
             super.setMessage(Component.translatable(key + "enabled"));
         } else {
             super.setMessage(Component.translatable(key + "disabled"));

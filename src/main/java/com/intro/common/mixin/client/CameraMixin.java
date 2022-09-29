@@ -1,6 +1,5 @@
 package com.intro.common.mixin.client;
 
-import com.intro.client.OsmiumClient;
 import com.intro.common.config.Options;
 import com.intro.common.config.options.SneakMode;
 import net.minecraft.client.Camera;
@@ -28,9 +27,9 @@ public class CameraMixin {
     public void changeEyeHeight(CallbackInfo info) {
         // smooth but no squish
         if (this.entity != null) {
-            if (OsmiumClient.options.getEnumOption(Options.SneakMode).get() == SneakMode.INSTANT) {
+            if (Options.SneakMode.get() == SneakMode.INSTANT) {
                 this.eyeHeight = this.entity.getEyeHeight();
-            } else if (OsmiumClient.options.getEnumOption(Options.SneakMode).get() == SneakMode.SMOOTH) {
+            } else if (Options.SneakMode.get() == SneakMode.SMOOTH) {
                 this.eyeHeight = (float) Mth.lerp(0.8, this.eyeHeight, this.entity.getEyeHeight());
             } else {
                 this.eyeHeight += (this.entity.getEyeHeight() - this.eyeHeight) * 0.5F;

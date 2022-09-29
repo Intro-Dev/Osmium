@@ -1,10 +1,9 @@
 package com.intro.common.mixin.client;
 
-import com.intro.client.OsmiumClient;
 import com.intro.client.render.color.Colors;
 import com.intro.client.util.HypixelAbstractionLayer;
+import com.intro.common.ModConstants;
 import com.intro.common.config.Options;
-import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Matrix4f;
 import com.mojang.math.Vector3d;
@@ -42,20 +41,20 @@ public abstract class LevelRendererMixin {
 
     @Inject(at = @At("HEAD"), method = "renderSnowAndRain", cancellable = true)
     public void RenderWeather(CallbackInfo info) {
-        if(OsmiumClient.options.getBooleanOption(Options.NoRainEnabled).get()) {
+        if(Options.NoRainEnabled.get()) {
             info.cancel();
         }
     }
 
     @Inject(at = @At("HEAD"), method = "addParticle(Lnet/minecraft/core/particles/ParticleOptions;ZZDDDDDD)V", cancellable = true)
     public void addParticle(ParticleOptions particleData, boolean ignoreRange, boolean minimizeLevel, double x, double y, double z, double xSpeed, double ySpeed, double zSpeed, CallbackInfo ci) {
-        if(particleData == ParticleTypes.RAIN && OsmiumClient.options.getBooleanOption(Options.NoRainEnabled).get()) {
+        if(particleData == ParticleTypes.RAIN && Options.NoRainEnabled.get()) {
             ci.cancel();
         }
-        if(particleData == ParticleTypes.FIREWORK && OsmiumClient.options.getBooleanOption(Options.FireworksDisabled).get()) {
+        if(particleData == ParticleTypes.FIREWORK && Options.FireworksDisabled.get()) {
             ci.cancel();
         }
-        if((particleData == ParticleTypes.WARPED_SPORE || particleData == ParticleTypes.CRIMSON_SPORE || particleData == ParticleTypes.SPORE_BLOSSOM_AIR || particleData == ParticleTypes.FALLING_SPORE_BLOSSOM) && OsmiumClient.options.getBooleanOption(Options.DecreaseNetherParticles).get()) {
+        if((particleData == ParticleTypes.WARPED_SPORE || particleData == ParticleTypes.CRIMSON_SPORE || particleData == ParticleTypes.SPORE_BLOSSOM_AIR || particleData == ParticleTypes.FALLING_SPORE_BLOSSOM) && Options.DecreaseNetherParticles.get()) {
             ci.cancel();
         }
     }
@@ -72,34 +71,34 @@ public abstract class LevelRendererMixin {
         }
         MultiBufferSource.BufferSource source = this.renderBuffers.bufferSource();
         assert minecraft.level != null;
-        RenderSystem.disableDepthTest();
         for(Player player : minecraft.level.players()) {
-            if (Minecraft.getInstance().getCurrentServer() != null && entityRenderDispatcher.shouldRender(player, usedFrustum, minecraft.gameRenderer.getMainCamera().getPosition().x,  minecraft.gameRenderer.getMainCamera().getPosition().y,  minecraft.gameRenderer.getMainCamera().getPosition().z)) {
-                if (Minecraft.getInstance().getCurrentServer().ip.contains("hypixel.net")) {
-                    stack.pushPose();
-                    {
-                        Vec3 vec3 = entityRenderDispatcher.getRenderer(player).getRenderOffset(player, partialTicks);
-                        double interpolatedX = Mth.lerp(partialTicks, player.xOld, player.getX()) - camera.getPosition().x + vec3.x();
-                        double interpolatedY = Mth.lerp(partialTicks, player.yOld, player.getY()) - camera.getPosition().y + vec3.y();
-                        double interpolatedZ = Mth.lerp(partialTicks, player.zOld, player.getZ()) - camera.getPosition().z + vec3.z();
-                        stack.translate(interpolatedX, interpolatedY, interpolatedZ);
-                        if (HypixelAbstractionLayer.canUseHypixelService() && OsmiumClient.options.getBooleanOption(Options.LevelHeadEnabled).get()) {
-                            stack.pushPose();
-                            stack.translate(0, 0.25, 0);
-                            try {
-                                renderCustomColorNameTag(player, Component.literal(Component.translatable("osmium.level").getString() + HypixelAbstractionLayer.getPlayerLevel(player.getStringUUID())), stack, source, this.entityRenderDispatcher.getPackedLightCoords(player, partialTicks), Colors.ORANGE.getColor().getInt());
-                            } catch (Exception e) {
-                                e.printStackTrace();
+            if(!HypixelAbstractionLayer.isPlayerNpc(player)) {
+                if (ModConstants.DEBUG || (Minecraft.getInstance().getCurrentServer() != null && entityRenderDispatcher.shouldRender(player, usedFrustum, minecraft.gameRenderer.getMainCamera().getPosition().x,  minecraft.gameRenderer.getMainCamera().getPosition().y,  minecraft.gameRenderer.getMainCamera().getPosition().z))) {
+                    if (ModConstants.DEBUG || Minecraft.getInstance().getCurrentServer().ip.contains("hypixel.net")) {
+                        stack.pushPose();
+                        {
+                            Vec3 vec3 = entityRenderDispatcher.getRenderer(player).getRenderOffset(player, partialTicks);
+                            double interpolatedX = Mth.lerp(partialTicks, player.xOld, player.getX()) - camera.getPosition().x + vec3.x();
+                            double interpolatedY = Mth.lerp(partialTicks, player.yOld, player.getY()) - camera.getPosition().y + vec3.y();
+                            double interpolatedZ = Mth.lerp(partialTicks, player.zOld, player.getZ()) - camera.getPosition().z + vec3.z();
+                            stack.translate(interpolatedX, interpolatedY, interpolatedZ);
+                            if (HypixelAbstractionLayer.canUseHypixelService() && Options.LevelHeadEnabled.get()) {
+                                stack.pushPose();
+                                stack.translate(0, 0.25, 0);
+                                try {
+                                    renderCustomColorNameTag(player, Component.literal(Component.translatable("osmium.level").getString() + HypixelAbstractionLayer.getPlayerLevel(player.getStringUUID())), stack, source, this.entityRenderDispatcher.getPackedLightCoords(player, partialTicks), Colors.ORANGE.getColor().getInt());
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
+                                stack.popPose();
                             }
-                            stack.popPose();
                         }
+                        stack.popPose();
                     }
-                    stack.popPose();
                 }
             }
         }
         source.endBatch();
-        RenderSystem.enableDepthTest();
     }
 
     private void renderCustomColorNameTag(Player entity, Component component, PoseStack poseStack, MultiBufferSource multiBufferSource, int light, int color) {

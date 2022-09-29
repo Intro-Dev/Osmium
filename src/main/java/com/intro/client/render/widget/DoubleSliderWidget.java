@@ -1,6 +1,7 @@
 package com.intro.client.render.widget;
 
-import com.intro.client.OsmiumClient;
+import com.intro.common.config.Options;
+import com.intro.common.config.options.Option;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.AbstractOptionSliderButton;
@@ -9,40 +10,40 @@ import net.minecraft.util.Mth;
 
 public class DoubleSliderWidget extends AbstractOptionSliderButton {
 
-    private final String optionId;
+    private final Option<Double> attachedOption;
     public final String key;
     private final double minVal;
     private final double maxVal;
 
     private final double roundTo;
 
-    public DoubleSliderWidget(Minecraft mc, int x, int y, int width, int height, String optionId, String key, double minVal, double maxVal, double roundTo) {
-        super(mc.options, x, y, width, height, OsmiumClient.options.getDoubleOption(optionId).get());
-        this.optionId = optionId;
+    public DoubleSliderWidget(Minecraft mc, int x, int y, int width, int height, Option<Double> attachedOption, String key, double minVal, double maxVal, double roundTo) {
+        super(mc.options, x, y, width, height, attachedOption.get());
+        this.attachedOption = attachedOption;
         this.key = key;
         this.minVal = minVal;
         this.maxVal = maxVal;
         this.roundTo = roundTo;
+        this.value = attachedOption.get();
         this.updateMessage();
-        this.applyValue();
     }
 
     @Override
     protected void updateMessage() {
-        if(OsmiumClient.options.getOverwrittenOptions().containsKey(optionId)) {
+        if(Options.getOverwrittenOptions().containsKey(attachedOption.getIdentifier())) {
             this.active = false;
         }
-        double scaledVal = (maxVal - minVal) * this.value;
+        double scaledVal = (maxVal - minVal) * attachedOption.get();
         scaledVal = Mth.clamp(scaledVal, minVal, maxVal);
         this.setMessage(Component.literal(Component.translatable(key).getString() + (Math.round(scaledVal * roundTo) / roundTo)));
     }
 
     @Override
     protected void applyValue() {
-        if(!OsmiumClient.options.getOverwrittenOptions().containsKey(optionId)) {
+        if(!Options.getOverwrittenOptions().containsKey(attachedOption.getIdentifier())) {
             double scaledVal = (maxVal - minVal) * this.value;
             scaledVal = Mth.clamp(scaledVal, minVal, maxVal);
-            OsmiumClient.options.getDoubleOption(optionId).set(Math.round(scaledVal * roundTo) / roundTo);
+            attachedOption.set(Math.round(scaledVal * roundTo) / roundTo);
         }
     }
 

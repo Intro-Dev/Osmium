@@ -3,15 +3,15 @@ package com.intro.client;
 import com.intro.client.module.AutoGG;
 import com.intro.client.module.EventListenerSupplier;
 import com.intro.client.module.Gui;
-import com.intro.client.module.ToggleSneak;
 import com.intro.client.module.event.Event;
 import com.intro.client.module.event.EventType;
 import com.intro.client.network.ClientNetworkHandler;
 import com.intro.client.render.RenderManager;
 import com.intro.client.render.cosmetic.CosmeticManager;
 import com.intro.client.render.drawables.PingDisplay;
+import com.intro.client.render.drawables.ToggleSneak;
 import com.intro.client.util.HypixelAbstractionLayer;
-import com.intro.client.util.OptionUtil;
+import com.intro.common.ModConstants;
 import com.intro.common.api.OsmiumApi;
 import com.intro.common.config.Options;
 import com.intro.common.util.Util;
@@ -28,23 +28,18 @@ import java.util.HashMap;
 
 public class OsmiumClient implements ClientModInitializer {
 
-    public static final String MOD_ID = "osmium";
-
     public static final Logger LOGGER = LogManager.getLogger("OsmiumClient");
 
     public static KeyMapping menuKey;
-
-    public static final Options options = new Options();
 
     public static boolean runningLatestVersion = true;
 
     public static CosmeticManager cosmeticManager = new CosmeticManager();
 
     public static void registerCallbacks() {
-        ToggleSneak toggleSneak = new ToggleSneak();
         Gui gui = new Gui();
 
-        EVENT_BUS.registerCallback(toggleSneak::onEvent, EventType.EVENT_TICK);
+        EVENT_BUS.registerCallback(ToggleSneak.getInstance()::onEvent, EventType.EVENT_TICK);
         EVENT_BUS.registerCallback(gui::onEvent, EventType.EVENT_TICK);
         EVENT_BUS.registerCallback(cosmeticManager::handleEvents, new EventType[] { EventType.EVENT_ADD_PLAYER, EventType.EVENT_REMOVE_PLAYER, EventType.EVENT_TICK } );
         EVENT_BUS.registerCallback(PingDisplay.getInstance()::onEvent, EventType.EVENT_TICK);
@@ -59,8 +54,9 @@ public class OsmiumClient implements ClientModInitializer {
 
 
     public void onInitializeClient() {
-        OptionUtil.Options.init();
-        OptionUtil.load();
+        ModConstants.DEBUG = Boolean.parseBoolean(System.getProperty("osmium.debug"));
+        if(ModConstants.DEBUG) LOGGER.info("Starting Osmium in debug mode");
+        Options.load();
         EVENT_BUS.initListenerMap();
         registerCallbacks();
         registerKeyBindings();
@@ -69,9 +65,8 @@ public class OsmiumClient implements ClientModInitializer {
         HypixelAbstractionLayer.loadApiKey();
         AutoGG.setupTriggers();
         runningLatestVersion = Util.isRunningLatestVersion();
-        // init api
         OsmiumApi.getInstance();
-        System.out.println("Osmium Initialized");
+        LOGGER.info("Osmium Initialized");
     }
 
 

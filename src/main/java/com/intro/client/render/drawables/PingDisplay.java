@@ -1,13 +1,10 @@
 package com.intro.client.render.drawables;
 
-import com.intro.client.OsmiumClient;
 import com.intro.client.module.event.Event;
 import com.intro.client.module.event.EventTick;
 import com.intro.client.render.color.Color;
 import com.intro.client.render.color.Colors;
-import com.intro.client.util.ElementPosition;
 import com.intro.common.config.Options;
-import com.intro.common.config.options.Option;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientPacketListener;
@@ -43,13 +40,13 @@ public class PingDisplay extends Scalable {
     }
 
     protected PingDisplay(int color) {
-        OsmiumClient.options.getElementPositionOption(Options.PingDisplayPosition).get().loadToScalable(this);
+        super(Options.PingDisplayPosition);
         this.color = color;
     }
 
     @Override
     public void render(PoseStack stack) {
-        if(OsmiumClient.options.getBooleanOption(Options.PingDisplayEnabled).get()) {
+        if(Options.PingDisplayEnabled.get()) {
             this.visible = true;
             if(firstRun) {
                 this.width = 40;
@@ -63,17 +60,6 @@ public class PingDisplay extends Scalable {
         }
     }
 
-    @Override
-    public void destroySelf() {
-
-    }
-
-    @Override
-    public void onPositionChange(int newX, int newY, int oldX, int oldY) {
-        OsmiumClient.options.put(Options.PingDisplayPosition, new Option<>(Options.PingDisplayPosition, new ElementPosition(newX, newY, this.scale)));
-
-    }
-
     public static PingDisplay getInstance() {
         if(INSTANCE == null) {
             INSTANCE = new PingDisplay(Colors.WHITE.getColor().getInt());
@@ -81,8 +67,4 @@ public class PingDisplay extends Scalable {
         return INSTANCE;
     }
 
-    @Override
-    public void onScaleChange(double oldScale, double newScale) {
-        OsmiumClient.options.put(Options.PingDisplayPosition, new Option<>(Options.PingDisplayPosition, new ElementPosition(this.posX, this.posY, newScale)));
-    }
 }

@@ -1,6 +1,5 @@
 package com.intro.client.render.screen.builder;
 
-import com.intro.client.OsmiumClient;
 import com.intro.client.render.widget.AbstractScalableButton;
 import com.intro.client.render.widget.BooleanButtonWidget;
 import com.intro.client.render.widget.DoubleSliderWidget;
@@ -51,13 +50,12 @@ public class ScreenBuilderImpl implements ScreenBuilder {
     }
 
     @Override
-    public ScreenBuilder button(String optionId, String translationKey) {
-        Option<?> option = OsmiumClient.options.get(optionId);
+    public ScreenBuilder button(Option<?> option, String translationKey) {
         if(option.get() instanceof Boolean) {
-            widget(new BooleanButtonWidget(mc.getWindow().getGuiScaledWidth() / 2 + widgetX, mc.getWindow().getScreenHeight() / 8 + widgetY, 150, 20, option.getIdentifier(), translationKey));
+            widget(new BooleanButtonWidget(mc.getWindow().getGuiScaledWidth() / 2 + widgetX, mc.getWindow().getScreenHeight() / 8 + widgetY, 150, 20, (Option<Boolean>) option, translationKey));
         }
         if (option.get() instanceof Enum<?>) {
-            widget(new EnumSelectWidget(mc.getWindow().getGuiScaledWidth() / 2 + widgetX, mc.getWindow().getScreenHeight() / 8 + widgetY, 150, 20, option.getIdentifier(), translationKey));
+            widget(new EnumSelectWidget(mc.getWindow().getGuiScaledWidth() / 2 + widgetX, mc.getWindow().getScreenHeight() / 8 + widgetY, 150, 20, (Option<Enum<?>>) option, translationKey));
         }
         incrementButton();
         return this;
@@ -76,15 +74,14 @@ public class ScreenBuilderImpl implements ScreenBuilder {
     }
 
     @Override
-    public ScreenBuilder button(String optionId, String translationKey, WidgetConsumer afterInit) {
-        Option<?> option = OsmiumClient.options.get(optionId);
+    public ScreenBuilder button(Option<?> option, String translationKey, WidgetConsumer afterInit) {
         if(option.get() instanceof Boolean) {
-            BooleanButtonWidget widget = new BooleanButtonWidget(mc.getWindow().getGuiScaledWidth() / 2 + widgetX, mc.getWindow().getScreenHeight() / 8 + widgetY, 150, 20, option.getIdentifier(), translationKey);
+            BooleanButtonWidget widget = new BooleanButtonWidget(mc.getWindow().getGuiScaledWidth() / 2 + widgetX, mc.getWindow().getScreenHeight() / 8 + widgetY, 150, 20, (Option<Boolean>) option, translationKey);
             widget(widget);
             addWidgetConsumer(widget, afterInit);
         }
         if (option.get() instanceof Enum<?>) {
-            EnumSelectWidget widget = new EnumSelectWidget(mc.getWindow().getGuiScaledWidth() / 2 + widgetX, mc.getWindow().getScreenHeight() / 8 + widgetY, 150, 20, option.getIdentifier(), translationKey);
+            EnumSelectWidget widget = new EnumSelectWidget(mc.getWindow().getGuiScaledWidth() / 2 + widgetX, mc.getWindow().getScreenHeight() / 8 + widgetY, 150, 20, (Option<Enum<?>>) option, translationKey);
             widget(widget);
             addWidgetConsumer(widget, afterInit);
         }
@@ -111,8 +108,8 @@ public class ScreenBuilderImpl implements ScreenBuilder {
     }
 
     @Override
-    public ScreenBuilder slider(String optionId, String translationKey, double minVal, double maxVal, double roundTo) {
-        widget(new DoubleSliderWidget(mc, mc.getWindow().getGuiScaledWidth() / 2 + widgetX, mc.getWindow().getScreenHeight() / 8 + widgetY, 150, 20, optionId, translationKey, minVal, maxVal, roundTo));
+    public ScreenBuilder slider(Option<Double> option, String translationKey, double minVal, double maxVal, double roundTo) {
+        widget(new DoubleSliderWidget(mc, mc.getWindow().getGuiScaledWidth() / 2 + widgetX, mc.getWindow().getScreenHeight() / 8 + widgetY, 150, 20, option, translationKey, minVal, maxVal, roundTo));
         incrementButton();
         return this;
     }

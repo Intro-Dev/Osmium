@@ -1,6 +1,5 @@
 package com.intro.common.mixin.client;
 
-import com.intro.client.OsmiumClient;
 import com.intro.common.config.Options;
 import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.util.Mth;
@@ -22,7 +21,7 @@ public class LightTextureMixin {
         float increment = 0.0001f;
         float max = 1f;
 
-        if(OsmiumClient.options.getBooleanOption(Options.FullbrightEnabled).get()) {
+        if(Options.FulbrightEnabled.get()) {
             if(!fullbrightPreviouslyEnabled) {
                 brightness = inputGamma.floatValue();
                 fullbrightPreviouslyEnabled = true;

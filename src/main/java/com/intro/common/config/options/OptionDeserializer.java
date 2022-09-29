@@ -15,7 +15,7 @@ public class OptionDeserializer implements JsonDeserializer<Option<?>> {
     @Override
     public Option<?> deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
         try {
-            return new Option<>(json.getAsJsonObject().get("Identifier").getAsString(), GSON.fromJson(json.getAsJsonObject().get("Value").getAsString(), Class.forName(json.getAsJsonObject().get("ValueType").getAsString())));
+            return Option.unboundOptionOf(json.getAsJsonObject().get("Identifier").getAsString(), GSON.fromJson(json.getAsJsonObject().get("Value").getAsString(), Class.forName(json.getAsJsonObject().get("ValueType").getAsString())));
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }

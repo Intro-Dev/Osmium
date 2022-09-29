@@ -1,9 +1,9 @@
 package com.intro.client.render.widget;
 
-import com.intro.client.OsmiumClient;
 import com.intro.client.render.color.Color;
 import com.intro.client.util.TextureUtil;
 import com.intro.client.util.Vector2d;
+import com.intro.common.config.options.Option;
 import com.mojang.blaze3d.platform.NativeImage;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
@@ -34,7 +34,7 @@ import org.jetbrains.annotations.NotNull;
  */
 public class ColorOptionWidget extends GuiComponent implements Widget, GuiEventListener, NarratableEntry {
 
-    private final String optionId;
+    private final Option<Color> attachedOption;
 
     private static final Minecraft mc = Minecraft.getInstance();
 
@@ -60,8 +60,8 @@ public class ColorOptionWidget extends GuiComponent implements Widget, GuiEventL
 
     edit: turns out im stupid, and it doesn't do all that
     */
-    public ColorOptionWidget(int x, int y, int width, int height, String optionId) {
-        this.optionId = optionId;
+    public ColorOptionWidget(int x, int y, int width, int height, Option<Color> attachedOption) {
+        this.attachedOption = attachedOption;
         this.x = x;
         this.y = y;
         this.width = width;
@@ -75,7 +75,7 @@ public class ColorOptionWidget extends GuiComponent implements Widget, GuiEventL
         RenderSystem.setShader(GameRenderer::getPositionTexShader);
         RenderSystem.setShaderTexture(0, BAKED_TEXTURE);
         blit(matrices, x, y, 0, 0, width, height, width, height);
-        drawCenteredString(matrices, mc.font, OsmiumClient.options.getColorOption(this.optionId).get().toStringNoAlpha(), x + (width / 2), y + height + 20, 0xffffff);
+        drawCenteredString(matrices, mc.font,attachedOption.get().toStringNoAlpha(), x + (width / 2), y + height + 20, 0xffffff);
         drawCenteredString(matrices, mc.font, Component.translatable("osmium.widget.color_picker"), x + (width / 2), y - 20, 0xffffff);
     }
 
@@ -91,7 +91,7 @@ public class ColorOptionWidget extends GuiComponent implements Widget, GuiEventL
             bytes = TEXTURE.makePixelArray();
             color = getColorAtLocation(bytes, TEXTURE, (int) vec2.getX(), (int) vec2.getY());
 
-            OsmiumClient.options.getColorOption(this.optionId).set(new Color(color));
+            attachedOption.set(new Color(color));
         }
         return GuiEventListener.super.mouseClicked(mouseX, mouseY, button);
     }

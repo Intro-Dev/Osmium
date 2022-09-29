@@ -1,7 +1,6 @@
 package com.intro.common.mixin.client;
 
-import com.intro.client.OsmiumClient;
-import com.intro.client.module.ToggleSneak;
+import com.intro.client.render.drawables.ToggleSneak;
 import com.intro.common.config.Options;
 import net.minecraft.client.player.Input;
 import net.minecraft.client.player.KeyboardInput;
@@ -29,7 +28,7 @@ public class KeyboardInputMixin extends Input {
             shift = At.Shift.AFTER,
             opcode = Opcodes.PUTFIELD))
     private void tick(boolean bl, float f, CallbackInfo ci) {
-        if(ToggleSneak.sneaking && OsmiumClient.options.getBooleanOption(Options.ToggleSneakEnabled).get()) {
+        if(ToggleSneak.getInstance().shouldSneak() && Options.ToggleSneakEnabled.get()) {
             this.shiftKeyDown = true;
         }
     }

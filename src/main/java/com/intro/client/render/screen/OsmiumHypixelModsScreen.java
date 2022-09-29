@@ -1,12 +1,9 @@
 package com.intro.client.render.screen;
 
-import com.intro.client.OsmiumClient;
 import com.intro.client.render.widget.BooleanButtonWidget;
 import com.intro.client.render.widget.EnumSelectWidget;
 import com.intro.client.util.HypixelAbstractionLayer;
-import com.intro.client.util.OptionUtil;
 import com.intro.common.config.Options;
-import com.intro.common.config.options.Option;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
@@ -62,10 +59,10 @@ public class OsmiumHypixelModsScreen extends Screen {
         EditBox autoggEnterBox = new EditBox(mc.font, this.width / 2 - 2, this.height / 4 + 105 + globalOffset, 75, 20, Component.translatable("osmium.options.auto_gg_string"));
         // Prohibit log/chat spam with this feature
         autoggEnterBox.setMaxLength(24);
-        autoggEnterBox.setValue(OsmiumClient.options.getStringOption(Options.AutoGGString).get());
+        autoggEnterBox.setValue(Options.AutoGGString.get());
         // as below with the API key, it isn't provided to the user directly
         autoggEnterBox.setResponder((string) -> {
-            OsmiumClient.options.put(Options.AutoGGString, new Option<>(Options.AutoGGString, autoggEnterBox.getValue()));
+            Options.AutoGGString.set(autoggEnterBox.getValue());
         });
 
 
@@ -73,11 +70,11 @@ public class OsmiumHypixelModsScreen extends Screen {
         // max uuid length is 36
         apiEnterBox.setMaxLength(36);
         apiEnterBox.setSuggestion("Enter Hypixel Api Key");
-        apiEnterBox.setValue(OsmiumClient.options.getStringOption(Options.HypixelApiKey).get());
+        apiEnterBox.setValue(Options.HypixelApiKey.get());
         // doesn't actually provide the string to the consumer
         // thanks mojang
         apiEnterBox.setResponder((string) -> {
-            OsmiumClient.options.put(Options.HypixelApiKey, new Option<>(Options.HypixelApiKey, apiEnterBox.getValue()));
+            Options.HypixelApiKey.set(apiEnterBox.getValue());
             try {
                 HypixelAbstractionLayer.loadApiKey();
             } catch (IllegalArgumentException ignored) {
@@ -98,7 +95,7 @@ public class OsmiumHypixelModsScreen extends Screen {
     @Override
     public void onClose() {
         super.onClose();
-        OptionUtil.save();
+        Options.save();
     }
 
     @Override

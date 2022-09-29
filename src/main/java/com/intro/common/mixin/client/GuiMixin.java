@@ -1,6 +1,5 @@
 package com.intro.common.mixin.client;
 
-import com.intro.client.OsmiumClient;
 import com.intro.client.render.RenderManager;
 import com.intro.common.config.Options;
 import com.intro.common.config.options.StatusEffectDisplayMode;
@@ -28,7 +27,7 @@ public class GuiMixin {
     }
     @Inject(at = @At("HEAD"), method = "renderEffects", cancellable = true)
     public void renderStatusEffectOverlay(PoseStack matrixStack, CallbackInfo ci) {
-        if(OsmiumClient.options.getEnumOption(Options.StatusEffectDisplayMode).get() == StatusEffectDisplayMode.CUSTOM)
+        if(Options.StatusEffectDisplayMode.get() == StatusEffectDisplayMode.CUSTOM)
             ci.cancel();
     }
 

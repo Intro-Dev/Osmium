@@ -1,11 +1,8 @@
 package com.intro.client.render.drawables;
 
-import com.intro.client.OsmiumClient;
 import com.intro.client.render.color.Color;
 import com.intro.client.render.color.Colors;
-import com.intro.client.util.ElementPosition;
 import com.intro.common.config.Options;
-import com.intro.common.config.options.Option;
 import com.intro.common.mixin.client.MinecraftAccessor;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
@@ -23,13 +20,13 @@ public class FpsDisplay extends Scalable {
     private final Minecraft mc = Minecraft.getInstance();
 
     protected FpsDisplay(int color) {
-        OsmiumClient.options.getElementPositionOption(Options.FpsDisplayPosition).get().loadToScalable(this);
+        super(Options.FpsDisplayPosition);
         this.color = color;
     }
 
     @Override
     public void render(PoseStack stack) {
-        if(OsmiumClient.options.getBooleanOption(Options.FpsEnabled).get()) {
+        if(Options.FpsEnabled.get()) {
 
             this.visible = true;
 
@@ -45,15 +42,6 @@ public class FpsDisplay extends Scalable {
         }
     }
 
-    @Override
-    public void destroySelf() {
-
-    }
-
-    @Override
-    public void onPositionChange(int newX, int newY, int oldX, int oldY) {
-        OsmiumClient.options.put(Options.FpsDisplayPosition, new Option<>(Options.FpsDisplayPosition, new ElementPosition(newX, newY, this.scale)));
-    }
 
     public static FpsDisplay getInstance() {
         if(INSTANCE == null) {
@@ -62,8 +50,4 @@ public class FpsDisplay extends Scalable {
         return INSTANCE;
     }
 
-    @Override
-    public void onScaleChange(double oldScale, double newScale) {
-        OsmiumClient.options.put(Options.FpsDisplayPosition, new Option<>(Options.FpsDisplayPosition, new ElementPosition(this.posX, this.posY, newScale)));
-    }
 }

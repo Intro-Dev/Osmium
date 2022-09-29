@@ -4,7 +4,6 @@ import com.intro.client.OsmiumClient;
 import com.intro.client.render.color.Color;
 import com.intro.client.render.screen.builder.ScreenBuilder;
 import com.intro.client.render.widget.AbstractScalableButton;
-import com.intro.client.util.OptionUtil;
 import com.intro.common.config.Options;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
@@ -67,8 +66,8 @@ public class OsmiumOptionsScreen extends Screen {
         bakedMaxAnim = 57 / mc.options.guiScale().get();
 
         Button openGeneralUtilScreen = new Button(this.width / 2 - 275, this.height / 4 + 80 + globalOffset, 150, 20, Component.translatable("osmium.options.general_mods"), button -> mc.setScreen(ScreenBuilder.newInstance()
-                        .button(Options.FullbrightEnabled, "osmium.options.full_bright_")
-                        .button(Options.HurtbobbingEnabled, "osmium.options.hurt_bobbing_")
+                        .button(Options.FulbrightEnabled, "osmium.options.full_bright_")
+                        .button(Options.HurtBobbingEnabled, "osmium.options.hurt_bobbing_")
                         .button(Options.NoFireEnabled, "osmium.options.no_fire_")
                         .button(Options.SneakMode, "osmium.options.sneak_")
                         .button(Component.translatable("osmium.options.toggle_sneak_settings"), (Button) -> mc.setScreen(ScreenBuilder.newInstance()
@@ -121,7 +120,10 @@ public class OsmiumOptionsScreen extends Screen {
 
         Button openHypixelScreen = new Button(this.width / 2+ 125, this.height / 4 + 120 + globalOffset, 150, 20, Component.translatable("osmium.options.hypixel_mods"), (Button) -> mc.setScreen(new OsmiumHypixelModsScreen(this)));
 
-        Button backButton = new Button(this.width / 2 - 100, this.height / 4 + 225 + globalOffset, 200, 20, Component.translatable("osmium.options.video_options.back"), (Button) -> mc.setScreen(parent));
+        Button backButton = new Button(this.width / 2 - 100, this.height / 4 + 225 + globalOffset, 200, 20, Component.translatable("osmium.options.video_options.back"), (Button) -> {
+            mc.setScreen(parent);
+            Options.save();
+        });
         Button openModrinthWidget = new Button(this.width / 2 - 75, this.height / 4 + 120 + globalOffset, 150, 20, Component.translatable("osmium.open_credits"), this::openCredits);
 
         if(mc.level == null) {
@@ -142,7 +144,7 @@ public class OsmiumOptionsScreen extends Screen {
     @Override
     public void onClose() {
         super.onClose();
-        OptionUtil.save();
+        Options.save();
     }
 
     private void openCredits(@Nullable Button widget) {
