@@ -8,6 +8,7 @@ import org.apache.http.entity.ByteArrayEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.impl.client.LaxRedirectStrategy;
+import org.apache.http.util.EntityUtils;
 
 import java.io.IOException;
 import java.net.URLEncoder;
@@ -26,8 +27,9 @@ public class HttpRequester {
 
     public static HttpResponse fetch(CustomizableHttpRequest request) throws IOException {
         HttpRequestBase base = request.getApacheHttpRequest();
+        HttpEntity requestEntity = request.getEntity();
         if(base instanceof HttpEntityEnclosingRequestBase requestBase) {
-            requestBase.setEntity(request.getEntity());
+            requestBase.setEntity(requestEntity);
         }
         CloseableHttpResponse response = instance.execute(base);
         byte[] bytes = response.getEntity().getContent().readAllBytes();
@@ -36,7 +38,10 @@ public class HttpRequester {
         for(Header header : response.getAllHeaders()) {
             responseHeaders.put(header.getName(), header.getValue());
         }
-        return new HttpResponse(response.getStatusLine().getStatusCode(), responseBuffer, responseHeaders);
+        int statusCode = response.getStatusLine().getStatusCode();
+        EntityUtils.consume(response.getEntity());
+        EntityUtils.consume(requestEntity);
+        return new HttpResponse(statusCode, responseBuffer, responseHeaders);
     }
 
 

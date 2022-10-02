@@ -12,6 +12,8 @@ public abstract class Scalable extends Drawable {
 
     public Scalable(Option<ElementPosition> boundOption) {
         this.boundOption = boundOption;
+        this.posX = boundOption.get().x;
+        this.posY = boundOption.get().y;
         boundOption.addChangeListener((newPos) -> {
             this.posX = newPos.x;
             this.posY = newPos.y;

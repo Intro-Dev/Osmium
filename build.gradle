@@ -15,9 +15,6 @@ repositories {
 		name = "ParchmentMC"
 		url = uri("https://maven.parchmentmc.org/")
 	}
-	maven {
-		url 'https://repo.hypixel.net/repository/Hypixel/'
-	}
 }
 
 dependencies {
@@ -32,11 +29,6 @@ dependencies {
 
 	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
 	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
-
-	include(modImplementation("net.hypixel:hypixel-api-core:4.1") {
-		exclude group: "com.google.code.gson", module: "gson"
-		exclude group: "org.apache.httpcomponents", module: "httpclient"
-	})
 }
 
 processResources {

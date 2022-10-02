@@ -7,8 +7,8 @@ import com.google.gson.JsonSyntaxException;
 import com.intro.client.OsmiumClient;
 import com.intro.client.render.color.Color;
 import com.intro.client.render.color.Colors;
+import com.intro.client.util.DebugUtil;
 import com.intro.client.util.ElementPosition;
-import com.intro.common.ModConstants;
 import com.intro.common.config.options.*;
 import com.intro.common.config.options.legacy.LegacyOption;
 import com.intro.common.config.options.legacy.LegacyOptionDeserializer;
@@ -60,8 +60,9 @@ public class Options {
         options.put(identifier, option);
     }
 
+    public static final Logger LOGGER = LogManager.getLogger();
 
-    public static final Option<String> OPTION_FILE_SCHEMA = new Option<>("OPTION_FILE_SCHEMA", "V3");
+    public static final Option<String> OPTION_FILE_SCHEMA = new Option<>("OPTION_FILE_SCHEMA", "V2");
     public static final Option<Boolean> ToggleSprintEnabled = new Option<>("ToggleSprintEnabled", false);
     public static final Option<Boolean> FulbrightEnabled = new Option<>("FullbrightEnabled", false);
     public static final Option<Boolean> HurtBobbingEnabled = new Option<>("HurtBobbingEnabled", false);
@@ -107,8 +108,6 @@ public class Options {
     public static HashMap<String, Option<?>> getValues() {
         return options;
     }
-
-    public static final Logger LOGGER = LogManager.getLogger();
 
     private static final Gson GSON = new GsonBuilder()
             .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
@@ -188,7 +187,7 @@ public class Options {
             Option<?>[] arr = Options.getOptions().values().toArray(new Option<?>[0]);
             writer.write(GSON.toJson(arr));
             writer.close();
-            if(ModConstants.DEBUG) LOGGER.info("Saved config to file " + path);
+            if(DebugUtil.DEBUG) LOGGER.info("Saved config to file " + path);
         } catch (Exception e) {
             LOGGER.warn("Error in saving osmium config!");
         }

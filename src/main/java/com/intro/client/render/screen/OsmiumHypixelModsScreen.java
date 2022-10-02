@@ -75,11 +75,7 @@ public class OsmiumHypixelModsScreen extends Screen {
         // thanks mojang
         apiEnterBox.setResponder((string) -> {
             Options.HypixelApiKey.set(apiEnterBox.getValue());
-            try {
-                HypixelAbstractionLayer.loadApiKey();
-            } catch (IllegalArgumentException ignored) {
-
-            }
+            HypixelAbstractionLayer.loadApiKey();
         });
         Button backButton = new Button(this.width / 2 - 100, this.height / 4 + 225 + globalOffset, 200, 20, Component.translatable("osmium.options.video_options.back"), (Button) -> mc.setScreen(parent));
 

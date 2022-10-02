@@ -10,8 +10,8 @@ import com.intro.client.render.RenderManager;
 import com.intro.client.render.cosmetic.CosmeticManager;
 import com.intro.client.render.drawables.PingDisplay;
 import com.intro.client.render.drawables.ToggleSneak;
+import com.intro.client.util.DebugUtil;
 import com.intro.client.util.HypixelAbstractionLayer;
-import com.intro.common.ModConstants;
 import com.intro.common.api.OsmiumApi;
 import com.intro.common.config.Options;
 import com.intro.common.util.Util;
@@ -54,8 +54,8 @@ public class OsmiumClient implements ClientModInitializer {
 
 
     public void onInitializeClient() {
-        ModConstants.DEBUG = Boolean.parseBoolean(System.getProperty("osmium.debug"));
-        if(ModConstants.DEBUG) LOGGER.info("Starting Osmium in debug mode");
+        DebugUtil.DEBUG = Boolean.parseBoolean(System.getProperty("osmium.debug"));
+        if(DebugUtil.DEBUG) LOGGER.info("Starting Osmium in debug mode");
         Options.load();
         EVENT_BUS.initListenerMap();
         registerCallbacks();

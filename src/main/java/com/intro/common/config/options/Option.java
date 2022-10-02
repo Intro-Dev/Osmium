@@ -1,6 +1,6 @@
 package com.intro.common.config.options;
 
-import com.intro.common.ModConstants;
+import com.intro.client.util.DebugUtil;
 import com.intro.common.config.Options;
 
 import java.util.ArrayList;
@@ -32,7 +32,7 @@ public class Option<T> {
         if(!value.getClass().isNestmateOf(o.getClass())) throw new ClassCastException("Object " + o + " cannot be assigned to option " + identifier + " with option type " + value.getClass());
         value = (T) o;
         valueChangeListeners.forEach(tConsumer -> tConsumer.accept(value));
-        if(ModConstants.DEBUG) Options.LOGGER.info("Setting option " + this.identifier + " to value " + o);
+        if(DebugUtil.DEBUG) Options.LOGGER.info("Setting option " + this.identifier + " to value " + o);
     }
 
     public T get() {
@@ -42,7 +42,7 @@ public class Option<T> {
     public void set(T value) {
         this.value = value;
         valueChangeListeners.forEach(tConsumer -> tConsumer.accept(value));
-        if(ModConstants.DEBUG) Options.LOGGER.info("Setting option " + this.identifier + " to value " + value);
+        if(DebugUtil.DEBUG) Options.LOGGER.info("Setting option " + this.identifier + " to value " + value);
     }
 
     public void addChangeListener(Consumer<T> listener) {

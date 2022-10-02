@@ -10,7 +10,7 @@ public class HttpRequestBuilder {
     private final HashMap<String, String> parameters = new HashMap<>();
     private final HashMap<String, String> headers = new HashMap<>();
     private String url = "";
-    private ByteBuffer requestData;
+    private ByteBuffer requestData = ByteBuffer.allocate(0);
 
     public HttpRequestBuilder url(String url) {
         this.url = url;

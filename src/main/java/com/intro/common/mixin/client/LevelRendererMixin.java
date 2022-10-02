@@ -1,8 +1,8 @@
 package com.intro.common.mixin.client;
 
 import com.intro.client.render.color.Colors;
+import com.intro.client.util.DebugUtil;
 import com.intro.client.util.HypixelAbstractionLayer;
-import com.intro.common.ModConstants;
 import com.intro.common.config.Options;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Matrix4f;
@@ -73,8 +73,8 @@ public abstract class LevelRendererMixin {
         assert minecraft.level != null;
         for(Player player : minecraft.level.players()) {
             if(!HypixelAbstractionLayer.isPlayerNpc(player)) {
-                if (ModConstants.DEBUG || (Minecraft.getInstance().getCurrentServer() != null && entityRenderDispatcher.shouldRender(player, usedFrustum, minecraft.gameRenderer.getMainCamera().getPosition().x,  minecraft.gameRenderer.getMainCamera().getPosition().y,  minecraft.gameRenderer.getMainCamera().getPosition().z))) {
-                    if (ModConstants.DEBUG || Minecraft.getInstance().getCurrentServer().ip.contains("hypixel.net")) {
+                if (DebugUtil.DEBUG || (Minecraft.getInstance().getCurrentServer() != null && entityRenderDispatcher.shouldRender(player, usedFrustum, minecraft.gameRenderer.getMainCamera().getPosition().x,  minecraft.gameRenderer.getMainCamera().getPosition().y,  minecraft.gameRenderer.getMainCamera().getPosition().z))) {
+                    if (DebugUtil.DEBUG || Minecraft.getInstance().getCurrentServer().ip.contains("hypixel.net")) {
                         stack.pushPose();
                         {
                             Vec3 vec3 = entityRenderDispatcher.getRenderer(player).getRenderOffset(player, partialTicks);
@@ -82,7 +82,7 @@ public abstract class LevelRendererMixin {
                             double interpolatedY = Mth.lerp(partialTicks, player.yOld, player.getY()) - camera.getPosition().y + vec3.y();
                             double interpolatedZ = Mth.lerp(partialTicks, player.zOld, player.getZ()) - camera.getPosition().z + vec3.z();
                             stack.translate(interpolatedX, interpolatedY, interpolatedZ);
-                            if (HypixelAbstractionLayer.canUseHypixelService() && Options.LevelHeadEnabled.get()) {
+                            if (Options.LevelHeadEnabled.get()) {
                                 stack.pushPose();
                                 stack.translate(0, 0.25, 0);
                                 try {
