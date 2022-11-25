@@ -13,6 +13,7 @@ import com.intro.client.module.event.EventAddPlayer;
 import com.intro.client.module.event.EventRemovePlayer;
 import com.intro.client.module.event.EventTick;
 import com.intro.client.render.texture.DynamicAnimation;
+import com.intro.client.util.DebugUtil;
 import com.intro.client.util.ExecutionUtil;
 import com.intro.client.util.TextureUtil;
 import com.intro.common.api.OsmiumApi;
@@ -157,6 +158,7 @@ public class CosmeticManager {
         boolean hasOptifine = false, hasOsmium = false;
         Cape optifineCape = null;
         Cape osmiumCape = null;
+        String playerName = DebugUtil.DEBUG ? "Boonka" : player.getName().getString();
         try {
             // I just spent 3 days trying to fix png corruption
             // because I typed fetch instead of fetchBin
