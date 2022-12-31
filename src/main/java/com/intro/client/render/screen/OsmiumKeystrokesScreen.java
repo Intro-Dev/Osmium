@@ -1,6 +1,7 @@
 package com.intro.client.render.screen;
 
 import com.intro.client.render.color.Color;
+import com.intro.client.render.widget.AbstractScalableButton;
 import com.intro.client.render.widget.BooleanButtonWidget;
 import com.intro.client.render.widget.ColorOptionWidget;
 import com.intro.client.render.widget.DoubleSliderWidget;
@@ -26,14 +27,14 @@ public class OsmiumKeystrokesScreen extends Screen {
         Button backButton;
         ColorOptionWidget colorSelectWidget;
         if(mc.options.guiScale().get() > 4) {
-            backButton = new Button(this.width / 2 - 175, this.height / 4 + 120, 150, 20, Component.translatable("osmium.options.video_options.back"), (buttonWidget) -> mc.setScreen(this.parent));
+            backButton = new AbstractScalableButton(this.width / 2 - 175, this.height / 4 + 120, 150, 20, Component.translatable("osmium.options.video_options.back"), (buttonWidget) -> mc.setScreen(this.parent));
             colorSelectWidget = new ColorOptionWidget(this.width / 2 + 25, this.height / 4, 128, 128, Options.KeystrokesColor);
         } else {
-            backButton = new Button(this.width / 2 - 100, this.height / 4 + 225, 200, 20, Component.translatable("osmium.options.video_options.back"), (buttonWidget) -> mc.setScreen(this.parent));
+            backButton = new AbstractScalableButton(this.width / 2 - 100, this.height / 4 + 225, 200, 20, Component.translatable("osmium.options.video_options.back"), (buttonWidget) -> mc.setScreen(this.parent));
             colorSelectWidget = new ColorOptionWidget(this.width / 2 + 25, this.height / 4 - 60, 256, 256, Options.KeystrokesColor);
         }
 
-        Button resetColorWidget = new Button(this.width / 2 - 175, this.height / 4 + 120, 150, 20, Component.translatable("osmium.options.reset_color"), (buttonWidget) -> Options.KeystrokesColor.set(new Color(0.1f, 0.1f, 0.1f, 0.2f)));
+        Button resetColorWidget = new AbstractScalableButton(this.width / 2 - 175, this.height / 4 + 120, 150, 20, Component.translatable("osmium.options.reset_color"), (buttonWidget) -> Options.KeystrokesColor.set(new Color(0.1f, 0.1f, 0.1f, 0.2f)));
         BooleanButtonWidget enabledWidget = new BooleanButtonWidget(this.width / 2 - 175, this.height / 4, 150, 20, Options.KeystrokesEnabled, "osmium.options.keystrokes_");
         BooleanButtonWidget rgbSelectWidget = new BooleanButtonWidget(this.width / 2 - 175, this.height / 4 + 40, 150, 20, Options.KeystrokesRgb, "osmium.options.rgb_");
         DoubleSliderWidget alphaSelectWidget = new DoubleSliderWidget(mc, this.width / 2 - 175, this.height / 4 + 80, 150, 20, Options.KeystrokesAlpha, "osmium.options.transparency", 0, 1, 10);

@@ -11,6 +11,7 @@ import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.resources.MobEffectTextureManager;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffectUtil;
 
 import java.util.List;
 
@@ -49,30 +50,13 @@ public class StatusEffectDisplay extends Scalable {
 
                         MobEffectInstance effect = effects.get(i);
                         TextureAtlasSprite sprite = spriteManager.get(effect.getEffect());
-
-                        int duration = effect.getDuration() / 20;
-                        int mins = duration / 60;
-                        int seconds = duration % 60;
-
-                        String formattedSeconds;
-                        if(seconds < 10) {
-                            formattedSeconds = "0" + seconds;
-                        } else {
-                            formattedSeconds = String.valueOf(seconds);
-                        }
-
-                        String formattedTime;
-                        if (effect.isNoCounter()) {
-                            formattedTime = "∞";
-                        } else {
-                            formattedTime = mins + ":" + formattedSeconds;
-                        }
+                        String formattedTime = MobEffectUtil.formatDuration(effect, 1.0F);
 
                         String messageText = Component.translatable(effect.getEffect().getDescriptionId()).getString() + (" " + (effect.getAmplifier() + 1) + ", " + formattedTime);
 
                         stack.pushPose();
                         {
-                            RenderSystem.setShaderTexture(0, sprite.atlas().getId());
+                            RenderSystem.setShaderTexture(0, sprite.atlasLocation());
                             blit(stack, this.posX, this.posY + offY,this.getBlitOffset(), 32,32, sprite);
                             drawCenteredString(stack, mc.font, messageText, this.posX + width / 2, this.posY + offY + 40, Colors.WHITE.getColor().getInt());
                         }

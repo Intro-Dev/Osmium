@@ -3,7 +3,7 @@ package com.intro.client.render.drawables;
 import com.intro.client.render.RenderManager;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.gui.GuiComponent;
-import net.minecraft.client.gui.components.Widget;
+import net.minecraft.client.gui.components.Renderable;
 import net.minecraft.client.gui.components.events.GuiEventListener;
 import net.minecraft.client.gui.narration.NarratableEntry;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
@@ -12,11 +12,10 @@ import net.minecraft.client.gui.narration.NarrationElementOutput;
  * <p>Generic class for gui drawables</p>
  *
  * @see RenderManager
- * @see RenderableText
  * @author Intro
  * @since 1.1.1
  */
-public abstract class Drawable extends GuiComponent implements Widget, GuiEventListener, NarratableEntry {
+public abstract class Drawable extends GuiComponent implements Renderable, GuiEventListener, NarratableEntry {
     
     public int posX = 0, posY = 0;
     public int width = 0, height = 0;

@@ -9,7 +9,6 @@ import com.intro.client.module.event.Event;
 import com.intro.client.module.event.EventReceiveChatMessage;
 import com.intro.common.config.Options;
 import net.minecraft.client.Minecraft;
-import net.minecraft.network.chat.Component;
 
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -57,7 +56,7 @@ public class AutoGG {
                 Matcher matcher = pattern.matcher(((EventReceiveChatMessage) event).getComponent().getString());
                 if(matcher.matches()) {
                     lastGG = System.currentTimeMillis();
-                    Minecraft.getInstance().player.chatSigned(Options.AutoGGString.get(), Component.literal(Options.AutoGGString.get()));
+                    Minecraft.getInstance().player.connection.sendChat(Options.AutoGGString.get());
                 }
             }
         }

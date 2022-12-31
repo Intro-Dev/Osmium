@@ -14,8 +14,6 @@ import com.intro.common.config.Options;
 import com.mojang.blaze3d.platform.Lighting;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.math.Quaternion;
-import com.mojang.math.Vector3f;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.Screen;
@@ -26,6 +24,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
+import org.joml.Quaternionf;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -235,8 +234,8 @@ public class OsmiumCapeOptionsScreen extends Screen {
         poseStack2.translate(0.0D, 0.0D, 1000.0D);
         poseStack2.scale((float)scale, (float)scale, (float)scale);
         // flip to right side
-        Quaternion zRotationQuaternion = Vector3f.ZP.rotationDegrees(180.0F);
-        Quaternion yRotationQuaternion = Vector3f.XP.rotationDegrees(yRotClamped * 20.0F);
+        Quaternionf zRotationQuaternion = (new Quaternionf()).rotateZ(3.1415927F);
+        Quaternionf yRotationQuaternion = (new Quaternionf()).rotateX(yRotClamped * 20.0F * 0.017453292F);
         zRotationQuaternion.mul(yRotationQuaternion);
         poseStack2.mulPose(zRotationQuaternion);
         // set entity rotations
@@ -253,7 +252,7 @@ public class OsmiumCapeOptionsScreen extends Screen {
         // setup for rendering
         Lighting.setupForEntityInInventory();
         EntityRenderDispatcher entityRenderDispatcher = Minecraft.getInstance().getEntityRenderDispatcher();
-        yRotationQuaternion.conj();
+        yRotationQuaternion.conjugate();
         entityRenderDispatcher.overrideCameraOrientation(yRotationQuaternion);
         entityRenderDispatcher.setRenderShadow(false);
         MultiBufferSource.BufferSource bufferSource = Minecraft.getInstance().renderBuffers().bufferSource();

@@ -1,5 +1,6 @@
 accessWidener v1 named
 
+
 accessible class net/minecraft/client/renderer/texture/SimpleTexture
 accessible class net/minecraft/client/renderer/texture/SimpleTexture$TextureImage
 accessible class net/minecraft/client/gui/Font$StringRenderOutput

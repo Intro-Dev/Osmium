@@ -91,6 +91,12 @@
   "osmium.options.api_key": "Hypixel API Schlüssel einfügen",
   "osmium.options.level_head_mode_network_level": "Mode: Network Level",
   "osmium.options.level_head_mode_bedwars_level": "Mode: BedWars Level",
-  "osmium.options.level_head_mode_skywars_level": "Mode: SkyWars Level"
+  "osmium.options.level_head_mode_skywars_level": "Mode: SkyWars Level",
+  "osmium.compatibility.sneak_tweak_disable": "ToggleSneak disabled for compatibility with SneakTweak",
+  "osmium.compatibility.block_outline_disable": "Block Outline disabled for compatibility with ColorMeOutlines",
+  "osmium.options.cape_screen_level_only": "Cape options can only be opened in a world",
+  "osmium.options.gui_screen_level_only": "Gui editing can only be done in a world",
+  "osmium.options.motion_blur_enabled": "Motion Blur: Aktiviert",
+  "osmium.options.motion_blur_disabled": "Motion Blur: Deaktiviert"
 
 }

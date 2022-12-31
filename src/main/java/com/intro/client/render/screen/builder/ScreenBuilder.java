@@ -3,7 +3,7 @@ package com.intro.client.render.screen.builder;
 import com.intro.common.config.options.Option;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.gui.components.Button;
-import net.minecraft.client.gui.components.Widget;
+import net.minecraft.client.gui.components.Renderable;
 import net.minecraft.client.gui.components.events.GuiEventListener;
 import net.minecraft.client.gui.narration.NarratableEntry;
 import net.minecraft.client.gui.screens.Screen;
@@ -37,7 +37,7 @@ public interface ScreenBuilder {
      * @param widget The widget to be added
      * @return Returns the current ScreenBuilder
      */
-    <T extends GuiEventListener & Widget & NarratableEntry> ScreenBuilder widget(T widget);
+    <T extends GuiEventListener & Renderable & NarratableEntry> ScreenBuilder widget(T widget);
 
     /**
      * Adds a generic option button. Automatically offsets the buttons each time a new one is added.
@@ -130,7 +130,7 @@ public interface ScreenBuilder {
 
     interface WidgetConsumer {
 
-        void onTick(Widget widget);
+        void onTick(Renderable widget);
 
     }
 

@@ -9,7 +9,7 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiComponent;
-import net.minecraft.client.gui.components.Widget;
+import net.minecraft.client.gui.components.Renderable;
 import net.minecraft.client.gui.components.events.GuiEventListener;
 import net.minecraft.client.gui.narration.NarratableEntry;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
@@ -32,7 +32,7 @@ import org.jetbrains.annotations.NotNull;
  * @see com.intro.common.config.Options
  * @see com.intro.client.render.screen.OsmiumBlockOptionsScreen
  */
-public class ColorOptionWidget extends GuiComponent implements Widget, GuiEventListener, NarratableEntry {
+public class ColorOptionWidget extends GuiComponent implements Renderable, GuiEventListener, NarratableEntry {
 
     private final Option<Color> attachedOption;
 

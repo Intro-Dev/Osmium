@@ -1,5 +1,6 @@
 package com.intro.client.render.screen;
 
+import com.intro.client.render.widget.AbstractScalableButton;
 import com.intro.client.render.widget.ColorOptionWidget;
 import com.intro.client.render.widget.DoubleSliderWidget;
 import com.intro.client.render.widget.EnumSelectWidget;
@@ -25,10 +26,10 @@ public class OsmiumBlockOptionsScreen extends Screen {
         Button backButton;
         ColorOptionWidget colorSelectWidget;
         if(mc.options.guiScale().get() > 4) {
-            backButton = new Button(this.width / 2 - 175, this.height / 4 + 120, 150, 20, Component.translatable("osmium.options.video_options.back"), (buttonWidget) -> mc.setScreen(this.parent));
+            backButton = new AbstractScalableButton(this.width / 2 - 175, this.height / 4 + 120, 150, 20, Component.translatable("osmium.options.video_options.back"), (buttonWidget) -> mc.setScreen(this.parent));
             colorSelectWidget = new ColorOptionWidget(this.width / 2 + 25, this.height / 4, 128, 128, Options.BlockOutlineColor);
         } else {
-            backButton = new Button(this.width / 2 - 100, this.height / 4 + 225, 200, 20, Component.translatable("osmium.options.video_options.back"), (buttonWidget) -> mc.setScreen(this.parent));
+            backButton = new AbstractScalableButton(this.width / 2 - 100, this.height / 4 + 225, 200, 20, Component.translatable("osmium.options.video_options.back"), (buttonWidget) -> mc.setScreen(this.parent));
             colorSelectWidget = new ColorOptionWidget(this.width / 2 + 25, this.height / 4 - 60, 256, 256, Options.BlockOutlineColor);
 
         }

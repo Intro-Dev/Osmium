@@ -61,8 +61,6 @@ publishing {
 			from components.java
 		}
 	}
-	repositories {
-	}
 }
 
 loom {

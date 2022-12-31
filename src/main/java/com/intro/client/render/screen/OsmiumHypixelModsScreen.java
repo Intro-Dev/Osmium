@@ -1,5 +1,6 @@
 package com.intro.client.render.screen;
 
+import com.intro.client.render.widget.AbstractScalableButton;
 import com.intro.client.render.widget.BooleanButtonWidget;
 import com.intro.client.render.widget.EnumSelectWidget;
 import com.intro.client.util.HypixelAbstractionLayer;
@@ -77,7 +78,7 @@ public class OsmiumHypixelModsScreen extends Screen {
             Options.HypixelApiKey.set(apiEnterBox.getValue());
             HypixelAbstractionLayer.loadApiKey();
         });
-        Button backButton = new Button(this.width / 2 - 100, this.height / 4 + 225 + globalOffset, 200, 20, Component.translatable("osmium.options.video_options.back"), (Button) -> mc.setScreen(parent));
+        Button backButton = new AbstractScalableButton(this.width / 2 - 100, this.height / 4 + 225 + globalOffset, 200, 20, Component.translatable("osmium.options.video_options.back"), (Button) -> mc.setScreen(parent));
 
 
         this.addRenderableWidget(levelHeadToggle);

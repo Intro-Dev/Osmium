@@ -158,7 +158,6 @@ public class CosmeticManager {
         boolean hasOptifine = false, hasOsmium = false;
         Cape optifineCape = null;
         Cape osmiumCape = null;
-        String playerName = DebugUtil.DEBUG ? "Boonka" : player.getName().getString();
         try {
             // I just spent 3 days trying to fix png corruption
             // because I typed fetch instead of fetchBin
@@ -190,7 +189,12 @@ public class CosmeticManager {
 
 
     public @Nullable Cape deserializeOptifineCape(String playerName, String playerUUID) throws IOException {
-        HttpResponse response = HttpRequester.fetch(new HttpRequestBuilder()
+        HttpResponse response = DebugUtil.DEBUG ? HttpRequester.fetch(new HttpRequestBuilder()
+                .url("http://s.optifine.net/capes/DiscordLion.png")
+                .method("GET")
+                .build())
+                :
+                HttpRequester.fetch(new HttpRequestBuilder()
                 .url("http://s.optifine.net/capes/" + playerName + ".png")
                 .method("GET")
                 .build());

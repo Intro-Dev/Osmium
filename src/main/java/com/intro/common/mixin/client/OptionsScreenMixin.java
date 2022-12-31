@@ -5,8 +5,8 @@ import com.intro.client.module.event.EventDirection;
 import com.intro.client.module.event.EventSettingsChange;
 import com.intro.client.module.event.EventType;
 import com.intro.client.render.screen.OsmiumOptionsScreen;
+import com.intro.client.render.widget.AbstractScalableButton;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.OptionsScreen;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
@@ -27,9 +27,9 @@ public abstract class OptionsScreenMixin extends Screen {
     @Inject(at = @At("TAIL"), method = "init")
     private void init(CallbackInfo info) {
         if(this.mc.options.guiScale().get() > 5) {
-            this.addRenderableWidget(new Button(this.width / 2 - 50, this.height / 6 + 140, 100, 20, Component.translatable("osmium.options.title"), (button) -> mc.setScreen(new OsmiumOptionsScreen(this))));
+            this.addRenderableWidget(new AbstractScalableButton(this.width / 2 - 50, this.height / 6 + 140, 100, 20, Component.translatable("osmium.options.title"), (button) -> mc.setScreen(new OsmiumOptionsScreen(this))));
         } else {
-            this.addRenderableWidget(new Button(this.width / 2 - 100, this.height / 6 + 200, 200, 20, Component.translatable("osmium.options.title"), (buttonWidget) -> mc.setScreen(new OsmiumOptionsScreen(this))));
+            this.addRenderableWidget(new AbstractScalableButton(this.width / 2 - 100, this.height / 6 + 200, 200, 20, Component.translatable("osmium.options.title"), (buttonWidget) -> mc.setScreen(new OsmiumOptionsScreen(this))));
         }
     }
 

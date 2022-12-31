@@ -24,8 +24,13 @@ public class AbstractScalableButton extends Button {
 
     private Component tooltip;
 
+    public AbstractScalableButton(int i, int j, int k, int l, Component component, OnPress onPress) {
+        super(i, j, k, l, component, onPress, Button.DEFAULT_NARRATION);
+        this.scale = 1f;
+    }
+
     public AbstractScalableButton(int i, int j, int k, int l, Component component, OnPress onPress, double scale) {
-        super(i, j, k, l, component, onPress);
+        super(i, j, k, l, component, onPress, Button.DEFAULT_NARRATION);
         this.scale = scale;
     }
 
@@ -38,19 +43,16 @@ public class AbstractScalableButton extends Button {
     }
 
     public AbstractScalableButton(int i, int j, int k, int l, Component component, OnPress onPress, double scale, Component tooltip) {
-        super(i, j, k, l, component, onPress);
+        super(i, j, k, l, component, onPress, Button.DEFAULT_NARRATION);
         this.tooltip = tooltip;
         this.scale = scale;
     }
 
-    public AbstractScalableButton(int i, int j, int k, int l, Component component, OnPress onPress, OnTooltip onTooltip) {
-        super(i, j, k, l, component, onPress, onTooltip);
-    }
 
     @Override
     public void render(PoseStack stack, int mouseX, int mouseY, float tickDelta) {
         if (this.visible) {
-            this.isHovered = mouseX >= this.x && mouseY >= this.y && mouseX < this.x + this.width && mouseY < this.y + this.height;
+            this.isHovered = mouseX >= this.getX() && mouseY >= this.getY() && mouseX < this.getX() + this.width && mouseY < this.getY() + this.height;
             Minecraft minecraft = Minecraft.getInstance();
             Font font = minecraft.font;
             RenderSystem.setShader(GameRenderer::getPositionTexShader);
@@ -60,12 +62,12 @@ public class AbstractScalableButton extends Button {
             RenderSystem.enableBlend();
             RenderSystem.defaultBlendFunc();
             RenderSystem.enableDepthTest();
-            this.blit(stack, this.x, this.y, 0, 46 + k * 20, this.width / 2, this.height);
-            this.blit(stack, this.x + this.width / 2, this.y, 200 - this.width / 2, 46 + k * 20, this.width / 2, this.height);
+            this.blit(stack, this.getX(), this.getY(), 0, 46 + k * 20, this.width / 2, this.height);
+            this.blit(stack, this.getX() + this.width / 2, this.getY(), 200 - this.width / 2, 46 + k * 20, this.width / 2, this.height);
             this.renderBg(stack, minecraft, mouseX, mouseY);
             int l = this.active ? 16777215 : 10526880;
             // scale has to be rounded or text rendering looses precision
-            RenderUtil.renderScaledText(stack, font, this.getMessage().getString(), this.x + this.width / 2 - (font.width(this.getMessage().getString()) / 2), this.y + (this.height - 8) / 2, l | Mth.ceil(this.alpha * 255.0F) << 24, (float) scale);
+            RenderUtil.renderScaledText(stack, font, this.getMessage().getString(), this.getX() + this.width / 2 - (font.width(this.getMessage().getString()) / 2), this.getY() + (this.height - 8) / 2, l | Mth.ceil(this.alpha * 255.0F) << 24, (float) scale);
             if(tooltip != null && this.isHovered) Minecraft.getInstance().screen.renderTooltip(stack, tooltip, mouseX, mouseY);
         }
 

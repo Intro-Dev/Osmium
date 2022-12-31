@@ -2,6 +2,7 @@ package com.intro.client.render.screen;
 
 import com.intro.client.OsmiumClient;
 import com.intro.client.render.color.Colors;
+import com.intro.client.render.widget.AbstractScalableButton;
 import com.intro.client.render.widget.ProgressBarWidget;
 import com.intro.common.ModConstants;
 import com.intro.common.util.Util;
@@ -48,13 +49,13 @@ public class OsmiumUpdateScreen extends Screen  {
 
     @Override
     protected void init() {
-        acceptButton = new Button(this.width / 2 - 175, this.height / 4 + 160, 150, 20, Component.translatable("osmium.download_update"), this::startDownload);
-        declineButton = new Button(this.width / 2 + 25, this.height / 4 + 160, 150, 20, Component.translatable("osmium.decline_update"), (button -> mc.setScreen(parent)));
+        acceptButton = new AbstractScalableButton(this.width / 2 - 175, this.height / 4 + 160, 150, 20, Component.translatable("osmium.download_update"), this::startDownload);
+        declineButton = new AbstractScalableButton(this.width / 2 + 25, this.height / 4 + 160, 150, 20, Component.translatable("osmium.decline_update"), (button -> mc.setScreen(parent)));
         progressBar = new ProgressBarWidget(this.width / 2 - 100, this.height / 4 + 110, 200);
         progressBar.visible = false;
-        retryButton = new Button(this.width / 2 - 100, this.height / 4 + 160, 200, 20, Component.translatable("osmium.retry"), this::startDownload);
+        retryButton = new AbstractScalableButton(this.width / 2 - 100, this.height / 4 + 160, 200, 20, Component.translatable("osmium.retry"), this::startDownload);
         retryButton.visible = false;
-        continueButton = new Button(this.width / 2 - 100, this.height / 4 + 160, 200, 20, Component.translatable("osmium.decline_update"),button -> mc.setScreen(parent));
+        continueButton = new AbstractScalableButton(this.width / 2 - 100, this.height / 4 + 160, 200, 20, Component.translatable("osmium.decline_update"),button -> mc.setScreen(parent));
         continueButton.visible = false;
 
 

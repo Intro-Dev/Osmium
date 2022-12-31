@@ -5,7 +5,7 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiComponent;
-import net.minecraft.client.gui.components.Widget;
+import net.minecraft.client.gui.components.Renderable;
 import net.minecraft.client.gui.components.events.GuiEventListener;
 import net.minecraft.client.gui.narration.NarratableEntry;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
@@ -18,7 +18,7 @@ import org.lwjgl.glfw.GLFW;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
-public class BackAndForwardWidget extends GuiComponent implements Widget, GuiEventListener, NarratableEntry {
+public class BackAndForwardWidget extends GuiComponent implements Renderable, GuiEventListener, NarratableEntry {
 
     private static final ResourceLocation FORWARD_BUTTON_LOCATION = new ResourceLocation("osmium", "/textures/gui/forward_button.png");
     private static final ResourceLocation BACK_BUTTON_LOCATION = new ResourceLocation("osmium", "/textures/gui/back_button.png");

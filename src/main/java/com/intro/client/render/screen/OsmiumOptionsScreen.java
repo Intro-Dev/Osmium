@@ -5,6 +5,7 @@ import com.intro.client.render.color.Color;
 import com.intro.client.render.screen.builder.ScreenBuilder;
 import com.intro.client.render.widget.AbstractScalableButton;
 import com.intro.common.config.Options;
+import com.mojang.blaze3d.platform.InputConstants;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.fabricmc.loader.api.FabricLoader;
@@ -37,6 +38,11 @@ public class OsmiumOptionsScreen extends Screen {
     private boolean shouldRenderLogo = true;
     private int bakedMaxAnim = 0;
 
+    // :)
+    // happy Easter
+    private int easterEggStage = 0;
+    private boolean hasDoneEasterEgg = false;
+
     private final ResourceLocation LOGO_TEXTURE = new ResourceLocation("osmium", "icon.png");
 
     public OsmiumOptionsScreen(Screen parent) {
@@ -65,7 +71,7 @@ public class OsmiumOptionsScreen extends Screen {
         }
         bakedMaxAnim = 57 / mc.options.guiScale().get();
 
-        Button openGeneralUtilScreen = new Button(this.width / 2 - 275, this.height / 4 + 80 + globalOffset, 150, 20, Component.translatable("osmium.options.general_mods"), button -> mc.setScreen(ScreenBuilder.newInstance()
+        Button openGeneralUtilScreen = new AbstractScalableButton(this.width / 2 - 275, this.height / 4 + 80 + globalOffset, 150, 20, Component.translatable("osmium.options.general_mods"), button -> mc.setScreen(ScreenBuilder.newInstance()
                         .button(Options.FulbrightEnabled, "osmium.options.full_bright_")
                         .button(Options.HurtBobbingEnabled, "osmium.options.hurt_bobbing_")
                         .button(Options.NoFireEnabled, "osmium.options.no_fire_")
@@ -112,19 +118,19 @@ public class OsmiumOptionsScreen extends Screen {
 
          */
 
-        Button openWidgetScreen = new Button(this.width / 2 - 75, this.height / 4 + 80 + globalOffset, 150, 20, Component.translatable("osmium.options.widgets_screen"), button -> mc.setScreen(new OsmiumWidgetOptionsScreen(this)));
+        Button openWidgetScreen = new AbstractScalableButton(this.width / 2 - 75, this.height / 4 + 80 + globalOffset, 150, 20, Component.translatable("osmium.options.widgets_screen"), button -> mc.setScreen(new OsmiumWidgetOptionsScreen(this)));
 
-        Button openVideoOptions = new Button(this.width / 2 + 125, this.height / 4 + 80 + globalOffset, 150, 20, Component.translatable("osmium.options.video_options"), (Button) -> mc.setScreen(new OsmiumVideoOptionsScreen(this)));
+        Button openVideoOptions = new AbstractScalableButton(this.width / 2 + 125, this.height / 4 + 80 + globalOffset, 150, 20, Component.translatable("osmium.options.video_options"), (Button) -> mc.setScreen(new OsmiumVideoOptionsScreen(this)));
 
         AbstractScalableButton openGuiEditing = new AbstractScalableButton(this.width / 2 - 275, this.height / 4 + 120 + globalOffset, 150, 20, Component.translatable("osmium.gui_edit.title"), (Button) -> mc.setScreen(new OsmiumGuiEditScreen(this)), 1f);
 
-        Button openHypixelScreen = new Button(this.width / 2+ 125, this.height / 4 + 120 + globalOffset, 150, 20, Component.translatable("osmium.options.hypixel_mods"), (Button) -> mc.setScreen(new OsmiumHypixelModsScreen(this)));
+        Button openHypixelScreen = new AbstractScalableButton(this.width / 2+ 125, this.height / 4 + 120 + globalOffset, 150, 20, Component.translatable("osmium.options.hypixel_mods"), (Button) -> mc.setScreen(new OsmiumHypixelModsScreen(this)));
 
-        Button backButton = new Button(this.width / 2 - 100, this.height / 4 + 225 + globalOffset, 200, 20, Component.translatable("osmium.options.video_options.back"), (Button) -> {
+        Button backButton = new AbstractScalableButton(this.width / 2 - 100, this.height / 4 + 225 + globalOffset, 200, 20, Component.translatable("osmium.options.video_options.back"), (Button) -> {
             mc.setScreen(parent);
             Options.save();
         });
-        Button openModrinthWidget = new Button(this.width / 2 - 75, this.height / 4 + 120 + globalOffset, 150, 20, Component.translatable("osmium.open_credits"), this::openCredits);
+        Button openModrinthWidget = new AbstractScalableButton(this.width / 2 - 75, this.height / 4 + 120 + globalOffset, 150, 20, Component.translatable("osmium.open_credits"), this::openCredits);
 
         if(mc.level == null) {
             openGuiEditing.active = false;
@@ -181,7 +187,7 @@ public class OsmiumOptionsScreen extends Screen {
         matrices.pushPose();
         RenderSystem.setShaderColor(shaderColor.getFloatR(), shaderColor.getFloatG(), shaderColor.getFloatB(), ((animationProgress * 4) - 1) / 255f);
         matrices.translate(0, animationProgress,0);
-        drawCenteredString(matrices, mc.font, Component.translatable("osmium.version"), this.width / 2, this.height / 8 + 100 + globalOffset + (logoOffset / 4), 0xffffff);
+        drawCenteredString(matrices, mc.font, hasDoneEasterEgg ? Component.literal("One Year of Osmium!") : Component.translatable("osmium.version"), this.width / 2, this.height / 8 + 100 + globalOffset + (logoOffset / 4), 0xffffff);
         matrices.popPose();
         super.render(matrices, mouseX, mouseY, delta);
         // 57 is the max because of animation progress looking good at 3
@@ -190,6 +196,31 @@ public class OsmiumOptionsScreen extends Screen {
         RenderSystem.disableBlend();
     }
 
+    @Override
+    public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
+        if(keyCode == InputConstants.KEY_UP && easterEggStage == 0 || easterEggStage == 1) {
+            easterEggStage++;
+        } else if(keyCode == InputConstants.KEY_DOWN && (easterEggStage == 2 || easterEggStage == 3)) {
+            easterEggStage++;
+        } else if(keyCode == InputConstants.KEY_LEFT && (easterEggStage == 4 || easterEggStage == 6)) {
+            easterEggStage++;
+        } else if(keyCode == InputConstants.KEY_RIGHT && (easterEggStage == 5 || easterEggStage == 7)) {
+            easterEggStage++;
+        } else if(keyCode == InputConstants.KEY_B && easterEggStage == 8) {
+            easterEggStage++;
+        } else if(keyCode == InputConstants.KEY_A && easterEggStage == 9) {
+            easterEggStage++;
+        } else if(keyCode == InputConstants.KEY_RETURN && easterEggStage == 10) {
+            easterEggStage++;
+        } else {
+            easterEggStage = 0;
+        }
+
+        if(easterEggStage == 11) {
+            hasDoneEasterEgg = true;
+        }
 
 
+        return super.keyPressed(keyCode, scanCode, modifiers);
+    }
 }

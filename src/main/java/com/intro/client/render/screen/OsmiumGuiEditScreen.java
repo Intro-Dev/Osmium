@@ -3,6 +3,7 @@ package com.intro.client.render.screen;
 import com.intro.client.render.RenderManager;
 import com.intro.client.render.drawables.Drawable;
 import com.intro.client.render.drawables.Scalable;
+import com.intro.client.render.widget.AbstractScalableButton;
 import com.intro.common.config.Options;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
@@ -22,7 +23,7 @@ public class OsmiumGuiEditScreen extends Screen {
 
     @Override
     protected void init() {
-        Button backButton = new Button(this.width / 2 - 75, this.height - 40, 150, 20, Component.translatable("osmium.options.video_options.back"), (Button) -> Minecraft.getInstance().setScreen(parent));
+        Button backButton = new AbstractScalableButton(this.width / 2 - 75, this.height - 40, 150, 20, Component.translatable("osmium.options.video_options.back"), (Button) -> Minecraft.getInstance().setScreen(parent));
         this.addRenderableWidget(backButton);
     }
 

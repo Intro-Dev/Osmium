@@ -1,6 +1,7 @@
 package com.intro.client.render.screen;
 
 import com.intro.client.render.screen.builder.ScreenBuilder;
+import com.intro.client.render.widget.AbstractScalableButton;
 import com.intro.client.render.widget.BooleanButtonWidget;
 import com.intro.common.config.Options;
 import com.mojang.blaze3d.systems.RenderSystem;
@@ -62,10 +63,10 @@ public class OsmiumWidgetOptionsScreen extends Screen {
         BooleanButtonWidget armorDisplayToggle = new BooleanButtonWidget(this.width / 2 - 275, this.height / 4 + 120 + globalOffset, 150, 20, Options.ArmorDisplayEnabled, "osmium.options.armor_display_");
 
 
-        Button keystrokesOptionsButton = new Button(this.width / 2 - 75, this.height / 4 + 120 + globalOffset, 150, 20, Component.translatable("osmium.options.keystrokes_settings"), (buttonWidget) -> mc.setScreen(new OsmiumKeystrokesScreen(this)));
-        Button statusEffectOptionsButton = new Button(this.width / 2 + 125, this.height / 4 + 120 + globalOffset, 150, 20, Component.translatable("osmium.options.status_effect_display_settings"), (buttonWidget) -> mc.setScreen(new OsmiumStatusEffectDisplayOptionsScreen(this)));
+        Button keystrokesOptionsButton = new AbstractScalableButton(this.width / 2 - 75, this.height / 4 + 120 + globalOffset, 150, 20, Component.translatable("osmium.options.keystrokes_settings"), (buttonWidget) -> mc.setScreen(new OsmiumKeystrokesScreen(this)));
+        Button statusEffectOptionsButton = new AbstractScalableButton(this.width / 2 + 125, this.height / 4 + 120 + globalOffset, 150, 20, Component.translatable("osmium.options.status_effect_display_settings"), (buttonWidget) -> mc.setScreen(new OsmiumStatusEffectDisplayOptionsScreen(this)));
 
-        Button backButton = new Button(this.width / 2 - 100, this.height / 4 + 225 + globalOffset, 200, 20, Component.translatable("osmium.options.video_options.back"), (Button) -> mc.setScreen(parent));
+        Button backButton = new AbstractScalableButton(this.width / 2 - 100, this.height / 4 + 225 + globalOffset, 200, 20, Component.translatable("osmium.options.video_options.back"), (Button) -> mc.setScreen(parent));
 
         this.addRenderableWidget(fpsDisplayToggle);
         this.addRenderableWidget(cpsDisplayToggle);

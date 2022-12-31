@@ -9,7 +9,7 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.Button;
-import net.minecraft.client.gui.components.Widget;
+import net.minecraft.client.gui.components.Renderable;
 import net.minecraft.client.gui.components.events.GuiEventListener;
 import net.minecraft.client.gui.narration.NarratableEntry;
 import net.minecraft.client.gui.screens.Screen;
@@ -28,7 +28,7 @@ public class ScreenBuilderImpl implements ScreenBuilder {
     private final List<RenderConsumer> renderConsumers = new ArrayList<>();
     private final List<Runnable> initConsumers = new ArrayList<>();
 
-    private final Map<Widget, Set<WidgetConsumer>> initWidgetConsumers = new HashMap();
+    private final Map<Renderable, Set<WidgetConsumer>> initWidgetConsumers = new HashMap();
 
     private int widgetX = -275;
     private int widgetY = 80;
@@ -44,7 +44,7 @@ public class ScreenBuilderImpl implements ScreenBuilder {
     }
 
     @Override
-    public <T extends GuiEventListener & Widget & NarratableEntry> ScreenBuilder widget(T widget) {
+    public <T extends GuiEventListener & Renderable & NarratableEntry> ScreenBuilder widget(T widget) {
         widgets.add(widget);
         return this;
     }
@@ -91,7 +91,7 @@ public class ScreenBuilderImpl implements ScreenBuilder {
 
     @Override
     public ScreenBuilder button(Component text, Button.OnPress onPress) {
-        widget(new Button(mc.getWindow().getGuiScaledWidth() / 2 + widgetX, mc.getWindow().getScreenHeight() / 8 + widgetY, 150, 20, text, onPress));
+        widget(new AbstractScalableButton(mc.getWindow().getGuiScaledWidth() / 2 + widgetX, mc.getWindow().getScreenHeight() / 8 + widgetY, 150, 20, text, onPress));
         return this;
     }
 
@@ -122,7 +122,7 @@ public class ScreenBuilderImpl implements ScreenBuilder {
         }
     }
 
-    private void addWidgetConsumer(Widget widget, WidgetConsumer consumer) {
+    private void addWidgetConsumer(Renderable widget, WidgetConsumer consumer) {
         initWidgetConsumers.computeIfAbsent(widget, k -> new HashSet<>());
         initWidgetConsumers.get(widget).add(consumer);
     }
@@ -179,18 +179,18 @@ public class ScreenBuilderImpl implements ScreenBuilder {
 
                 widgets.forEach((w) -> {
                     add(w);
-                    initWidgetConsumers.computeIfAbsent((Widget) w, k -> new HashSet<>());
-                    initWidgetConsumers.get((Widget) w).forEach(consumer -> consumer.onTick((Widget) w));
+                    initWidgetConsumers.computeIfAbsent((Renderable) w, k -> new HashSet<>());
+                    initWidgetConsumers.get((Renderable) w).forEach(consumer -> consumer.onTick((Renderable) w));
                 });
                 initConsumers.forEach(Runnable::run);
                 if(parent != null) {
-                    addRenderableWidget(new Button(this.width / 2 - 100, this.height / 4 + 225, 200, 20, Component.translatable("osmium.options.video_options.back"), (Button) -> mc.setScreen(parent)));
+                    addRenderableWidget(new AbstractScalableButton(this.width / 2 - 100, this.height / 4 + 225, 200, 20, Component.translatable("osmium.options.video_options.back"), (Button) -> mc.setScreen(parent)));
                 }
                 super.init();
             }
 
             @SuppressWarnings("uncheckedcast")
-            private <T extends GuiEventListener & Widget & NarratableEntry> void add(Object widget) {
+            private <T extends GuiEventListener & Renderable & NarratableEntry> void add(Object widget) {
                 addRenderableWidget((T) widget);
             }
         };

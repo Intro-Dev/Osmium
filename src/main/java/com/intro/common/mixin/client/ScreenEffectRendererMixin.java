@@ -3,14 +3,14 @@ package com.intro.common.mixin.client;
 import com.intro.common.config.Options;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
-import com.mojang.math.Matrix4f;
-import com.mojang.math.Vector3f;
+import com.mojang.math.Axis;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.renderer.ScreenEffectRenderer;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.resources.model.ModelBakery;
 import net.minecraft.util.Mth;
+import org.joml.Matrix4f;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 
@@ -31,7 +31,7 @@ public class ScreenEffectRendererMixin {
         RenderSystem.defaultBlendFunc();
         RenderSystem.enableTexture();
         TextureAtlasSprite textureAtlasSprite = ModelBakery.FIRE_1.sprite();
-        RenderSystem.setShaderTexture(0, textureAtlasSprite.atlas().location());
+        RenderSystem.setShaderTexture(0, textureAtlasSprite.atlasLocation());
         float f = textureAtlasSprite.getU0();
         float g = textureAtlasSprite.getU1();
         float h = (f + g) / 2.0F;
@@ -57,7 +57,7 @@ public class ScreenEffectRendererMixin {
             } else {
                 stack.translate((float)(-(r * 2 - 1)) * 0.24F, -0.30000001192092896D, 0.0D);
             }
-            stack.mulPose(Vector3f.YP.rotationDegrees((float)(r * 2 - 1) * 10.0F));
+            stack.mulPose(Axis.YP.rotationDegrees((float)(r * 2 - 1) * 10.0F));
             Matrix4f matrix4f = stack.last().pose();
             bufferBuilder.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_COLOR_TEX);
             bufferBuilder.vertex(matrix4f, -0.5F, -0.5F, -0.5F).color(1.0F, 1.0F, 1.0F, 0.9F).uv(n, p).endVertex();

@@ -6,7 +6,7 @@ import com.intro.common.config.options.CapeRenderingMode;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import com.mojang.math.Vector3f;
+import com.mojang.math.Axis;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.PlayerModel;
 import net.minecraft.client.player.AbstractClientPlayer;
@@ -65,9 +65,9 @@ public class CapeRenderer extends RenderLayer<AbstractClientPlayer, PlayerModel<
                     j += 25.0F;
                 }
 
-                stack.mulPose(Vector3f.XP.rotationDegrees(6.0F + k / 2.0F + j));
-                stack.mulPose(Vector3f.ZP.rotationDegrees(l / 2.0F));
-                stack.mulPose(Vector3f.YP.rotationDegrees(180.0F - l / 2.0F));
+                stack.mulPose(Axis.XP.rotationDegrees(6.0F + k / 2.0F + j));
+                stack.mulPose(Axis.ZP.rotationDegrees(l / 2.0F));
+                stack.mulPose(Axis.YP.rotationDegrees(180.0F - l / 2.0F));
 
 
                 if(OsmiumClient.cosmeticManager.getCapeFromEntityGotUUID(player.getStringUUID()) != null) {

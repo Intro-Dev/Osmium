@@ -16,7 +16,6 @@
     "client.FontInvoker",
     "client.GameRendererMixin",
     "client.GuiMixin",
-    "client.InventoryScreenMixin",
     "client.KeyboardInputMixin",
     "client.KeyMappingAccessor",
     "client.LevelRendererAccessor",
@@ -31,7 +30,6 @@
     "client.ResourceTextureAccessor",
     "client.ResourceTextureSubclassAccessor",
     "client.ScreenEffectRendererMixin",
-    "client.ScreenMixin",
     "client.TitleScreenMixin",
     "client.VertexFormatAccessor"
   ],

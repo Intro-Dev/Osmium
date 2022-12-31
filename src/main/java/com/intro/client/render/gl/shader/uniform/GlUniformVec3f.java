@@ -2,7 +2,7 @@ package com.intro.client.render.gl.shader.uniform;
 
 import com.intro.client.render.gl.shader.Shader;
 import com.mojang.blaze3d.platform.GlStateManager;
-import com.mojang.math.Vector3f;
+import org.joml.Vector3f;
 import org.lwjgl.opengl.GL20;
 
 import java.nio.FloatBuffer;
