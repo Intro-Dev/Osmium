@@ -187,7 +187,7 @@ public class OsmiumOptionsScreen extends Screen {
         matrices.pushPose();
         RenderSystem.setShaderColor(shaderColor.getFloatR(), shaderColor.getFloatG(), shaderColor.getFloatB(), ((animationProgress * 4) - 1) / 255f);
         matrices.translate(0, animationProgress,0);
-        drawCenteredString(matrices, mc.font, hasDoneEasterEgg ? Component.literal("One Year of Osmium!") : Component.translatable("osmium.version"), this.width / 2, this.height / 8 + 100 + globalOffset + (logoOffset / 4), 0xffffff);
+        drawCenteredString(matrices, mc.font, hasDoneEasterEgg ? com.intro.common.util.Util.generateRandomEasterEggMessage() : Component.translatable("osmium.version"), this.width / 2, this.height / 8 + 100 + globalOffset + (logoOffset / 4), 0xffffff);
         matrices.popPose();
         super.render(matrices, mouseX, mouseY, delta);
         // 57 is the max because of animation progress looking good at 3

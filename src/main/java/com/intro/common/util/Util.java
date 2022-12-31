@@ -7,6 +7,9 @@ import com.google.gson.JsonParser;
 import com.google.gson.stream.JsonReader;
 import com.intro.common.ModConstants;
 import net.fabricmc.loader.api.FabricLoader;
+import net.minecraft.network.chat.Component;
+import net.minecraft.util.Mth;
+import net.minecraft.util.RandomSource;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -34,6 +37,8 @@ public class Util {
     private static String cachedLatestReleaseTag;
     private static String cachedLatestReleaseDownload;
     private static String cachedLatestReleaseName;
+    // starts at 1
+    private static final int EASTER_EGG_COUNT = 12;
 
 
     // cache values at startup
@@ -82,6 +87,10 @@ public class Util {
             LOGGER.log(Level.WARN, "Failed to get latest version string!");
             return ModConstants.FULL_VERSION_STRING;
         }
+    }
+
+    public static Component generateRandomEasterEggMessage() {
+        return Component.translatable("osmium.easter_eggs.random_" + Mth.randomBetween(RandomSource.create(), 1, EASTER_EGG_COUNT));
     }
 
     public static boolean isRunningLatestVersion() {
