@@ -32,7 +32,7 @@ public class CapeRenderer extends RenderLayer<AbstractClientPlayer, PlayerModel<
         super(parent);
     }
 
-        public void render(PoseStack stack, MultiBufferSource multiBuffer, int light, AbstractClientPlayer player, float limbAngle, float limbDistance, float tickDelta, float animationProgress, float headYaw, float headPitch) {
+    public void render(PoseStack stack, MultiBufferSource multiBuffer, int light, AbstractClientPlayer player, float limbAngle, float limbDistance, float tickDelta, float animationProgress, float headYaw, float headPitch) {
         try {
             ItemStack itemStack = player.getItemBySlot(EquipmentSlot.CHEST);
             if(Options.ShowOtherPlayersCapes.get() && !Objects.equals(player.getStringUUID(), Minecraft.getInstance().player.getStringUUID())) {
