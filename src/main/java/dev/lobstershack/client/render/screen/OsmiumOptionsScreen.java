@@ -183,8 +183,9 @@ public class OsmiumOptionsScreen extends Screen {
         matrices.popPose();
 
         matrices.pushPose();
-        RenderSystem.setShaderColor(shaderColor.getFloatR(), shaderColor.getFloatG(), shaderColor.getFloatB(), ((animationProgress * 4) - 1) / 255f);
+        // RenderSystem.setShaderColor(shaderColor.getFloatR(), shaderColor.getFloatG(), shaderColor.getFloatB(), ((animationProgress * 4) - 1) / 255f);
         matrices.translate(0, animationProgress,0);
+
         drawCenteredString(matrices, mc.font, hasDoneEasterEgg ? easterEggText : Component.translatable("osmium.version"), this.width / 2, this.height / 8 + 100 + globalOffset + (logoOffset / 4), 0xffffff);
         matrices.popPose();
         super.render(matrices, mouseX, mouseY, delta);

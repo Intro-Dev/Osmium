@@ -81,7 +81,6 @@ public class TextureUtil {
         for(int y = 1; y < overlay.getHeight(); y++) {
             long overlayOffset = ((long) y * overlay.getWidth()) * 4L;
             long returnOffset = ((long) y * returnImage.getWidth()) * 4L;
-            // System.out.println("Copying " + overlayByteCountPerLine + " bytes from " + overlayOffset + overlay.pixels + " to " + returnOffset + returnImage.pixels + " , y: " + y);
             MemoryUtil.memCopy(overlayOffset + overlay.pixels, returnOffset + returnImage.pixels, overlayByteCountPerLine);
         }
 
