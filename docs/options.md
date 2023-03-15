@@ -19,10 +19,10 @@ Enum Options
 
 | Name                    | Identifier              | EnumType                                                |
 |-------------------------|-------------------------|---------------------------------------------------------|
-| SneakMode               | SneakMode               | com.intro.common.config.options.SneakMode               |
+| SneakMode               | SneakMode               | SneakMode               |
 | CustomCapeMode          | CustomCapeMode          | com.intro.common.config.CapeRenderingMode               |
-| BlockOutlineMode        | CustomBlockOutline      | com.intro.common.config.options.BlockOutlineMode        |
-| StatusEffectDisplayMode | StatusEffectDisplayMode | com.intro.common.config.options.StatusEffectDisplayMode |
+| BlockOutlineMode        | CustomBlockOutline      | BlockOutlineMode        |
+| StatusEffectDisplayMode | StatusEffectDisplayMode | StatusEffectDisplayMode |
 
 Other Options
 

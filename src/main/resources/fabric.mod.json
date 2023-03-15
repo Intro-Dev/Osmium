@@ -19,10 +19,10 @@
   "environment": "*",
   "entrypoints": {
     "client": [
-      "com.intro.client.OsmiumClient"
+      "dev.lobstershack.client.OsmiumClient"
     ],
     "server": [
-      "com.intro.server.OsmiumServer"
+      "dev.lobstershack.server.OsmiumServer"
     ]
   },
   "accessWidener" : "osmium.accesswidener",
@@ -33,7 +33,7 @@
   "depends": {
     "fabricloader": ">=0.8.0",
     "fabric": "*",
-    "minecraft": "1.19.3"
+    "minecraft": "1.19.4.*"
   },
 
 

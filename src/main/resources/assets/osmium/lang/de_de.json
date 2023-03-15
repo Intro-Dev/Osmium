@@ -97,6 +97,19 @@
   "osmium.options.cape_screen_level_only": "Cape options can only be opened in a world",
   "osmium.options.gui_screen_level_only": "Gui editing can only be done in a world",
   "osmium.options.motion_blur_enabled": "Motion Blur: Aktiviert",
-  "osmium.options.motion_blur_disabled": "Motion Blur: Deaktiviert"
+  "osmium.options.motion_blur_disabled": "Motion Blur: Deaktiviert",
+  "osmium.easter_eggs.random_1": "Thanks For 1000 DLS!",
+  "osmium.easter_eggs.random_2": "Happy 1 Year Anniversary!",
+  "osmium.easter_eggs.random_3": "If You're Seeing This, It's Already Too Late...",
+  "osmium.easter_eggs.random_4": "UP UP DOWN DOWN LEFT RIGHT LEFT RIGHT B A START",
+  "osmium.easter_eggs.random_5": "Why Did the Chicken Cross the Road?",
+  "osmium.easter_eggs.random_6": "To Get to the Other Side!",
+  "osmium.easter_eggs.random_7": "Not Affiliated With Mojang!",
+  "osmium.easter_eggs.random_8": "No Time to Explain, Get in the Menu!",
+  "osmium.easter_eggs.random_9": "Also Check Out Minecraft!",
+  "osmium.easter_eggs.random_10": "Most Certainly not a Virus!",
+  "osmium.easter_eggs.random_11": "Don't Check Your Startup Folder!",
+  "osmium.easter_eggs.random_12": "Not Based in Sweden!",
+  "osmium.keys.FreeLookKey": "Free Look"
 
 }

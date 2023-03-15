@@ -1,11 +1,12 @@
 {
   "required": true,
-  "package": "com.intro.common.mixin",
-  "plugin": "com.intro.common.mixin.OsmiumMixinPlugin",
+  "package": "dev.lobstershack.common.mixin",
+  "plugin": "dev.lobstershack.common.mixin.OsmiumMixinPlugin",
   "compatibilityLevel": "JAVA_17",
   "client": [
     "client.AbilitiesMixin",
     "client.AbstractContainerEventHandlerMixin",
+    "client.CameraInvoker",
     "client.CameraMixin",
     "client.CapeLayerMixin",
     "client.ChatListenerMixin",
@@ -24,6 +25,7 @@
     "client.LightTextureMixin",
     "client.MinecraftAccessor",
     "client.MinecraftMixin",
+    "client.MouseHandlerMixin",
     "client.OptionsScreenMixin",
     "client.PlayerRendererMixin",
     "client.ReloadableResourceManagerMixin",

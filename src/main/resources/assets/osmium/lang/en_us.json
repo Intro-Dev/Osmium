@@ -109,6 +109,8 @@
   "osmium.easter_eggs.random_9": "Also Check Out Minecraft!",
   "osmium.easter_eggs.random_10": "Most Certainly not a Virus!",
   "osmium.easter_eggs.random_11": "Don't Check Your Startup Folder!",
-  "osmium.easter_eggs.random_12": "Not Based in Sweden!"
-
+  "osmium.easter_eggs.random_12": "Not Based in Sweden!",
+  "keys.osmium.FreeLookKey": "Free Look",
+  "osmium.options.free_look_enabled": "Free Look: Enabled",
+  "osmium.options.free_look_disabled": "Free Look: Disabled"
 }
