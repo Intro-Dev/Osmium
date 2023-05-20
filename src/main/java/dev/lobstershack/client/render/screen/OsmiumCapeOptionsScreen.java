@@ -4,7 +4,7 @@ import com.mojang.blaze3d.platform.Lighting;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import dev.lobstershack.client.OsmiumClient;
-import dev.lobstershack.client.network.ClientNetworkHandler;
+import dev.lobstershack.client.config.Options;
 import dev.lobstershack.client.render.color.Colors;
 import dev.lobstershack.client.render.cosmetic.Cape;
 import dev.lobstershack.client.render.widget.AbstractScalableButton;
@@ -13,8 +13,8 @@ import dev.lobstershack.client.render.widget.BooleanButtonWidget;
 import dev.lobstershack.client.render.widget.EnumSelectWidget;
 import dev.lobstershack.client.util.MathUtil;
 import dev.lobstershack.client.util.RenderUtil;
-import dev.lobstershack.common.config.Options;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -26,7 +26,6 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
 import org.joml.Quaternionf;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -115,7 +114,9 @@ public class OsmiumCapeOptionsScreen extends Screen {
     }
 
     // the gore from all the multiplications for gui scaling
-    public void render(PoseStack stack, int mouseX, int mouseY, float delta) {
+    @Override
+    public void render(GuiGraphics graphics, int mouseX, int mouseY, float delta) {
+        PoseStack stack = graphics.pose();
         PoseStack entityRenderStack = RenderSystem.getModelViewStack();
         entityRenderStack.pushPose();
         stack.pushPose();
@@ -125,8 +126,8 @@ public class OsmiumCapeOptionsScreen extends Screen {
         entityRenderStack.scale(zoomInScale, zoomInScale, zoomInScale);
         stack.scale(zoomInScale, zoomInScale, 0);
 
-        fill(stack, (int) (this.width / 2 - (312 * guiScale)), bgStartHeight, (int) (this.width / 2 + (312 * guiScale)), (int) (this.height / 2 + (256 * guiScale)), Colors.BACKGROUND_GRAY.getColor().getInt());
-        RenderUtil.renderScaledText(stack, mc.font, Component.translatable("osmium.cape_select"), (int) (this.width / 2 + (180 * guiScale)), bgStartHeight + (10 * guiScale), Colors.WHITE.getColor().getInt(), (float) guiScale, true);
+        graphics.fill((int) (this.width / 2 - (312 * guiScale)), bgStartHeight, (int) (this.width / 2 + (312 * guiScale)), (int) (this.height / 2 + (256 * guiScale)), Colors.BACKGROUND_GRAY.getColor().getInt());
+        RenderUtil.renderScaledText(graphics, mc.font, Component.translatable("osmium.cape_select"), (int) (this.width / 2 + (180 * guiScale)), bgStartHeight + (10 * guiScale), Colors.WHITE.getColor().getInt(), (float) guiScale, true);
 
         List<Cape> pageCapes = capePages.get(currentPage.get());
 
@@ -134,25 +135,24 @@ public class OsmiumCapeOptionsScreen extends Screen {
             Cape cape = pageCapes.get(i);
 
             if(OsmiumClient.cosmeticManager.getPlayerCape(Minecraft.getInstance().user.getUuid().toLowerCase()) != null && OsmiumClient.cosmeticManager.getPlayerCape(Minecraft.getInstance().user.getUuid().toLowerCase()) == cape) {
-                fill(stack, (int) (this.width / 2 + (100 * guiScale)), (int) (bgStartHeight + (40 + (i * 70)) * guiScale), (int) (this.width / 2 + (300 * guiScale)), (int) (bgStartHeight + (100 + (i * 70)) * guiScale), Colors.DARK_GRAY.getColor().getInt());
+                graphics.fill((int) (this.width / 2 + (100 * guiScale)), (int) (bgStartHeight + (40 + (i * 70)) * guiScale), (int) (this.width / 2 + (300 * guiScale)), (int) (bgStartHeight + (100 + (i * 70)) * guiScale), Colors.DARK_GRAY.getColor().getInt());
             }
 
-            drawOutlinedBox(stack, (int) (this.width / 2 + (100 * guiScale)), (int) (bgStartHeight + (40 + (i * 70)) * guiScale), (int) (200 * guiScale), (int) (60 * guiScale), Colors.WHITE.getColor().getInt());
+            drawOutlinedBox(graphics, (int) (this.width / 2 + (100 * guiScale)), (int) (bgStartHeight + (40 + (i * 70)) * guiScale), (int) (200 * guiScale), (int) (60 * guiScale), Colors.WHITE.getColor().getInt());
             stack.pushPose();
             RenderUtil.positionAccurateScale(stack, 0.5f, (int) (this.width / 2 + (70 * guiScale)), (int) (bgStartHeight + (40 + (i * 70) - 10) * guiScale), (int) (160 * guiScale), (int) (80 * guiScale));
             // something wacky going on here
             // view stack scaling is slightly off, so we have to change pos a bit
-            RenderSystem.setShaderTexture(0, cape.getFrameTexture());
-            blit(stack, (int) (this.width / 2 + (70 * guiScale)), (int) (bgStartHeight + (40 + (i * 70) - 10) * guiScale), 0, 0 , (int) (160 * guiScale), (int) (80 * guiScale), (int) (160 * guiScale), (int) (80 * guiScale));
+            graphics.blit(cape.getFrameTexture(), (int) (this.width / 2 + (70 * guiScale)), (int) (bgStartHeight + (40 + (i * 70) - 10) * guiScale), 0, 0 , (int) (160 * guiScale), (int) (80 * guiScale), (int) (160 * guiScale), (int) (80 * guiScale));
             stack.popPose();
 
             //  these coordinates are just insane
-            RenderUtil.renderScaledText(stack, mc.font,"Source: " + cape.source, (int) (this.width / 2 + (200 * guiScale)), (int) (bgStartHeight + (40 + (i * 70) + 15) * guiScale), Colors.WHITE.getColor().getInt(), (float) guiScale, true);
-            RenderUtil.renderScaledText(stack, mc.font, "Animated: " + cape.animated, (int) (this.width / 2 + (200 * guiScale)), (int) (bgStartHeight + (40 + (i * 70) + 25) * guiScale), Colors.WHITE.getColor().getInt(), (float) guiScale, true);
-            RenderUtil.renderScaledText(stack, mc.font, "Creator: " + cape.creator, (int) (this.width / 2 + (200 * guiScale)), (int) (bgStartHeight + (40 + (i * 70) + 35) * guiScale)  , Colors.WHITE.getColor().getInt(), (float) guiScale, true);
+            RenderUtil.renderScaledText(graphics, mc.font,"Source: " + cape.source, (int) (this.width / 2 + (200 * guiScale)), (int) (bgStartHeight + (40 + (i * 70) + 15) * guiScale), Colors.WHITE.getColor().getInt(), (float) guiScale, true);
+            RenderUtil.renderScaledText(graphics, mc.font, "Animated: " + cape.animated, (int) (this.width / 2 + (200 * guiScale)), (int) (bgStartHeight + (40 + (i * 70) + 25) * guiScale), Colors.WHITE.getColor().getInt(), (float) guiScale, true);
+            RenderUtil.renderScaledText(graphics, mc.font, "Creator: " + cape.creator, (int) (this.width / 2 + (200 * guiScale)), (int) (bgStartHeight + (40 + (i * 70) + 35) * guiScale)  , Colors.WHITE.getColor().getInt(), (float) guiScale, true);
         }
 
-        RenderUtil.renderScaledText(stack, mc.font, currentPage.get() + 1 + "/" +  capePages.size(), (int) (this.width / 2 + (200 * guiScale)), (int) (bgStartHeight + (475 * guiScale)), Colors.WHITE.getColor().getInt(), (float) guiScale, true);
+        RenderUtil.renderScaledText(graphics, mc.font, currentPage.get() + 1 + "/" +  capePages.size(), (int) (this.width / 2 + (200 * guiScale)), (int) (bgStartHeight + (475 * guiScale)), Colors.WHITE.getColor().getInt(), (float) guiScale, true);
 
         playerXRot -= 0.15 * delta;
         if(playerXRot <= -179.85) {
@@ -164,14 +164,14 @@ public class OsmiumCapeOptionsScreen extends Screen {
         renderEntityInInventory((int) (this.width / 2 - (150 * guiScale)), (int) (bgStartHeight + (300 * guiScale)), (int) (140 * guiScale), playerXRot, 0, mc.player);
         stack.popPose();
         entityRenderStack.popPose();
-        super.render(stack, mouseX, mouseY, delta);
+        super.render(graphics, mouseX, mouseY, delta);
     }
 
-    public void drawOutlinedBox(PoseStack stack, int x, int y, int width, int height, int color) {
-        vLine(stack, x, y, y + height, color);
-        vLine(stack, x + width, y, y + height, color);
-        hLine(stack, x, x + width, y, color);
-        hLine(stack, x, x + width, y + height, color);
+    public void drawOutlinedBox(GuiGraphics graphics, int x, int y, int width, int height, int color) {
+        graphics.vLine(x, y, y + height, color);
+        graphics.vLine(x + width, y, y + height, color);
+        graphics.hLine(x, x + width, y, color);
+        graphics.hLine(x, x + width, y + height, color);
     }
 
     @Override
@@ -185,11 +185,6 @@ public class OsmiumCapeOptionsScreen extends Screen {
                 OsmiumClient.cosmeticManager.setLocalPlayerCape(pageCapes.get(i));
                 Minecraft.getInstance().getSoundManager().play(SimpleSoundInstance.forUI(SoundEvents.UI_BUTTON_CLICK, 1.0F));
                 Options.SetCape.set(pageCapes.get(i).name);
-                try {
-                    ClientNetworkHandler.sendCapeSetPacket(pageCapes.get(i));
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
                 return super.mouseClicked(mouseX, mouseY, mouseCode);
             }
         }

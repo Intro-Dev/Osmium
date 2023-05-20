@@ -2,8 +2,8 @@ package dev.lobstershack.client.util;
 
 import com.mojang.blaze3d.platform.NativeImage;
 import dev.lobstershack.client.OsmiumClient;
-import dev.lobstershack.common.mixin.client.ResourceTextureAccessor;
-import dev.lobstershack.common.mixin.client.ResourceTextureSubclassAccessor;
+import dev.lobstershack.client.mixin.client.ResourceTextureAccessor;
+import dev.lobstershack.client.mixin.client.ResourceTextureSubclassAccessor;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.SimpleTexture;
 import net.minecraft.resources.ResourceLocation;

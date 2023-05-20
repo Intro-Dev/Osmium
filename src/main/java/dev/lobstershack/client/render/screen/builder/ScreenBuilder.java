@@ -1,7 +1,7 @@
 package dev.lobstershack.client.render.screen.builder;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import dev.lobstershack.common.config.options.Option;
+import dev.lobstershack.client.config.options.Option;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.Renderable;
 import net.minecraft.client.gui.components.events.GuiEventListener;
@@ -89,6 +89,15 @@ public interface ScreenBuilder {
      * @return Returns the current ScreenBuilder
      */
     ScreenBuilder button(Component text, Button.OnPress onPress);
+
+    /**
+     * Adds a button with custom function
+     * @param text Button text
+     * @param onPress Button function
+     * @return Returns the current ScreenBuilder
+     */
+    ScreenBuilder button(Component text, Button.OnPress onPress, WidgetConsumer afterInit);
+
 
     /**
      * Adds a back button

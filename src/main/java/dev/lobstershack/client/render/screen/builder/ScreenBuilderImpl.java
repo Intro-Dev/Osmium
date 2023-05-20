@@ -2,20 +2,22 @@ package dev.lobstershack.client.render.screen.builder;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
+import dev.lobstershack.client.config.options.Option;
 import dev.lobstershack.client.render.widget.AbstractScalableButton;
 import dev.lobstershack.client.render.widget.BooleanButtonWidget;
 import dev.lobstershack.client.render.widget.DoubleSliderWidget;
 import dev.lobstershack.client.render.widget.EnumSelectWidget;
-import dev.lobstershack.common.config.options.Option;
+import dev.lobstershack.client.util.DebugUtil;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.Renderable;
 import net.minecraft.client.gui.components.events.GuiEventListener;
 import net.minecraft.client.gui.narration.NarratableEntry;
 import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import org.apache.logging.log4j.Level;
 
 import java.util.*;
 
@@ -31,6 +33,7 @@ public class ScreenBuilderImpl implements ScreenBuilder {
     private final Map<Renderable, Set<WidgetConsumer>> initWidgetConsumers = new HashMap();
 
     private int widgetX = -275;
+    private int placeInRow = 1;
     private int widgetY = 80;
 
     private Screen parent;
@@ -45,6 +48,7 @@ public class ScreenBuilderImpl implements ScreenBuilder {
 
     @Override
     public <T extends GuiEventListener & Renderable & NarratableEntry> ScreenBuilder widget(T widget) {
+        DebugUtil.logIfDebug("Adding widget to screen: " + widget.toString(), Level.INFO);
         widgets.add(widget);
         return this;
     }
@@ -92,6 +96,16 @@ public class ScreenBuilderImpl implements ScreenBuilder {
     @Override
     public ScreenBuilder button(Component text, Button.OnPress onPress) {
         widget(new AbstractScalableButton(mc.getWindow().getGuiScaledWidth() / 2 + widgetX, mc.getWindow().getScreenHeight() / 8 + widgetY, 150, 20, text, onPress));
+        incrementButton();
+        return this;
+    }
+
+    @Override
+    public ScreenBuilder button(Component text, Button.OnPress onPress, WidgetConsumer afterInit) {
+        AbstractScalableButton button = new AbstractScalableButton(mc.getWindow().getGuiScaledWidth() / 2 + widgetX, mc.getWindow().getScreenHeight() / 8 + widgetY, 150, 20, text, onPress);
+        widget(button);
+        incrementButton();
+        addWidgetConsumer(button, afterInit);
         return this;
     }
 
@@ -116,9 +130,11 @@ public class ScreenBuilderImpl implements ScreenBuilder {
 
     private void incrementButton() {
         widgetX += 200;
-        if(widgetX > 125) {
-            widgetX = -275;
+        placeInRow++;
+        if(placeInRow > 3) {
+            placeInRow = 1;
             widgetY += 40;
+            widgetX = -275;
         }
     }
 
@@ -138,11 +154,9 @@ public class ScreenBuilderImpl implements ScreenBuilder {
             private final ResourceLocation LOGO_TEXTURE = new ResourceLocation("osmium", "icon.png");
 
             @Override
-            public void render(PoseStack stack, int mouseX, int mouseY, float partialTicks) {
-                renderBackground(stack);
-                // set proper shaders
-                RenderSystem.setShader(GameRenderer::getPositionColorTexShader);
-                RenderSystem.setShaderTexture(0, LOGO_TEXTURE);
+            public void render(GuiGraphics graphics, int mouseX, int mouseY, float partialTicks) {
+                PoseStack stack = graphics.pose();
+                renderBackground(graphics);
                 RenderSystem.enableBlend();
                 stack.pushPose();
                 // scale image down to a good size
@@ -151,15 +165,15 @@ public class ScreenBuilderImpl implements ScreenBuilder {
                 // its width / 2 - 128 because we are scaling by 0.5, and 128 is the scaled dimensions of the image
                 stack.translate(this.width / 2f - 128, finalOffset,0);
                 if(shouldRenderLogo)
-                    blit(stack, this.width / 2, this.height / 8 + globalOffset + logoOffset, 0, 0, 256, 256);
+                    graphics.blit(LOGO_TEXTURE, this.width / 2, this.height / 8 + globalOffset + logoOffset, 0, 0, 256, 256);
                 stack.popPose();
 
                 stack.pushPose();
                 stack.translate(0, finalOffset,0);
-                drawCenteredString(stack, mc.font, Component.translatable("osmium.version"), this.width / 2, this.height / 8 + 100 + globalOffset + (logoOffset / 4), 0xffffff);
+                graphics.drawCenteredString(mc.font, Component.translatable("osmium.version"), this.width / 2, this.height / 8 + 100 + globalOffset + (logoOffset / 4), 0xffffff);
                 stack.popPose();
                 renderConsumers.forEach(consumer -> consumer.onRender(stack, partialTicks));
-                super.render(stack, mouseX, mouseY, partialTicks);
+                super.render(graphics, mouseX, mouseY, partialTicks);
             }
 
             @Override

@@ -6,4 +6,8 @@ public class MathUtil {
         return x > posX && x < posX + width && y > posY && y < posY + height;
     }
 
+    public static double roundUp(double number) {
+        return Math.floor(number) + 1;
+    }
+
 }

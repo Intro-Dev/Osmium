@@ -4,16 +4,16 @@ import com.mojang.blaze3d.platform.InputConstants;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import dev.lobstershack.client.OsmiumClient;
+import dev.lobstershack.client.config.Options;
 import dev.lobstershack.client.render.color.Color;
 import dev.lobstershack.client.render.screen.builder.ScreenBuilder;
-import dev.lobstershack.client.render.widget.AbstractScalableButton;
-import dev.lobstershack.common.config.Options;
+import dev.lobstershack.client.render.widget.*;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.Util;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
@@ -42,7 +42,7 @@ public class OsmiumOptionsScreen extends Screen {
     // happy Easter
     private int easterEggStage = 0;
     private boolean hasDoneEasterEgg = false;
-    private final Component easterEggText = dev.lobstershack.common.util.Util.generateRandomEasterEggMessage();
+    private final Component easterEggText = dev.lobstershack.client.util.Util.generateRandomEasterEggMessage();
 
     private final ResourceLocation LOGO_TEXTURE = new ResourceLocation("osmium", "icon.png");
 
@@ -78,7 +78,7 @@ public class OsmiumOptionsScreen extends Screen {
                         .button(Options.NoFireEnabled, "osmium.options.no_fire_")
                         .button(Options.SneakMode, "osmium.options.sneak_")
                         .button(Options.FreeLookEnabled, "osmium.options.free_look_")
-                        .button(Component.translatable("osmium.options.toggle_sneak_settings"), (Button) -> mc.setScreen(ScreenBuilder.newInstance()
+                        .button(Component.translatable("osmium.options.toggle_sneak_settings"), (bT) -> mc.setScreen(ScreenBuilder.newInstance()
                                 .button(Options.ToggleSprintEnabled, "osmium.options.toggle_sprint_")
                                 .button(Options.ToggleSneakEnabled, "osmium.options.toggle_sneak_", (widget) -> {
                                     // compatibility patch for sneaktweak
@@ -103,17 +103,40 @@ public class OsmiumOptionsScreen extends Screen {
                 .button(Options.CpsDisplayEnabled, "osmium.options.cps_")
                 .button(Options.FpsEnabled, "osmium.options.fps_")
                 .button(Options.ArmorDisplayEnabled, "osmium.options.armor_display_")
-                .button(Component.translatable("osmium.options.keystrokes_settings"), (buttonWidget) -> mc.setScreen(new OsmiumKeystrokesScreen(this)))
-                .button(Component.translatable("osmium.options.status_effect_display_settings"), (buttonWidget) -> mc.setScreen(new OsmiumStatusEffectDisplayOptionsScreen(this)))
+                .button(Component.translatable("osmium.options.keystrokes_settings"), (buttonWidget) -> mc.setScreen(ScreenBuilder.newInstance()
+                        .widget(new ColorOptionWidget(mc.getWindow().getGuiScaledWidth() / 2 + 50, mc.getWindow().getScreenHeight() / 4 - 100, 150, Options.KeystrokesColor))
+                        .widget(new AbstractScalableButton(mc.getWindow().getGuiScaledWidth() / 2 - 175, mc.getWindow().getScreenHeight() / 4 - 100, 150, 20, Component.translatable("osmium.options.reset_color"), (bW) -> Options.KeystrokesColor.set(new Color(0.1f, 0.1f, 0.1f, 0.2f))))
+                        .widget(new BooleanButtonWidget(mc.getWindow().getGuiScaledWidth() / 2 - 175, mc.getWindow().getScreenHeight() / 4 + 20, 150, 20, Options.KeystrokesEnabled, "osmium.options.keystrokes_"))
+                        .widget(new BooleanButtonWidget(mc.getWindow().getGuiScaledWidth() / 2 - 175, mc.getWindow().getScreenHeight() / 4 - 20, 150, 20, Options.KeystrokesRgb, "osmium.options.rgb_"))
+                        .widget(new DoubleSliderWidget(mc, mc.getWindow().getGuiScaledWidth() / 2 - 175, mc.getWindow().getScreenHeight() / 4 - 60, 150, 20, Options.KeystrokesAlpha, "osmium.options.transparency", 0, 1, 10))
+                        .widget(new AbstractScalableButton(mc.getWindow().getGuiScaledWidth() / 2 - 100, mc.getWindow().getScreenHeight() / 4 + 225, 200, 20, Component.translatable("osmium.options.video_options.back"), (bW) -> mc.setScreen(this.parent)))
+                        .build(Component.translatable("osmium.options.keystrokes_settings"))
+                ))
+                .button(Component.translatable("osmium.options.status_effect_display_settings"), (buttonWidget) -> mc.setScreen(ScreenBuilder.newInstance()
+                                .button(Options.StatusEffectDisplayMode, "osmium.options.status_effect_display_")
+                                .slider(Options.MaxStatusEffectsDisplayed, "osmium.options.max_status_display", 0, 10, 1)
+                                .addBackButton(this)
+                                .build(Component.translatable("osmium.options.status_effect_display_settings"))))
                 .addBackButton(this)
                 .build(Component.translatable("osmium.options.widgets_screen"))
         ));
         Button openVideoOptions = new AbstractScalableButton(this.width / 2 + 125, this.height / 4 + 80 + globalOffset, 150, 20, Component.translatable("osmium.options.video_options"), (Button) -> mc.setScreen(ScreenBuilder.newInstance()
-                .button(Component.translatable("osmium.cape_options"), button -> mc.setScreen(new OsmiumCapeOptionsScreen(this)))
+                .button(Component.translatable("osmium.cape_options"), button -> mc.setScreen(new OsmiumCapeOptionsScreen(this)), btn -> {
+                    if(mc.level == null) {
+                        ((AbstractScalableButton) btn).active = false;
+                        ((AbstractScalableButton) btn).setTooltip(Component.translatable("osmium.options.cape_screen_level_only"));
+                    }
+                })
                 .button(Options.NoRainEnabled, "osmium.options.rain_")
                 .button(Options.FireworksDisabled, "osmium.options.fireworks_")
                 .button(Options.DecreaseNetherParticles, "osmium.options.nether_particles_")
-                .button(Component.translatable("osmium.options.block_option_settings"), (buttonWidget) -> mc.setScreen(new OsmiumBlockOptionsScreen(this)))
+                .button(Component.translatable("osmium.options.block_option_settings"), (buttonWidget) -> mc.setScreen(ScreenBuilder.newInstance()
+                        .widget(new AbstractScalableButton(mc.getWindow().getGuiScaledWidth() / 2 - 100, mc.getWindow().getScreenHeight() / 4 + 225, 200, 20, Component.translatable("osmium.options.video_options.back"), (bW) -> mc.setScreen(this.parent)))
+                        .widget(new ColorOptionWidget(mc.getWindow().getGuiScaledWidth() / 2 + 50, mc.getWindow().getScreenHeight() / 4 - 100, 150, Options.BlockOutlineColor))
+                        .widget(new EnumSelectWidget(mc.getWindow().getGuiScaledWidth() / 2 - 175, mc.getWindow().getScreenHeight() / 4 - 100, 150, 20, Options.BlockOutlineMode, "osmium.options.overlay_"))
+                        .widget(new DoubleSliderWidget(mc, mc.getWindow().getGuiScaledWidth() / 2 - 175, mc.getWindow().getScreenHeight() / 4 - 60, 150, 20, Options.BlockOutlineAlpha, "osmium.options.block_overlay_alpha", 0, 1, 10))
+                        .build(Component.translatable("osmium.options.block_option_settings"))
+                ))
                 .addBackButton(this)
                 .build(Component.translatable("osmium.options.video_options.title"))
         ));
@@ -160,35 +183,34 @@ public class OsmiumOptionsScreen extends Screen {
     }
 
     @Override
-    public void render(PoseStack matrices, int mouseX, int mouseY, float delta) {
-        this.renderBackground(matrices);
+    public void render(GuiGraphics graphics, int mouseX, int mouseY, float delta) {
+        PoseStack stack = graphics.pose();
+        this.renderBackground(graphics);
         // set proper shaders
-        RenderSystem.setShader(GameRenderer::getPositionColorTexShader);
-        RenderSystem.setShaderTexture(0, LOGO_TEXTURE);
         // gets the current shader color
         Color shaderColor = Color.fromFloatArray(RenderSystem.getShaderColor());
         RenderSystem.enableBlend();
         // renders osmium logo to screen with fade in
-        matrices.pushPose();
+        stack.pushPose();
         // sets the current shader color to itself, but with a modified alpha for fade in effect
         float floatColor = Mth.clamp((animationProgress * 4) - 1 / 255f, 0, 1);
         RenderSystem.setShaderColor(shaderColor.getFloatR(), shaderColor.getFloatG(), shaderColor.getFloatB(), floatColor);
         // scale image down to a good size
-        matrices.scale(0.5f, 0.5f, 0.5f);
+        stack.scale(0.5f, 0.5f, 0.5f);
         // account for scaling difference
         // its width / 2 - 128 because we are scaling by 0.5, and 128 is the scaled dimensions of the image
-        matrices.translate(this.width / 2f - 128, animationProgress,0);
+        stack.translate(this.width / 2f - 128, animationProgress,0);
         if(shouldRenderLogo)
-            blit(matrices, this.width / 2, this.height / 8 + globalOffset + logoOffset, 0, 0, 256, 256);
-        matrices.popPose();
+            graphics.blit(LOGO_TEXTURE, this.width / 2, this.height / 8 + globalOffset + logoOffset, 0, 0, 256, 256);
+        stack.popPose();
 
-        matrices.pushPose();
+        stack.pushPose();
         // RenderSystem.setShaderColor(shaderColor.getFloatR(), shaderColor.getFloatG(), shaderColor.getFloatB(), ((animationProgress * 4) - 1) / 255f);
-        matrices.translate(0, animationProgress,0);
+        stack.translate(0, animationProgress,0);
 
-        drawCenteredString(matrices, mc.font, hasDoneEasterEgg ? easterEggText : Component.translatable("osmium.version"), this.width / 2, this.height / 8 + 100 + globalOffset + (logoOffset / 4), 0xffffff);
-        matrices.popPose();
-        super.render(matrices, mouseX, mouseY, delta);
+        graphics.drawCenteredString(mc.font, hasDoneEasterEgg ? easterEggText : Component.translatable("osmium.version"), this.width / 2, this.height / 8 + 100 + globalOffset + (logoOffset / 4), 0xffffff);
+        stack.popPose();
+        super.render(graphics, mouseX, mouseY, delta);
         // 57 is the max because of animation progress looking good at 3
         animationProgress += 10 * delta;
         animationProgress = Mth.clamp(animationProgress, 0, bakedMaxAnim);

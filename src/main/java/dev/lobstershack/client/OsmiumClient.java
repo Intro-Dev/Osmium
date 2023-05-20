@@ -1,20 +1,19 @@
 package dev.lobstershack.client;
 
 import com.mojang.blaze3d.platform.InputConstants;
+import dev.lobstershack.client.api.OsmiumApi;
+import dev.lobstershack.client.config.Options;
 import dev.lobstershack.client.event.EventBuss;
 import dev.lobstershack.client.event.EventType;
-import dev.lobstershack.client.module.AutoGG;
-import dev.lobstershack.client.module.Gui;
-import dev.lobstershack.client.network.ClientNetworkHandler;
+import dev.lobstershack.client.feature.AutoGG;
+import dev.lobstershack.client.feature.Gui;
 import dev.lobstershack.client.render.cosmetic.CosmeticManager;
-import dev.lobstershack.client.render.widget.DrawableRenderer;
-import dev.lobstershack.client.render.widget.drawables.PingDisplay;
-import dev.lobstershack.client.render.widget.drawables.ToggleSneak;
+import dev.lobstershack.client.render.widget.drawable.DrawableRenderer;
+import dev.lobstershack.client.render.widget.drawable.PingDisplay;
+import dev.lobstershack.client.render.widget.drawable.ToggleSneak;
 import dev.lobstershack.client.util.DebugUtil;
 import dev.lobstershack.client.util.HypixelAbstractionLayer;
-import dev.lobstershack.common.api.OsmiumApi;
-import dev.lobstershack.common.config.Options;
-import dev.lobstershack.common.util.Util;
+import dev.lobstershack.client.util.Util;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
 import net.minecraft.client.KeyMapping;
@@ -56,12 +55,13 @@ public class OsmiumClient implements ClientModInitializer {
         if(Boolean.parseBoolean(System.getProperty("osmium.debug"))) {{
             DebugUtil.enableDebugMode();
             DebugUtil.logIfDebug("Starting Osmium in debug mode", Level.INFO);
+            DebugUtil.logIfDebug("If you don't want to see debug messages, change -Dosmium.debug=true to -Dosmium.debug=false in your launch parameters", Level.INFO);
         }}
+        DebugUtil.initDebugCommands();
         Options.load();
         EventBuss.initListenerMap();
         registerCallbacks();
         registerKeyBindings();
-        ClientNetworkHandler.registerPackets();
         DrawableRenderer.initDrawables();
         HypixelAbstractionLayer.loadApiKey();
         AutoGG.setupTriggers();

@@ -4,6 +4,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import dev.lobstershack.client.render.color.Color;
 import net.minecraft.client.gui.Font;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.network.chat.Component;
 import org.joml.Matrix4f;
@@ -89,55 +90,43 @@ public class RenderUtil {
     }
 
 
-    public static void renderScaledText(PoseStack stack, Font font, Component text, double x, double y, int color, float scale, boolean shadowed) {
-        stack.pushPose();
-        positionAccurateScale(stack, scale, x, y);
-        int ignored = shadowed ? font.drawShadow(stack, text, (int) x, (int) y, color) : font.draw(stack, text, (int) x, (int) y, color);
-        stack.popPose();
+    public static void renderScaledText(GuiGraphics graphics, Font font, Component text, double x, double y, int color, float scale, boolean shadowed) {
+        renderScaledText(graphics, graphics.bufferSource(), font, text, x, y, color, scale, shadowed);
+        graphics.bufferSource().endBatch();
     }
 
-    public static void renderScaledText(PoseStack stack, MultiBufferSource.BufferSource bufferSource, Font font, Component text, double x, double y, int color, float scale, boolean shadowed) {
-        stack.pushPose();
-        positionAccurateScale(stack, scale, x, y);
-        font.drawInBatch(text.getString(), (float) x, (float) y, color, shadowed, stack.last().pose(), bufferSource, Font.DisplayMode.NORMAL, 0, 15728880, font.isBidirectional());
-        stack.popPose();
+    public static void renderScaledText(GuiGraphics graphics, Font font, String text, double x, double y, int color, float scale, boolean shadowed) {
+        renderScaledText(graphics, font, Component.literal(text), x, y, color, scale, shadowed);
     }
 
-    public static void renderScaledText(PoseStack stack, MultiBufferSource.BufferSource bufferSource, Font font, String text, double x, double y, int color, float scale, boolean shadowed) {
-        stack.pushPose();
-        int textWidth = font.width(text);
-        // translate by text width or else it is off a bit
-        positionAccurateScale(stack, scale, x, y, textWidth, 0);
-        font.drawInBatch(text, (float) x, (float) y, color, shadowed, stack.last().pose(), bufferSource, Font.DisplayMode.NORMAL, 0, 15728880, font.isBidirectional());
-        stack.popPose();
+
+    public static void renderScaledText(GuiGraphics graphics, MultiBufferSource.BufferSource bufferSource, Font font, Component text, double x, double y, int color, float scale, boolean shadowed) {
+        graphics.pose().pushPose();
+        positionAccurateScale(graphics.pose(), scale, x, y);
+        font.drawInBatch(text.getString(), (float) x, (float) y, color, shadowed, graphics.pose().last().pose(), bufferSource, Font.DisplayMode.NORMAL, 0, 15728880, font.isBidirectional());
+        graphics.pose().popPose();
     }
 
-    public static void renderScaledText(PoseStack stack, Font font, String text, double x, double y, int color, float scale, boolean shadowed) {
-        stack.pushPose();
-        positionAccurateScale(stack, scale, x, y);
-        int ignored = shadowed ? font.drawShadow(stack, text, (int) x, (int) y, color) : font.draw(stack, text, (int) x, (int) y, color);
-        stack.popPose();
+    public static void renderScaledText(GuiGraphics graphics, MultiBufferSource.BufferSource bufferSource, Font font, String text, double x, double y, int color, float scale, boolean shadowed) {
+        renderScaledText(graphics, bufferSource, font, Component.literal(text), x, y, color, scale, shadowed);
     }
 
-    public static void renderScaledText(PoseStack stack, Font font, String text, int x, int y, int color, float scale) {
-        stack.pushPose();
-        int textWidth = font.width(text);
-        int textHeight = font.lineHeight;
-        positionAccurateScale(stack, scale, x, y, textWidth, textHeight);
-        font.drawShadow(stack, text, x, y, color);
-        stack.popPose();
+
+
+    public static void renderScaledText(GuiGraphics graphics, Font font, String text, int x, int y, int color, float scale) {
+        renderScaledText(graphics, font, text, x, y, color, scale, true);
     }
 
-    public static void renderCenteredScaledText(PoseStack stack, Font font, Component text, int x, int y, int color, float scale) {
-        renderScaledText(stack, font, text.getString(), x + font.width(text) / 2, y, color, scale);
+    public static void renderCenteredScaledText(GuiGraphics graphics, Font font, Component text, int x, int y, int color, float scale) {
+        renderScaledText(graphics, font, text.getString(), x + font.width(text) / 2, y, color, scale);
     }
 
-    public static void renderCenteredScaledText(PoseStack stack, Font font, String text, int x, int y, int color, float scale) {
-        renderScaledText(stack, font, text, (x - font.width(text) / 2), y, color, scale);
+    public static void renderCenteredScaledText(GuiGraphics graphics, Font font, String text, int x, int y, int color, float scale) {
+        renderScaledText(graphics, font, text, (x - font.width(text) / 2), y, color, scale);
     }
 
-    public static void renderCenteredScaledText(PoseStack stack, Font font, MultiBufferSource.BufferSource bufferSource, String text, int x, int y, int color, float scale) {
-        renderScaledText(stack, bufferSource, font, text, (x - font.width(text) / 2f), y, color, scale, true);
+    public static void renderCenteredScaledText(GuiGraphics graphics, Font font, MultiBufferSource.BufferSource bufferSource, String text, int x, int y, int color, float scale) {
+        renderScaledText(graphics, bufferSource, font, text, (x - font.width(text) / 2f), y, color, scale, true);
     }
 
 

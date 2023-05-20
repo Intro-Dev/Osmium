@@ -1,5 +1,5 @@
 plugins {
-	id 'fabric-loom' version '1.1.8'
+	id 'fabric-loom' version '1.2.5'
 	id 'maven-publish'
 }
 
@@ -22,11 +22,9 @@ dependencies {
 
 
 	mappings(loom.layered {
-		parchment("org.parchmentmc.data:parchment-1.19.2:2022.09.18@zip")
+		parchment("org.parchmentmc.data:${project.parchment_version}@zip")
 		officialMojangMappings()
 	})
-
-
 	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
 	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 }

@@ -2,13 +2,13 @@ package dev.lobstershack.client.util;
 
 import com.google.gson.JsonObject;
 import dev.lobstershack.client.OsmiumClient;
+import dev.lobstershack.client.config.Options;
+import dev.lobstershack.client.config.options.LevelHeadMode;
 import dev.lobstershack.client.event.Event;
 import dev.lobstershack.client.event.EventRemovePlayer;
-import dev.lobstershack.common.config.Options;
-import dev.lobstershack.common.config.options.LevelHeadMode;
-import dev.lobstershack.common.util.http.HttpRequestBuilder;
-import dev.lobstershack.common.util.http.HttpRequester;
-import dev.lobstershack.common.util.http.HttpResponse;
+import dev.lobstershack.client.util.http.HttpRequestBuilder;
+import dev.lobstershack.client.util.http.HttpRequester;
+import dev.lobstershack.client.util.http.HttpResponse;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.TextColor;
 import net.minecraft.world.entity.player.Player;

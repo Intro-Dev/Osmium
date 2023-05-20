@@ -6,8 +6,9 @@ import dev.lobstershack.client.render.widget.AbstractScalableButton;
 import dev.lobstershack.client.render.widget.BooleanButtonWidget;
 import dev.lobstershack.client.render.widget.EnumSelectWidget;
 import dev.lobstershack.client.util.HypixelAbstractionLayer;
-import dev.lobstershack.common.config.Options;
+import dev.lobstershack.client.config.Options;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.screens.Screen;
@@ -96,34 +97,34 @@ public class OsmiumHypixelModsScreen extends Screen {
     }
 
     @Override
-    public void render(PoseStack matrices, int mouseX, int mouseY, float delta) {
-        this.renderBackground(matrices);
+    public void render(GuiGraphics graphics, int mouseX, int mouseY, float delta) {
+        PoseStack stack = graphics.pose();
+        this.renderBackground(graphics);
         // set proper shaders
         RenderSystem.setShader(GameRenderer::getPositionColorTexShader);
         RenderSystem.setShaderTexture(0, LOGO_TEXTURE);
         RenderSystem.enableBlend();
-        matrices.pushPose();
+        stack.pushPose();
         // scale image down to a good size
-        matrices.scale(0.5f, 0.5f, 0.5f);
+        stack.scale(0.5f, 0.5f, 0.5f);
         // account for scaling difference
         // its width / 2 - 128 because we are scaling by 0.5, and 128 is the scaled dimensions of the image
-        matrices.translate(this.width / 2f - 128, finalOffset,0);
+        stack.translate(this.width / 2f - 128, finalOffset,0);
         if(shouldRenderLogo)
-            blit(matrices, this.width / 2, this.height / 8 + globalOffset + logoOffset, 0, 0, 256, 256);
-        matrices.popPose();
+            graphics.blit(LOGO_TEXTURE, this.width / 2, this.height / 8 + globalOffset + logoOffset, 0, 0, 256, 256);
+        stack.popPose();
 
-        matrices.pushPose();
-        matrices.translate(0, finalOffset,0);
-        drawCenteredString(matrices, mc.font, Component.translatable("osmium.version"), this.width / 2, this.height / 8 + 100 + globalOffset + (logoOffset / 4), 0xffffff);
-        matrices.popPose();
+        stack.pushPose();
+        stack.translate(0, finalOffset,0);
+        graphics.drawCenteredString(mc.font, Component.translatable("osmium.version"), this.width / 2, this.height / 8 + 100 + globalOffset + (logoOffset / 4), 0xffffff);
+        stack.popPose();
 
-        matrices.pushPose();
-        matrices.translate(0, finalOffset,0);
-        drawString(matrices, mc.font, "GG String: ", this.width / 2 - 73, this.height / 4 + 85 + globalOffset + (logoOffset / 4), 0xffffff);
-        matrices.popPose();
-
-        super.render(matrices, mouseX, mouseY, delta);
+        stack.pushPose();
+        stack.translate(0, finalOffset,0);
+        graphics.drawString(mc.font, "GG String: ", this.width / 2 - 73, this.height / 4 + 85 + globalOffset + (logoOffset / 4), 0xffffff);
+        stack.popPose();
         RenderSystem.disableBlend();
+        super.render(graphics, mouseX, mouseY, delta);
     }
 
 }

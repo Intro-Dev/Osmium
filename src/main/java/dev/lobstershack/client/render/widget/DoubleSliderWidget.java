@@ -1,10 +1,10 @@
 package dev.lobstershack.client.render.widget;
 
-import com.mojang.blaze3d.vertex.PoseStack;
+import dev.lobstershack.client.config.Options;
+import dev.lobstershack.client.config.options.Option;
 import dev.lobstershack.client.util.DebugUtil;
-import dev.lobstershack.common.config.Options;
-import dev.lobstershack.common.config.options.Option;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractOptionSliderButton;
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.Mth;
@@ -26,7 +26,7 @@ public class DoubleSliderWidget extends AbstractOptionSliderButton {
         this.minVal = minVal;
         this.maxVal = maxVal;
         this.roundTo = roundTo;
-        this.value = attachedOption.get();
+        this.value = (attachedOption.get() / (maxVal - minVal)) - minVal;
         this.updateMessage();
     }
 
@@ -35,9 +35,7 @@ public class DoubleSliderWidget extends AbstractOptionSliderButton {
         if(Options.getOverwrittenOptions().containsKey(attachedOption.getIdentifier())) {
             this.active = false;
         }
-        double scaledVal = (maxVal - minVal) * attachedOption.get();
-        scaledVal = Mth.clamp(scaledVal, minVal, maxVal);
-        this.setMessage(Component.literal(Component.translatable(key).getString() + (Math.round(scaledVal * roundTo) / roundTo)));
+        this.setMessage(Component.literal(Component.translatable(key).getString() + (Math.round(attachedOption.get() * roundTo) / roundTo)));
         DebugUtil.logIfDebug(this.getMessage(), Level.INFO);
     }
 
@@ -53,8 +51,8 @@ public class DoubleSliderWidget extends AbstractOptionSliderButton {
 
 
     @Override
-    public void render(PoseStack matrices, int mouseX, int mouseY, float delta) {
+    public void renderWidget(GuiGraphics graphics, int mouseX, int mouseY, float delta) {
         this.value = Mth.clamp(value, 0, 1);
-        super.render(matrices, mouseX, mouseY, delta);
+        super.renderWidget(graphics, mouseX, mouseY, delta);
     }
 }

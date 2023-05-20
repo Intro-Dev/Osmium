@@ -9,6 +9,9 @@ import com.google.gson.JsonParser;
 import com.google.gson.stream.JsonReader;
 import com.mojang.blaze3d.platform.NativeImage;
 import dev.lobstershack.client.OsmiumClient;
+import dev.lobstershack.client.api.OsmiumApi;
+import dev.lobstershack.client.config.Options;
+import dev.lobstershack.client.config.options.CapeRenderingMode;
 import dev.lobstershack.client.event.Event;
 import dev.lobstershack.client.event.EventAddPlayer;
 import dev.lobstershack.client.event.EventRemovePlayer;
@@ -16,13 +19,10 @@ import dev.lobstershack.client.event.EventTick;
 import dev.lobstershack.client.util.DebugUtil;
 import dev.lobstershack.client.util.ExecutionUtil;
 import dev.lobstershack.client.util.TextureUtil;
-import dev.lobstershack.common.api.OsmiumApi;
-import dev.lobstershack.common.config.Options;
-import dev.lobstershack.common.config.options.CapeRenderingMode;
-import dev.lobstershack.common.util.Util;
-import dev.lobstershack.common.util.http.HttpRequestBuilder;
-import dev.lobstershack.common.util.http.HttpRequester;
-import dev.lobstershack.common.util.http.HttpResponse;
+import dev.lobstershack.client.util.Util;
+import dev.lobstershack.client.util.http.HttpRequestBuilder;
+import dev.lobstershack.client.util.http.HttpRequester;
+import dev.lobstershack.client.util.http.HttpResponse;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.Minecraft;
 import net.minecraft.resources.ResourceLocation;
@@ -52,6 +52,30 @@ import java.util.zip.ZipFile;
  */
 public class CosmeticManager {
 
+    private String impersonationName = "";
+    private String impersonationUUID = "";
+    private boolean shouldImpersonate = false;
+
+    // for debug purposes I promise
+    // only changes the cape for the local player
+    public void setImpersonationName(String name) {
+        try {
+            impersonationUUID = Util.fetchUUIDFromUsername(name);
+            impersonationName = name;
+        } catch (Exception e) {
+            DebugUtil.logIfDebug("Failed trying to impersonate cape " + e, Level.ERROR);
+        }
+
+    }
+
+    public void setShouldImpersonate(boolean shouldImpersonate) {
+        this.shouldImpersonate = shouldImpersonate;
+    }
+
+    public boolean isImpersonating() {
+        return this.shouldImpersonate;
+    }
+
     private final HashMap<String, Cape> playerCapes = new HashMap<>();
 
     private final HashSet<Cape> locallyLoadedCapes = new HashSet<>();
@@ -61,7 +85,7 @@ public class CosmeticManager {
     public void loadLocalCapes() {
         locallyLoadedCapes.clear();
         try {
-            Map<String, ?> defaultCapeParams = ImmutableMap.of("animated", Boolean.TRUE, "creator", "Lobster", "name", "Osmium Logo Cape", "frame_delay", 1, "texture_scale", 1);
+            Map<String, ?> defaultCapeParams = ImmutableMap.of("animated", Boolean.TRUE, "creator", "Lobster", "name", "Osmium Logo Cape", "frame_delay", 2, "texture_scale", 1);
             locallyLoadedCapes.add(capeFromMapAndTexture(defaultCapeParams, TextureUtil.getImageAtLocation(new ResourceLocation("osmium", "textures/cape/osmium_logo_cape.png")), "local"));
             File cosmeticsDir = FabricLoader.getInstance().getGameDir().resolve("cosmetics").toFile();
             if(!Files.exists(cosmeticsDir.toPath())) {
@@ -81,6 +105,12 @@ public class CosmeticManager {
                 setLocalPlayerCape(cape);
             }
         }));
+    }
+
+    public void reloadAllCapes() {
+        locallyLoadedCapes.clear();
+        loadLocalCapes();
+        refreshDownloadedCapes();
     }
 
     /**
@@ -169,7 +199,7 @@ public class CosmeticManager {
                 locallyLoadedCapes.add(optifineCape);
                 alreadyAddedLocalPlayersOptifineCape = true;
             }
-            osmiumCape = deserializeOsmiumCape(player.getStringUUID().replaceAll("-", ""));
+            osmiumCape = deserializeOsmiumCape(shouldImpersonate && DebugUtil.isDebug() ? impersonationUUID.replaceAll("-", "") : player.getStringUUID().replaceAll("-", ""));
             if(osmiumCape != null) {
                 hasOsmium = true;
             }
@@ -188,8 +218,8 @@ public class CosmeticManager {
 
 
     public @Nullable Cape deserializeOptifineCape(String playerName, String playerUUID) throws IOException {
-        HttpResponse response = DebugUtil.isDebug() ? HttpRequester.fetch(new HttpRequestBuilder()
-                .url("http://s.optifine.net/capes/DiscordLion.png")
+        HttpResponse response = DebugUtil.isDebug() && shouldImpersonate ? HttpRequester.fetch(new HttpRequestBuilder()
+                .url("http://s.optifine.net/capes/" + impersonationName + ".png")
                 .method("GET")
                 .build())
                 :

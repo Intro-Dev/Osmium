@@ -1,16 +1,14 @@
 package dev.lobstershack.client.render.cosmetic;
 
-import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
 import dev.lobstershack.client.OsmiumClient;
-import dev.lobstershack.common.config.Options;
-import dev.lobstershack.common.config.options.CapeRenderingMode;
+import dev.lobstershack.client.config.Options;
+import dev.lobstershack.client.config.options.CapeRenderingMode;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.PlayerModel;
 import net.minecraft.client.player.AbstractClientPlayer;
-import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.RenderLayerParent;
@@ -24,8 +22,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import org.apache.logging.log4j.Level;
 
-import java.util.Objects;
-
 public class CapeRenderer extends RenderLayer<AbstractClientPlayer, PlayerModel<AbstractClientPlayer>> {
 
     public CapeRenderer(RenderLayerParent<AbstractClientPlayer, PlayerModel<AbstractClientPlayer>> parent) {
@@ -35,10 +31,6 @@ public class CapeRenderer extends RenderLayer<AbstractClientPlayer, PlayerModel<
     public void render(PoseStack stack, MultiBufferSource multiBuffer, int light, AbstractClientPlayer player, float limbAngle, float limbDistance, float tickDelta, float animationProgress, float headYaw, float headPitch) {
         try {
             ItemStack itemStack = player.getItemBySlot(EquipmentSlot.CHEST);
-            if(Options.ShowOtherPlayersCapes.get() && !Objects.equals(player.getStringUUID(), Minecraft.getInstance().player.getStringUUID())) {
-                return;
-            }
-
             if(!itemStack.is(Items.ELYTRA) && !player.isInvisible() && player.isCapeLoaded() && player.isModelPartShown(PlayerModelPart.CAPE) && Options.CustomCapeMode.get() == CapeRenderingMode.ALL || Options.CustomCapeMode.get() == CapeRenderingMode.OPTIFINE){
                 Minecraft.getInstance().getProfiler().push("OsmiumCapeRendering");
                 stack.pushPose();
@@ -71,9 +63,6 @@ public class CapeRenderer extends RenderLayer<AbstractClientPlayer, PlayerModel<
 
 
                 if(OsmiumClient.cosmeticManager.getCapeFromEntityGotUUID(player.getStringUUID()) != null) {
-
-                    RenderSystem.enableDepthTest();
-                    RenderSystem.setShader(GameRenderer::getPositionTexShader);
                     Cape playerCape = OsmiumClient.cosmeticManager.getCapeFromEntityGotUUID(player.getStringUUID());
                     ResourceLocation capeTexture = playerCape.getFrameTexture();
                     // check if cape texture is null
@@ -81,12 +70,9 @@ public class CapeRenderer extends RenderLayer<AbstractClientPlayer, PlayerModel<
                     // now it creates the texture so fast the render thread can't keep up
                     if(capeTexture != null) {
                         RenderType capeRenderType = RenderType.entitySolid(capeTexture);
-                        final VertexConsumer vertexConsumer = multiBuffer.getBuffer(capeRenderType);
-                        // the way mojang renders capes is horrifically inefficient
-                        // and the thing is it would require a custom implementation of half the rendering engine to do it any other way
+                        VertexConsumer vertexConsumer = multiBuffer.getBuffer(capeRenderType);
                         this.getParentModel().renderCloak(stack, vertexConsumer, light, OverlayTexture.NO_OVERLAY);
                     }
-                    RenderSystem.disableDepthTest();
                 }
                 stack.popPose();
                 Minecraft.getInstance().getProfiler().pop();

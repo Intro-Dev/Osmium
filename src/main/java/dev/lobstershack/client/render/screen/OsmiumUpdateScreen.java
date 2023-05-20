@@ -1,14 +1,14 @@
 package dev.lobstershack.client.render.screen;
 
-import com.mojang.blaze3d.vertex.PoseStack;
+import dev.lobstershack.client.ModConstants;
 import dev.lobstershack.client.OsmiumClient;
 import dev.lobstershack.client.render.color.Colors;
 import dev.lobstershack.client.render.widget.AbstractScalableButton;
 import dev.lobstershack.client.render.widget.ProgressBarWidget;
-import dev.lobstershack.common.ModConstants;
-import dev.lobstershack.common.util.Util;
+import dev.lobstershack.client.util.Util;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
@@ -51,7 +51,7 @@ public class OsmiumUpdateScreen extends Screen  {
     protected void init() {
         acceptButton = new AbstractScalableButton(this.width / 2 - 175, this.height / 4 + 160, 150, 20, Component.translatable("osmium.download_update"), this::startDownload);
         declineButton = new AbstractScalableButton(this.width / 2 + 25, this.height / 4 + 160, 150, 20, Component.translatable("osmium.decline_update"), (button -> mc.setScreen(parent)));
-        progressBar = new ProgressBarWidget(this.width / 2 - 100, this.height / 4 + 110, 200);
+        progressBar = new ProgressBarWidget(this.width / 2 - 100, this.height / 4 + 110, 200, 20, Component.empty());
         progressBar.visible = false;
         retryButton = new AbstractScalableButton(this.width / 2 - 100, this.height / 4 + 160, 200, 20, Component.translatable("osmium.retry"), this::startDownload);
         retryButton.visible = false;
@@ -80,13 +80,12 @@ public class OsmiumUpdateScreen extends Screen  {
     }
 
     @Override
-    public void render(PoseStack matrices, int mouseX, int mouseY, float delta) {
-        this.renderBackground(matrices);
-        drawCenteredString(matrices, mc.font, Component.translatable("osmium.update_available"), this.width / 2, this.height / 4, Colors.WHITE.getColor().getInt());
-        drawCenteredString(matrices, mc.font, errorText, this.width / 2, this.height / 4 + 250, Colors.RED.getColor().getInt());
-        drawCenteredString(matrices, mc.font, Component.literal("Current version: " + ModConstants.UPDATE_STRING + "-" + ModConstants.MINECRAFT_VERSION_STRING + ", New version: " + latestReleaseTag), this.width / 2, this.height / 4 + 50, Colors.WHITE.getColor().getInt());
-
-        super.render(matrices, mouseX, mouseY, delta);
+    public void render(GuiGraphics graphics, int mouseX, int mouseY, float delta) {
+        this.renderBackground(graphics);
+        graphics.drawCenteredString(mc.font, Component.translatable("osmium.update_available"), this.width / 2, this.height / 4, Colors.WHITE.getColor().getInt());
+        graphics.drawCenteredString(mc.font, errorText, this.width / 2, this.height / 4 + 250, Colors.RED.getColor().getInt());
+        graphics.drawCenteredString(mc.font, Component.literal("Current version: " + ModConstants.UPDATE_STRING + "-" + ModConstants.MINECRAFT_VERSION_STRING + ", New version: " + latestReleaseTag), this.width / 2, this.height / 4 + 50, Colors.WHITE.getColor().getInt());
+        super.render(graphics, mouseX, mouseY, delta);
     }
 
 

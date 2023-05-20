@@ -1,7 +1,7 @@
 package dev.lobstershack.client.render.widget;
 
-import dev.lobstershack.common.config.Options;
-import dev.lobstershack.common.config.options.Option;
+import dev.lobstershack.client.config.Options;
+import dev.lobstershack.client.config.options.Option;
 import net.minecraft.client.gui.narration.NarratableEntry;
 import net.minecraft.network.chat.Component;
 

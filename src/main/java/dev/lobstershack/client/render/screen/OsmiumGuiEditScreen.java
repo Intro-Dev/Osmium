@@ -1,12 +1,15 @@
 package dev.lobstershack.client.render.screen;
 
-import com.mojang.blaze3d.vertex.PoseStack;
+import dev.lobstershack.client.render.color.Colors;
 import dev.lobstershack.client.render.widget.AbstractScalableButton;
-import dev.lobstershack.client.render.widget.DrawableRenderer;
-import dev.lobstershack.client.render.widget.drawables.Drawable;
-import dev.lobstershack.client.render.widget.drawables.Scalable;
-import dev.lobstershack.common.config.Options;
+import dev.lobstershack.client.render.widget.drawable.DrawableRenderer;
+import dev.lobstershack.client.render.widget.drawable.Drawable;
+import dev.lobstershack.client.render.widget.drawable.Scalable;
+import dev.lobstershack.client.util.DebugUtil;
+import dev.lobstershack.client.util.RenderUtil;
+import dev.lobstershack.client.config.Options;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
@@ -34,23 +37,30 @@ public class OsmiumGuiEditScreen extends Screen {
     }
 
     @Override
-    public void render(PoseStack matrices, int mouseX, int mouseY, float delta) {
-        this.renderBackground(matrices);
-        DrawableRenderer.renderHud(matrices);
-        super.render(matrices, mouseX, mouseY, delta);
+    public void render(GuiGraphics graphics, int mouseX, int mouseY, float delta) {
+        this.renderBackground(graphics);
+        DrawableRenderer.renderHud(graphics);
+        // make drawable click boxes visible when debug mode is active
+        if(DebugUtil.isDebug()) {
+            for(Drawable drawable : DrawableRenderer.drawables) {
+                if(drawable.visible) {
+                    int width = drawable.getWidth();
+                    int height = drawable.getHeight();
+                    int x = drawable.getX();
+                    int y = drawable.getY();
+                    graphics.pose().pushPose();
+                    if(drawable instanceof Scalable scalable) RenderUtil.positionAccurateScale(graphics.pose(), (float) scalable.getScale(), x, y, width, height);
+                    graphics.hLine(x, x + width, y, Colors.WHITE.getColor().getInt());
+                    graphics.hLine(x, x + width, y + height, Colors.WHITE.getColor().getInt());
+
+                    graphics.vLine(x, y, y + height, Colors.WHITE.getColor().getInt());
+                    graphics.vLine(x + width, y, y + height, Colors.WHITE.getColor().getInt());
+                    graphics.pose().popPose();
+                }
+            }
+        }
+        super.render(graphics, mouseX, mouseY, delta);
     }
-
-    @Override
-    public void mouseMoved(double mouseX, double mouseY) {
-        super.mouseMoved(mouseX, mouseY);
-    }
-
-    @Override
-    public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
-
-        return super.keyPressed(keyCode, scanCode, modifiers);
-    }
-
 
     @Override
     public boolean mouseDragged(double mouseX, double mouseY, int button, double deltaX, double deltaY) {
@@ -66,14 +76,14 @@ public class OsmiumGuiEditScreen extends Screen {
                         scalable.setScaledY((int) mouseY);
                     }
                 } else {
-                    if(mouseX + drawable.width < this.width || mouseX - drawable.width < 0) {
-                        drawable.posX = (int) mouseX;
+                    if(mouseX + drawable.getWidth() < this.width || mouseX - drawable.getWidth() < 0) {
+                        drawable.setX((int) mouseX);
                     }
-                    if(mouseY + drawable.height < this.height || mouseY - drawable.height < 0) {
-                        drawable.posY = (int) mouseY;
+                    if(mouseY + drawable.getHeight() < this.height || mouseY - drawable.getHeight() < 0) {
+                        drawable.setY((int) mouseY);
                     }
                 }
-                return super.mouseDragged(mouseX, mouseX, button, deltaX, deltaY);
+                return super.mouseDragged(mouseX, mouseY, button, deltaX, deltaY);
             }
         }
         return super.mouseDragged(mouseX, mouseY, button, deltaX, deltaY);

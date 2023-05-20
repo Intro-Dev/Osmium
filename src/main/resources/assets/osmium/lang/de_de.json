@@ -16,7 +16,7 @@
   "osmium.options.sneak_smooth": "Sneak: Geschmeidig",
   "osmium.options.sneak_instant": "Sneak: Instant",
   "osmium.options.video_options.back": "Zurück",
-  "osmium.version": "Osmium Version 1.4.0.1",
+  "osmium.version": "Osmium Version 1.4.1",
   "osmium.gui_edit.title": "Gui bearbeiten",
   "osmium.options.fps_enabled": "Fps Display: an",
   "osmium.options.fps_disabled": "Fps Display: aus",
@@ -110,6 +110,8 @@
   "osmium.easter_eggs.random_10": "Most Certainly not a Virus!",
   "osmium.easter_eggs.random_11": "Don't Check Your Startup Folder!",
   "osmium.easter_eggs.random_12": "Not Based in Sweden!",
-  "osmium.keys.FreeLookKey": "Free Look"
+  "keys.osmium.FreeLookKey": "Free Look",
+  "osmium.options.free_look_enabled": "Free Look: Enabled",
+  "osmium.options.free_look_disabled": "Free Look: Disabled"
 
 }
