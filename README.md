@@ -19,4 +19,4 @@ Features include
 - Fly boost
 - Disable nether particles
 - Disable firework particles
-- FreeeLook
+- FreeLook
