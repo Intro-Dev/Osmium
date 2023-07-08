@@ -188,7 +188,11 @@ public class ScreenBuilderImpl implements ScreenBuilder {
                     globalOffset = -64;
                 }
 
-                finalOffset = 57 / mc.options.guiScale().get();
+                if(mc.options.guiScale().get() == 0) {
+                    finalOffset = 57;
+                }  else {
+                    finalOffset = 57 / mc.options.guiScale().get();
+                }
 
 
                 widgets.forEach((w) -> {

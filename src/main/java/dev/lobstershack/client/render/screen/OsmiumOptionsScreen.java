@@ -70,7 +70,12 @@ public class OsmiumOptionsScreen extends Screen {
             globalOffset = -64;
 
         }
-        bakedMaxAnim = 57 / mc.options.guiScale().get();
+        if(mc.options.guiScale().get() == 0) {
+            bakedMaxAnim = 57;
+        }  else {
+            bakedMaxAnim = 57 / mc.options.guiScale().get();
+        }
+
 
         Button openGeneralUtilScreen = new AbstractScalableButton(this.width / 2 - 275, this.height / 4 + 80 + globalOffset, 150, 20, Component.translatable("osmium.options.general_mods"), button -> mc.setScreen(ScreenBuilder.newInstance()
                         .button(Options.FulbrightEnabled, "osmium.options.full_bright_")
