@@ -1,30 +1,24 @@
 package dev.lobstershack.client.mixin.client;
 
-import com.mojang.blaze3d.vertex.PoseStack;
 import dev.lobstershack.client.OsmiumClient;
-import net.minecraft.client.model.EntityModel;
-import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.entity.RenderLayerParent;
+import dev.lobstershack.client.render.cosmetic.Cape;
+import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.client.renderer.entity.layers.ElytraLayer;
-import net.minecraft.client.renderer.entity.layers.RenderLayer;
-import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.client.resources.PlayerSkin;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.Redirect;
 
 @Mixin(ElytraLayer.class)
-public abstract class ElytraLayerMixin<T extends LivingEntity, M extends EntityModel<T>> extends RenderLayer<T, M> {
+public class ElytraLayerMixin {
 
-
-    public ElytraLayerMixin(RenderLayerParent<T, M> renderLayerParent) {
-        super(renderLayerParent);
-    }
-
-    @Inject(method = "render", at = @At("HEAD"), cancellable = true)
-    public void render(PoseStack poseStack, MultiBufferSource multiBufferSource, int i, T livingEntity, float f, float g, float h, float j, float k, float l, CallbackInfo ci) {
-        if(OsmiumClient.cosmeticManager.getPlayerCape(livingEntity.getStringUUID()) != null) {
-            ci.cancel();
+    @Redirect(method = "render(Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;ILnet/minecraft/world/entity/LivingEntity;FFFFFF)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/player/AbstractClientPlayer;getSkin()Lnet/minecraft/client/resources/PlayerSkin;"))
+    public PlayerSkin redirectCapeTexture(AbstractClientPlayer instance) {
+        PlayerSkin originalSkin = instance.getSkin();
+        Cape cape = OsmiumClient.cosmeticManager.getCapeFromEntityGotUUID(instance.getUUID());
+        if(cape != null) {
+            return new PlayerSkin(originalSkin.texture(), originalSkin.textureUrl(), cape.getFrameTexture(), cape.getFrameTexture(), originalSkin.model(), originalSkin.secure());
         }
+        return originalSkin;
     }
 }

@@ -37,7 +37,7 @@ public class DrawableRenderer {
 
     public static void renderHud(GuiGraphics graphics) {
         mc.getProfiler().push("OsmiumHudRenderer");
-        if(!mc.options.renderDebug) {
+        if(!mc.gui.getDebugOverlay().showDebugScreen()) {
             for(Drawable element : drawables) {
                 if(element instanceof Scalable scalable) {
                     graphics.pose().pushPose();

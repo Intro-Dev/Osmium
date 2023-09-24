@@ -9,6 +9,8 @@ import net.minecraft.client.gui.narration.NarratableEntry;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 
+import java.util.function.Consumer;
+
 /**
  * A class for creating generic ui screens
  * Can be implemented to create various themes
@@ -123,6 +125,21 @@ public interface ScreenBuilder {
      * @return Returns the current ScreenBuilder
      */
     ScreenBuilder slider(Option<Double> option, String translationKey, double minVal, double maxVal, double roundTo);
+
+    /**
+     * Adds a text input
+     * @param def The default string
+     * @param onTextChange A callback that triggers when text is input, callback returns a formatted version of the text
+     * @return Returns the current ScreenBuilder
+     */
+    ScreenBuilder textInput(String def, Consumer<String> onTextChange);
+
+    /**
+     * Adds a text input
+     * @param option The backing option
+     * @return Returns the current ScreenBuilder
+     */
+    ScreenBuilder textInput(Option<String> option);
 
     /**
      * Builds the given data into a screen

@@ -6,13 +6,17 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.Tooltip;
+import net.minecraft.client.gui.components.WidgetSprites;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 
 public class AbstractScalableButton extends Button {
 
     private double scale;
     private Component tooltip;
+
+    private static final WidgetSprites SPRITES = new WidgetSprites(new ResourceLocation("widget/button"), new ResourceLocation("widget/button_disabled"), new ResourceLocation("widget/button_highlighted"));
 
     public Tooltip getTooltip() {
         return Tooltip.create(tooltip);
@@ -51,14 +55,12 @@ public class AbstractScalableButton extends Button {
     public void renderWidget(GuiGraphics graphics, int mouseX, int mouseY, float tickDelta) {
         if(this.visible) {
             this.isHovered = mouseX >= this.getX() && mouseY >= this.getY() && mouseX < this.getX() + this.width && mouseY < this.getY() + this.height;
-            RenderSystem.setShaderTexture(0, WIDGETS_LOCATION);
-            RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, this.alpha);
+            Minecraft minecraft = Minecraft.getInstance();
+            graphics.setColor(1.0F, 1.0F, 1.0F, this.alpha);
             RenderSystem.enableBlend();
             RenderSystem.enableDepthTest();
-            graphics.blitNineSliced(WIDGETS_LOCATION, this.getX(), this.getY(), this.getWidth(), this.getHeight(), 20, 4, 200, 20, 0, this.getTextureY());
-            RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
-            // magic numbers
-            // thanks mojang
+            graphics.blitSprite(SPRITES.get(this.active, this.isHoveredOrFocused()), this.getX(), this.getY(), this.getWidth(), this.getHeight());
+            graphics.setColor(1.0F, 1.0F, 1.0F, 1.0F);
             int color = this.active ? 16777215 : 10526880;
             RenderUtil.renderScaledText(graphics, Minecraft.getInstance().font, this.getMessage().getString(), this.getX() + this.width / 2 - (Minecraft.getInstance().font.width(this.getMessage().getString()) / 2), this.getY() + (this.height - 8) / 2, color | Mth.ceil(this.alpha * 255.0F) << 24, (float) scale);
             if(tooltip != null && this.isHovered) graphics.renderTooltip(Minecraft.getInstance().font, tooltip, mouseX, mouseY);

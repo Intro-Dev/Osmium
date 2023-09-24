@@ -11,6 +11,7 @@ import dev.lobstershack.client.util.DebugUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
+import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.components.Renderable;
 import net.minecraft.client.gui.components.events.GuiEventListener;
 import net.minecraft.client.gui.narration.NarratableEntry;
@@ -20,6 +21,7 @@ import net.minecraft.resources.ResourceLocation;
 import org.apache.logging.log4j.Level;
 
 import java.util.*;
+import java.util.function.Consumer;
 
 public class ScreenBuilderImpl implements ScreenBuilder {
 
@@ -128,6 +130,20 @@ public class ScreenBuilderImpl implements ScreenBuilder {
         return this;
     }
 
+    @Override
+    public ScreenBuilder textInput(String def, Consumer<String> onTextChange) {
+        EditBox textBox = new EditBox(mc.font, mc.getWindow().getGuiScaledWidth() / 2 + widgetX, mc.getWindow().getScreenHeight() / 8 + widgetY, 150, 20, Component.literal(def));
+        textBox.setValue(def);
+        textBox.setResponder(onTextChange);
+        widget(textBox);
+        return this;
+    }
+
+    @Override
+    public ScreenBuilder textInput(Option<String> option) {
+        return textInput(option.get(), option::set);
+    }
+
     private void incrementButton() {
         widgetX += 200;
         placeInRow++;
@@ -156,7 +172,7 @@ public class ScreenBuilderImpl implements ScreenBuilder {
             @Override
             public void render(GuiGraphics graphics, int mouseX, int mouseY, float partialTicks) {
                 PoseStack stack = graphics.pose();
-                renderBackground(graphics);
+                super.render(graphics, mouseX, mouseY, partialTicks);
                 RenderSystem.enableBlend();
                 stack.pushPose();
                 // scale image down to a good size
@@ -173,7 +189,6 @@ public class ScreenBuilderImpl implements ScreenBuilder {
                 graphics.drawCenteredString(mc.font, Component.translatable("osmium.version"), this.width / 2, this.height / 8 + 100 + globalOffset + (logoOffset / 4), 0xffffff);
                 stack.popPose();
                 renderConsumers.forEach(consumer -> consumer.onRender(stack, partialTicks));
-                super.render(graphics, mouseX, mouseY, partialTicks);
             }
 
             @Override

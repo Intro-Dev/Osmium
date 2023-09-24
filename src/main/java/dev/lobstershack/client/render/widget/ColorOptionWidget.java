@@ -42,6 +42,8 @@ public class ColorOptionWidget extends SimpleWidget {
         PoseStack stack = graphics.pose();
         stack.pushPose();
         graphics.blit(BAKED_TEXTURE, this.getX(), this.getY(), 0, 0, this.width, this.height, this.width, this.height);
+        graphics.fill(this.getX() + this.width / 2 - 30, this.getY() + this.height + this.height / 8 - 15, this.getX() + this.width / 2 + 30, this.getY() + this.height + this.height / 8 - 5, attachedOption.get().getInt());
+
         graphics.drawCenteredString(Minecraft.getInstance().font, this.attachedOption.get().toStringNoAlpha(), this.getX() + this.width / 2, this.getY() + this.height + this.height / 8, Colors.WHITE.getColor().getInt());
         graphics.drawCenteredString(Minecraft.getInstance().font, Component.translatable(  "osmium.widget.color_picker"), this.getX() + this.width / 2, this.getY() - this.height / 8, Colors.WHITE.getColor().getInt());
         stack.popPose();

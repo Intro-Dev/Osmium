@@ -24,10 +24,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
@@ -51,11 +48,11 @@ public class Util {
         getLatestReleaseDownloadString();
     }
 
-    public static String fetchUUIDFromUsername(String name) throws IOException {
+    public static UUID fetchUUIDFromUsername(String name) throws IOException {
         HttpResponse response = HttpRequester.fetch(new HttpRequestBuilder()
                 .url("https://api.mojang.com/users/profiles/minecraft/" + name)
                 .build());
-        return response.getAsJson().getAsJsonObject().get("id").getAsString();
+        return UUID.fromString(response.getAsJson().getAsJsonObject().get("id").getAsString());
     }
 
 

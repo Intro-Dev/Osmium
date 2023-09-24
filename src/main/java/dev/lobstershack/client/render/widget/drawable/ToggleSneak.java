@@ -1,10 +1,9 @@
 package dev.lobstershack.client.render.widget.drawable;
 
 import dev.lobstershack.client.config.Options;
-import dev.lobstershack.client.event.Event;
-import dev.lobstershack.client.event.EventTick;
 import dev.lobstershack.client.render.color.Color;
 import dev.lobstershack.client.render.color.Colors;
+import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
@@ -24,7 +23,7 @@ public class ToggleSneak extends Scalable {
     private static ToggleSneak INSTANCE;
 
     public static ToggleSneak getInstance() {
-        if(INSTANCE == null) {
+        if (INSTANCE == null) {
             INSTANCE = new ToggleSneak();
         }
         return INSTANCE;
@@ -36,7 +35,7 @@ public class ToggleSneak extends Scalable {
 
     @Override
     public void render(GuiGraphics graphics) {
-        if(visible) {
+        if (visible) {
             this.setWidth(Minecraft.getInstance().font.width("Sprinting(Key Down)"));
             this.height = Minecraft.getInstance().font.lineHeight * 2;
             graphics.fill(this.getX(), this.getY(), this.getX() + width, this.getY() + height, BG_COLOR);
@@ -44,46 +43,45 @@ public class ToggleSneak extends Scalable {
         }
     }
 
-    public void onEvent(Event event) {
-        if(mc.player != null) {
-            if(Options.ToggleSprintEnabled.get() ||Options.ToggleSneakEnabled.get()) {
+    public void registerEventListeners() {
+        ClientTickEvents.START_WORLD_TICK.register((client -> {
+            if (Options.ToggleSprintEnabled.get() || Options.ToggleSneakEnabled.get()) {
                 boolean toggleSprintEnabled = Options.ToggleSprintEnabled.get();
                 boolean toggleSneakEnabled = Options.ToggleSneakEnabled.get();
-                if(event instanceof EventTick && event.isPre()) {
-                    if(mc.player.zza > 0 && !mc.player.isUsingItem() && !mc.player.isShiftKeyDown() && !mc.player.horizontalCollision && this.sprinting)
-                        mc.player.setSprinting(true);
 
-                    // why is sneak called keyShift?
-                    // the world may never know
-                    if(mc.options.keyShift.consumeClick() && toggleSneakEnabled) {
-                        sneaking = !sneaking;
-                    }
-                    if(mc.options.keySprint.consumeClick() && toggleSprintEnabled) {
-                        this.sprinting = !this.sprinting;
-                    }
+                if (mc.player.zza > 0 && !mc.player.isUsingItem() && !mc.player.isShiftKeyDown() && !mc.player.horizontalCollision && this.sprinting)
+                    mc.player.setSprinting(true);
 
-                    if((this.sprinting && toggleSprintEnabled) && (!sneaking)) {
-                        visible = true;
-                        text = "Sprinting(Toggled)";
-                    } else if (mc.options.keySprint.isDown() && toggleSprintEnabled) {
-                        visible = true;
-                        text = "Sprinting(Key Down)";
-                    } else if(sneaking && toggleSneakEnabled) {
-                        visible = true;
-                        text = "Sneaking(Toggled)";
-                    } else if (mc.options.keyShift.isDown() && toggleSneakEnabled) {
-                        visible = true;
-                        text = "Sneaking(Key Down)";
-                    } else {
-                        visible = false;
-                        text = "";
-                    }
+                // why is sneak called keyShift?
+                // the world may never know
+                if (mc.options.keyShift.consumeClick() && toggleSneakEnabled) {
+                    sneaking = !sneaking;
                 }
-            } else if(visible) {
+                if (mc.options.keySprint.consumeClick() && toggleSprintEnabled) {
+                    this.sprinting = !this.sprinting;
+                }
+
+                if ((this.sprinting && toggleSprintEnabled) && (!sneaking)) {
+                    visible = true;
+                    text = "Sprinting(Toggled)";
+                } else if (mc.options.keySprint.isDown() && toggleSprintEnabled) {
+                    visible = true;
+                    text = "Sprinting(Key Down)";
+                } else if (sneaking && toggleSneakEnabled) {
+                    visible = true;
+                    text = "Sneaking(Toggled)";
+                } else if (mc.options.keyShift.isDown() && toggleSneakEnabled) {
+                    visible = true;
+                    text = "Sneaking(Key Down)";
+                } else {
+                    visible = false;
+                    text = "";
+                }
+            } else if (visible) {
                 text = "";
                 visible = false;
             }
-        }
+        }));
     }
 
     public boolean shouldSneak() {

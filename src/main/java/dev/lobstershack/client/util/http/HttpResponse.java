@@ -5,6 +5,7 @@ import com.google.gson.JsonParser;
 
 import java.nio.ByteBuffer;
 import java.util.HashMap;
+import java.util.UUID;
 
 public class HttpResponse {
     private final int statusCode;
@@ -32,6 +33,8 @@ public class HttpResponse {
     public int getStatusCode() {
         return statusCode;
     }
+
+    public UUID getAsUUID() { return UUID.fromString(getAsString()); }
 
     public HashMap<String, String> getResponseHeaders() {
         return responseHeaders;

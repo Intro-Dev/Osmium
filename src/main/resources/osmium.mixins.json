@@ -10,8 +10,6 @@
     "client.CameraMixin",
     "client.CapeLayerMixin",
     "client.ChatComponentInvoker",
-    "client.ChatListenerMixin",
-    "client.ClientLevelMixin",
     "client.ClientPacketListenerMixin",
     "client.ElytraLayerMixin",
     "client.FireworkEntityRendererMixin",
@@ -28,12 +26,10 @@
     "client.MinecraftMixin",
     "client.MouseHandlerMixin",
     "client.OptionsScreenMixin",
-    "client.PlayerRendererMixin",
     "client.ReloadableResourceManagerMixin",
     "client.ResourceTextureAccessor",
     "client.ResourceTextureSubclassAccessor",
     "client.ScreenEffectRendererMixin",
-    "client.TitleScreenMixin",
     "client.VertexFormatAccessor"
   ],
   "injectors": {

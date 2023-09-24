@@ -13,6 +13,7 @@ import net.minecraft.Util;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
+import net.minecraft.client.gui.components.Tooltip;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -150,7 +151,14 @@ public class OsmiumOptionsScreen extends Screen {
 
         AbstractScalableButton openGuiEditing = new AbstractScalableButton(this.width / 2 - 275, this.height / 4 + 120 + globalOffset, 150, 20, Component.translatable("osmium.gui_edit.title"), (Button) -> mc.setScreen(new OsmiumGuiEditScreen(this)), 1f);
 
-        Button openHypixelScreen = new AbstractScalableButton(this.width / 2+ 125, this.height / 4 + 120 + globalOffset, 150, 20, Component.translatable("osmium.options.hypixel_mods"), (Button) -> mc.setScreen(new OsmiumHypixelModsScreen(this)));
+        Button openHypixelScreen = new AbstractScalableButton(this.width / 2+ 125, this.height / 4 + 120 + globalOffset, 150, 20, Component.translatable("osmium.options.hypixel_mods"), (button) -> {mc.setScreen(ScreenBuilder.newInstance()
+                .button(Options.AutoGGEnabled, "osmium.options.auto_gg_")
+                .textInput(Options.AutoGGString)
+                .addBackButton(this)
+                .build(Component.translatable("osmium.options.hypixel_mods")));
+        });
+
+        openHypixelScreen.setTooltip(Tooltip.create(Component.translatable("osmium.hypixel_disabled")));
 
         Button backButton = new AbstractScalableButton(this.width / 2 - 100, this.height / 4 + 225 + globalOffset, 200, 20, Component.translatable("osmium.options.video_options.back"), (Button) -> {
             mc.setScreen(parent);
@@ -190,7 +198,7 @@ public class OsmiumOptionsScreen extends Screen {
     @Override
     public void render(GuiGraphics graphics, int mouseX, int mouseY, float delta) {
         PoseStack stack = graphics.pose();
-        this.renderBackground(graphics);
+        super.render(graphics, mouseX, mouseY, delta);
         // set proper shaders
         // gets the current shader color
         Color shaderColor = Color.fromFloatArray(RenderSystem.getShaderColor());
@@ -215,7 +223,6 @@ public class OsmiumOptionsScreen extends Screen {
 
         graphics.drawCenteredString(mc.font, hasDoneEasterEgg ? easterEggText : Component.translatable("osmium.version"), this.width / 2, this.height / 8 + 100 + globalOffset + (logoOffset / 4), 0xffffff);
         stack.popPose();
-        super.render(graphics, mouseX, mouseY, delta);
         // 57 is the max because of animation progress looking good at 3
         animationProgress += 10 * delta;
         animationProgress = Mth.clamp(animationProgress, 0, bakedMaxAnim);

@@ -12,17 +12,11 @@ import dev.lobstershack.client.OsmiumClient;
 import dev.lobstershack.client.api.OsmiumApi;
 import dev.lobstershack.client.config.Options;
 import dev.lobstershack.client.config.options.CapeRenderingMode;
-import dev.lobstershack.client.event.Event;
-import dev.lobstershack.client.event.EventAddPlayer;
-import dev.lobstershack.client.event.EventRemovePlayer;
-import dev.lobstershack.client.event.EventTick;
-import dev.lobstershack.client.util.DebugUtil;
-import dev.lobstershack.client.util.ExecutionUtil;
-import dev.lobstershack.client.util.TextureUtil;
-import dev.lobstershack.client.util.Util;
+import dev.lobstershack.client.util.*;
 import dev.lobstershack.client.util.http.HttpRequestBuilder;
 import dev.lobstershack.client.util.http.HttpRequester;
 import dev.lobstershack.client.util.http.HttpResponse;
+import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.Minecraft;
 import net.minecraft.resources.ResourceLocation;
@@ -48,12 +42,11 @@ import java.util.zip.ZipFile;
  * @since 1.2.3
  * @author Intro
  * @see Cape
- * @see CapeRenderer
  */
 public class CosmeticManager {
 
     private String impersonationName = "";
-    private String impersonationUUID = "";
+    private UUID impersonationUUID = UUID.randomUUID();
     private boolean shouldImpersonate = false;
 
     // for debug purposes I promise
@@ -76,7 +69,7 @@ public class CosmeticManager {
         return this.shouldImpersonate;
     }
 
-    private final HashMap<String, Cape> playerCapes = new HashMap<>();
+    private final HashMap<UUID, Cape> playerCapes = new HashMap<>();
 
     private final HashSet<Cape> locallyLoadedCapes = new HashSet<>();
 
@@ -118,7 +111,7 @@ public class CosmeticManager {
      * @param cape Cape
      */
     public void setLocalPlayerCape(Cape cape) {
-        playerCapes.put(Minecraft.getInstance().user.getUuid().replaceAll("-", ""), cape);
+        playerCapes.put(Minecraft.getInstance().user.getProfileId(), cape);
         ExecutionUtil.submitTask(() -> {
             try {
                 OsmiumApi.getInstance().setServerSideCape(cape);
@@ -130,8 +123,8 @@ public class CosmeticManager {
         Options.SetCape.set(cape.name);
     }
 
-    public Cape getCapeFromEntityGotUUID(String uuid) {
-        return getPlayerCape(uuid.toLowerCase().replaceAll("-", ""));
+    public Cape getCapeFromEntityGotUUID(UUID uuid) {
+        return getPlayerCape(uuid);
     }
 
     public HashSet<Cape> getLocalCapes() {
@@ -139,10 +132,10 @@ public class CosmeticManager {
     }
 
     public void refreshDownloadedCapes() {
-        for(String uuid : playerCapes.keySet()) {
+        for(UUID uuid : playerCapes.keySet()) {
             ExecutionUtil.submitTask(() -> {
                 try {
-                    downloadPlayerCape(Objects.requireNonNull(Minecraft.getInstance().level.getPlayerByUUID(UUID.fromString(uuid))));
+                    downloadPlayerCape(Objects.requireNonNull(Minecraft.getInstance().level.getPlayerByUUID(uuid)));
                 } catch (Exception e) {
                     OsmiumClient.LOGGER.log(Level.WARN, "Failed downloading player cape: " + e.getMessage());
                 }
@@ -150,33 +143,39 @@ public class CosmeticManager {
         }
     }
 
-    public void handleEvents(Event event) {
-        if(event instanceof EventTick && Options.AnimateCapes.get()) {
-            for(Cape cape : playerCapes.values()) {
-                if(cape != null) cape.nextFrame();
+    public void registerEventListeners() {
+        ClientTickEvents.END_CLIENT_TICK.register((client -> {
+            if(Options.AnimateCapes.get()) {
+                for(Cape cape : playerCapes.values()) {
+                    if(cape != null) cape.nextFrame();
+                }
             }
-        }
+        }));
 
-        if(event instanceof EventAddPlayer addPlayer) {
+
+        CustomEvents.PLAYER_JOIN.register(playerInfo -> {
             ExecutionUtil.submitTask(() -> {
                 try {
-                    downloadPlayerCape(addPlayer.entity);
+                    Player player = Minecraft.getInstance().level.getPlayerByUUID(playerInfo.getProfile().getId());
+                    if(player != null) downloadPlayerCape(player);
                 } catch (Exception e) {
                     OsmiumClient.LOGGER.log(Level.WARN, "Failed downloading player cape: " + e.getMessage());
                     e.printStackTrace();
                 }
             });
-        }
+        });
 
-        if(event instanceof EventRemovePlayer removePlayer) {
-            Cape cape = playerCapes.get(removePlayer.entity.getStringUUID());
-            cape.free();
-            playerCapes.remove(removePlayer.entity.getStringUUID().replaceAll("-", ""));
-        }
+        CustomEvents.PLAYER_REMOVE.register((playerInfo -> {
+            // don't free local player cape, causes weirdness when changing between servers on hypixel if not here
+            if(playerInfo.getProfile().getId().equals(Minecraft.getInstance().player.getUUID())) return;
+            Cape cape = playerCapes.get(playerInfo.getProfile().getId());
+            if(cape != null) cape.free();
+            playerCapes.remove(playerInfo.getProfile().getId());
+        }));
     }
 
-    public Cape getPlayerCape(String UUID) {
-        Cape cape = playerCapes.get(UUID);
+    public Cape getPlayerCape(UUID uuid) {
+        Cape cape = playerCapes.get(uuid);
         if(cape == null) return null;
         if(Options.CustomCapeMode.get() == CapeRenderingMode.ALL) return cape;
         if((Options.CustomCapeMode.get() == CapeRenderingMode.OPTIFINE) && cape.isOptifine) return cape;
@@ -191,7 +190,7 @@ public class CosmeticManager {
             // I just spent 3 days trying to fix png corruption
             // because I typed fetch instead of fetchBin
             // please help me
-            optifineCape = deserializeOptifineCape(player.getName().getString(), player.getStringUUID());
+            optifineCape = deserializeOptifineCape(player.getName().getString(), player.getUUID());
             if(optifineCape != null) {
                 hasOptifine = true;
             }
@@ -199,7 +198,7 @@ public class CosmeticManager {
                 locallyLoadedCapes.add(optifineCape);
                 alreadyAddedLocalPlayersOptifineCape = true;
             }
-            osmiumCape = deserializeOsmiumCape(shouldImpersonate && DebugUtil.isDebug() ? impersonationUUID.replaceAll("-", "") : player.getStringUUID().replaceAll("-", ""));
+            osmiumCape = deserializeOsmiumCape(shouldImpersonate && DebugUtil.isDebug() ? impersonationUUID : player.getUUID());
             if(osmiumCape != null) {
                 hasOsmium = true;
             }
@@ -208,16 +207,16 @@ public class CosmeticManager {
         }
 
         if(hasOptifine && !hasOsmium) {
-            playerCapes.put(player.getStringUUID().replaceAll("-", ""), optifineCape);
+            playerCapes.put(player.getUUID(), optifineCape);
             return;
         }
         if(hasOsmium) {
-            playerCapes.put(player.getStringUUID().replaceAll("-", ""), osmiumCape);
+            playerCapes.put(player.getUUID(), osmiumCape);
         }
     }
 
 
-    public @Nullable Cape deserializeOptifineCape(String playerName, String playerUUID) throws IOException {
+    public @Nullable Cape deserializeOptifineCape(String playerName, UUID playerUUID) throws IOException {
         HttpResponse response = DebugUtil.isDebug() && shouldImpersonate ? HttpRequester.fetch(new HttpRequestBuilder()
                 .url("http://s.optifine.net/capes/" + impersonationName + ".png")
                 .method("GET")
@@ -244,13 +243,16 @@ public class CosmeticManager {
             parsedTexture = rawTexture;
         }
         DynamicAnimation capeTexture = new DynamicAnimation(parsedTexture, "optifine-" + playerUUID, 64, 32, 0);
+        DebugUtil.logIfDebug("Adding cape to player " + playerName + " from optifine", Level.INFO);
+
         return new Cape(capeTexture, true, false, "Optifine", "optifine-" + playerUUID, "Unknown", 1);
     }
 
-    public Cape deserializeOsmiumCape(String playerUUID) throws IOException {
+    public Cape deserializeOsmiumCape(UUID playerUUID) throws IOException {
         Map<String, ?> capeData = OsmiumApi.getInstance().getCapeDataFromServers(playerUUID);
         NativeImage rawTexture = OsmiumApi.getInstance().getCapeTextureFromServers(playerUUID);
         if(capeData == null || rawTexture == null) return null;
+        DebugUtil.logIfDebug("Adding cape to player " + playerUUID + " from osmium servers", Level.INFO);
         return capeFromMapAndTexture(capeData, rawTexture, "osmium-servers");
     }
 

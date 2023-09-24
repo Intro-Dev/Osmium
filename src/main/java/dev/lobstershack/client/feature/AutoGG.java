@@ -6,8 +6,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.stream.JsonReader;
 import dev.lobstershack.client.OsmiumClient;
 import dev.lobstershack.client.config.Options;
-import dev.lobstershack.client.event.Event;
-import dev.lobstershack.client.event.EventReceiveChatMessage;
+import net.fabricmc.fabric.api.client.message.v1.ClientReceiveMessageEvents;
 import net.minecraft.client.Minecraft;
 
 import java.io.IOException;
@@ -50,16 +49,18 @@ public class AutoGG {
 
     }
 
-    public static void onEvent(Event event) {
-        if(System.currentTimeMillis() - lastGG > 1000 && Options.AutoGGEnabled.get()) {
-            for(Pattern pattern : triggers) {
-                Matcher matcher = pattern.matcher(((EventReceiveChatMessage) event).getComponent().getString());
-                if(matcher.matches()) {
-                    lastGG = System.currentTimeMillis();
-                    Minecraft.getInstance().player.connection.sendChat(Options.AutoGGString.get());
+    public static void registerEventListeners() {
+        ClientReceiveMessageEvents.GAME.register(((message, ignored) -> {
+            if(System.currentTimeMillis() - lastGG > 1000 && Options.AutoGGEnabled.get()) {
+                for(Pattern pattern : triggers) {
+                    Matcher matcher = pattern.matcher(message.getString());
+                    if(matcher.matches()) {
+                        lastGG = System.currentTimeMillis();
+                        Minecraft.getInstance().player.connection.sendChat(Options.AutoGGString.get());
+                    }
                 }
             }
-        }
+        }));
     }
 
 }

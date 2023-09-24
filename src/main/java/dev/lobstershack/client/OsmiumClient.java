@@ -3,8 +3,6 @@ package dev.lobstershack.client;
 import com.mojang.blaze3d.platform.InputConstants;
 import dev.lobstershack.client.api.OsmiumApi;
 import dev.lobstershack.client.config.Options;
-import dev.lobstershack.client.event.EventBuss;
-import dev.lobstershack.client.event.EventType;
 import dev.lobstershack.client.feature.AutoGG;
 import dev.lobstershack.client.feature.Gui;
 import dev.lobstershack.client.render.cosmetic.CosmeticManager;
@@ -12,7 +10,6 @@ import dev.lobstershack.client.render.widget.drawable.DrawableRenderer;
 import dev.lobstershack.client.render.widget.drawable.PingDisplay;
 import dev.lobstershack.client.render.widget.drawable.ToggleSneak;
 import dev.lobstershack.client.util.DebugUtil;
-import dev.lobstershack.client.util.HypixelAbstractionLayer;
 import dev.lobstershack.client.util.Util;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
@@ -34,12 +31,11 @@ public class OsmiumClient implements ClientModInitializer {
     public static CosmeticManager cosmeticManager = new CosmeticManager();
 
     public static void registerCallbacks() {
-        EventBuss.registerCallback(ToggleSneak.getInstance()::onEvent, EventType.EVENT_TICK);
-        EventBuss.registerCallback(Gui.getInstance()::onEvent, EventType.EVENT_TICK);
-        EventBuss.registerCallback(cosmeticManager::handleEvents, new EventType[] { EventType.EVENT_ADD_PLAYER, EventType.EVENT_REMOVE_PLAYER, EventType.EVENT_TICK } );
-        EventBuss.registerCallback(PingDisplay.getInstance()::onEvent, EventType.EVENT_TICK);
-        EventBuss.registerCallback(HypixelAbstractionLayer::handleDisconnectEvents, EventType.EVENT_REMOVE_PLAYER);
-        EventBuss.registerCallback(AutoGG::onEvent, EventType.EVENT_RECEIVE_CHAT_MESSAGE);
+        ToggleSneak.getInstance().registerEventListeners();
+        Gui.getInstance().registerEventListeners();
+        cosmeticManager.registerEventListeners();
+        PingDisplay.getInstance().registerEventListeners();
+        AutoGG.registerEventListeners();
     }
 
     public void registerKeyBindings() {
@@ -59,11 +55,9 @@ public class OsmiumClient implements ClientModInitializer {
         }}
         DebugUtil.initDebugCommands();
         Options.load();
-        EventBuss.initListenerMap();
         registerCallbacks();
         registerKeyBindings();
         DrawableRenderer.initDrawables();
-        HypixelAbstractionLayer.loadApiKey();
         AutoGG.setupTriggers();
         runningLatestVersion = Util.isRunningLatestVersion();
         OsmiumApi.getInstance();

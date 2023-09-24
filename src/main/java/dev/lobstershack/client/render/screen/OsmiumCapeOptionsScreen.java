@@ -134,7 +134,7 @@ public class OsmiumCapeOptionsScreen extends Screen {
         for(int i = 0; i < pageCapes.size(); i++) {
             Cape cape = pageCapes.get(i);
 
-            if(OsmiumClient.cosmeticManager.getPlayerCape(Minecraft.getInstance().user.getUuid().toLowerCase()) != null && OsmiumClient.cosmeticManager.getPlayerCape(Minecraft.getInstance().user.getUuid().toLowerCase()) == cape) {
+            if(OsmiumClient.cosmeticManager.getPlayerCape(Minecraft.getInstance().user.getProfileId()) != null && OsmiumClient.cosmeticManager.getPlayerCape(Minecraft.getInstance().user.getProfileId()) == cape) {
                 graphics.fill((int) (this.width / 2 + (100 * guiScale)), (int) (bgStartHeight + (40 + (i * 70)) * guiScale), (int) (this.width / 2 + (300 * guiScale)), (int) (bgStartHeight + (100 + (i * 70)) * guiScale), Colors.DARK_GRAY.getColor().getInt());
             }
 

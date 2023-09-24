@@ -8,12 +8,13 @@ import org.apache.logging.log4j.Level;
 
 import java.io.IOException;
 import java.util.Map;
+import java.util.UUID;
 
 public interface OsmiumApi {
 
     void setServerSideCape(Cape cape) throws IOException;
-    NativeImage getCapeTextureFromServers(String uuid) throws IOException;
-    Map<String, ?> getCapeDataFromServers(String uuid) throws IOException;
+    NativeImage getCapeTextureFromServers(UUID uuid) throws IOException;
+    Map<String, ?> getCapeDataFromServers(UUID uuid) throws IOException;
     void sendKeepAlive() throws IOException;
 
     InstanceHolder<OsmiumApi> INSTANCE = new InstanceHolder<>();

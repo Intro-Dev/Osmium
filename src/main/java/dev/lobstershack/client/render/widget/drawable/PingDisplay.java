@@ -1,10 +1,9 @@
 package dev.lobstershack.client.render.widget.drawable;
 
 import dev.lobstershack.client.config.Options;
-import dev.lobstershack.client.event.Event;
-import dev.lobstershack.client.event.EventTick;
 import dev.lobstershack.client.render.color.Color;
 import dev.lobstershack.client.render.color.Colors;
+import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.multiplayer.ClientPacketListener;
@@ -22,8 +21,8 @@ public class PingDisplay extends Scalable {
 
     private final Minecraft mc = Minecraft.getInstance();
 
-    public void onEvent(Event event) {
-        if(event instanceof EventTick && mc.player != null) {
+    public void registerEventListeners() {
+        ClientTickEvents.END_CLIENT_TICK.register((client -> {
             if((mc.getCurrentServer() != null)) {
                 ClientPacketListener clientPacketListener = mc.player.connection;
                 try {
@@ -35,7 +34,7 @@ public class PingDisplay extends Scalable {
             } else {
                 currentPing = 0;
             }
-        }
+        }));
     }
 
     protected PingDisplay(int color) {

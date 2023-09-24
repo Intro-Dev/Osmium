@@ -1,9 +1,6 @@
 package dev.lobstershack.client.mixin.client;
 
-import dev.lobstershack.client.event.EventBuss;
-import dev.lobstershack.client.event.EventDirection;
-import dev.lobstershack.client.event.EventSettingsChange;
-import dev.lobstershack.client.event.EventType;
+
 import dev.lobstershack.client.render.screen.OsmiumOptionsScreen;
 import dev.lobstershack.client.render.widget.AbstractScalableButton;
 import net.minecraft.client.Minecraft;
@@ -33,13 +30,4 @@ public abstract class OptionsScreenMixin extends Screen {
         }
     }
 
-    @Inject(at = @At("TAIL"), method = "removed")
-    private void onClosePost(CallbackInfo info) {
-        EventBuss.postEvent(new EventSettingsChange(EventDirection.POST), EventType.EVENT_SETTINGS_CHANGE);
-    }
-
-    @Inject(at = @At("HEAD"), method = "removed")
-    private void onClosePre(CallbackInfo info) {
-        EventBuss.postEvent(new EventSettingsChange(EventDirection.PRE), EventType.EVENT_SETTINGS_CHANGE);
-    }
 }

@@ -22,6 +22,7 @@ import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
 
@@ -66,7 +67,7 @@ public class OsmiumApiImpl implements OsmiumApi {
         HttpResponse response = HttpRequester.fetch(new HttpRequestBuilder()
                 .url(hostName + "/osmium/v2/direct/login")
                 .method("GET")
-                .parameter("uuid", Minecraft.getInstance().user.getUuid())
+                .parameter("uuid", Minecraft.getInstance().user.getProfileId().toString())
                 .parameter("stage", "initial")
                 .build());
 
@@ -90,7 +91,7 @@ public class OsmiumApiImpl implements OsmiumApi {
         HttpResponse finalLoginResponse = HttpRequester.fetch(new HttpRequestBuilder()
                 .url(hostName + "/osmium/v2/direct/login")
                 .method("GET")
-                .parameter("uuid", Minecraft.getInstance().user.getUuid())
+                .parameter("uuid", Minecraft.getInstance().user.getProfileId().toString())
                 .parameter("stage", "confirm")
                 .build());
 
@@ -133,7 +134,7 @@ public class OsmiumApiImpl implements OsmiumApi {
         HttpResponse response = HttpRequester.fetch(new MultiPartRequestBuilder()
                 .url(hostName + "/osmium/v2/direct/cape/upload")
                 .method("POST")
-                .parameter("uuid", Minecraft.getInstance().user.getUuid())
+                .parameter("uuid", Minecraft.getInstance().user.getProfileId().toString())
                 .parameter("token", sessionToken)
                 .addFileSection("cape.png", ByteBuffer.wrap(cape.getTexture().image.asByteArray()))
                 .addTextSection("data", capeJson)
@@ -149,12 +150,12 @@ public class OsmiumApiImpl implements OsmiumApi {
      * @throws IOException If an error occurs during connection to Osmium servers
      */
     @Override
-    public NativeImage getCapeTextureFromServers(String uuid) throws IOException {
+    public NativeImage getCapeTextureFromServers(UUID uuid) throws IOException {
         DebugUtil.logIfDebug("Downloading cape texture for user " + uuid, Level.INFO);
         HttpResponse response = HttpRequester.fetch(new HttpRequestBuilder()
                 .url(hostName + "/osmium/v2/static/cape/get/texture/")
                 .method("GET")
-                .parameter("uuid", uuid.replace("-", ""))
+                .parameter("uuid", uuid.toString())
                 .parameter("token", sessionToken)
                 .build());
         if(response.getStatusCode() != 200 && response.getStatusCode() != 404) {
@@ -176,12 +177,12 @@ public class OsmiumApiImpl implements OsmiumApi {
      * @throws IOException If an error occurs during connection to Osmium servers
      */
     @Override
-    public Map<String, ?> getCapeDataFromServers(String uuid) throws IOException {
+    public Map<String, ?> getCapeDataFromServers(UUID uuid) throws IOException {
         DebugUtil.logIfDebug("Downloading cape data for user " + uuid, Level.INFO);
         HttpResponse response = HttpRequester.fetch(new HttpRequestBuilder()
                 .url(hostName + "/osmium/v2/static/cape/get/data/")
                 .method("GET")
-                .parameter("uuid", uuid.replace("-", ""))
+                .parameter("uuid", uuid.toString())
                 .parameter("token", sessionToken)
                 .build());
         if(response.getStatusCode() != 200 && response.getStatusCode() != 404) {
@@ -202,7 +203,7 @@ public class OsmiumApiImpl implements OsmiumApi {
             HttpResponse response = HttpRequester.fetch(new HttpRequestBuilder()
                     .url(hostName + "/osmium/v2/direct/keep-alive")
                     .method("GET")
-                    .parameter("uuid", Minecraft.getInstance().user.getUuid())
+                    .parameter("uuid", Minecraft.getInstance().user.getProfileId().toString())
                     .parameter("token", sessionToken)
                     .build());
             if(response.getStatusCode() != 204) {

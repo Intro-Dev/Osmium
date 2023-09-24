@@ -81,7 +81,7 @@ public class OsmiumUpdateScreen extends Screen  {
 
     @Override
     public void render(GuiGraphics graphics, int mouseX, int mouseY, float delta) {
-        this.renderBackground(graphics);
+        this.renderBackground(graphics, mouseX, mouseY, delta);
         graphics.drawCenteredString(mc.font, Component.translatable("osmium.update_available"), this.width / 2, this.height / 4, Colors.WHITE.getColor().getInt());
         graphics.drawCenteredString(mc.font, errorText, this.width / 2, this.height / 4 + 250, Colors.RED.getColor().getInt());
         graphics.drawCenteredString(mc.font, Component.literal("Current version: " + ModConstants.UPDATE_STRING + "-" + ModConstants.MINECRAFT_VERSION_STRING + ", New version: " + latestReleaseTag), this.width / 2, this.height / 4 + 50, Colors.WHITE.getColor().getInt());

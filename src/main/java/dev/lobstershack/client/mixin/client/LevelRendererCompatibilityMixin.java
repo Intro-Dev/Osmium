@@ -1,6 +1,5 @@
 package dev.lobstershack.client.mixin.client;
 
-import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
 import dev.lobstershack.client.config.Options;
@@ -54,8 +53,8 @@ public class LevelRendererCompatibilityMixin {
             edgeXDiff /= pythagorean;
             edgeYDiff /= pythagorean;
             edgeZDiff /= pythagorean;
-            vertexConsumer.vertex(pose.pose(), (float)(edgeX1 + x), (float)(edgeY1 + y), (float)(edgeZ1 + z)).color(color.getFloatR(), color.getFloatG(), color.getFloatB(), (float) Options.BlockOutlineAlpha.get().byteValue()).normal(pose.normal(), edgeXDiff, edgeYDiff, edgeZDiff).endVertex();
-            vertexConsumer.vertex(pose.pose(), (float)(edgeX2 + x), (float)(edgeY2 + y), (float)(edgeZ2 + z)).color(color.getFloatR(), color.getFloatG(), color.getFloatB(), (float) Options.BlockOutlineAlpha.get().byteValue()).normal(pose.normal(), edgeXDiff, edgeYDiff, edgeZDiff).endVertex();
+            vertexConsumer.vertex(pose.pose(), (float)(edgeX1 + x), (float)(edgeY1 + y), (float)(edgeZ1 + z)).color(color.getFloatR(), color.getFloatG(), color.getFloatB(), Options.BlockOutlineAlpha.get().floatValue()).normal(pose.normal(), edgeXDiff, edgeYDiff, edgeZDiff).endVertex();
+            vertexConsumer.vertex(pose.pose(), (float)(edgeX2 + x), (float)(edgeY2 + y), (float)(edgeZ2 + z)).color(color.getFloatR(), color.getFloatG(), color.getFloatB(), Options.BlockOutlineAlpha.get().floatValue()).normal(pose.normal(), edgeXDiff, edgeYDiff, edgeZDiff).endVertex();
         });
     }
 
@@ -63,12 +62,12 @@ public class LevelRendererCompatibilityMixin {
         stack.pushPose();
         BufferBuilder builder = Tesselator.getInstance().getBuilder();
         builder.begin(VertexFormat.Mode.TRIANGLE_STRIP, DefaultVertexFormat.POSITION_COLOR);
-        renderVoxelShape(stack, builder, voxelShape, x, y, z, color.getFloatR(), color.getFloatG(), color.getFloatB(), (float) Options.BlockOutlineAlpha.get().byteValue(), 0.01d);
+        renderVoxelShape(stack, builder, voxelShape, x, y, z, color.getFloatR(), color.getFloatG(), color.getFloatB(), Options.BlockOutlineAlpha.get().floatValue(), 0.01d);
         RenderSystem.setShader(GameRenderer::getPositionColorShader);
         RenderSystem.enableBlend();
         RenderSystem.enableDepthTest();
-        RenderSystem.blendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
-        BufferUploader.draw(builder.end());
+        // RenderSystem.blendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
+        BufferUploader.drawWithShader(builder.end());
         RenderSystem.disableBlend();
         RenderSystem.disableDepthTest();
         stack.popPose();

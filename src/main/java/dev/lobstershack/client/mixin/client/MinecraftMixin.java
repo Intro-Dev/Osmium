@@ -2,10 +2,6 @@ package dev.lobstershack.client.mixin.client;
 
 import dev.lobstershack.client.OsmiumClient;
 import dev.lobstershack.client.config.Options;
-import dev.lobstershack.client.event.EventBuss;
-import dev.lobstershack.client.event.EventDirection;
-import dev.lobstershack.client.event.EventTick;
-import dev.lobstershack.client.event.EventType;
 import dev.lobstershack.client.render.screen.OsmiumUpdateScreen;
 import dev.lobstershack.client.render.widget.drawable.CpsDisplay;
 import net.minecraft.client.Minecraft;
@@ -21,16 +17,6 @@ import java.nio.file.Files;
 
 @Mixin(Minecraft.class)
 public class MinecraftMixin {
-
-    @Inject(at = @At("HEAD"), method = "tick")
-    public void preTick(CallbackInfo info) {
-        EventBuss.postEvent(new EventTick(EventDirection.PRE), EventType.EVENT_TICK);
-    }
-
-    @Inject(at = @At("HEAD"), method = "tick")
-    public void postTick(CallbackInfo info) {
-        EventBuss.postEvent(new EventTick(EventDirection.POST), EventType.EVENT_TICK);
-    }
 
     @Inject(at = @At("HEAD"), method = "close")
     public void close(CallbackInfo ci) {

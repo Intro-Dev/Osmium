@@ -1,13 +1,13 @@
 package dev.lobstershack.client.render.screen;
 
+import dev.lobstershack.client.config.Options;
 import dev.lobstershack.client.render.color.Colors;
 import dev.lobstershack.client.render.widget.AbstractScalableButton;
-import dev.lobstershack.client.render.widget.drawable.DrawableRenderer;
 import dev.lobstershack.client.render.widget.drawable.Drawable;
+import dev.lobstershack.client.render.widget.drawable.DrawableRenderer;
 import dev.lobstershack.client.render.widget.drawable.Scalable;
 import dev.lobstershack.client.util.DebugUtil;
 import dev.lobstershack.client.util.RenderUtil;
-import dev.lobstershack.client.config.Options;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
@@ -38,7 +38,7 @@ public class OsmiumGuiEditScreen extends Screen {
 
     @Override
     public void render(GuiGraphics graphics, int mouseX, int mouseY, float delta) {
-        this.renderBackground(graphics);
+        super.render(graphics, mouseX, mouseY, delta);
         DrawableRenderer.renderHud(graphics);
         // make drawable click boxes visible when debug mode is active
         if(DebugUtil.isDebug()) {
@@ -59,7 +59,6 @@ public class OsmiumGuiEditScreen extends Screen {
                 }
             }
         }
-        super.render(graphics, mouseX, mouseY, delta);
     }
 
     @Override
@@ -90,17 +89,17 @@ public class OsmiumGuiEditScreen extends Screen {
     }
 
     @Override
-    public boolean mouseScrolled(double mouseX, double mouseY, double scrollDelta) {
+    public boolean mouseScrolled(double mouseX, double mouseY, double scrollDelta, double ignored) {
         for(Drawable drawable : DrawableRenderer.drawables) {
             if(drawable instanceof Scalable scalable) {
                 if(scalable.isPositionWithinBounds((int) mouseX, (int) mouseY) && drawable.visible) {
                     scalable.setScale(scalable.getScale() + scrollDelta * 0.1);
                     scalable.setScale(Mth.clamp(scalable.getScale(), 0.5, 10));
-                    return super.mouseScrolled(mouseX, mouseY, scrollDelta);
+                    return super.mouseScrolled(mouseX, mouseY, scrollDelta, ignored);
                 }
             }
         }
 
-        return super.mouseScrolled(mouseX, mouseY, scrollDelta);
+        return super.mouseScrolled(mouseX, mouseY, scrollDelta, ignored);
     }
 }

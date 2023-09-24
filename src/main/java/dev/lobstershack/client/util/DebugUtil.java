@@ -77,7 +77,7 @@ public class DebugUtil {
                 if(Minecraft.getInstance().level != null && shouldDisplayLogsInChat) {
                     // solid 200 characters
                     // i love java
-                    ((ChatComponentInvoker) Minecraft.getInstance().gui.getChat()).invokeAddMessage(Component.literal("[OsmiumDebug] ").withStyle(ChatFormatting.LIGHT_PURPLE).append(Component.literal(className + "." + callingStack.getMethodName() +  "()").withStyle(ChatFormatting.GREEN).append(Component.literal(": " + o).withStyle(ChatFormatting.WHITE))), null, Minecraft.getInstance().gui.getGuiTicks(), Minecraft.getInstance().isSingleplayer() ? GuiMessageTag.systemSinglePlayer() : GuiMessageTag.system(), false);
+                    ((ChatComponentInvoker) Minecraft.getInstance().gui.getChat()).invokeAddMessage(Component.literal("[OsmiumDebug] " + level.name() + " ").withStyle(ChatFormatting.LIGHT_PURPLE).append(Component.literal(className + "." + callingStack.getMethodName() +  "()").withStyle(ChatFormatting.GREEN).append(Component.literal(": " + o).withStyle(ChatFormatting.WHITE))), null, Minecraft.getInstance().gui.getGuiTicks(), Minecraft.getInstance().isSingleplayer() ? GuiMessageTag.systemSinglePlayer() : GuiMessageTag.system(), false);
                 }
             } catch (Exception e) {
                 LOGGER.log(Level.WARN, "Congrats, the Osmium debugger just crashed. How did this happen?");
