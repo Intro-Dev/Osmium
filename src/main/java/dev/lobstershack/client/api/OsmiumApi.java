@@ -3,6 +3,7 @@ package dev.lobstershack.client.api;
 import com.mojang.blaze3d.platform.NativeImage;
 import dev.lobstershack.client.OsmiumClient;
 import dev.lobstershack.client.render.cosmetic.Cape;
+import dev.lobstershack.client.util.DebugUtil;
 import dev.lobstershack.client.util.InstanceHolder;
 import org.apache.logging.log4j.Level;
 
@@ -24,7 +25,8 @@ public interface OsmiumApi {
             try {
                 INSTANCE.setInstance(new OsmiumApiImpl("https://lobstershack.dev:443"));
             } catch (Exception e) {
-                OsmiumClient.LOGGER.log(Level.ERROR, "Failed to instantiate OsmiumApi, defaulting to non-functional implementation", e);
+                OsmiumClient.LOGGER.log(Level.WARN, "Failed to instantiate OsmiumApi, defaulting to non-functional implementation.");
+                DebugUtil.logIfDebug(e, Level.ERROR);
                 INSTANCE.setInstance(new NonFunctionalOsmiumApi());
             }
         }
