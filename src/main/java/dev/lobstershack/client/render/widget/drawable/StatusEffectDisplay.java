@@ -52,7 +52,7 @@ public class StatusEffectDisplay extends Scalable {
 
                         MobEffectInstance effect = effects.get(i);
                         TextureAtlasSprite sprite = spriteManager.get(effect.getEffect());
-                        String formattedTime = MobEffectUtil.formatDuration(effect, 1.0F).getString();
+                        String formattedTime = MobEffectUtil.formatDuration(effect, 1.0F, Minecraft.getInstance().level.tickRateManager().tickrate()).getString();
 
                         String messageText = Component.translatable(effect.getEffect().getDescriptionId()).getString() + (" " + (effect.getAmplifier() + 1) + ", " + formattedTime);
 
